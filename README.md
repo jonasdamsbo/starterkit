@@ -1,2 +1,1 @@
 # myblazor
-blazor mssql
