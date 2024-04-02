@@ -1,14 +1,23 @@
 ﻿@page "/"
-@attribute [StreamRendering]
+@rendermode InteractiveWebAssembly
+@inject myblazor.Services.SomeClass someClass
 
 <PageTitle>Home</PageTitle>
 
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
+<p>current: @conn</p>
 
 @code
 {
+	public string conn = "empty";
+
+	protected override async Task OnInitializedAsync()
+	{
+		await Task.Delay(500);
+		conn = someClass.SomeMethod();
+	}
 	/*
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
