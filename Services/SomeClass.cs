@@ -11,14 +11,27 @@ namespace myblazor.Services
             _configuration = configuration;
         }
 
-        public string SomeMethod()
+        public string GetConnStr()
         {
             // retrieve nested App Service app setting
             var myHierarchicalConfig = _configuration["My:Hierarchical:Config:Data"];
             // retrieve App Service connection string
             var myConnString = _configuration.GetConnectionString("DefaultConnection");
+            
             Debug.WriteLine(myConnString);
-            return myConnString;
+
+			return myConnString;
         }
-    }
+		public string GetEnvVar()
+		{
+			// retrieve nested App Service app setting
+			var myHierarchicalConfig = _configuration["My:Hierarchical:Config:Data"];
+			// retrieve App Service connection string
+			var myEnvironment = _configuration.GetValue("ASPNETCORE_ENVIRONMENT", "empty");
+			
+			Debug.WriteLine(myEnvironment);
+
+			return myEnvironment;
+		}
+	}
 }
