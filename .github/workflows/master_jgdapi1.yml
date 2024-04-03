@@ -64,7 +64,10 @@ jobs:
       - name: Install EF Core CLI
         run: dotnet tool install dotnet-ef --global
         shell: bash
-    
+        
+      - name: Update database #2
+        run: dotnet ef update database
+        
       - name: Update db
         run: |
           cd ${{ inputs.schema-manager-directory }}
@@ -75,6 +78,3 @@ jobs:
         
       - name: Update database #1
         run: dotnet update-database
-
-      - name: Update database #2
-        run: dotnet ef update database
