@@ -58,12 +58,11 @@ jobs:
 
   syncdb:
     runs-on: windows-latest
+    needs: deploy
   
     steps:
-      - uses: actions/checkout@v4
-      
       - name: Update database #1
-        run: dotnet ef update database
+        run: dotnet update-database
 
       - name: Update database #2
-        run: dotnet update-database
+        run: dotnet ef update database
