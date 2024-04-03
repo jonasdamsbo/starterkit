@@ -61,6 +61,18 @@ jobs:
     needs: deploy
   
     steps:
+      - name: Install EF Core CLI
+        run: dotnet tool install dotnet-ef --global
+        shell: bash
+    
+      - name: Update db
+        run: |
+          cd ${{ inputs.schema-manager-directory }}
+          dotnet ef database update --context ${{ inputs.database-context }} || exit 1
+        shell: bash
+        env:
+          DATABASE_CONNECTION_STRING: ${{ inputs.database-connection-string }}
+        
       - name: Update database #1
         run: dotnet update-database
 
