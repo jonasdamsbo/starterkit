@@ -66,7 +66,7 @@ jobs:
         shell: bash
         
       - name: Update database #2
-        run: dotnet ef update database
+        run: dotnet ef update database --project
         
       - name: Update db
         run: |
