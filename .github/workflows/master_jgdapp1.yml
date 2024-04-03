@@ -55,3 +55,6 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0D888EF3D034458B9222A2789B016393 }}
           package: .
+
+      - name: Update database
+        run: dotnet ef update database
