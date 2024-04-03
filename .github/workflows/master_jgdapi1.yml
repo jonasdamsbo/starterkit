@@ -55,6 +55,12 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1CA30D2976F64639B73199B5061658CA }}
           package: .
-          
+
+  syncdb:
+    runs-on: windows-latest
+  
+    steps:
+      - uses: actions/checkout@v4
+      
       - name: Update database
         run: dotnet ef update database
