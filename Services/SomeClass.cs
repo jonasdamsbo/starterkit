@@ -33,5 +33,16 @@ namespace myblazor.Services
 
 			return myEnvironment;
 		}
+		public string GetProj()
+		{
+			// retrieve nested App Service app setting
+			var myHierarchicalConfig = _configuration["My:Hierarchical:Config:Data"];
+			// retrieve App Service connection string
+			var myProject = _configuration.GetValue("Project", "empty");
+
+			Debug.WriteLine(myProject);
+
+			return myProject;
+		}
 	}
 }

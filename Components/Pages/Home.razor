@@ -10,6 +10,7 @@
 Welcome to your new app.
 <p>current conStr: @conn</p>
 <p>current env: @env</p>
+<p>current proj: @proj</p>
 
 <button @onclick="(() => ToggleComments())" style="padding: 0; border: none;border-top: 2px black dashed;height: auto; width: 100%; background-color: rgb(228, 228, 228, 1);">
     <b>Comments</b>
@@ -81,6 +82,7 @@ Welcome to your new app.
 
 	public string conn = "empty";
 	public string env = "empty";
+	public string proj = "empty";
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
@@ -89,6 +91,7 @@ Welcome to your new app.
 		await Task.Delay(500);
 		conn = someClass.GetConnStr();
 		env = someClass.GetEnvVar();
+		proj = someClass.GetProj();
 
 		StateHasChanged();
 	}
