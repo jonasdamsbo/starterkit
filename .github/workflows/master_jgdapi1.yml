@@ -22,9 +22,6 @@ jobs:
           dotnet-version: '8.x'
           include-prerelease: true
 
-      - name: Sync database
-        run: dotnet ef update database
-
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
@@ -58,3 +55,6 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1CA30D2976F64639B73199B5061658CA }}
           package: .
+          
+      - name: Update database
+        run: dotnet ef update database
