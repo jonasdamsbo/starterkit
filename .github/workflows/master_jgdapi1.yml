@@ -64,11 +64,14 @@ jobs:
       - name: Install EF Core CLI
         run: dotnet tool install dotnet-ef --global
         shell: bash
+
+      - name: Update db #1
+        run: dotnet ef database update --connection "Server=tcp:jgdserver1.database.windows.net,1433;Initial Catalog=database1;Persist Security Info=False;User ID=jgd;Password=Kommer123lol;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
         
       - name: Update database #2
         run: dotnet ef update database --project
         
-      - name: Update db
+      - name: Update db #3
         run: |
           cd ${{ inputs.schema-manager-directory }}
           dotnet ef database update --context ${{ inputs.database-context }} || exit 1
@@ -76,5 +79,5 @@ jobs:
         env:
           DATABASE_CONNECTION_STRING: ${{ inputs.database-connection-string }}
         
-      - name: Update database #1
+      - name: Update database #4
         run: dotnet update-database
