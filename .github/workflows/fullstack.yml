@@ -55,6 +55,7 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0D888EF3D034458B9222A2789B016393 }}
           package: .
+          projects: 'myblazor/myblazor.csproj'
 
   build-backend:
     runs-on: windows-latest
@@ -101,6 +102,7 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1CA30D2976F64639B73199B5061658CA }}
           package: .
+          projects: 'myapi/myapi.csproj'
 
   syncdb:
     runs-on: windows-latest
