@@ -6,7 +6,6 @@ name: Sync database in Azure - database1
 on:
   push:
     branches:
-      - database
       - fullstack
   workflow_dispatch:
 
