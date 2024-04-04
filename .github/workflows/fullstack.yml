@@ -77,7 +77,7 @@ jobs:
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
-          name: .net-app
+          name: .net-api
           path: ${{env.DOTNET_ROOT}}/myapi
 
   deploy-backend:
@@ -91,7 +91,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
-          name: .net-app
+          name: .net-api
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
