@@ -115,5 +115,5 @@ jobs:
       
       - name: Update db
         run: | 
-          cd 'D:\a\mydotnet\myblazor\'
+          cd 'D:\a\mydotnet\mydotnet\myapi\'
           dotnet ef database update --connection '${{ secrets.CONNECTIONSTRING }}'
