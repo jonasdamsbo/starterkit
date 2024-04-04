@@ -24,8 +24,6 @@ jobs:
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
-        with:
-          projects: {myblazor/myblazor.csproj}
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
