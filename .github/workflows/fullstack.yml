@@ -104,7 +104,6 @@ jobs:
 
   syncdb:
     runs-on: windows-latest
-    needs: deploy-backend
   
     steps:
       - uses: actions/checkout@v4
