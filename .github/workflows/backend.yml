@@ -56,19 +56,3 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1CA30D2976F64639B73199B5061658CA }}
           package: .
-
-  syncdb:
-    runs-on: windows-latest
-    needs: deploy
-  
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Install EF Core CLI
-        run: dotnet tool install dotnet-ef --global
-        shell: bash
-      
-      - name: Update db
-        run: | 
-          cd 'D:\a\myblazor\myblazor\'
-          dotnet ef database update --connection 'Server=tcp:jgdserver1.database.windows.net,1433;Initial Catalog=database1;Persist Security Info=False;User ID=jgd;Password=Kommer123lol;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
