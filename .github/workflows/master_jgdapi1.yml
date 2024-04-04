@@ -40,7 +40,7 @@ jobs:
 
       - name: Update db #1
         run: | 
-          cd D:\a\myblazor\
+          cd 'D:\a\myblazor\'
           dotnet ef database update --connection 'Server=tcp:jgdserver1.database.windows.net,1433;Initial Catalog=database1;Persist Security Info=False;User ID=jgd;Password=Kommer123lol;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
         
 
