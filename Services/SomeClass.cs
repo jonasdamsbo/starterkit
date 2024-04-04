@@ -44,5 +44,17 @@ namespace myblazor.Services
 
 			return myProject;
 		}
+
+		public string GetApiUrl()
+		{
+			// retrieve nested App Service app setting
+			var myHierarchicalConfig = _configuration["My:Hierarchical:Config:Data"];
+			// retrieve App Service connection string
+			var myApiurl = _configuration.GetValue("MyAppSettings:APIURL", "empty");
+
+			Debug.WriteLine(myApiurl);
+
+			return myApiurl;
+		}
 	}
 }
