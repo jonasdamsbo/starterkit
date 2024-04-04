@@ -117,8 +117,3 @@ jobs:
         run: | 
           cd 'D:\a\myblazor\myblazor\'
           dotnet ef database update --connection 'Server=tcp:jgdserver1.database.windows.net,1433;Initial Catalog=database1;Persist Security Info=False;User ID=jgd;Password=Kommer123lol;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
-
-      - name: Update db2
-        run: | 
-          cd 'D:\a\myblazor\myblazor\BlazorApp1\'
-          dotnet ef database update --connection 'Server=tcp:jgdserver1.database.windows.net,1433;Initial Catalog=database1;Persist Security Info=False;User ID=jgd;Password=Kommer123lol;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
