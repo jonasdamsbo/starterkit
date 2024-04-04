@@ -61,7 +61,11 @@ jobs:
     needs: deploy
   
     steps:
-      - uses: actions/checkout@v4
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.x'
+          include-prerelease: true
 
       - name: Install EF Core CLI
         run: dotnet tool install dotnet-ef --global
