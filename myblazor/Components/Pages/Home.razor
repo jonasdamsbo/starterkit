@@ -14,13 +14,13 @@ Welcome to your new app.
 <p>current url: @url</p>
 
 <button @onclick="(() => ToggleComments())" style="padding: 0; border: none;border-top: 2px black dashed;height: auto; width: 100%; background-color: rgb(228, 228, 228, 1);">
-    <b>Comments</b>
+	<b>Comments</b>
 </button>
 <div class="@commentsClass">
-    <div>
-        <div>some comment</div>
-        <div>another comment</div>
-    </div>
+	<div>
+		<div>some comment</div>
+		<div>another comment</div>
+	</div>
 </div>
 <div>comment below</div>
 <div>another comment below</div>
@@ -43,26 +43,26 @@ Welcome to your new app.
 
 	/* WITHOUT GRID */
 	/*
-	.comment {
-		background-color: red;
-		height: 0;
-		transition: all .3s ease;
-		transform: scaleY(0);
-		opacity: 0;
-		visibility: hidden;
-		margin-bottom: 0;
-		translate: 0 -50%;
-	}
+		.comment {
+			background-color: red;
+			height: 0;
+			transition: all .3s ease;
+			transform: scaleY(0);
+			opacity: 0;
+			visibility: hidden;
+			margin-bottom: 0;
+			translate: 0 -50%;
+		}
 
-	.show {
-		opacity: 1;
-		visibility: visible;
-		margin-bottom: 0%;
-		height: 100%;
-		transform: scaleY(1);
-		translate: 0 0%;
-	}
-	*/
+		.show {
+			opacity: 1;
+			visibility: visible;
+			margin-bottom: 0%;
+			height: 100%;
+			transform: scaleY(1);
+			translate: 0 0%;
+		}
+		*/
 </style>
 
 @code
