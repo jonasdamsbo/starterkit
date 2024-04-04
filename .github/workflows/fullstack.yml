@@ -26,7 +26,7 @@ jobs:
         run: dotnet build myblazor --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish myblazor -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
@@ -36,7 +36,7 @@ jobs:
 
   deploy-frontend:
     runs-on: windows-latest
-    needs: [ build-frontend ]
+    needs: [ syncdb ]
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
@@ -58,7 +58,6 @@ jobs:
 
   build-backend:
     runs-on: windows-latest
-    needs: [ deploy-frontend ]
 
     steps:
       - uses: actions/checkout@v4
@@ -73,7 +72,7 @@ jobs:
         run: dotnet build myapi --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapi
+        run: dotnet publish myapi -c Release -o ${{env.DOTNET_ROOT}}/myapi
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
@@ -83,7 +82,7 @@ jobs:
 
   deploy-backend:
     runs-on: windows-latest
-    needs: [ build-backend ]
+    needs: [ syncdb ]
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
@@ -105,7 +104,7 @@ jobs:
 
   syncdb:
     runs-on: windows-latest
-    needs: [ deploy-backend ]
+    needs: [ build-backend , build-frontend ]
     
     steps:
       - uses: actions/checkout@v4
