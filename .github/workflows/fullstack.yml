@@ -69,7 +69,6 @@ jobs:
           include-prerelease: true
 
       - name: Build with dotnet
-        working-directory: wwwroot
         run: dotnet build --configuration Release
 
       - name: dotnet publish
