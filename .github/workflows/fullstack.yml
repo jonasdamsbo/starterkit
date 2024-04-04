@@ -24,6 +24,8 @@ jobs:
 
       - name: Build with dotnet
         run: dotnet build --configuration Release
+        inputs:
+          solution: {myblazor/myblazor.csproj}
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
@@ -55,7 +57,6 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0D888EF3D034458B9222A2789B016393 }}
           package: .
-          projects: 'myblazor/myblazor.csproj'
 
   build-backend:
     runs-on: windows-latest
@@ -70,7 +71,7 @@ jobs:
           include-prerelease: true
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: dotnet build --project myapi --configuration Release
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
@@ -102,7 +103,6 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1CA30D2976F64639B73199B5061658CA }}
           package: .
-          projects: 'myapi/myapi.csproj'
 
   syncdb:
     runs-on: windows-latest
