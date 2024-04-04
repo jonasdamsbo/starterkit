@@ -61,8 +61,7 @@ jobs:
     needs: deploy
   
     steps:
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
+      - uses: actions/checkout@v4
 
       - name: Install EF Core CLI
         run: dotnet tool install dotnet-ef --global
