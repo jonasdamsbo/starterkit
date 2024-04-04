@@ -65,7 +65,8 @@ jobs:
         run: | 
           dotnet tool install --global dotnet-ef
           dotnet tool restore
-          dotnet ef database update -p '${{env.DOTNET_ROOT}}/myapp' --connection 'Server=tcp:jgdserver1.database.windows.net,1433;Initial Catalog=database1;Persist Security Info=False;User ID=jgd;Password=Kommer123lol;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
+          cd ${{env.DOTNET_ROOT}}/myapp
+          dotnet ef database update --connection 'Server=tcp:jgdserver1.database.windows.net,1433;Initial Catalog=database1;Persist Security Info=False;User ID=jgd;Password=Kommer123lol;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
     
       - name: Install EF Core CLI
         run: dotnet tool install dotnet-ef --global
