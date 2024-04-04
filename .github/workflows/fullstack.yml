@@ -70,6 +70,7 @@ jobs:
           include-prerelease: true
 
       - name: Build with dotnet
+        working-directory: myblazor2
         run: dotnet build --configuration Release
 
       - name: dotnet publish
