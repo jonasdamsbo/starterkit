@@ -43,7 +43,6 @@ jobs:
           cd 'D:\a\myblazor\myblazor\'
           dotnet ef database update --connection 'Server=tcp:jgdserver1.database.windows.net,1433;Initial Catalog=database1;Persist Security Info=False;User ID=jgd;Password=Kommer123lol;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
 
-
   deploy:
     runs-on: windows-latest
     needs: build
@@ -71,6 +70,17 @@ jobs:
     needs: deploy
   
     steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.x'
+          include-prerelease: true
+
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
+
       - name: Install EF Core CLI
         run: dotnet tool install dotnet-ef --global
         shell: bash
