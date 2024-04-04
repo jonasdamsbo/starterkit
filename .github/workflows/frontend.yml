@@ -7,7 +7,6 @@ on:
   push:
     branches:
       - frontend
-      - fullstack
   workflow_dispatch:
 
 jobs:
