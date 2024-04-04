@@ -22,5 +22,5 @@ jobs:
       
       - name: Update db
         run: | 
-          cd 'D:\a\myblazor\myblazor\'
-          dotnet ef database update --connection ${{ secrets.CONNECTIONSTRING }}
+          cd 'D:\a\mydotnet\mydotnet\myapi\'
+          dotnet ef database update --connection '${{ secrets.CONNECTIONSTRING }}'
