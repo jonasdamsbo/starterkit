@@ -34,16 +34,6 @@ jobs:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
 
-      - name: Install EF Core CLI
-        run: dotnet tool install dotnet-ef --global
-        shell: bash
-
-      - name: Update db #1
-        run: | 
-          cd 'D:\a\myblazor\'
-          dotnet ef database update --connection 'Server=tcp:jgdserver1.database.windows.net,1433;Initial Catalog=database1;Persist Security Info=False;User ID=jgd;Password=Kommer123lol;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
-        
-
   deploy:
     runs-on: windows-latest
     needs: build
@@ -71,31 +61,11 @@ jobs:
     needs: deploy
   
     steps:
-      - name: Run EF 
-        run: | 
-          dotnet build --configuration Release
-          dotnet tool install --global dotnet-ef
-          dotnet tool restore
-          dotnet ef database update --connection 'Server=tcp:jgdserver1.database.windows.net,1433;Initial Catalog=database1;Persist Security Info=False;User ID=jgd;Password=Kommer123lol;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
-    
       - name: Install EF Core CLI
         run: dotnet tool install dotnet-ef --global
         shell: bash
 
-      - name: Update db #1
-        run: dotnet ef database update --project ${{env.DOTNET_ROOT}}/myapp/ --connection 'Server=tcp:jgdserver1.database.windows.net,1433;Initial Catalog=database1;Persist Security Info=False;User ID=jgd;Password=Kommer123lol;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
-        shell: bash
-        
-      - name: Update database #2
-        run: dotnet ef update database --project
-        
-      - name: Update db #3
-        run: |
-          cd ${{ inputs.schema-manager-directory }}
-          dotnet ef database update --context ${{ inputs.database-context }} || exit 1
-        shell: bash
-        env:
-          DATABASE_CONNECTION_STRING: ${{ inputs.database-connection-string }}
-        
-      - name: Update database #4
-        run: dotnet update-database
+      - name: Update db
+        run: | 
+          cd 'D:\a\myblazor\myblazor\'
+          dotnet ef database update --connection 'Server=tcp:jgdserver1.database.windows.net,1433;Initial Catalog=database1;Persist Security Info=False;User ID=jgd;Password=Kommer123lol;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;'
