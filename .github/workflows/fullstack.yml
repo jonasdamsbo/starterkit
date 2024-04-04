@@ -36,7 +36,7 @@ jobs:
 
   deploy-frontend:
     runs-on: windows-latest
-    needs: [ build-frontend , syncdb ]
+    needs: [ syncdb ]
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
@@ -82,7 +82,7 @@ jobs:
 
   deploy-backend:
     runs-on: windows-latest
-    needs: [ build-backend , syncdb ]
+    needs: [ syncdb ]
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
@@ -104,7 +104,8 @@ jobs:
 
   syncdb:
     runs-on: windows-latest
-  
+    needs: [ build-backend , build-frontend ]
+    
     steps:
       - uses: actions/checkout@v4
 
