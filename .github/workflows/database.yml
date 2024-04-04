@@ -12,7 +12,7 @@ on:
 jobs:
   syncdb:
     runs-on: windows-latest
-  
+    
     steps:
       - uses: actions/checkout@v4
 
@@ -22,5 +22,5 @@ jobs:
       
       - name: Update db
         run: | 
-          cd 'D:\a\myblazor\myblazor\'
-          dotnet ef database update --connection ${{ secrets.CONNECTIONSTRING }}
+          cd 'D:\a\mydotnet\myblazor\'
+          dotnet ef database update --connection '${{ secrets.CONNECTIONSTRING }}'
