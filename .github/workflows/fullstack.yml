@@ -114,6 +114,10 @@ jobs:
         shell: bash
       
       - name: Update db
-        run: | 
-          cd 'D:\a\mydotnet\mydotnet\myapi\'
-          dotnet ef database update --connection '${{ secrets.CONNECTIONSTRING }}'
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 1
+          max_attempts: 3
+          command: | 
+            cd 'D:\a\mydotnet\mydotnet\myapi\'
+            dotnet ef database update --connection '${{ secrets.CONNECTIONSTRING }}'
