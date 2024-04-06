@@ -116,8 +116,8 @@ jobs:
       - name: Update db
         uses: nick-fields/retry@v3
         with:
-          timeout_minutes: 1
-          max_attempts: 3
+          timeout_minutes: 2
+          max_attempts: 5
           command: | 
             cd 'D:\a\mydotnet\mydotnet\myapi\'
             dotnet ef database update --connection '${{ secrets.CONNECTIONSTRING }}'

@@ -1,4 +1,4 @@
-﻿using myblazor.Models;
+﻿using myshared.Models;
 
 namespace myblazor.Services
 {
