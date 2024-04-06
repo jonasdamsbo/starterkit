@@ -2,6 +2,7 @@
 @page "/edit-project/{Id:int}"
 @inject IPortfolioService PortfolioService
 @inject NavigationManager NavigationManager
+@inject SomeClass someClass
 @rendermode InteractiveServer
 
 @if(Id is null)
@@ -37,12 +38,19 @@ else
 	public int? Id { get; set; }
 
 	public PortfolioProject CurrentProject { get; set; } = new();
+	private HttpResponseMessage response = new();
 
 	protected override async Task OnParametersSetAsync()
 	{
 		if(Id is not null)
 		{
-			var project = await PortfolioService.GetProjectByIdAsync((int)Id);
+			/*var project = await PortfolioService.GetProjectByIdAsync((int)Id);*/
+
+			var APIURL = someClass.GetApiUrl();
+			HttpClient httpClient = new HttpClient();
+			response = await httpClient.GetAsync(APIURL + "api/PortfolioOverview/" + (int)Id);
+			var project = JsonConvert.DeserializeObject<PortfolioProject>(await response.Content.ReadAsStringAsync()) ?? new PortfolioProject();
+			httpClient.Dispose();
 
 			if(project is not null)
 			{
@@ -56,13 +64,35 @@ else
 		if(Id is not null)
 		{
 			// Update
-			await PortfolioService.UpdateProjectAsync(CurrentProject, (int)Id);
+			/*await PortfolioService.UpdateProjectAsync(CurrentProject, (int)Id);
+			NavigationManager.NavigateTo("/portfolio");*/
+
+			var APIURL = someClass.GetApiUrl();
+
+			HttpClient httpClient = new HttpClient();
+			string jsonContent = JsonConvert.SerializeObject(CurrentProject);
+			HttpContent httpContent = new StringContent(jsonContent);
+			response = await httpClient.PutAsync(APIURL + "api/PortfolioProjects/" + (int)Id, httpContent);
+			httpClient.Dispose();
+
 			NavigationManager.NavigateTo("/portfolio");
 		}
 		else
 		{
 			// Add
-			await PortfolioService.AddProjectAsync(CurrentProject);
+			/*await PortfolioService.AddProjectAsync(CurrentProject);
+			NavigationManager.NavigateTo("/portfolio");*/
+
+			var APIURL = someClass.GetApiUrl();
+
+			HttpClient httpClient = new HttpClient();
+			string jsonContent = JsonConvert.SerializeObject(CurrentProject);
+			HttpContent httpContent = new StringContent(jsonContent);
+			response = await httpClient.PostAsync(APIURL + "api/PortfolioProjects/", httpContent);
+			httpClient.Dispose();
+
+			NavigationManager.NavigateTo("/portfolio");
+
 			NavigationManager.NavigateTo("/portfolio");
 		}
 	}

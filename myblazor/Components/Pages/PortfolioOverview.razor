@@ -1,6 +1,7 @@
 ﻿@page "/portfolio"
 @inject IPortfolioService PortfolioService
 @inject NavigationManager NavigationManager
+@inject SomeClass someClass
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 
 <PageTitle>Portfolio</PageTitle>
@@ -42,11 +43,18 @@ else
 @code
 {
 	List<PortfolioProject> projects = new List<PortfolioProject>();
+	private HttpResponseMessage response = new();
 
 	protected override async Task OnInitializedAsync()
 	{
-		await Task.Delay(500);
-		projects = await PortfolioService.GetAllProjectsAsync();
+		/*await Task.Delay(500);
+		projects = await PortfolioService.GetAllProjectsAsync();*/
+
+		var APIURL = someClass.GetApiUrl();
+		HttpClient httpClient = new HttpClient();
+		response = await httpClient.GetAsync(APIURL + "api/PortfolioProjects/");
+		projects = JsonConvert.DeserializeObject<List<PortfolioProject>>(await response.Content.ReadAsStringAsync()) ?? new List<PortfolioProject>();
+		httpClient.Dispose();
 	}
 
 	void EditProject(int id)
@@ -56,8 +64,14 @@ else
 
 	async Task DeleteProject(int id)
 	{
-		await PortfolioService.DeleteProjectAsync(id);
-		projects = await PortfolioService.GetAllProjectsAsync();
+		/*await PortfolioService.DeleteProjectAsync(id);
+		projects = await PortfolioService.GetAllProjectsAsync();*/
+
+		var APIURL = someClass.GetApiUrl();
+		HttpClient httpClient = new HttpClient();
+		response = await httpClient.DeleteAsync(APIURL + "api/PortfolioProjects/" + id);
+		projects = JsonConvert.DeserializeObject<List<PortfolioProject>>(await response.Content.ReadAsStringAsync()) ?? new List<PortfolioProject>();
+		httpClient.Dispose();
 	}
 
 	void AddProject()
