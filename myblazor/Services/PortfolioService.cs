@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using myblazor.Data;
-using myblazor.Models;
+using myshared.Models;
 
 namespace myblazor.Services
 {

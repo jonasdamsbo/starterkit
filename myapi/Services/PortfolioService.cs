@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using myapi.Data;
-using myapi.Models;
+using myshared.Models;
 
 namespace myapi.Services
 {

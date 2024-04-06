@@ -1,4 +1,4 @@
-﻿namespace myapi.Models
+﻿namespace myshared.Models
 {
     public class PortfolioProject
     {

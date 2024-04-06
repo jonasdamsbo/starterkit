@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using myapi.Models;
+using myshared.Models;
 
 namespace myapi.Data
 {

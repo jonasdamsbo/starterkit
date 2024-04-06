@@ -1,4 +1,4 @@
-﻿using myapi.Models;
+﻿using myshared.Models;
 
 namespace myapi.Services
 {

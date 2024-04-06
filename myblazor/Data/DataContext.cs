@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using myblazor.Models;
+using myshared.Models;
 
 namespace myblazor.Data
 {
