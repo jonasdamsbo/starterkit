@@ -1,8 +1,7 @@
 ﻿@page "/edit-project"
 @page "/edit-project/{Id:int}"
-@inject IPortfolioService PortfolioService
 @inject NavigationManager NavigationManager
-@inject SomeClass someClass
+@inject EnvironmentVariableService EnvironmentVariableService
 @rendermode InteractiveServer
 
 @if(Id is null)
@@ -46,7 +45,7 @@ else
 		{
 			/*var project = await PortfolioService.GetProjectByIdAsync((int)Id);*/
 
-			var APIURL = someClass.GetApiUrl();
+			var APIURL = EnvironmentVariableService.GetApiUrl();
 			HttpClient httpClient = new HttpClient();
 			response = await httpClient.GetAsync(APIURL + "api/PortfolioOverview/" + (int)Id);
 			var project = JsonConvert.DeserializeObject<PortfolioProject>(await response.Content.ReadAsStringAsync()) ?? new PortfolioProject();
@@ -67,7 +66,7 @@ else
 			/*await PortfolioService.UpdateProjectAsync(CurrentProject, (int)Id);
 			NavigationManager.NavigateTo("/portfolio");*/
 
-			var APIURL = someClass.GetApiUrl();
+			var APIURL = EnvironmentVariableService.GetApiUrl();
 
 			HttpClient httpClient = new HttpClient();
 			string jsonContent = JsonConvert.SerializeObject(CurrentProject);
@@ -83,7 +82,7 @@ else
 			/*await PortfolioService.AddProjectAsync(CurrentProject);
 			NavigationManager.NavigateTo("/portfolio");*/
 
-			var APIURL = someClass.GetApiUrl();
+			var APIURL = EnvironmentVariableService.GetApiUrl();
 
 			HttpClient httpClient = new HttpClient();
 			string jsonContent = JsonConvert.SerializeObject(CurrentProject);
