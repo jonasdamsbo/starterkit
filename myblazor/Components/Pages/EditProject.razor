@@ -47,7 +47,7 @@ else
 
 			var APIURL = EnvironmentVariableService.GetApiUrl();
 			HttpClient httpClient = new HttpClient();
-			response = await httpClient.GetAsync(APIURL + "api/PortfolioOverview/" + (int)Id);
+			response = await httpClient.GetAsync(APIURL + "api/PortfolioProjects/" + (int)Id);
 			var project = JsonConvert.DeserializeObject<PortfolioProject>(await response.Content.ReadAsStringAsync()) ?? new PortfolioProject();
 			httpClient.Dispose();
 
