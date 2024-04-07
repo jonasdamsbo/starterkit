@@ -51,7 +51,7 @@ else
 
 		var APIURL = EnvironmentVariableService.GetApiUrl();
 		HttpClient httpClient = new HttpClient();
-		response = await httpClient.GetAsync(APIURL + "api/PortfolioProjects/");
+		response = await httpClient.GetAsync(APIURL + "api/PortfolioProjects");
 		projects = JsonConvert.DeserializeObject<List<PortfolioProjectDTO>>(await response.Content.ReadAsStringAsync()) ?? new List<PortfolioProjectDTO>();
 		httpClient.Dispose();
 	}
@@ -68,8 +68,15 @@ else
 
 		var APIURL = EnvironmentVariableService.GetApiUrl();
 		HttpClient httpClient = new HttpClient();
-		response = await httpClient.DeleteAsync(APIURL + "api/PortfolioProjects/" + id);
+		await httpClient.DeleteAsync(APIURL + "api/PortfolioProjects/" + id);
+		//response = await httpClient.DeleteAsync(APIURL + "api/PortfolioProjects/" + id);
+		//projects = JsonConvert.DeserializeObject<List<PortfolioProjectDTO>>(await response.Content.ReadAsStringAsync()) ?? new List<PortfolioProjectDTO>();
+		//httpClient.Dispose();
+
+		// workaround because deleting does not update projects, so it loads forever
+		response = await httpClient.GetAsync(APIURL + "api/PortfolioProjects");
 		projects = JsonConvert.DeserializeObject<List<PortfolioProjectDTO>>(await response.Content.ReadAsStringAsync()) ?? new List<PortfolioProjectDTO>();
+		//NavigationManager.NavigateTo("/portfolio");
 		httpClient.Dispose();
 	}
 
