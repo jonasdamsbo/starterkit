@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-backend:
     runs-on: windows-latest
 
     steps:
@@ -23,20 +23,20 @@ jobs:
           include-prerelease: true
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: dotnet build myapi --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish myapi -c Release -o ${{env.DOTNET_ROOT}}/myapi
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          name: .net-api
+          path: ${{env.DOTNET_ROOT}}/myapi
 
-  deploy:
+  deploy-backend:
     runs-on: windows-latest
-    needs: build
+    needs: [ build-backend ]
     environment:
       name: 'Production'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
@@ -45,7 +45,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v3
         with:
-          name: .net-app
+          name: .net-api
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -55,3 +55,4 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_1CA30D2976F64639B73199B5061658CA }}
           package: .
+
