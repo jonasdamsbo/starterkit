@@ -24,10 +24,10 @@ else
 		<label for="description">Description</label>
 		<InputText id="description" @bind-Value="CurrentProject.Description" class="form-control" />
 	</div>
-	<div>
+	<!--<div>
 		<label for="weburl">WebUrl</label>
 		<InputText id="weburl" @bind-Value="CurrentProject.WebUrl" class="form-control" />
-	</div>
+	</div>-->
 	<button type="submit" class="btn btn-primary">Save</button>
 </EditForm>
 
@@ -36,7 +36,7 @@ else
 	[Parameter]
 	public int? Id { get; set; }
 
-	public PortfolioProject CurrentProject { get; set; } = new();
+	public PortfolioProjectDTO CurrentProject { get; set; } = new();
 	private HttpResponseMessage response = new();
 
 	protected override async Task OnParametersSetAsync()
@@ -48,7 +48,7 @@ else
 			var APIURL = EnvironmentVariableService.GetApiUrl();
 			HttpClient httpClient = new HttpClient();
 			response = await httpClient.GetAsync(APIURL + "api/PortfolioProjects/" + (int)Id);
-			var project = JsonConvert.DeserializeObject<PortfolioProject>(await response.Content.ReadAsStringAsync()) ?? new PortfolioProject();
+			var project = JsonConvert.DeserializeObject<PortfolioProjectDTO>(await response.Content.ReadAsStringAsync()) ?? new PortfolioProjectDTO();
 			httpClient.Dispose();
 
 			if(project is not null)
@@ -71,6 +71,7 @@ else
 			HttpClient httpClient = new HttpClient();
 			string jsonContent = JsonConvert.SerializeObject(CurrentProject);
 			HttpContent httpContent = new StringContent(jsonContent);
+			httpContent.Headers.ContentType.MediaType = "application/json";
 			response = await httpClient.PutAsync(APIURL + "api/PortfolioProjects/" + (int)Id, httpContent);
 			httpClient.Dispose();
 
@@ -87,6 +88,7 @@ else
 			HttpClient httpClient = new HttpClient();
 			string jsonContent = JsonConvert.SerializeObject(CurrentProject);
 			HttpContent httpContent = new StringContent(jsonContent);
+			httpContent.Headers.ContentType.MediaType = "application/json";
 			response = await httpClient.PostAsync(APIURL + "api/PortfolioProjects/", httpContent);
 			httpClient.Dispose();
 

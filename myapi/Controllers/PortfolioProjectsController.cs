@@ -24,18 +24,18 @@ namespace myapi.Controllers
 
         // GET: api/PortfolioProjects
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<PortfolioProject>>> GetPortfolioProjects()
+        public async Task<ActionResult<IEnumerable<PortfolioProjectDTO>>> GetPortfolioProjects()
         {
             var portfolioprojects = await _context.PortfolioProjects.ToListAsync();
-            //var portfolioprojectDTOs = portfolioprojects.Select(x => new PortfolioProjectDTO(x));
+            var portfolioprojectDTOs = portfolioprojects.Select(x => new PortfolioProjectDTO(x));
 
-			return Ok(portfolioprojects);
+			return Ok(portfolioprojectDTOs);
 
 		}
 
         // GET: api/PortfolioProjects/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<PortfolioProject>> GetPortfolioProject(int id)
+        public async Task<ActionResult<PortfolioProjectDTO>> GetPortfolioProject(int id)
         {
             var portfolioProject = await _context.PortfolioProjects.FindAsync(id);
 
@@ -44,22 +44,27 @@ namespace myapi.Controllers
                 return NotFound();
 			}
 
-			//var portfolioProjectDTO = new PortfolioProjectDTO(portfolioProject);
+			var portfolioProjectDTO = new PortfolioProjectDTO(portfolioProject);
 
-			return Ok(portfolioProject);
+			return Ok(portfolioProjectDTO);
         }
 
         // PUT: api/PortfolioProjects/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPortfolioProject(int id, PortfolioProject portfolioProject)
+        public async Task<IActionResult> PutPortfolioProject(int id, PortfolioProjectDTO portfolioProjectDTO)
         {
-            if (id != portfolioProject.Id)
+			if (id != portfolioProjectDTO.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(portfolioProject).State = EntityState.Modified;
+			var portfolioProject = await _context.PortfolioProjects.FindAsync(id);
+			portfolioProject.Id = portfolioProjectDTO.Id;
+			portfolioProject.Title = portfolioProjectDTO.Title;
+			portfolioProject.Description = portfolioProjectDTO.Description;
+
+			_context.Entry(portfolioProject).State = EntityState.Modified;
 
             try
             {

@@ -10,6 +10,6 @@ namespace myshared.DTOs
 
 		public PortfolioProjectDTO() { }
 		public PortfolioProjectDTO(PortfolioProject portfolioProject) =>
-		(Title, Description) = (portfolioProject.Title, portfolioProject.Description);
+		(Id, Title, Description) = (portfolioProject.Id, portfolioProject.Title, portfolioProject.Description);
 	}
 }
