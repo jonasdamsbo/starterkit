@@ -8,28 +8,44 @@
 {
 	<PageTitle>Add a new project</PageTitle>
 	<h3>Add a new project</h3>
+
+	<EditForm Model="CurrentProject" OnSubmit="HandleSubmit">
+		<div>
+			<label for="title">Title</label>
+			<InputText id="title" @bind-Value="CurrentProject.Title" class="form-control" />
+		</div>
+		<div>
+			<label for="description">Description</label>
+			<InputText id="description" @bind-Value="CurrentProject.Description" class="form-control" />
+		</div>
+		<div>
+			<label for="weburl">WebUrl</label>
+			<InputText id="weburl" @bind-Value="CurrentProject.WebUrl" class="form-control" />
+		</div>
+		<button type="submit" class="btn btn-primary">Save</button>
+	</EditForm>
 }
 else
 {
-	<PageTitle>Edit: "@CurrentProject.Title"</PageTitle>
-	<h3>Edit: "@CurrentProject.Title"</h3>
-}
+	<PageTitle>Edit: "@CurrentProjectDTO.Title"</PageTitle>
+	<h3>Edit: "@CurrentProjectDTO.Title"</h3>
 
-<EditForm Model="CurrentProject" OnSubmit="HandleSubmit">
-	<div>
-		<label for="title">Title</label>
-		<InputText id="title" @bind-Value="CurrentProject.Title" class="form-control" />
-	</div>
-	<div>
-		<label for="description">Description</label>
-		<InputText id="description" @bind-Value="CurrentProject.Description" class="form-control" />
-	</div>
-	<div>
-		<label for="weburl">WebUrl</label>
-		<InputText id="weburl" @bind-Value="CurrentProject.WebUrl" class="form-control" />
-	</div>
-	<button type="submit" class="btn btn-primary">Save</button>
-</EditForm>
+	<EditForm Model="CurrentProjectDTO" OnSubmit="HandleSubmit">
+		<div>
+			<label for="title">Title</label>
+			<InputText id="title" @bind-Value="CurrentProjectDTO.Title" class="form-control" />
+		</div>
+		<div>
+			<label for="description">Description</label>
+			<InputText id="description" @bind-Value="CurrentProjectDTO.Description" class="form-control" />
+		</div>
+		<!--<div>
+			<label for="weburl">WebUrl</label>
+			<InputText id="weburl" @bind-Value="CurrentProject.WebUrl" class="form-control" />
+		</div>-->
+		<button type="submit" class="btn btn-primary">Save</button>
+	</EditForm>
+}
 
 @code
 {
@@ -37,6 +53,7 @@ else
 	public int? Id { get; set; }
 
 	public PortfolioProject CurrentProject { get; set; } = new();
+	public PortfolioProjectDTO CurrentProjectDTO { get; set; } = new();
 	private HttpResponseMessage response = new();
 
 	protected override async Task OnParametersSetAsync()
@@ -47,13 +64,13 @@ else
 
 			var APIURL = EnvironmentVariableService.GetApiUrl();
 			HttpClient httpClient = new HttpClient();
-			response = await httpClient.GetAsync(APIURL + "api/PortfolioOverview/" + (int)Id);
-			var project = JsonConvert.DeserializeObject<PortfolioProject>(await response.Content.ReadAsStringAsync()) ?? new PortfolioProject();
+			response = await httpClient.GetAsync(APIURL + "api/PortfolioProjects/" + (int)Id);
+			var project = JsonConvert.DeserializeObject<PortfolioProjectDTO>(await response.Content.ReadAsStringAsync()) ?? new PortfolioProjectDTO();
 			httpClient.Dispose();
 
 			if(project is not null)
 			{
-				CurrentProject = project;
+				CurrentProjectDTO = project;
 			}
 		}
 	}
@@ -69,8 +86,9 @@ else
 			var APIURL = EnvironmentVariableService.GetApiUrl();
 
 			HttpClient httpClient = new HttpClient();
-			string jsonContent = JsonConvert.SerializeObject(CurrentProject);
+			string jsonContent = JsonConvert.SerializeObject(CurrentProjectDTO);
 			HttpContent httpContent = new StringContent(jsonContent);
+			httpContent.Headers.ContentType.MediaType = "application/json";
 			response = await httpClient.PutAsync(APIURL + "api/PortfolioProjects/" + (int)Id, httpContent);
 			httpClient.Dispose();
 
@@ -87,10 +105,9 @@ else
 			HttpClient httpClient = new HttpClient();
 			string jsonContent = JsonConvert.SerializeObject(CurrentProject);
 			HttpContent httpContent = new StringContent(jsonContent);
+			httpContent.Headers.ContentType.MediaType = "application/json";
 			response = await httpClient.PostAsync(APIURL + "api/PortfolioProjects/", httpContent);
 			httpClient.Dispose();
-
-			NavigationManager.NavigateTo("/portfolio");
 
 			NavigationManager.NavigateTo("/portfolio");
 		}

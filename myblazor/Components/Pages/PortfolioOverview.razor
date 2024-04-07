@@ -17,7 +17,7 @@ else
 			<tr>
 				<th>Title</th>
 				<th>Description</th>
-				<th>WebUrl</th>
+				<!--<th>WebUrl</th>-->
 				<th></th>
 				<th></th>
 			</tr>
@@ -28,7 +28,7 @@ else
 				<tr>
 					<td>@project.Title</td>
 					<td>@project.Description</td>
-					<td>@project.WebUrl</td>
+					<!--<td>@project.WebUrl</td>-->
 					<td><button class="btn btn-primary" @onclick="@(() => EditProject(project.Id))">Edit</button></td>
 					<td><button class="btn btn-primary" @onclick="@(() => DeleteProject(project.Id))">Delete</button></td>
 				</tr>
@@ -41,7 +41,7 @@ else
 
 @code
 {
-	List<PortfolioProject> projects = new List<PortfolioProject>();
+	List<PortfolioProjectDTO> projects = new List<PortfolioProjectDTO>();
 	private HttpResponseMessage response = new();
 
 	protected override async Task OnInitializedAsync()
@@ -51,8 +51,8 @@ else
 
 		var APIURL = EnvironmentVariableService.GetApiUrl();
 		HttpClient httpClient = new HttpClient();
-		response = await httpClient.GetAsync(APIURL + "api/PortfolioProjects/");
-		projects = JsonConvert.DeserializeObject<List<PortfolioProject>>(await response.Content.ReadAsStringAsync()) ?? new List<PortfolioProject>();
+		response = await httpClient.GetAsync(APIURL + "api/PortfolioProjects");
+		projects = JsonConvert.DeserializeObject<List<PortfolioProjectDTO>>(await response.Content.ReadAsStringAsync()) ?? new List<PortfolioProjectDTO>();
 		httpClient.Dispose();
 	}
 
@@ -68,8 +68,15 @@ else
 
 		var APIURL = EnvironmentVariableService.GetApiUrl();
 		HttpClient httpClient = new HttpClient();
-		response = await httpClient.DeleteAsync(APIURL + "api/PortfolioProjects/" + id);
-		projects = JsonConvert.DeserializeObject<List<PortfolioProject>>(await response.Content.ReadAsStringAsync()) ?? new List<PortfolioProject>();
+		await httpClient.DeleteAsync(APIURL + "api/PortfolioProjects/" + id);
+		//response = await httpClient.DeleteAsync(APIURL + "api/PortfolioProjects/" + id);
+		//projects = JsonConvert.DeserializeObject<List<PortfolioProjectDTO>>(await response.Content.ReadAsStringAsync()) ?? new List<PortfolioProjectDTO>();
+		//httpClient.Dispose();
+
+		// workaround because deleting does not update projects, so it loads forever
+		response = await httpClient.GetAsync(APIURL + "api/PortfolioProjects");
+		projects = JsonConvert.DeserializeObject<List<PortfolioProjectDTO>>(await response.Content.ReadAsStringAsync()) ?? new List<PortfolioProjectDTO>();
+		//NavigationManager.NavigateTo("/portfolio");
 		httpClient.Dispose();
 	}
 
