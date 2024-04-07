@@ -9,7 +9,8 @@ namespace myapi.Data
         {
         }
 
-        public DbSet<PortfolioProject> PortfolioProjects { get; set; }
+		public DbSet<PortfolioProject> PortfolioProjects => Set<PortfolioProject>();
+		//public DbSet<PortfolioProject> PortfolioProjects { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
