@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using myapi.Data;
+using myapi.Endpoints;
 using myapi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +14,12 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DataContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// controllers
 builder.Services.AddScoped<IPortfolioService, PortfolioService>();
+
+// minimal api
+//builder.Services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("PortfolioProjects"));
 
 var app = builder.Build();
 
@@ -28,6 +34,13 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
+// controllers
 app.MapControllers();
+
+// minimap api endpoints
+/*app.MapPortfolioProjectsEndpoints();
+app.MapGroup("/portfolioprojects")
+	.MapPortfolioProjectsEndpoints()
+	.WithTags("Public");*/
 
 app.Run();

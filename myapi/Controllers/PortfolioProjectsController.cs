@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using myapi.Data;
+using myshared.DTOs;
 using myshared.Models;
 
 namespace myapi.Controllers
@@ -25,8 +26,12 @@ namespace myapi.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<PortfolioProject>>> GetPortfolioProjects()
         {
-            return await _context.PortfolioProjects.ToListAsync();
-        }
+            var portfolioprojects = await _context.PortfolioProjects.ToListAsync();
+            //var portfolioprojectDTOs = portfolioprojects.Select(x => new PortfolioProjectDTO(x));
+
+			return Ok(portfolioprojects);
+
+		}
 
         // GET: api/PortfolioProjects/5
         [HttpGet("{id}")]
@@ -34,12 +39,14 @@ namespace myapi.Controllers
         {
             var portfolioProject = await _context.PortfolioProjects.FindAsync(id);
 
-            if (portfolioProject == null)
+			if (portfolioProject == null)
             {
                 return NotFound();
-            }
+			}
 
-            return portfolioProject;
+			//var portfolioProjectDTO = new PortfolioProjectDTO(portfolioProject);
+
+			return Ok(portfolioProject);
         }
 
         // PUT: api/PortfolioProjects/5
