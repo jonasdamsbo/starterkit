@@ -12,6 +12,10 @@ builder.Services.AddScoped<EnvironmentVariableService>();
 
 builder.Services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
 
+builder.Services.Configure<IISOptions>(options =>
+{
+	options.ForwardClientCertificate = false;
+});
 
 var app = builder.Build();
 
