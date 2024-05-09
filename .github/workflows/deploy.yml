@@ -6,7 +6,7 @@ name: Fullstack to Azure - jgdapiapp/jgdwebapp
 on:
   push:
     branches:
-      - fullstack
+      - deploy
   workflow_dispatch:
 
 jobs:
