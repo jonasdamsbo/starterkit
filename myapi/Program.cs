@@ -28,6 +28,15 @@ builder.Services.Configure<IISOptions>(options =>
 
 var app = builder.Build();
 
+// update-database on build
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+
+    var context = services.GetRequiredService<DataContext>();
+    context.Database.Migrate();
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
