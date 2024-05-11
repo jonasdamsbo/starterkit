@@ -33,13 +33,4 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: efcore-migration-script-generator-task@1
-  inputs:
-    projectpath: 'D:\a\1\s\myapi\myapi.csproj'
-    databasecontexts: 'DataContext'
-    startupprojectpath: 'D:\a\1\s\myapi\myapi.csproj'
-    targetfolder: '$(build.artifactstagingdirectory)/migrations'
-    build: true
-    installdependencies: true
-
 - task: PublishBuildArtifacts@1
