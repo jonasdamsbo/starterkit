@@ -1,3 +1,4 @@
+using EFCore.AutomaticMigrations;
 using Microsoft.EntityFrameworkCore;
 using myapi.Data;
 using myapi.Endpoints;
@@ -31,10 +32,24 @@ var app = builder.Build();
 // update-database on build
 using (var scope = app.Services.CreateScope())
 {
-    var services = scope.ServiceProvider;
+	var services = scope.ServiceProvider;
 
-    var context = services.GetRequiredService<DataContext>();
-    context.Database.Migrate();
+	var context = services.GetRequiredService<DataContext>();
+
+	// using your manually created migrations, automatically runs update-database
+	//context.Database.Migrate();
+
+	// without having to manually create migrations, fully automatic, requires NuGet EFCode.AutomaticMigrations
+	// without options
+	//MigrateDatabaseToLatestVersion.Execute(context);
+
+	// with options
+	MigrateDatabaseToLatestVersion.Execute(context,
+		new DbMigrationsOptions { 
+			AutomaticMigrationsEnabled = true,
+			AutomaticMigrationDataLossAllowed = true
+		}
+	);
 }
 
 // Configure the HTTP request pipeline.
@@ -51,7 +66,7 @@ app.UseAuthorization();
 // controllers
 app.MapControllers();
 
-// minimap api endpoints
+// minimal api endpoints
 /*app.MapPortfolioProjectsEndpoints();
 app.MapGroup("/portfolioprojects")
 	.MapPortfolioProjectsEndpoints()

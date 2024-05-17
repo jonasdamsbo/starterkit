@@ -3,7 +3,7 @@ using myapi.Data;
 using myshared.Models;
 using myshared.DTOs;
 
-namespace myapi.Endpoints
+namespace myapi.Endpoints // minimal apis
 {
 	public static class PortfolioProjectsEndpoints
 	{

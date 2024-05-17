@@ -9,7 +9,7 @@ using myapi.Data;
 using myshared.DTOs;
 using myshared.Models;
 
-namespace myapi.Controllers
+namespace myapi.Controllers // controllers
 {
     [Route("api/[controller]")]
     [ApiController]
