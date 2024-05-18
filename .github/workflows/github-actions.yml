@@ -6,7 +6,7 @@ name: Deploy to Azure - jgdwebapp/jgdapiapp
 on:
   push:
     branches:
-      - deploy
+      - deploygit
   workflow_dispatch:
 
 jobs:
