@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using myapi.Data;
 using myapi.Endpoints;
 using myapi.Services;
+using myshared.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +19,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 // controllers
 builder.Services.AddScoped<IPortfolioService, PortfolioService>();
+builder.Services.AddScoped<EnvironmentVariableService>();
 
 builder.Services.Configure<IISOptions>(options =>
 {
@@ -42,6 +44,8 @@ using (var scope = app.Services.CreateScope())
 	// without having to manually create migrations, fully automatic, requires NuGet EFCode.AutomaticMigrations
 	// without options
 	//MigrateDatabaseToLatestVersion.Execute(context);
+	var envVarService = services.GetRequiredService<EnvironmentVariableService>();
+	Console.WriteLine(envVarService.GetConnStr());
 
 	// with options
 	MigrateDatabaseToLatestVersion.Execute(context,
@@ -50,6 +54,8 @@ using (var scope = app.Services.CreateScope())
 			AutomaticMigrationDataLossAllowed = true
 		}
 	);
+
+	Console.WriteLine(envVarService.GetConnStr());
 }
 
 // Configure the HTTP request pipeline.
@@ -73,3 +79,10 @@ app.MapGroup("/portfolioprojects")
 	.WithTags("Public");*/
 
 app.Run();
+
+/*using (var scope = app.Services.CreateScope())
+{
+	var services = scope.ServiceProvider;
+	var envVarService = services.GetRequiredService<EnvironmentVariableService>();
+	Console.WriteLine(envVarService.GetConnStr());
+}*/
