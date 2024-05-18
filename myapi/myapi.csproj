@@ -24,4 +24,9 @@
     <ProjectReference Include="..\myshared\myshared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+    <Folder Include="DataBackup\" />
+  </ItemGroup>
+
 </Project>
