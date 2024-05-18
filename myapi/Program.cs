@@ -48,12 +48,12 @@ using (var scope = app.Services.CreateScope())
 	//Console.WriteLine(envVarService.GetConnStr());
 
 	// with options
-	MigrateDatabaseToLatestVersion.Execute(context,
+	/*MigrateDatabaseToLatestVersion.Execute(context,
 		new DbMigrationsOptions { 
 			AutomaticMigrationsEnabled = true,
 			AutomaticMigrationDataLossAllowed = true
 		}
-	);
+	);*/
 
 	//Console.WriteLine(envVarService.GetConnStr());
 }
