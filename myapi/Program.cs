@@ -19,7 +19,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 // controllers
 builder.Services.AddScoped<IPortfolioService, PortfolioService>();
-builder.Services.AddScoped<EnvironmentVariableService>();
+//builder.Services.AddScoped<EnvironmentVariableService>();
 
 builder.Services.Configure<IISOptions>(options =>
 {
@@ -48,12 +48,12 @@ using (var scope = app.Services.CreateScope())
 	//Console.WriteLine(envVarService.GetConnStr());
 
 	// with options
-	MigrateDatabaseToLatestVersion.Execute(context,
+	/*MigrateDatabaseToLatestVersion.Execute(context,
 		new DbMigrationsOptions { 
 			AutomaticMigrationsEnabled = true,
 			AutomaticMigrationDataLossAllowed = true
 		}
-	);
+	);*/
 
 	//Console.WriteLine(envVarService.GetConnStr());
 }
