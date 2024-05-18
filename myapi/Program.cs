@@ -44,8 +44,8 @@ using (var scope = app.Services.CreateScope())
 	// without having to manually create migrations, fully automatic, requires NuGet EFCode.AutomaticMigrations
 	// without options
 	//MigrateDatabaseToLatestVersion.Execute(context);
-	var envVarService = services.GetRequiredService<EnvironmentVariableService>();
-	Console.WriteLine(envVarService.GetConnStr());
+	//var envVarService = services.GetRequiredService<EnvironmentVariableService>();
+	//Console.WriteLine(envVarService.GetConnStr());
 
 	// with options
 	MigrateDatabaseToLatestVersion.Execute(context,
@@ -55,7 +55,7 @@ using (var scope = app.Services.CreateScope())
 		}
 	);
 
-	Console.WriteLine(envVarService.GetConnStr());
+	//Console.WriteLine(envVarService.GetConnStr());
 }
 
 // Configure the HTTP request pipeline.
