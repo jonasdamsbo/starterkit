@@ -42,7 +42,7 @@ using (var scope = app.Services.CreateScope())
 	//context.Database.Migrate();
 
 	// without having to manually create migrations, fully automatic, requires NuGet EFCode.AutomaticMigrations
-	// without options
+	// without options 
 	//MigrateDatabaseToLatestVersion.Execute(context);
 	//var envVarService = services.GetRequiredService<EnvironmentVariableService>();
 	//Console.WriteLine(envVarService.GetConnStr());
