@@ -21,10 +21,10 @@ builder.Services.AddDbContext<DataContext>(options =>
 builder.Services.AddScoped<IPortfolioService, PortfolioService>();
 //builder.Services.AddScoped<EnvironmentVariableService>();
 
-builder.Services.Configure<IISOptions>(options =>
+/*builder.Services.Configure<IISOptions>(options =>
 {
 	options.ForwardClientCertificate = false;
-});
+});*/
 
 // minimal api
 //builder.Services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("PortfolioProjects"));
