@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
-  <!-- <PropertyGroup>
+  <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-	<AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
-  </PropertyGroup> -->
+	<!--<AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>-->
+  </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="EFCore.AutomaticMigrations" Version="8.0.0" />
