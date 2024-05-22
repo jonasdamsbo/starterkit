@@ -31,6 +31,26 @@ builder.Services.Configure<IISOptions>(options =>
 
 var app = builder.Build();
 
+// Configure the HTTP request pipeline.
+if (app.Environment.IsDevelopment())
+{
+	app.UseSwagger();
+	app.UseSwaggerUI();
+}
+
+app.UseHttpsRedirection();
+
+app.UseAuthorization();
+
+// controllers
+app.MapControllers();
+
+// minimal api endpoints
+/*app.MapPortfolioProjectsEndpoints();
+app.MapGroup("/portfolioprojects")
+	.MapPortfolioProjectsEndpoints()
+	.WithTags("Public");*/
+
 // update-database on build
 using (var scope = app.Services.CreateScope())
 {
@@ -57,26 +77,6 @@ using (var scope = app.Services.CreateScope())
 
 	//Console.WriteLine(envVarService.GetConnStr());
 }
-
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-	app.UseSwagger();
-	app.UseSwaggerUI();
-}
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-// controllers
-app.MapControllers();
-
-// minimal api endpoints
-/*app.MapPortfolioProjectsEndpoints();
-app.MapGroup("/portfolioprojects")
-	.MapPortfolioProjectsEndpoints()
-	.WithTags("Public");*/
 
 app.Run();
 
