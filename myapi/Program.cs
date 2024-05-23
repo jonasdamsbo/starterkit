@@ -55,7 +55,7 @@ using (var scope = app.Services.CreateScope())
 		}
 	);
 
-	//Console.WriteLine(envVarService.GetConnStr());
+	//Console.WriteLine(envVarService.GetConnStr()); 
 }
 
 // Configure the HTTP request pipeline.
