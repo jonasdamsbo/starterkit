@@ -18,7 +18,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // controllers
-builder.Services.AddScoped<IPortfolioService, PortfolioService>();
+builder.Services.AddScoped<IPortfolioService, PortfolioService>(); 
 //builder.Services.AddScoped<EnvironmentVariableService>();
 
 builder.Services.Configure<IISOptions>(options =>
