@@ -47,7 +47,7 @@ using (var scope = app.Services.CreateScope())
 	//var envVarService = services.GetRequiredService<EnvironmentVariableService>();
 	//Console.WriteLine(envVarService.GetConnStr());
 
-	// with options
+	// with options 
 	MigrateDatabaseToLatestVersion.Execute(context,
 		new DbMigrationsOptions { 
 			AutomaticMigrationsEnabled = true,
