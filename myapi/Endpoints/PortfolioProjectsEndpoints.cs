@@ -2,72 +2,66 @@
 using myapi.Data;
 using myshared.Models;
 using myshared.DTOs;
+using myapi.Services;
 
 namespace myapi.Endpoints // minimal apis
 {
 	public static class PortfolioProjectsEndpoints
 	{
-		public static RouteGroupBuilder MapPortfolioProjectsEndpoints(this RouteGroupBuilder group)
+		public static void MapPortfolioProjectsEndpoints(this WebApplication app)
 		{
-			// route =  "/portfolioprojects"
+			var group = app.MapGroup("api/portfolioprojects");
 			group.MapGet("/", GetAllPortfolioProjects);
 			group.MapGet("/{id}", GetPortfolioProject);
 			group.MapPost("/", CreatePortfolioProject);
 			group.MapPut("/{id}", UpdatePortfolioProject);
 			group.MapDelete("/{id}", DeletePortfolioProject);
-
-			return group;
 		}
 
-		static async Task<IResult> GetAllPortfolioProjects(DataContext db)
+		static async Task<IResult> GetAllPortfolioProjects(IPortfolioService portfolioService)
 		{
-			return TypedResults.Ok(await db.PortfolioProjects.Select(x => new PortfolioProjectDTO(x)).ToArrayAsync());
+			return TypedResults.Ok(await portfolioService.GetAllProjectsAsync());
 		}
 
-		static async Task<IResult> GetPortfolioProject(int id, DataContext db)
+		static async Task<IResult> GetPortfolioProject(int id, IPortfolioService portfolioService)
 		{
-			return await db.PortfolioProjects.FindAsync(id)
-				is PortfolioProject portfolioProject
-					? TypedResults.Ok(new PortfolioProjectDTO(portfolioProject))
+			return await portfolioService.GetProjectByIdAsync(id)
+				is PortfolioProjectDTO portfolioProjectDTO
+					? TypedResults.Ok(portfolioProjectDTO)
 					: TypedResults.NotFound();
 		}
 
-		static async Task<IResult> CreatePortfolioProject(PortfolioProjectDTO portfolioProjectDTO, DataContext db)
+		static async Task<IResult> CreatePortfolioProject(PortfolioProjectDTO portfolioProjectDTO, IPortfolioService portfolioService)
 		{
-			var portfolioProject = new PortfolioProject
+			/*var portfolioProjectDTO = new PortfolioProjectDTO
 			{
 				Title = portfolioProjectDTO.Title,
 				Description = portfolioProjectDTO.Description
-			};
+			};*/
 
-			db.PortfolioProjects.Add(portfolioProject);
-			await db.SaveChangesAsync();
+			await portfolioService.AddProjectAsync(portfolioProjectDTO);
 
-			portfolioProjectDTO = new PortfolioProjectDTO(portfolioProject);
+			//portfolioProjectDTO = new PortfolioProjectDTO(portfolioProject);
 
-			return TypedResults.Created($"/portfolioProjects/{portfolioProject.Id}", portfolioProjectDTO);
+			return TypedResults.Created($"/portfolioProjects/{portfolioProjectDTO.Id}", portfolioProjectDTO);
 		}
 
-		static async Task<IResult> UpdatePortfolioProject(int id, PortfolioProjectDTO portfolioProjectDTO, DataContext db)
+		static async Task<IResult> UpdatePortfolioProject(int id, PortfolioProjectDTO updatedPortfolioProjectDTO, IPortfolioService portfolioService)
 		{
-			var portfolioProject = await db.PortfolioProjects.FindAsync(id);
+			var portfolioProjectDTO = await portfolioService.GetProjectByIdAsync(id);
 
-			if (portfolioProject is null) return TypedResults.NotFound();
+			if (portfolioProjectDTO is null) return TypedResults.NotFound();
 
-			portfolioProject.Title = portfolioProjectDTO.Title;
-			portfolioProject.Description = portfolioProjectDTO.Description;
-
-			await db.SaveChangesAsync();
+			await portfolioService.UpdateProjectAsync(updatedPortfolioProjectDTO, id);
 
 			return TypedResults.NoContent();
 		}
 
-		static async Task<IResult> DeletePortfolioProject(int id, DataContext db)
+		static async Task<IResult> DeletePortfolioProject(int id, IPortfolioService portfolioService)
 		{
-			if (await db.PortfolioProjects.FindAsync(id) is PortfolioProject portfolioProject)
+			if (await portfolioService.GetProjectByIdAsync(id) is PortfolioProjectDTO)
 			{
-				db.PortfolioProjects.Remove(portfolioProject);
-				await db.SaveChangesAsync();
+				await portfolioService.DeleteProjectAsync(id);
 				return TypedResults.NoContent();
 			}
 

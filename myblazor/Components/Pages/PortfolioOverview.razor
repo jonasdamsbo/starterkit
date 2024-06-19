@@ -1,6 +1,4 @@
 ﻿@page "/portfolio"
-@inject NavigationManager NavigationManager
-@inject EnvironmentVariableService EnvironmentVariableService
 @rendermode @(new InteractiveServerRenderMode(prerender: false))
 
 <PageTitle>Portfolio</PageTitle>
@@ -37,51 +35,4 @@ else
 	</table>
 
 	<button @onclick="AddProject">Add a new project</button>
-}
-
-@code
-{
-	List<PortfolioProjectDTO> projects = new List<PortfolioProjectDTO>();
-	private HttpResponseMessage response = new();
-
-	protected override async Task OnInitializedAsync()
-	{
-		/*await Task.Delay(500);
-		projects = await PortfolioService.GetAllProjectsAsync();*/
-
-		var APIURL = EnvironmentVariableService.GetApiUrl();
-		HttpClient httpClient = new HttpClient();
-		response = await httpClient.GetAsync(APIURL + "api/PortfolioProjects");
-		projects = JsonConvert.DeserializeObject<List<PortfolioProjectDTO>>(await response.Content.ReadAsStringAsync()) ?? new List<PortfolioProjectDTO>();
-		httpClient.Dispose();
-	}
-
-	void EditProject(int id)
-	{
-		NavigationManager.NavigateTo($"/edit-project/{id}");
-	}
-
-	async Task DeleteProject(int id)
-	{
-		/*await PortfolioService.DeleteProjectAsync(id);
-		projects = await PortfolioService.GetAllProjectsAsync(); */
-
-		var APIURL = EnvironmentVariableService.GetApiUrl();
-		HttpClient httpClient = new HttpClient();
-		await httpClient.DeleteAsync(APIURL + "api/PortfolioProjects/" + id);
-		//response = await httpClient.DeleteAsync(APIURL + "api/PortfolioProjects/" + id);
-		//projects = JsonConvert.DeserializeObject<List<PortfolioProjectDTO>>(await response.Content.ReadAsStringAsync()) ?? new List<PortfolioProjectDTO>();
-		//httpClient.Dispose();
-
-		// workaround because deleting does not update projects, so it loads forever
-		response = await httpClient.GetAsync(APIURL + "api/PortfolioProjects");
-		projects = JsonConvert.DeserializeObject<List<PortfolioProjectDTO>>(await response.Content.ReadAsStringAsync()) ?? new List<PortfolioProjectDTO>();
-		//NavigationManager.NavigateTo("/portfolio");
-		httpClient.Dispose();
-	}
-
-	void AddProject()
-	{
-		NavigationManager.NavigateTo($"/edit-project");
-	}
 }
