@@ -15,7 +15,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<DataContext>(options =>
-	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+	options.UseSqlServer(builder.Configuration.GetConnectionString("Mssql")));
 
 // controllers
 builder.Services.AddScoped<IPortfolioService, PortfolioService>(); 
@@ -48,12 +48,12 @@ using (var scope = app.Services.CreateScope())
 	//Console.WriteLine(envVarService.GetConnStr());
 
 	// with options
-	/*MigrateDatabaseToLatestVersion.Execute(context,
+	MigrateDatabaseToLatestVersion.Execute(context,
 		new DbMigrationsOptions { 
 			AutomaticMigrationsEnabled = true,
 			AutomaticMigrationDataLossAllowed = true
 		}
-	);*/
+	);
 
 	//Console.WriteLine(envVarService.GetConnStr()); 
 }
