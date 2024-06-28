@@ -62,8 +62,8 @@ using (var scope = app.Services.CreateScope())
 			}
 		);
 	}
-	catch{
-
+	catch (Exception e){
+		Console.WriteLine(e.ToString());
 	}
 	
 
