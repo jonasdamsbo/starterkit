@@ -20,7 +20,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 // controllers
 builder.Services.AddScoped<IPortfolioService, PortfolioService>(); 
 //builder.Services.AddScoped<EnvironmentVariableService>();
-builder.Services.AddScoped<BackupService>();
+//builder.Services.AddScoped<BackupService>();
 
 builder.Services.Configure<IISOptions>(options =>
 {
@@ -37,7 +37,7 @@ using (var scope = app.Services.CreateScope())
 {
 	var services = scope.ServiceProvider;
 
-	var backupService = services.GetRequiredService<BackupService>();
+	//var backupService = services.GetRequiredService<BackupService>();
 	//backupService.BackupDb();
 
 	var context = services.GetRequiredService<DataContext>();
