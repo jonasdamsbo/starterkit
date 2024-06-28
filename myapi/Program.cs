@@ -20,6 +20,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 // controllers
 builder.Services.AddScoped<IPortfolioService, PortfolioService>(); 
 //builder.Services.AddScoped<EnvironmentVariableService>();
+builder.Services.AddScoped<BackupService>();
 
 builder.Services.Configure<IISOptions>(options =>
 {
@@ -36,6 +37,9 @@ using (var scope = app.Services.CreateScope())
 {
 	var services = scope.ServiceProvider;
 
+	var backupService = services.GetRequiredService<BackupService>();
+	//backupService.BackupDb();
+
 	var context = services.GetRequiredService<DataContext>();
 
 	// using your manually created migrations, automatically runs update-database
@@ -48,17 +52,25 @@ using (var scope = app.Services.CreateScope())
 	//Console.WriteLine(envVarService.GetConnStr());
 
 	// with options
-	MigrateDatabaseToLatestVersion.Execute(context,
-		new DbMigrationsOptions { 
-			AutomaticMigrationsEnabled = true,
-			AutomaticMigrationDataLossAllowed = true
-		}
-	);
+	try
+	{
+		MigrateDatabaseToLatestVersion.Execute(context,
+			new DbMigrationsOptions
+			{
+				AutomaticMigrationsEnabled = true,
+				AutomaticMigrationDataLossAllowed = true
+			}
+		);
+	}
+	catch{
+
+	}
+	
 
 	//Console.WriteLine(envVarService.GetConnStr()); 
 }
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline. 
 if (app.Environment.IsDevelopment())
 {
 	app.UseSwagger();
