@@ -27,7 +27,7 @@ services:
       ACCEPT_EULA: "Y"
       MSSQL_SA_PASSWORD: "P@ssw0rd"
     entrypoint: # use to run scripts after building
-      - ./entrypoint/sql-entrypoint.sh
+      - ./entrypoint/mssql-init.sh
     deploy:
       resources:
         limits:

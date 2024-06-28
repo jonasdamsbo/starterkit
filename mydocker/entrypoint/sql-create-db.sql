@@ -1,3 +1,5 @@
+-- Create db and table
+
 USE [master]
 GO
 
