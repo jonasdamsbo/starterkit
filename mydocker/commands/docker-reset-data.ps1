@@ -5,4 +5,5 @@ docker-compose down --volumes
 Write-Host 
 Write-Host "Containers and volumes removed" -ForegroundColor DarkGreen
 Write-Host 
-Read-Host "Press any key to close..."
+Write-Host "Press any key to close..."
+$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")

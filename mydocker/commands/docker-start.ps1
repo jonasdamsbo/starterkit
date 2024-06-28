@@ -5,4 +5,5 @@ docker-compose start
 Write-Host 
 Write-Host "Containers started" -ForegroundColor DarkGreen
 Write-Host 
-Read-Host "Press any key to close..."
+Write-Host "Press any key to close..."
+$Host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
