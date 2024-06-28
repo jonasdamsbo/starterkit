@@ -10,24 +10,24 @@ namespace myblazor.Components.Pages
 		// dependencies
 
 		// dotnet 8
-		/*
+
 		[Inject]
-		public NavigationManager NavigationManager { get; set;}
+		public NavigationManager NavigationManager { get; set; }
 		[Inject]
-		public EnvironmentVariableService EnvironmentVariableService { get; set;}
-		*/
+		public EnvironmentVariableService EnvironmentVariableService { get; set; }
+
 
 		// dotnet 9
-		private readonly NavigationManager NavigationManager;
-		private readonly EnvironmentVariableService EnvironmentVariableService;
+		//private readonly NavigationManager NavigationManager;
+		//private readonly EnvironmentVariableService EnvironmentVariableService;
 
-		public PortfolioOverview(
-			NavigationManager navigationManager,
-			EnvironmentVariableService environmentVariableService)
-		{
-			NavigationManager = navigationManager;
-			EnvironmentVariableService = environmentVariableService;
-		}
+		//public PortfolioOverview(
+		//	NavigationManager navigationManager,
+		//	EnvironmentVariableService environmentVariableService)
+		//{
+		//	NavigationManager = navigationManager;
+		//	EnvironmentVariableService = environmentVariableService;
+		//}
 
 		// properties
 		List<PortfolioProjectDTO> projects = new List<PortfolioProjectDTO>();
