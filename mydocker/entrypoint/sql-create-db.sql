@@ -1,4 +1,4 @@
--- Create db and table
+-- Create db
 
 USE [master]
 GO
@@ -8,6 +8,8 @@ BEGIN
   CREATE DATABASE [mydb];
 END;
 GO
+
+-- Create table
 
 USE [mydb];
 GO
