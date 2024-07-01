@@ -7,7 +7,7 @@ $files =
     "Postman2.exe"
 
 #check directory
-$folder = "C:\installer\"
+$folder = ".\tools-installer\"
 
 Write-Host "Checking install folder:" -ForegroundColor Cyan
 
