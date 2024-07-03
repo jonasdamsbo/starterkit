@@ -1,5 +1,4 @@
 Write-Host 
-cd $env:userprofile/Documents/GitHub/mywebrepo/mydocker/
 if ($args[0] -eq "--skip-build") {
     Write-Host "--skip-build was supplied " -NoNewline
     Write-Host "skipping" -ForegroundColor DarkYellow

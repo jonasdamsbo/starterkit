@@ -289,7 +289,7 @@ do {
                 Write-Host "Installing local database (MSSQL + MongoDB) docker-container:" -ForegroundColor Cyan
                 Write-Host "Installing docker container" -ForegroundColor Blue
                 #./mydocker/docker-setup run
-
+		cd $env:userprofile/Documents/GitHub/mywebrepo/mydocker/
 		& $env:userprofile/Documents/GitHub/mywebrepo/mydocker/docker-setup run
 
                 #*/Documents/GitHub/mywebrepo/mydocker/docker-setup run
