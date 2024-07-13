@@ -26,7 +26,6 @@ services:
     environment:
       ACCEPT_EULA: "Y"
       MSSQL_SA_PASSWORD: "P@ssw0rd"
-      COMPOSE_PROJECT_NAME: "mycontainerss"
     volumes:
      - ./entrypoint:/entrypoint # use to mount scripts to a folder in container
      - mssqldata:/var/opt/mssql/data
