@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   mongo:
     container_name: mongo-server
@@ -17,22 +15,23 @@ services:
   sql:
     container_name: mssql-server
     image: 'mcr.microsoft.com/mssql/server:latest'
-    user: root
-    ports:
-      - "12345:1433"
-    volumes:
-     - ./entrypoint:/entrypoint # use to mount scripts to a folder in container
-     - mssqldata:/var/opt/mssql/data
-    environment:
-      ACCEPT_EULA: "Y"
-      MSSQL_SA_PASSWORD: "P@ssw0rd"
-    entrypoint: # use to run scripts after building
-      - ./entrypoint/sql-entrypoint.sh
     deploy:
       resources:
         limits:
           cpus: '1'
           memory: 2048M
+    user: root
+    ports:
+      - "12345:1433"
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "P@ssw0rd"
+      COMPOSE_PROJECT_NAME: "mycontainerss"
+    volumes:
+     - ./entrypoint:/entrypoint # use to mount scripts to a folder in container
+     - mssqldata:/var/opt/mssql/data
+    entrypoint: # use to run scripts after building
+      - ./entrypoint/sql-entrypoint.sh
 
 volumes:
   mssqldata:
