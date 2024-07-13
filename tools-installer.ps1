@@ -4,25 +4,25 @@ $urls =
     "https://code.visualstudio.com/sha/download?build=stable&os=win32-x64-user",
     "https://dl.pstmn.io/download/latest/win64",
     "https://central.github.com/deployments/desktop/desktop/latest/win32",
-    "https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe?utm_source=docker&utm_medium=webreferral&utm_campaign=dd-smartbutton&utm_location=module",
     "https://downloads.mongodb.com/compass/mongodb-compass-1.43.4-win32-x64.exe",
     "https://aka.ms/ssmsfullsetup",
     "https://go.microsoft.com/fwlink/?linkid=2274898",
     "https://drive.usercontent.google.com/download?id=1cx_jhuthZJVpZevvtPwLYdUQYvBUSZVR&export=download&authuser=0&confirm=t&uuid=19d4b1a8-766a-43ec-af8d-d359dabe4f77&at=APZUnTXnXmYGBSHefMsJ5qydo108%3A1719878149675",
     "https://discord.com/api/downloads/distributions/app/installers/latest?channel=stable&platform=win&arch=x64",
-    "https://dl.google.com/drive-file-stream/GoogleDriveSetup.exe"
+    "https://dl.google.com/drive-file-stream/GoogleDriveSetup.exe",
+    "https://desktop.docker.com/win/main/amd64/Docker%20Desktop%20Installer.exe?utm_source=docker&utm_medium=webreferral&utm_campaign=dd-smartbutton&utm_location=module"
 $files = 
     "VisualStudio.exe",
     "VSCode.exe",
     "Postman.exe",
     "GithubDesktop.exe",
-    "DockerDesktop.exe",
     "MongoDBCompass.exe",
     "SQLServerManagementStudio.exe",
     "AzureDataStudio.exe",
     "Trello.exe",
     "Discord.exe",
-    "GoogleDrive.exe"
+    "GoogleDrive.exe",
+    "DockerDesktop.exe"
 $choices = "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "X", "Y"
 
 #choose what to install or all or exit
@@ -82,6 +82,19 @@ do {
         
     if($answer -notmatch "X")
     {
+	#check directory
+        $folder = ".\tools-installer\"
+
+        Write-Host "Checking install folder:" -ForegroundColor Cyan
+
+        If (Test-Path -Path "$folder" -PathType Container)
+        { Write-Host "Folder $folder already exists" -ForegroundColor Red}
+        ELSE
+        {
+            New-Item -Path "$folder" -ItemType directory
+            Write-Host "Folder $folder directory created" -ForegroundColor Green
+        }
+
         # check for prerequisites
         if($answer -match "M" -or $answer -match "N" -or $answer -match "O" -or $answer -match "Z" )
         {
@@ -95,19 +108,6 @@ do {
 
             if($answer -match "M" -or $answer -match "Z")
             {
-                #check directory
-                $folder = ".\tools-installer\"
-
-                Write-Host "Checking install folder:" -ForegroundColor Cyan
-
-                If (Test-Path -Path "$folder" -PathType Container)
-                { Write-Host "Folder $folder already exists" -ForegroundColor Red}
-                ELSE
-                {
-                    New-Item -Path "$folder" -ItemType directory
-                    Write-Host "Folder $folder directory created" -ForegroundColor Green
-                }
-
                 Write-Host ""
 
                 #git download
@@ -266,7 +266,6 @@ do {
 
 
                 #remove folder
-            
                 Write-Host "Remove install folder:" -ForegroundColor Cyan
                 If (Test-Path -Path "$folder")
                 {
