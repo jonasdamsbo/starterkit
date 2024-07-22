@@ -43,7 +43,7 @@ using (var scope = app.Services.CreateScope())
 	var context = services.GetRequiredService<DataContext>();
 
 	// using your manually created migrations, automatically runs update-database
-	//context.Database.Migrate();
+	context.Database.Migrate();
 
 	// without having to manually create migrations, fully automatic, requires NuGet EFCode.AutomaticMigrations
 	// without options 
@@ -52,7 +52,7 @@ using (var scope = app.Services.CreateScope())
 	//Console.WriteLine(envVarService.GetConnStr());
 
 	// with options
-	try
+	/*try
 	{
 		MigrateDatabaseToLatestVersion.Execute(context,
 			new DbMigrationsOptions
@@ -64,7 +64,7 @@ using (var scope = app.Services.CreateScope())
 	}
 	catch (Exception e){
 		Console.WriteLine(e.ToString());
-	}
+	}*/
 	
 
 	//Console.WriteLine(envVarService.GetConnStr()); 
