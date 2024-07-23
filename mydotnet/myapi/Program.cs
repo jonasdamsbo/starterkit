@@ -45,14 +45,14 @@ using (var scope = app.Services.CreateScope())
 	// using your manually created migrations, automatically runs update-database
 	context.Database.Migrate();
 
-	// without having to manually create migrations, fully automatic, requires NuGet EFCode.AutomaticMigrations
-	// without options 
-	//MigrateDatabaseToLatestVersion.Execute(context);
-	//var envVarService = services.GetRequiredService<EnvironmentVariableService>();
-	//Console.WriteLine(envVarService.GetConnStr());
+    // without having to manually create migrations, fully automatic, requires NuGet EFCode.AutomaticMigrations
+    // without options 
+    //MigrateDatabaseToLatestVersion.Execute(context);
+    //var envVarService = services.GetRequiredService<EnvironmentVariableService>();
+    //Console.WriteLine(envVarService.GetConnStr());
 
-	// with options
-	/*try
+    // with options
+    /*try
 	{
 		MigrateDatabaseToLatestVersion.Execute(context,
 			new DbMigrationsOptions
@@ -65,9 +65,10 @@ using (var scope = app.Services.CreateScope())
 	catch (Exception e){
 		Console.WriteLine(e.ToString());
 	}*/
-	
 
-	//Console.WriteLine(envVarService.GetConnStr()); 
+    MigrateDatabaseToLatestVersion.Execute(context, new DbMigrationsOptions{ AutomaticMigrationDataLossAllowed = true });
+
+    //Console.WriteLine(envVarService.GetConnStr()); 
 }
 
 // Configure the HTTP request pipeline. 
