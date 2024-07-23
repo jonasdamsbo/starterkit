@@ -42,13 +42,18 @@ using (var scope = app.Services.CreateScope())
 
 	var context = services.GetRequiredService<DataContext>();
 
-	// using your manually created migrations, automatically runs update-database
-	//context.Database.Migrate();
+    // using your manually created migrations, automatically runs update-database
+    context.Database.Migrate();
+
+    // runs update-database without the need for migrations
+    //MigrateDatabaseToLatestVersion.Execute(context, new DbMigrationsOptions { AutomaticMigrationDataLossAllowed = true });
+
+
+    //context.Database.EnsureCreated();
+    //context.Database.Migrate();
 
     // without having to manually create migrations, fully automatic, requires NuGet EFCode.AutomaticMigrations
     // without options 
-    context.Database.EnsureCreated();
-    context.Database.Migrate();
     //MigrateDatabaseToLatestVersion.Execute(context);
     //var envVarService = services.GetRequiredService<EnvironmentVariableService>();
     //Console.WriteLine(envVarService.GetConnStr());
@@ -67,8 +72,6 @@ using (var scope = app.Services.CreateScope())
 	catch (Exception e){
 		Console.WriteLine(e.ToString());
 	}*/
-
-    //MigrateDatabaseToLatestVersion.Execute(context, new DbMigrationsOptions{ AutomaticMigrationDataLossAllowed = true });
 
     //Console.WriteLine(envVarService.GetConnStr()); 
 }
