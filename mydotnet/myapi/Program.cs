@@ -42,7 +42,7 @@ using (var scope = app.Services.CreateScope())
 
 	var context = services.GetRequiredService<DataContext>();
 
-    // using your manually created migrations, automatically runs update-database
+    // using your manually created migrations, automatically runs update-database 
     context.Database.Migrate();
 
     // runs update-database without the need for migrations
