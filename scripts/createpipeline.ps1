@@ -4,5 +4,5 @@ write-host "Trying to create pipeline in azure"
 $pipelinename = $repoName+"pipeline"
 write-host $pipelinename
 Read-Host "Press enter to continue..."
-az pipelines create --name $pipelinename --yml-path '\scripts\azurepipeline.yml' --detect true
+az pipelines create --name $pipelinename --yml-path '\.azure\azurepipeline.yml' --detect true
 Read-Host "Press enter to continue..."
