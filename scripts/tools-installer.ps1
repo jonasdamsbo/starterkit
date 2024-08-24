@@ -28,7 +28,7 @@ $choices = "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
 #choose what to install or all or exit
 do {
     do {
-        cls
+        #cls
         #write-host ""
         #write-host "****************************" -ForegroundColor Cyan
         #write-host "**       Main Menu        **" -ForegroundColor Cyan
