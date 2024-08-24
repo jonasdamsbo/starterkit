@@ -35,20 +35,39 @@ while($projectType -ne "new" -and $projectType -ne "old")
         ### if existing project, 
         ## if not found,
         # prompt install git
+        # prompt install Azure CLI
         # clone existing project from $repoName,
         # cd existing project
         ## if found,
         # run tools-installer
         cd $PWD.Path
-        while($installTools -ne "yes" -and $installTools -ne "no")
+        while($installTools -ne "x")
         {
-            $installTools = read-host "Install developer tools? (yes/no)"
-            if($installTools -eq "yes")
+            write-host "Choose an option:"
+            write-host " - Install developer tools (i)"
+            write-host " - Manage existing project (m)"
+            write-host " - Exit program (x)"
+            $installTools = read-host
+
+            if($installTools -eq "i")
             {
                 $scriptpath = $PWD.Path + '\tools-installer.ps1'
                 write-host $scriptpath
                 write-host
+                read-host "Developer tools script will run"
                 & $scriptpath run
+            }
+            elseif($installTools -eq "m")
+            {
+                $scriptpath = $PWD.Path + '\project-manager.ps1'
+                write-host $scriptpath
+                write-host
+                read-host "Project manager script will run"
+                & $scriptpath run
+            }
+            elseif($installTools -eq "x")
+            {
+                write-host "Program will exit"
             }
         }
         Read-Host "Enter to proceed..."
