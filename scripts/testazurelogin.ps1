@@ -1,0 +1,1 @@
+az pipelines create --name "testtest" --yml-path '\.azure\azurepipeline.yml' --detect true
