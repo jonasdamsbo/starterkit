@@ -1,11 +1,11 @@
 #New-Variable -Name "subscriptionName" -Visibility Public -Value ""
 #New-Variable -Name "subscriptionId" -Visibility Public -Value ""
 
-$username = read-host "Type azure username" # "jonasdamsbo@hotmail.com"
-$password = read-host "Type azure password" -AsSecureString # "Jones123!321hejlol"
+#$username = read-host "Type azure username" # "jonasdamsbo@hotmail.com"
+#$password = read-host "Type azure password" -AsSecureString # "Jones123!321hejlol"
 
 Write-Host "Trying to login"
-az login -u $username -p $password
+#az login -u $username -p $password
 #az login # login with prompt, can outcomment username and password on line 4 and 5
 Read-Host "Press enter to continue..."
 # LOGIN IN 'createrpo' and remove from here
@@ -31,4 +31,9 @@ write-host "Trying to replace temp vars in yml pipeline file"
 ((Get-Content -path azurepipeline.yml -Raw) -replace 'tempapiname',$apiappname) | Set-Content -Path azurepipeline.yml
 ((Get-Content -path azurepipeline.yml -Raw) -replace 'tempwebname',$webappname) | Set-Content -Path azurepipeline.yml
 Get-Content -path azurepipeline.yml
+Read-Host "Press enter to continue..."
+
+write-host "Trying to create pipeline in azure"
+#$ymlPath = $PWD.Path + '\azurepipeline.yml'
+az pipelines create --name "testpipeline" --yml-path '\azurepipeline.yml' --detect true
 Read-Host "Press enter to continue..."

@@ -11,17 +11,20 @@ while($projectType -ne "new" -and $projectType -ne "old")
     {
         Write-Host "starting new"
         $projectType = $tempProjectType
-        
+
         ### if new project, 
         # prompt for new project name, 
+        # prompt install git
         # clone starter kit,
         # cd starter kit
         # run project-creator
         cd $PWD.Path
         $scriptpath = $PWD.Path + '\project-creator.ps1'
+        write-host $scriptpath
+        write-host
         & $scriptpath run
 
-        Read-Host "Enter to exit..."
+        Read-Host "Enter to proceed..."
     }
     elseif($tempProjectType -eq "old")
     {
@@ -30,15 +33,24 @@ while($projectType -ne "new" -and $projectType -ne "old")
 
         ### if existing project, 
         ## if not found,
+        # prompt install git
         # clone existing project from $repoName,
         # cd existing project
         ## if found,
         # run tools-installer
         cd $PWD.Path
-        $scriptpath = $PWD.Path + '\tools-installer.ps1'
-        & $scriptpath run
-
-        Read-Host "Enter to exit..."
+        while($installTools -ne "yes" -and $installTools -ne "no")
+        {
+            $installTools = read-host "Install developer tools? (yes/no)"
+            if($installTools -eq "yes")
+            {
+                $scriptpath = $PWD.Path + '\tools-installer.ps1'
+                write-host $scriptpath
+                write-host
+                & $scriptpath run
+            }
+        }
+        Read-Host "Enter to proceed..."
     }
 }
 

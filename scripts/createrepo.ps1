@@ -3,4 +3,4 @@ Write-Host "Trying to login"
 az login
 Read-Host "Press enter to continue..."
 
-# create repo
+# create repo with newRepoName from clonestarterkit.ps1
