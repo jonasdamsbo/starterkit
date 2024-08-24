@@ -6,7 +6,7 @@
 #parameters you need to change
 parameters:
 - name: AzureSubId # change to your azure subscription and subscription id
-  default: jgdtestsubscription (8e4e96ed-7549-4b0c-9bd9-edbeed4c2f77)
+  default: testsubscription (8e4e96ed-7549-4b0c-9bd9-edbeed4c2f77)
 - name: ApiAppName # change to your azure api name
   default: jgdtestapiapp
 - name: WebAppName # change to your azure web app name
