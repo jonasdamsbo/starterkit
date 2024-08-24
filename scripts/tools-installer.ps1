@@ -263,21 +263,6 @@ do {
                         }
                     }
                 }
-
-
-                #remove folder
-                Write-Host "Remove install folder:" -ForegroundColor Cyan
-                If (Test-Path -Path "$folder")
-                {
-                    Write-Host "Removing install folder" -ForegroundColor Blue
-                    rm -Force "$folder"
-                    Write-Host "Folder removed" -ForegroundColor Green
-                    Write-Host ""
-                }
-                ELSE
-                {
-                    Write-Host "No such folder" -ForegroundColor Red
-                }
             }
 
 
@@ -288,28 +273,45 @@ do {
                 Write-Host "Installing local database (MSSQL + MongoDB) docker-container:" -ForegroundColor Cyan
                 Write-Host "Installing docker container" -ForegroundColor Blue
                 #./mydocker/docker-setup run
-		cd $env:userprofile/Documents/GitHub/mywebrepo/mydocker/
-		& $env:userprofile/Documents/GitHub/mywebrepo/mydocker/docker-setup run
+                cd $env:userprofile/Documents/GitHub/mywebrepo/.docker/
+                & $env:userprofile/Documents/GitHub/mywebrepo/.docker/docker-setup run
 
-                #*/Documents/GitHub/mywebrepo/mydocker/docker-setup run
-		#cd "$env:userprofile\Documents\GitHub\mywebrepo\mydocker\"
-		#docker-setup run
-		#$mypath = $env:userprofile+"/Documents/GitHub/mywebrepo/mydocker"
-		#Write-Host "$mypath"
-		#cd $mypath
-		#docker-setup run
-		#$mypath/docker-setup run
-		#$env:userprofile+"/Documents/GitHub/mywebrepo/mydocker/docker-setup" run
-		#Write-Host "$env:userprofile"
-		#Write-Host "$env:userprofile\Documents\GitHub\mywebrepo\mydocker\"
-		#$mypath = "$env:userprofile/Documents/GitHub/mywebrepo/mydocker/docker-setup"
-		#$mypath run
+                        #*/Documents/GitHub/mywebrepo/mydocker/docker-setup run
+                #cd "$env:userprofile\Documents\GitHub\mywebrepo\mydocker\"
+                #docker-setup run
+                #$mypath = $env:userprofile+"/Documents/GitHub/mywebrepo/mydocker"
+                #Write-Host "$mypath"
+                #cd $mypath
+                #docker-setup run
+                #$mypath/docker-setup run
+                #$env:userprofile+"/Documents/GitHub/mywebrepo/mydocker/docker-setup" run
+                #Write-Host "$env:userprofile"
+                #Write-Host "$env:userprofile\Documents\GitHub\mywebrepo\mydocker\"
+                #$mypath = "$env:userprofile/Documents/GitHub/mywebrepo/mydocker/docker-setup"
+                #$mypath run
                 
-		Write-Host "Docker container installed" -ForegroundColor Green
+                Write-Host "Docker container installed" -ForegroundColor Green
                 Write-Host ""
             }
         }
 
+        #remove folder
+        Write-Host "Remove install folder:" -ForegroundColor Cyan
+        Write-Host $folder
+        cd ..
+        cd '.\scripts\'
+        read-host "wtf"
+        If (Test-Path -Path "$folder" -PathType Container)
+        {
+            Write-Host "Removing install folder" -ForegroundColor Blue
+            Remove-Item -Force $folder
+            Write-Host "Folder removed" -ForegroundColor Green
+            Write-Host ""
+        }
+        ELSE
+        {
+            Write-Host "No such folder" -ForegroundColor Red
+        }
     }
 
     # end setup
