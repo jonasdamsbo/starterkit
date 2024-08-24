@@ -1,6 +1,7 @@
 #pre
 $repoName = "tempRepoName"
-$projectType = "";
+$setupPath = $PWD.Path
+$projectType = ""
 
 while($projectType -ne "new" -and $projectType -ne "old")
 {
@@ -19,7 +20,7 @@ while($projectType -ne "new" -and $projectType -ne "old")
         # cd starter kit
         # run project-creator
         cd $PWD.Path
-        $scriptpath = $PWD.Path + '\project-creator.ps1'
+        $scriptpath = $PWD.Path + '\project-creator\project-creator.ps1'
         write-host $scriptpath
         write-host
         & $scriptpath run

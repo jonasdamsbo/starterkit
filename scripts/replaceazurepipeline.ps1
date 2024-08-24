@@ -27,8 +27,8 @@ Write-Host $webappname
 Read-Host "Press enter to continue..."
 
 write-host "Trying to replace temp vars in yml pipeline file"
-((Get-Content -path ../azurepipeline.yml -Raw) -replace 'tempsubid',$fullSubId) | Set-Content -Path ../azurepipeline.yml
-((Get-Content -path ../azurepipeline.yml -Raw) -replace 'tempapiname',$apiappname) | Set-Content -Path ../azurepipeline.yml
-((Get-Content -path ../azurepipeline.yml -Raw) -replace 'tempwebname',$webappname) | Set-Content -Path ../azurepipeline.yml
+((Get-Content -path azurepipeline.yml -Raw) -replace 'tempsubid',$fullSubId) | Set-Content -Path azurepipeline.yml
+((Get-Content -path azurepipeline.yml -Raw) -replace 'tempapiname',$apiappname) | Set-Content -Path azurepipeline.yml
+((Get-Content -path azurepipeline.yml -Raw) -replace 'tempwebname',$webappname) | Set-Content -Path azurepipeline.yml
 Get-Content -path azurepipeline.yml
 Read-Host "Press enter to continue..."
