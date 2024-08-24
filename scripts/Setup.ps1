@@ -59,7 +59,7 @@ while($projectType -ne "new" -and $projectType -ne "old")
             }
             elseif($installTools -eq "m")
             {
-                $scriptpath = $PWD.Path + '\project-manager.ps1'
+                $scriptpath = $PWD.Path + '\resource-manager.ps1'
                 write-host $scriptpath
                 write-host
                 read-host "Project manager script will run"
