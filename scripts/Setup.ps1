@@ -3,6 +3,9 @@ $projectName = "tempRepoName"
 $orgName = "tempOrgName"
 $setupPath = $PWD.Path
 $projectType = ""
+$gitfolder = "$env:userprofile/Documents/GitHub/"
+$repofolder = $gitfolder+$orgName #+"repo"
+$tempRepoFolder = $gitfolder+"tempOrgName"
 
 while($projectType -ne "new" -and $projectType -ne "old")
 {
@@ -15,38 +18,76 @@ while($projectType -ne "new" -and $projectType -ne "old")
         $projectType = $tempProjectType
 
         ### if new project, 
-        # prompt install git
+        If (Test-Path -Path "$repofolder" -PathType Container)
+        { Write-Host "Something went wrong, template folder $repofolder already exists" -ForegroundColor Red}
+        ELSE
+        {
+            # prompt install git <-- remove?
+            
+            ## start download
+            $gitFileUri = "https://github.com/git-for-windows/git/releases/download/v2.45.2.windows.1/Git-2.45.2-64-bit.exe"
+            $gitInstallPath = $PWD.Path+"gitinstaller.exe"
+            $bitsJobObj = Start-BitsTransfer $gitFileUri -Destination $gitInstallPath
+            switch ($bitsJobObj.JobState) {
 
+                'Transferred' {
+                    Complete-BitsTransfer -BitsJob $bitsJobObj
+                    break
+                }
 
-        # prompt install azure cli
+                'Error' {
+                    throw 'Error downloading'
+                }
+            }
 
+            ## start install
+            $exeArgs = '/verysilent /tasks=addcontextmenufiles,addcontextmenufolders,addtopath'
+            Start-Process -Wait $gitInstallPath -ArgumentList $exeArgs
 
-        # clone starter kit to new project name folder
-        #Param($newRepoName)
-        write-host "reponame: " $projectName #$args[1]
-        Read-Host "Press enter to continue..."
+            # remove installer
+            rm -Force "$gitInstallPath"
 
-        write-host "Trying to clone starter kit"
-        $gitfolder = "$env:userprofile/Documents/GitHub/"
-        $repofolder = $gitfolder+$orgName #+"repo"
-        write-host $repofolder
-        git clone https://github.com/jonasdamsbo/mywebrepo.git $repofolder
-        write-host "Cloned"
+            ## prompt install azure cli <-- remove?
 
-        # cd folder
-        cd $repofolder
-        cd "starter-kit"
+            # install azure cli
+            write-host "Started instaling Azure CLI"
+            $ProgressPreference = 'SilentlyContinue'; 
+            Invoke-WebRequest -Uri https://aka.ms/installazurecliwindows -OutFile .\AzureCLI.msi; 
+            Start-Process msiexec.exe -Wait -ArgumentList '/I AzureCLI.msi /quiet'; 
+            Remove-Item .\AzureCLI.msi
+            read-host "finished installing Azure CLI"
 
-        # delete .git ref
-        Remove-Item -LiteralPath ".git" -Force -Recurse -erroraction 'silentlycontinue'
-        Remove-Item -LiteralPath ".git" -Force -Recurse -erroraction 'silentlycontinue'
+            ## clone starter kit to new project name folder
+            #Param($newRepoName)
+            write-host "reponame: " $projectName #$args[1]
+            Read-Host "Press enter to continue..."
 
-        # run project-creator
-        cd $PWD.Path
-        $scriptpath = $PWD.Path + '\project-creator.ps1'
-        write-host $scriptpath
-        write-host
-        & $scriptpath run
+            write-host "Trying to clone starter kit"
+            write-host $repofolder
+            git clone https://github.com/jonasdamsbo/mywebrepo.git $repofolder
+            write-host "Cloned"
+
+            # cd folder
+            cd $repofolder
+            cd "starter-kit"
+
+            # delete .git ref
+            Remove-Item -LiteralPath ".git" -Force -Recurse -erroraction 'silentlycontinue'
+            Remove-Item -LiteralPath ".git" -Force -Recurse -erroraction 'silentlycontinue'
+
+            write-host "Would you like to use."
+            write-host " - Azure DevOps Repos and Pipelines"
+            write-host " - or"
+            write-host " - GitHub and GitHub Actions?"
+            $azureorgit = read-host "(azure/github)"
+
+            # run project-creator
+            cd $PWD.Path
+            $scriptpath = $PWD.Path + '\project-creator.ps1'
+            write-host $scriptpath
+            write-host
+            & $scriptpath run
+        }
 
         Read-Host "Enter to proceed..."
     }
@@ -54,25 +95,36 @@ while($projectType -ne "new" -and $projectType -ne "old")
     {
         Write-Host "starting old"
         $projectType = $tempProjectType
-
-        ### if existing project, 
-        ## if folder not found,
-
-
-        # prompt install git
-
-
-        # clone existing project from $repoName,
-        write-host "Trying to clone existing project"
         $gitfolder = "$env:userprofile/Documents/GitHub/"
         $repofolder = $gitfolder+$orgName #+"repo"
         write-host $repofolder
-        git clone https://github.com/+"$orgName"+"/"+"$projectName"+".git" $repofolder
-        write-host "Cloned"
 
-        # cd existing project
-        cd $repofolder
-        cd $projectName
+        ### if existing project, 
+        ## if folder not found,
+        If (Test-Path -Path "$repofolder" -PathType Container)
+        { Write-Host "Folder $repofolder already exists" -ForegroundColor Red}
+        ELSE
+        {
+            #New-Item -Path "$repofolder" -ItemType directory
+            #Write-Host "Folder $repofolder directory created" -ForegroundColor Green
+
+            # prompt install git? <-- remove?
+
+            # install git
+            $ProgressPreference = 'SilentlyContinue'; 
+            Invoke-WebRequest -Uri https://github.com/git-for-windows/git/releases/download/v2.45.2.windows.1/Git-2.45.2-64-bit.exe -OutFile .\git.exe; 
+            Start-Process msiexec.exe -Wait -ArgumentList '/I git.exe /quiet'; 
+            Remove-Item .\git.exe
+
+            # clone existing project from $repoName,
+            write-host "Trying to clone existing project"
+            git clone https://github.com/+"$orgName"+"/"+"$projectName"+".git" $repofolder
+            write-host "Cloned"
+
+            # cd existing project
+            cd $repofolder
+            cd $projectName
+        }
 
         ## if found,
         cd $PWD.Path

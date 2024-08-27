@@ -1,3 +1,12 @@
+terraform {
+  required_providers {
+    azurerm = {
+      source = "hashicorp/azurerm"
+      version = "4.0.1"
+    }
+  }
+}
+
 provider "azurerm" {
   features {}
 }
@@ -103,29 +112,35 @@ resource "azuredevops_build_definition" "examplePipeline" {
   }
 }
 
-data "azurerm_billing_mca_account_scope" "exampleBillingscope" {
-  billing_account_name = "tempBillingaccountname"
-  billing_profile_name = "tempBillingprofilename"
-  invoice_section_name = "tempInvoicesectionname"
-}
+# data "azurerm_billing_mca_account_scope" "exampleBillingscope" { # problematisk, få bruger til at create en subscription inden, eller kan azure cli ?
+#   billing_account_name = "tempBillingaccountname"
+#   billing_profile_name = "tempBillingprofilename"
+#   invoice_section_name = "tempInvoicesectionname"
+# }
 
-resource "azurerm_subscription" "exampleSubscription" {
-  subscription_name = "tempSubscription"
-  billing_scope_id  = data.azurerm_billing_mca_account_scope.exampleBillingscope.id
-}
+# output "id" {
+#   value = data.azurerm_billing_mca_account_scope.exampleBillingscope.id
+# }
+
+# resource "azurerm_subscription" "exampleSubscription" {
+#   subscription_name = "tempSubscription"
+#   billing_scope_id  = data.azurerm_billing_mca_account_scope.exampleBillingscope.id
+# }
 
 resource "azurerm_resource_group" "exampleResourcegroup" {
   name     = "tempResourcegroup"
   location = "North Europe"
+  #managed_by = data.azurerm_subscription.exampleSubscription.id # optional
 }
 
 resource "azurerm_mssql_server" "exampleMssqlserver" {
-  name                         = "example-sqlserver"
+  name                         = "tempMssqlserver"
   resource_group_name          = azurerm_resource_group.exampleResourcegroup.name
   location                     = azurerm_resource_group.exampleResourcegroup.location
   version                      = "12.0"
   administrator_login          = "4dm1n157r470r"
   administrator_login_password = "4-v3ry-53cr37-p455w0rd"
+  public_network_access_enabled = false
 
   azuread_administrator {
     login_username = "AzureAD Admin"
@@ -135,6 +150,20 @@ resource "azurerm_mssql_server" "exampleMssqlserver" {
   tags = {
     environment = "production"
   }
+}
+
+resource "azurerm_mssql_firewall_rule" "exampleMssqlfirewallruleApi" {
+  name             = "tempMssqlfirewallruleApi"
+  server_id        = azurerm_mssql_server.exampleMssqlserver.id
+  start_ip_address = "tempApiip"
+  end_ip_address   = "tempApiip"
+}
+
+resource "azurerm_mssql_firewall_rule" "exampleMssqlfirewallruleLocal" {
+  name             = "tempMssqlfirewallruleLocal"
+  server_id        = azurerm_mssql_server.exampleMssqlserver.id
+  start_ip_address = "tempLocalip"
+  end_ip_address   = "tempLocalip"
 }
 
 resource "azurerm_mssql_database" "exampleMssqldatabase" {
@@ -158,9 +187,50 @@ resource "azurerm_mssql_database" "exampleMssqldatabase" {
   }
 }
 
-data "azurerm_cosmosdb_account" "exampleCosmosdbaccount" {
+resource "azurerm_cosmosdb_account" "exampleCosmosdbaccount" {
   name                = "tempCosmosdbaccount"
-  resource_group_name = "tempCosmosdbaccountresourcegroup"
+  location            = azurerm_resource_group.exampleResourcegroup.location
+  resource_group_name = azurerm_resource_group.exampleResourcegroup.name
+  offer_type          = "Standard"
+  kind                = "MongoDB"
+  public_network_access_enabled = false
+  free_tier_enabled = true
+
+  automatic_failover_enabled = true
+
+  ip_range_filter = ["tempLocalip","tempApiip"]
+
+  capabilities {
+    name = "EnableAggregationPipeline"
+  }
+
+  capabilities {
+    name = "mongoEnableDocLevelTTL"
+  }
+
+  capabilities {
+    name = "MongoDBv3.4"
+  }
+
+  capabilities {
+    name = "EnableMongo"
+  }
+
+  consistency_policy {
+    consistency_level       = "BoundedStaleness"
+    max_interval_in_seconds = 300
+    max_staleness_prefix    = 100000
+  }
+
+  geo_location {
+    location          = "northeu"
+    failover_priority = 1
+  }
+
+  geo_location {
+    location          = "northeu"
+    failover_priority = 0
+  }
 }
 
 resource "azurerm_cosmosdb_mongo_database" "exampleCosmosdbmongodb" {
@@ -170,22 +240,19 @@ resource "azurerm_cosmosdb_mongo_database" "exampleCosmosdbmongodb" {
   throughput          = 400
 }
 
-resource "azurerm_app_service_plan" "exampleAppserviceplan" {
+resource "azurerm_service_plan" "exampleAppserviceplan" {
   name                = "tempAppserviceplan"
   location            = azurerm_resource_group.exampleResourcegroup.location
   resource_group_name = azurerm_resource_group.exampleResourcegroup.name
-
-  sku {
-    tier = "Standard"
-    size = "S1"
-  }
+  os_type             = "Windows"
+  sku_name            = "F1"
 }
 
 resource "azurerm_app_service" "exampleWebapp" {
   name                = "tempWebapp"
   location            = azurerm_resource_group.exampleResourcegroup.location
   resource_group_name = azurerm_resource_group.exampleResourcegroup.name
-  app_service_plan_id = azurerm_app_service_plan.exampleResourcegroup.id
+  app_service_plan_id = azurerm_service_plan.exampleAppserviceplan.id
 
   site_config {
     dotnet_framework_version = "v4.0"
@@ -193,28 +260,43 @@ resource "azurerm_app_service" "exampleWebapp" {
   }
 
   app_settings = {
-    "APIURL" = "some-value"
+    "APIURL" = "tempApiurl"
   }
 }
 
-resource "azurerm_app_service" "exampleApiapp" {
+resource "azurerm_windows_web_app" "exampleApiapp" {
   name                = "tempApiapp"
   location            = azurerm_resource_group.exampleResourcegroup.location
   resource_group_name = azurerm_resource_group.exampleResourcegroup.name
-  app_service_plan_id = azurerm_app_service_plan.exampleAppserviceplan.id
+  service_plan_id = azurerm_service_plan.exampleAppserviceplan.id
+  public_network_access_enabled = false
 
   site_config {
-    dotnet_framework_version = "v4.0"
-    scm_type                 = "LocalGit"
-  }
+    #scm_type                 = "LocalGit"
+    ip_restriction_default_action = "deny"
+    
+    ip_restriction {
+      ip_address = "tempWebappip"
+      action = "Allow"
+      priority = 1
+    }
 
-  app_settings = {
-    "SOME_KEY" = "some-value"
+    ip_restriction {
+      ip_address = "tempLocalip"
+      action = "Allow"
+      priority = 1
+    }
   }
 
   connection_string {
     name  = "Mssql"
     type  = "SQLServer"
-    value = "tempMsssqlconnectionstring"
+    value = "tempMssqlconnectionstring"
+  }
+
+  connection_string {
+    name  = "Nosql"
+    type  = "DocDb"
+    value = "tempNosqlconnectionstring"
   }
 }

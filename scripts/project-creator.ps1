@@ -2,10 +2,12 @@
 write-host "OBS!!! READ BEFORE PROCEEDING" -ForegroundColor Red
 write-host "Make sure you have a microsoft account, and that it is setup to be able to access:" -ForegroundColor Yellow
 write-host " - Azure DevOps at: https://dev.azure.com/" -ForegroundColor Yellow
+write-host "    - Create an Organization"
 write-host " - Azure Cloud at: https://portal.azure.com/" -ForegroundColor Yellow
+write-host "    - Create a Subscription: Write in the search bar at the top and click on 'Subscriptions'"
 write-host ""
 write-host "Come back after you have verified that you can access both platforms with your microsoft account," -ForegroundColor Yellow
-write-host "and created a new organization in Azure DevOps." -ForegroundColor Yellow
+write-host "and created a new organization in Azure DevOps and a Subscription in Azure Portal." -ForegroundColor Yellow
 write-host ""
 read-host "Press enter to proceed..."
 

@@ -37,6 +37,12 @@ Read-Host "Press enter to continue..."
 
 # replace cloud # replace temp vars in terraform files with projectname
     # replace terraform script in newRepoName folder 
+    # find billingaccount, billingprofile and invoicesection
+        # az billing account list
+        # az billing profile list --account-name 086682b6-a4b1-57e9-5bdd-62806d3dc3c0:b4ca7cb9-8c50-4b0c-9347-e7cbccca336f_2019-05-31
+        # az billing invoice section list --account-name 086682b6-a4b1-57e9-5bdd-62806d3dc3c0:b4ca7cb9-8c50-4b0c-9347-e7cbccca336f_2019-05-31 --profile-name M3E4-IYP6-BG7-PGB
+        
+    # replace billingaccount, billingprofile and invoicesection in terraform
 
 Read-Host "Press enter to continue..."
 

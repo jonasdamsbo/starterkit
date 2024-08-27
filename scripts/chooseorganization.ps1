@@ -1,5 +1,6 @@
 ## prompt to enter organisation name name
-$orgName = read-host "What is the name your Azure DevOps organization?"
+az login
+$orgName = read-host "What is the name your Azure DevOps organization?" # used to check project and repo name before accepting chosen projectname, and git init
 write-host $orgName"?"
 read-host "(y/n)"
 $fullOrgName = "https://dev.azure.com/"+$orgName+"/"
