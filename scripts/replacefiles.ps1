@@ -1,3 +1,5 @@
+### Replace temp vars, uses projectname
+
 #New-Variable -Name "subscriptionName" -Visibility Public -Value ""
 #New-Variable -Name "subscriptionId" -Visibility Public -Value ""
 

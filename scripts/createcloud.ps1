@@ -22,7 +22,7 @@ terraform plan
 terraform apply
 
 
-### replace before 2nd terraform apply, own file?
+### replace before 2nd terraform apply, own file? replace cloud vars in cloud files
 
 # get mongodb and mssqldb connectionstrings
 
@@ -45,11 +45,11 @@ terraform apply
 # add local ip and api ip to mongodb and mssqldb
 
 # terraform plan/apply
-terraform plan
-terraform apply
+#terraform plan
+#terraform apply
 
 
-### Replace and push, own file?
+### Replace cloud vars in readme/setup and push, own file? # uses data after cloud is created
 cd ..
 
 # replace temp vars in readme, -> add connectionstrings, webappurl and apiurl to readme?
