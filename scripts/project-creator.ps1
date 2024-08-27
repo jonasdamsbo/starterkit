@@ -11,53 +11,56 @@ read-host "Press enter to proceed..."
 
 cd $PWD.Path
 
-# prompt desired repo/project name
-$repoName = read-host "What do you want to name your new project?"
-
-# run clonestarterkit script
-$scriptpath = $PWD.Path + '\clonestarterkit.ps1'
+# run chooseorganization script
+$scriptpath = $PWD.Path + '\chooseorganization.ps1'
 write-host $scriptpath
 & $scriptpath run #-newRepoName $newRepoName run
 read-host "Enter to proceed..."
 
-# run createrepo script
-$scriptpath = $PWD.Path + '\createrepo.ps1'
+# run chooseproject script
+$scriptpath = $PWD.Path + '\chooseproject.ps1'
+write-host $scriptpath
+& $scriptpath run #-newRepoName $newRepoName run
+read-host "Enter to proceed..."
+
+# # run clonestarterkit script <-- move to setup
+# $scriptpath = $PWD.Path + '\clonestarterkit.ps1'
+# write-host $scriptpath
+# & $scriptpath run #-newRepoName $newRepoName run
+# read-host "Enter to proceed..."
+
+# # run createsubscription script
+# $scriptpath = $PWD.Path + '\createsubscription.ps1'
+# write-host $scriptpath
+# & $scriptpath run
+# read-host "Enter to proceed..."
+
+# # run createrepo script
+# $scriptpath = $PWD.Path + '\createrepo.ps1'
+# write-host $scriptpath
+# & $scriptpath run
+# read-host "Enter to proceed..."
+
+# run replace pipeline-cloud-setup-repo script
+$scriptpath = $PWD.Path + '\replacefiles.ps1'
 write-host $scriptpath
 & $scriptpath run
 read-host "Enter to proceed..."
 
-# run replaceazurepipeline script
-$scriptpath = $PWD.Path + '\replaceazurepipeline.ps1'
-write-host $scriptpath
-& $scriptpath run
-read-host "Enter to proceed..."
+# # run createpipeline script
+# $scriptpath = $PWD.Path + '\createpipeline.ps1'
+# write-host $scriptpath
+# & $scriptpath run
+# read-host "Enter to proceed..."
 
-# run replaceterraform script
-$scriptpath = $PWD.Path + '\replaceterraform.ps1'
-write-host $scriptpath
-& $scriptpath run
-read-host "Enter to proceed..."
-
-# run replacesetupscript script
-$scriptpath = $PWD.Path + '\replacesetupscript.ps1'
+# run createcloud script
+$scriptpath = $PWD.Path + '\createcloud.ps1'
 write-host $scriptpath
 & $scriptpath run
 read-host "Enter to proceed..."
 
 # run pushtorepo script
 $scriptpath = $PWD.Path + '\pushtorepo.ps1'
-write-host $scriptpath
-& $scriptpath run
-read-host "Enter to proceed..."
-
-# run createterraform script
-$scriptpath = $PWD.Path + '\createterraform.ps1'
-write-host $scriptpath
-& $scriptpath run
-read-host "Enter to proceed..."
-
-# run createpipeline script
-$scriptpath = $PWD.Path + '\createpipeline.ps1'
 write-host $scriptpath
 & $scriptpath run
 read-host "Enter to proceed..."
