@@ -31,23 +31,17 @@ if($verifySetup -eq "y")
     & $scriptpath run #-newRepoName $newRepoName run
     read-host "Enter to proceed..."
 
+    # run createsubscription script
+    $scriptpath = $PWD.Path + '\choosesubscription.ps1'
+    write-host $scriptpath
+    & $scriptpath run
+    read-host "Enter to proceed..."
+
     # run chooseproject script
     $scriptpath = $PWD.Path + '\chooseproject.ps1'
     write-host $scriptpath
     & $scriptpath run #-newRepoName $newRepoName run
     read-host "Enter to proceed..."
-
-    # # run clonestarterkit script <-- move to setup
-    # $scriptpath = $PWD.Path + '\clonestarterkit.ps1'
-    # write-host $scriptpath
-    # & $scriptpath run #-newRepoName $newRepoName run
-    # read-host "Enter to proceed..."
-
-    # # run createsubscription script
-    # $scriptpath = $PWD.Path + '\createsubscription.ps1'
-    # write-host $scriptpath
-    # & $scriptpath run
-    # read-host "Enter to proceed..."
 
     # # run createrepo script
     # $scriptpath = $PWD.Path + '\createrepo.ps1'

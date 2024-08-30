@@ -8,7 +8,7 @@ $firstRun = "true"
 $bypass = "false"
 
 ## prompt desired repo/project name
-while(($projectExists -eq "true" -or $firstRun -eq "true") -and $bypass -ne "true")
+while((($projectExists -eq "true" -or $resourcegroupExists -eq "true") -or $firstRun -eq "true") -and $bypass -ne "true")
 {
     $firstRun = "false"
     $projectName = read-host "What do you want to name your new project?"
@@ -17,6 +17,7 @@ while(($projectExists -eq "true" -or $firstRun -eq "true") -and $bypass -ne "tru
     write-host $fullOrgName$projectName"/"
 
     ## check if project with name already exists
+    write-host "Checking if project exists..."
     #$projectExists = "false"
     $listOfProjects = az devops project show --project $projectName --org $fullOrgName --query "[name]" --output tsv 2>$null
     
@@ -52,27 +53,58 @@ while(($projectExists -eq "true" -or $firstRun -eq "true") -and $bypass -ne "tru
     #     }
     # }
 
+    ## check if resourcegroup exists
+    ## check if project with name already exists
+    write-host "Checking if resourcegroup exists..."
+    #$projectExists = "false"
+    $resourcegroupName = $projectName+"resourcegroup"
+    $resourcegroupExists = "false"
+    $listOfResourcegroups = az group show --name $resourcegroupName --query "[name]" --output tsv 2>$null
+    
+    if($listOfResourcegroups -eq $resourcegroupName)
+    {
+        $resourcegroupExists = "true"
+    }
+    else
+    {
+        $resourcegroupExists = "false"
+    }
+
+    write-host $listOfProjects -erroraction 'silentlycontinue'
+    write-host $projectExists
+
     # create project
-    if($projectExists -eq "false")
+    if($projectExists -eq "false" -and $resourcegroupExists -eq "false")
     {
         #az devops project create --name $projectName --org $fullOrgName
+        write-host "Project name can be used"
         cd ..
         Rename-Item -Path "starter-kit" -NewName $projectName
         cd $projectName
     }
-    else
+    elseif($projectExists -eq "true" -and $resourcegroupExists -eq "false")
     {
+        read-host "Project already exists, rename existing project in azure devops or choose another project name"
         # while($useExisting -ne "y" -and $useExisting -ne "n")
         # {
-        #     #use existing?
-        #     $useExisting = read-host "Project already exists, use existing project? (y/n)"
-        #     if($useExisting -eq "y")
-        #     {
-        #         $bypass = "true"
-        #     }
+            # #use existing?
+            # $useExisting = read-host "Project already exists, use existing project? (y/n)"
+            # if($useExisting -eq "y")
+            # {
+            #     $bypass = "true"
+            # }
         # }
         # $useExisting = ""
     }
+    elseif($resourcegroupExists -eq "true" -and $projectExists -eq "false")
+    {
+        read-host "Resourcegroup already exists, rename existing resourcegroup in azure portal or choose another project name"
+    }
+    elseif($resourcegroupExists -eq "true" -and $projectExists -eq "true")
+    {
+        read-host "Resourcegroup and project already exists, rename existing resourcegroup and project in azure portal and azure devops, or choose another project name"
+    }
+    write-host "Done checking if project and resourcegroup exists..."
 }
 
 read-host "Enter to exit..."

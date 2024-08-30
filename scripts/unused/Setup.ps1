@@ -1,11 +1,14 @@
 #pre
-$projectName = "tempRepoName"
-$orgName = "tempOrgName"
+$projectName = "tempprojectname"
+$orgName = "temporganizationname"
+$azureorgit = ""
+
 $setupPath = $PWD.Path
 $projectType = ""
 $gitfolder = "$env:userprofile/Documents/GitHub/"
 $repofolder = $gitfolder+$orgName #+"repo"
-$tempRepoFolder = $gitfolder+"tempOrgName"
+$newProjOrgFolder = $gitfolder+"starter-kit-org"
+#$tempRepofolder = $gitfolder+"temporganizationname"
 
 while($projectType -ne "new" -and $projectType -ne "old")
 {
@@ -18,8 +21,8 @@ while($projectType -ne "new" -and $projectType -ne "old")
         $projectType = $tempProjectType
 
         ### if new project, 
-        If (Test-Path -Path "$repofolder" -PathType Container)
-        { Write-Host "Something went wrong, template folder $repofolder already exists" -ForegroundColor Red}
+        If (Test-Path -Path "$newProjOrgFolder" -PathType Container)
+        { Write-Host "Something went wrong, template folder $newProjOrgFolder already exists" -ForegroundColor Red}
         ELSE
         {
             # prompt install git <-- remove?
@@ -63,12 +66,12 @@ while($projectType -ne "new" -and $projectType -ne "old")
             Read-Host "Press enter to continue..."
 
             write-host "Trying to clone starter kit"
-            write-host $repofolder
-            git clone https://github.com/jonasdamsbo/mywebrepo.git $repofolder
+            write-host $newProjOrgFolder
+            git clone https://github.com/jonasdamsbo/mywebrepo.git $newProjOrgFolder
             write-host "Cloned"
 
             # cd folder
-            cd $repofolder
+            cd $newProjOrgFolder
             cd "starter-kit"
 
             # delete .git ref
@@ -118,9 +121,18 @@ while($projectType -ne "new" -and $projectType -ne "old")
 
             # clone existing project from $repoName,
             write-host "Trying to clone existing project"
-            git clone https://github.com/+"$orgName"+"/"+"$projectName"+".git" $repofolder
+            if($azureorgit -eq "azure")
+            {
+                # azure repo clone
+                git clone "https://"+"$orgName"+"@dev.azure.com/"+"$orgName"+"/"+"$projectName"+"/_git/"+"$projectName"+"Azurerepository" $repofolder
+            }
+            else
+            {
+                # github clone
+                git clone https://github.com/+"$orgName"+"/"+"$projectName"+".git" $repofolder
+            }
             write-host "Cloned"
-
+            
             # cd existing project
             cd $repofolder
             cd $projectName

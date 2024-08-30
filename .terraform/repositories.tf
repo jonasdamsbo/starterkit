@@ -1,6 +1,6 @@
 resource "azuredevops_git_repository" "exampleAzurerepository" {
   project_id = azuredevops_project.exampleAzuredevopsproject.id
-  name       = "tempAzurerepository"
+  name       = "tempprojectnameAzurerepository"
   initialization {
     init_type = "Clean"
   }
@@ -12,21 +12,21 @@ resource "azuredevops_git_repository" "exampleAzurerepository" {
 }
 
 resource "azurerm_management_lock" "exampleAzurerepositorylock" {
-  name = "tempAzurerepositorylock"
+  name = "tempprojectnameAzurerepositorylock"
   scope = azuredevops_git_repository.exampleAzurerepository.id
   lock_level = "CanNotDelete"
   notes = "Prevents repository data loss"
 }
 
 resource "azuredevops_user_entitlement" "exampleUserentitlement" {
-  principal_name       = "tempPrincipalname"
+  principal_name       = "tempprincipalname"
   account_license_type = "basic"
 }
 
 resource "azuredevops_branch_policy_status_check" "exampleBranchpolicy" {
   project_id = azuredevops_project.exampleAzuredevopsproject.id
 
-  enabled  = true
+  enabled  = false
   blocking = true
 
   settings {

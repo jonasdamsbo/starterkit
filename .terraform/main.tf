@@ -4,16 +4,26 @@ terraform {
       source = "hashicorp/azurerm"
       version = "4.0.1"
     }
+    azuredevops = {
+      source  = "microsoft/azuredevops"
+      version = ">=0.1.0"
+    }
   }
 }
 
 provider "azurerm" {
   features {}
+
+  subscription_id = "tempsubscriptionid"
+}
+
+provider "azuredevops" {
+  
 }
 
 # giver det mening at terraform laver project? terraform ligger i repo, men 1 project kan have flere repos, men det her kan være main repo?
 resource "azuredevops_project" "exampleAzuredevopsproject" {
-  name               = "tempAzuredevopsproject"
+  name               = "tempprojectnameAzuredevopsproject"
   visibility         = "private"
   version_control    = "Git"
   work_item_template = "Agile"
@@ -25,10 +35,32 @@ resource "azuredevops_project" "exampleAzuredevopsproject" {
 }
 
 resource "azurerm_management_lock" "exampleAzuredevopsprojectlock" {
-  name = "tempAzuredevopsprojectlock"
+  name = "tempprojectnameAzuredevopsprojectlock"
   scope = azuredevops_project.exampleAzuredevopsproject.id
   lock_level = "CanNotDelete"
-  notes = "Prevents mssqldb data loss"
+  notes = "Prevents data loss"
+}
+
+resource "azuredevops_variable_group" "exampleVariablegroup" {
+  project_id   = azuredevops_project.exampleAzuredevopsproject.id
+  name         = "tempprojectnameVariablegroup"
+  description  = "Managed by Terraform"
+  allow_access = true
+
+  variable {
+    name  = "FOO"
+    value = "BAR"
+  }
+
+  variable {
+    name  = "Organization"
+    value = "temporganizationname"
+  }
+
+  variable {
+    name  = "Subscription"
+    value = "tempsubscriptionid"
+  }
 }
 
 # data "azurerm_billing_mca_account_scope" "exampleBillingscope" { # problematisk, få bruger til at create en subscription inden, eller kan azure cli ?
@@ -47,7 +79,7 @@ resource "azurerm_management_lock" "exampleAzuredevopsprojectlock" {
 # }
 
 resource "azurerm_resource_group" "exampleResourcegroup" {
-  name     = "tempResourcegroup"
+  name     = "tempprojectnameResourcegroup"
   location = "North Europe"
   #managed_by = data.azurerm_subscription.exampleSubscription.id # optional <-- need this?
 
@@ -57,20 +89,8 @@ resource "azurerm_resource_group" "exampleResourcegroup" {
   }
 }
 resource "azurerm_management_lock" "exampleResourcegrouplock" {
-  name = "tempResourcegrouplock"
+  name = "tempprojectnameResourcegrouplock"
   scope = azurerm_resource_group.exampleResourcegroup.id
   lock_level = "CanNotDelete"
   notes = "Prevents accidental database loss"
-}
-
-resource "azuredevops_variable_group" "exampleVariablegroup" {
-  project_id   = azuredevops_project.exampleAzuredevopsproject.id
-  name         = "tempVariablegroup"
-  description  = "Managed by Terraform"
-  allow_access = true
-
-  variable {
-    name  = "FOO"
-    value = "BAR"
-  }
 }

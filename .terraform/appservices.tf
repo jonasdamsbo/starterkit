@@ -1,5 +1,5 @@
 resource "azurerm_service_plan" "exampleAppserviceplan" {
-  name                = "tempAppserviceplan"
+  name                = "tempprojectnameAppserviceplan"
   location            = azurerm_resource_group.exampleResourcegroup.location
   resource_group_name = azurerm_resource_group.exampleResourcegroup.name
   os_type             = "Windows"
@@ -7,7 +7,7 @@ resource "azurerm_service_plan" "exampleAppserviceplan" {
 }
 
 resource "azurerm_app_service" "exampleWebapp" {
-  name                = "tempWebapp"
+  name                = "tempprojectnameWebapp"
   location            = azurerm_resource_group.exampleResourcegroup.location
   resource_group_name = azurerm_resource_group.exampleResourcegroup.name
   app_service_plan_id = azurerm_service_plan.exampleAppserviceplan.id
@@ -18,12 +18,12 @@ resource "azurerm_app_service" "exampleWebapp" {
   }
 
   app_settings = {
-    "APIURL" = "tempApiurl"
+    "APIURL" = "tempapiurl"
   }
 }
 
 resource "azurerm_windows_web_app" "exampleApiapp" {
-  name                = "tempApiapp"
+  name                = "tempprojectnameApiapp"
   location            = azurerm_resource_group.exampleResourcegroup.location
   resource_group_name = azurerm_resource_group.exampleResourcegroup.name
   service_plan_id = azurerm_service_plan.exampleAppserviceplan.id
@@ -34,27 +34,27 @@ resource "azurerm_windows_web_app" "exampleApiapp" {
     ip_restriction_default_action = "deny"
     
     ip_restriction {
-      ip_address = "tempWebappip"
+      ip_address = "tempwebappip"
       action = "Allow"
       priority = 1
     }
 
     ip_restriction {
-      ip_address = "tempLocalip"
+      ip_address = "templocalip"
       action = "Allow"
       priority = 1
     }
   }
 
   connection_string {
-    name  = "Mssql"
+    name  = "tempprojectnameMssql"
     type  = "SQLServer"
-    value = "tempMssqlconnectionstring"
+    value = "tempsqlconnectionstring"
   }
 
   connection_string {
-    name  = "Nosql"
+    name  = "tempprojectnameNosql"
     type  = "DocDb"
-    value = "tempNosqlconnectionstring"
+    value = "tempnosqlconnectionstring"
   }
 }

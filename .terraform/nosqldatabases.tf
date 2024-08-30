@@ -1,5 +1,5 @@
 resource "azurerm_cosmosdb_account" "exampleCosmosdbaccount" {
-  name                = "tempCosmosdbaccount"
+  name                = "tempprojectnameCosmosdbaccount"
   location            = azurerm_resource_group.exampleResourcegroup.location
   resource_group_name = azurerm_resource_group.exampleResourcegroup.name
   offer_type          = "Standard"
@@ -9,7 +9,7 @@ resource "azurerm_cosmosdb_account" "exampleCosmosdbaccount" {
 
   automatic_failover_enabled = true
 
-  ip_range_filter = ["tempLocalip","tempApiip"]
+  ip_range_filter = ["templocalip","tempapiappip"]
 
   capabilities {
     name = "EnableAggregationPipeline"
@@ -49,14 +49,14 @@ resource "azurerm_cosmosdb_account" "exampleCosmosdbaccount" {
   }
 }
 resource "azurerm_management_lock" "exampleCosmosdbaccountlock" {
-  name = "tempCosmosdbaccountlock"
+  name = "tempprojectnameCosmosdbaccountlock"
   scope = azurerm_cosmosdb_account.exampleCosmosdbaccount.id
   lock_level = "CanNotDelete"
   notes = "Prevents nosqldb data loss"
 }
 
 resource "azurerm_cosmosdb_mongo_database" "exampleCosmosdbmongodb" {
-  name                = "tempCosmosdbmongodb"
+  name                = "tempprojectnameCosmosdbmongodb"
   resource_group_name = data.azurerm_cosmosdb_account.example.resource_group_name
   account_name        = data.azurerm_cosmosdb_account.example.name
   throughput          = 400
@@ -67,8 +67,14 @@ resource "azurerm_cosmosdb_mongo_database" "exampleCosmosdbmongodb" {
   }
 }
 resource "azurerm_management_lock" "exampleCosmosdbmongodblock" {
-  name = "tempCosmosdbmongodblock"
+  name = "tempprojectnameCosmosdbmongodblock"
   scope = azurerm_cosmosdb_mongo_database.exampleCosmosdbmongodb.id
   lock_level = "CanNotDelete"
   notes = "Prevents nosqldb data loss"
+}
+
+resource "azurerm_cosmosdb_mongo_user_definition" "exampleCosmosdbmongodbuserdefinition" {
+  cosmos_mongo_database_id = azurerm_cosmosdb_mongo_database.exampleCosmosdbmongodb.id
+  username                 = "tempprojectname"
+  password                 = "P4ssw0rd"
 }

@@ -36,7 +36,7 @@ do {
         #write-host ""
         write-host "PROGRAMS" -ForegroundColor Cyan
         write-host "  A - Install VisualStudio" -NoNewline
-	write-host " <--- Choose to install these 2 workflows: ASP.NET and web development + Azure development" -ForegroundColor Yellow
+	    write-host " <--- Choose to install these 2 workflows: ASP.NET and web development + Azure development" -ForegroundColor Yellow
         write-host "  B - Install VSCode"
         write-host "  C - Install Postman"
         write-host "  D - Install GithubDesktop"
@@ -47,16 +47,16 @@ do {
         write-host "  I - Install Discord"
         write-host "  J - Install GoogleDrive"
         write-host "  K - Install DockerDesktop" -NoNewline
-	write-host " <--- Requires 'O - Install WSL'" -ForegroundColor Yellow
+	    write-host " <--- Requires 'O - Install WSL'" -ForegroundColor Yellow
         write-host "  L - Install DockerContainers" -NoNewline
-	write-host " <--- Requires 'K - Install DockerDesktop' + 'N - Clone project'" -ForegroundColor Yellow
+	    write-host " <--- Requires 'K - Install DockerDesktop' + 'N - Clone project'" -ForegroundColor Yellow
         write-host ""
         write-host "PREREQUISITES" -ForegroundColor Cyan
         #write-host "  M - Install git"
         #write-host "  N - Clone project" -NoNewline
-	#write-host " <--- Requires 'M - Install git'" -ForegroundColor Yellow
+	    #write-host " <--- Requires 'M - Install git'" -ForegroundColor Yellow
         write-host "  O - Install WSL" -NoNewline
-	write-host " <--- Requires PC restart afterwards" -ForegroundColor Yellow
+	    write-host " <--- Requires PC restart afterwards" -ForegroundColor Yellow
         write-host ""
         write-host "Z - Install ALL prerequisites"
         write-host "Y - Install ALL programs"
@@ -65,16 +65,17 @@ do {
     
         write-host ""
         write-host "OBS!!! If you don't have the project and this is your first time running the script:" -ForegroundColor Yellow
-	write-host " - Choose 'Z' to install prerequisites" -ForegroundColor Yellow
-	write-host " - If you installed WSL, restart your PC before installing programs" -ForegroundColor Yellow
-	write-host ""
+        write-host " - Choose 'Z' to install prerequisites" -ForegroundColor Yellow
+        write-host " - If you installed WSL, restart your PC before installing programs" -ForegroundColor Yellow
+        write-host ""
         $answer = read-host "Type one or multiple characters"
     
         $ok = $answer -match '[ABCDEFGHIJKLMNOYX]+$'
-        if ( -not $ok) {write-host "Invalid selection"
-                        sleep 2
-                        write-host ""
-                        }
+        if ( -not $ok) {
+            write-host "Invalid selection"
+            sleep 2
+            write-host ""
+        }
     } until ($ok)
         
     Write-Host "Press any key to continue..."
@@ -270,12 +271,31 @@ do {
 
             if($answer -match "L" -or $answer -match "Y")
             {
+                #prompt enter docker path? first check if "cd .." + "Test-Path -Path 'pathToFolderThatContains.docker'"
+                Write-host "Checking for .docker folder"
+                $dockerFolderExists = "false"
+                $dockerPath = "./.docker/"
+                cd ..
+                while($dockerFolderExists -eq "false")
+                {
+                    if(Test-Path -Path $dockerPath -PathType Container)
+                    {
+                        $dockerFolderExists = "true"
+                        Write-Host "Folder exists"
+                    }
+                    else
+                    {
+                        $dockerFolderExists = "false"
+                        $dockerPath = read-host "Can't find .docker folder. Please specify absolute path to the folder that contains the .docker folder"
+                    }
+                }
+
                 Write-Host "Installing local database (MSSQL + MongoDB) docker-container:" -ForegroundColor Cyan
                 Write-Host "Installing docker container" -ForegroundColor Blue
                 #./mydocker/docker-setup run
                 #cd $env:userprofile/Documents/GitHub/mywebrepo/.docker/
                 #& $env:userprofile/Documents/GitHub/mywebrepo/.docker/docker-setup run
-                cd ..
+                #cd ..
                 cd './.docker/'
                 & './docker-setup' run
 
