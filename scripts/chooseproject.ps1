@@ -61,7 +61,8 @@ while((($projectExists -eq "true" -or $resourcegroupExists -eq "true") -or $firs
     # create project
     if($projectExists -eq "false")
     {
-        $statusProj = az devops project create --name $projectName --organization $fullOrgName --output tsv
+        write-host "fullorgname: "$fullOrgName
+        $statusProj = az devops project create --name $projectName --organization $fullOrgName --output tsv 2>$null
         #$projectId = az devops project create --name $projectName --organization $fullOrgName --query "[id]" --output tsv
         write-host $statusProj #$projectId
         $projectId = az devops project show --project $projectName --org $fullOrgName --query "[id]" --output tsv 2>$null
