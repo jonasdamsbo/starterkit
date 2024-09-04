@@ -4,7 +4,7 @@
 
 # init git repo
 git init
-git remote add origin "https://"+"$orgName"+"@dev.azure.com/"+"$orgName$projectName"+"_git/"+"$projectName"
+git remote add origin "https://"+"$orgName"+"@dev.azure.com/"+"$orgName$projectName"+"_git/"+"$repositoryName"
 
 # push
 git add .

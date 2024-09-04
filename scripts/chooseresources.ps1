@@ -91,12 +91,12 @@ while($resourcegroupExists -eq "true" -or $repositoryExists -eq "true" -or $pipe
         # create repo - 
         #$repoDetails = az repos create --name $repositoryName --org $fullOrgName --output json
         #write-host $repoDetails
-        $repositoryId = az repos create --name $repositoryName --org $fullOrgName --output json --query "[id]"
+        $repositoryId = az repos create --name $repositoryName --org $fullOrgName --project $projectName --output json --query "[id]"
         write-host $repositoryId
 
         # create pipeline
         #$pipelineDetails = az pipelines create --name $pipelinename --yml-path '\.azure\azure-pipelines.yml' --org $fullOrgName --repository-type "tfsgit" --repository $repositoryName
-        $pipelineId = az pipelines create --name $pipelinename --yml-path '\.azure\azure-pipelines.yml' --org $fullOrgName --repository-type "tfsgit" --repository $repositoryName --output json --query "[id]"
+        $pipelineId = az pipelines create --name $pipelinename --yml-path '\.azure\azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --output json --query "[id]"
         write-host $pipelineId
 
         # create resourcegroup
