@@ -61,7 +61,7 @@ while((($projectExists -eq "true" -or $resourcegroupExists -eq "true") -or $firs
     # create project
     if($projectExists -eq "false")
     {
-        $projectId = az devops project create --name $projectName --org $fullOrgName --query "[id]"
+        $projectId = az devops project create --name $projectName --organization $fullOrgName --query "[id]" --output tsv 2>$null
         write-host $projectId
         
         write-host "Project name can be used"
@@ -80,7 +80,7 @@ while((($projectExists -eq "true" -or $resourcegroupExists -eq "true") -or $firs
             $useExisting = read-host "Project already exists, use existing project? (y/n)"
             if($useExisting -eq "y")
             {
-                $projectId = az devops project create --name $projectName --org $fullOrgName --query "[id]"
+                $projectId = az devops project create --name $projectName --organization $fullOrgName --query "[id]" --output tsv 2>$null
                 $bypass = "true"
             }
         }
