@@ -53,58 +53,47 @@ while((($projectExists -eq "true" -or $resourcegroupExists -eq "true") -or $firs
     #     }
     # }
 
-    ## check if resourcegroup exists
-    ## check if project with name already exists
-    write-host "Checking if resourcegroup exists..."
-    #$projectExists = "false"
-    $resourcegroupName = $projectName+"resourcegroup"
-    $resourcegroupExists = "false"
-    $listOfResourcegroups = az group show --name $resourcegroupName --query "[name]" --output tsv 2>$null
     
-    if($listOfResourcegroups -eq $resourcegroupName)
-    {
-        $resourcegroupExists = "true"
-    }
-    else
-    {
-        $resourcegroupExists = "false"
-    }
 
     write-host $listOfProjects -erroraction 'silentlycontinue'
     write-host $projectExists
 
     # create project
-    if($projectExists -eq "false" -and $resourcegroupExists -eq "false")
+    if($projectExists -eq "false")
     {
-        #az devops project create --name $projectName --org $fullOrgName
+        $projectId = az devops project create --name $projectName --org $fullOrgName --query "[id]"
+        
         write-host "Project name can be used"
         cd ..
         Rename-Item -Path "starter-kit" -NewName $projectName
         cd $projectName
+
+        # create project, resourcegroup, storageaccount, repository (, pipeline?) -> remove from .tf. This way terraform can freely destroy/create
     }
-    elseif($projectExists -eq "true" -and $resourcegroupExists -eq "false")
+    elseif($projectExists -eq "true")
     {
-        read-host "Project already exists, rename existing project in azure devops or choose another project name"
-        # while($useExisting -ne "y" -and $useExisting -ne "n")
-        # {
-            # #use existing?
-            # $useExisting = read-host "Project already exists, use existing project? (y/n)"
-            # if($useExisting -eq "y")
-            # {
-            #     $bypass = "true"
-            # }
-        # }
-        # $useExisting = ""
+        #read-host "Project already exists, rename existing project in azure devops or choose another project name"
+        while($useExisting -ne "y" -and $useExisting -ne "n")
+        {
+            #use existing?
+            $useExisting = read-host "Project already exists, use existing project? (y/n)"
+            if($useExisting -eq "y")
+            {
+                $projectId = az devops project create --name $projectName --org $fullOrgName --query "[id]"
+                $bypass = "true"
+            }
+        }
+        $useExisting = ""
     }
-    elseif($resourcegroupExists -eq "true" -and $projectExists -eq "false")
-    {
-        read-host "Resourcegroup already exists, rename existing resourcegroup in azure portal or choose another project name"
-    }
-    elseif($resourcegroupExists -eq "true" -and $projectExists -eq "true")
-    {
-        read-host "Resourcegroup and project already exists, rename existing resourcegroup and project in azure portal and azure devops, or choose another project name"
-    }
-    write-host "Done checking if project and resourcegroup exists..."
+    # elseif($resourcegroupExists -eq "true" -and $projectExists -eq "false")
+    # {
+    #     read-host "Resourcegroup already exists, rename existing resourcegroup in azure portal or choose another project name"
+    # }
+    # elseif($resourcegroupExists -eq "true" -and $projectExists -eq "true")
+    # {
+    #     read-host "Resourcegroup and project already exists, rename existing resourcegroup and project in azure portal and azure devops, or choose another project name"
+    # }
+    write-host "Done checking if project..."
 }
 
 read-host "Enter to exit..."

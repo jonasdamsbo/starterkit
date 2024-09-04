@@ -1,5 +1,5 @@
 resource "azurerm_service_plan" "exampleAppserviceplan" {
-  name                = "tempprojectnameAppserviceplan"
+  name                = "tempresourcenameAppserviceplan"
   location            = azurerm_resource_group.exampleResourcegroup.location
   resource_group_name = azurerm_resource_group.exampleResourcegroup.name
   os_type             = "Windows"
@@ -7,7 +7,7 @@ resource "azurerm_service_plan" "exampleAppserviceplan" {
 }
 
 resource "azurerm_app_service" "exampleWebapp" {
-  name                = "tempprojectnameWebapp"
+  name                = "tempresourcenameWebapp"
   location            = azurerm_resource_group.exampleResourcegroup.location
   resource_group_name = azurerm_resource_group.exampleResourcegroup.name
   app_service_plan_id = azurerm_service_plan.exampleAppserviceplan.id
@@ -23,7 +23,7 @@ resource "azurerm_app_service" "exampleWebapp" {
 }
 
 resource "azurerm_windows_web_app" "exampleApiapp" {
-  name                = "tempprojectnameApiapp"
+  name                = "tempresourcenameApiapp"
   location            = azurerm_resource_group.exampleResourcegroup.location
   resource_group_name = azurerm_resource_group.exampleResourcegroup.name
   service_plan_id = azurerm_service_plan.exampleAppserviceplan.id
@@ -47,13 +47,13 @@ resource "azurerm_windows_web_app" "exampleApiapp" {
   }
 
   connection_string {
-    name  = "tempprojectnameMssql"
+    name  = "tempresourcenameMssql"
     type  = "SQLServer"
     value = "tempsqlconnectionstring"
   }
 
   connection_string {
-    name  = "tempprojectnameNosql"
+    name  = "tempresourcenameNosql"
     type  = "DocDb"
     value = "tempnosqlconnectionstring"
   }

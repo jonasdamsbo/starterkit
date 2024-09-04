@@ -17,9 +17,10 @@
 # cd terraform folder
 cd ".terraform"
 
-# terraform initial plan/apply
+# terraform initial init/plan/apply
+terraform init
 terraform plan
-terraform apply
+terraform apply -auto-approve
 
 
 ###  replace cloud vars in cloud files (needs the above apply to create apps, and in turn generate ips)
@@ -28,7 +29,7 @@ terraform apply
 #$localip = ""
 
 # get apiurl for webapp
-$apiurl = $projectName+"Apiapp.azurewebsite.net"
+$apiurl = $projectName+"Apiapp.azurewebsites.net"
 
 # get webapp ip for apiapp
 $rg = $projectName+"resourcegroup"
@@ -76,8 +77,13 @@ $apiappip = az webapp config hostname get-external-ip --resource-group $rg --web
 #((Get-Content -path sqldatabases.tf -Raw) -replace 'templocalip',$localip) | Set-Content -Path sqldatabases.tf
 #((Get-Content -path nosqldatabases.tf -Raw) -replace 'templocalip',$localip) | Set-Content -Path nosqldatabases.tf
 
+# terraform second init/plan/apply
+terraform init
+terraform plan
+terraform apply -auto-approve
+
 # flip branch policy to enabled aka "no direct push to master"-rule # kan gøres ved at den er outcommentet ved apply, efter apply outcommenter jeg ved at replace "#" med ""
-((Get-Content -path repositories.tf -Raw) -replace 'enabled  = false','enabled  = true') | Set-Content -Path repositories.tf
+#((Get-Content -path repositories.tf -Raw) -replace 'enabled  = false','enabled  = true') | Set-Content -Path repositories.tf
 
 # cd projectfolder
 cd ..

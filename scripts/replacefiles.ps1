@@ -46,12 +46,15 @@ cd "./.azure/"
 # replace tempsubid with $fullSubId
 ((Get-Content -path azure-pipelines.yml -Raw) -replace 'tempsubscriptionid',$fullSubId) | Set-Content -Path azure-pipelines.yml
 
+((Get-Content -path azure-pipelines.yml -Raw) -replace 'tempresourcename',$resourceName) | Set-Content -Path azure-pipelines.yml
+((Get-Content -path azure-pipelines.yml -Raw) -replace 'tempstorageaccount',$storageaccountName) | Set-Content -Path azure-pipelines.yml
+
 # replace tempapiname with $apiappname
-$apiappname = $projectName+"Apiapp"
+$apiappname = $resourceName+"Apiapp"
 ((Get-Content -path azure-pipelines.yml -Raw) -replace 'tempapiappname',$apiappname) | Set-Content -Path azure-pipelines.yml
 
 # replace tempwebname with $webappname
-$webappname = $projectName+"Webapp"
+$webappname = $resourceName+"Webapp"
 ((Get-Content -path azure-pipelines.yml -Raw) -replace 'tempwebappname',$webappname) | Set-Content -Path azure-pipelines.yml
 
 cd ..
@@ -70,16 +73,40 @@ cd "./.terraform/"
 ((Get-Content -path main.tf -Raw) -replace 'tempsubscriptionid',$fullSubId) | Set-Content -Path main.tf
 
 # replace tempprincipalname with $principalname in repositories.tf
-$principalname = $projectName
-((Get-Content -path repositories.tf -Raw) -replace 'tempprincipalname',$principalname) | Set-Content -Path repositories.tf
+# $principalname = $resourceName
+# ((Get-Content -path repositories.tf -Raw) -replace 'tempprincipalname',$principalname) | Set-Content -Path repositories.tf
 
 # replace tempprojectname with $projectName in *.tf
-((Get-Content -path appservices.tf -Raw) -replace 'tempprojectname',$projectName) | Set-Content -Path appservices.tf
 ((Get-Content -path main.tf -Raw) -replace 'tempprojectname',$projectName) | Set-Content -Path main.tf
+((Get-Content -path appservices.tf -Raw) -replace 'tempprojectname',$projectName) | Set-Content -Path appservices.tf
 ((Get-Content -path nosqldatabases.tf -Raw) -replace 'tempprojectname',$projectName) | Set-Content -Path nosqldatabases.tf
-((Get-Content -path pipelines.tf -Raw) -replace 'tempprojectname',$projectName) | Set-Content -Path pipelines.tf
-((Get-Content -path repositories.tf -Raw) -replace 'tempprojectname',$projectName) | Set-Content -Path repositories.tf
 ((Get-Content -path sqldatabases.tf -Raw) -replace 'tempprojectname',$projectName) | Set-Content -Path sqldatabases.tf
+# ((Get-Content -path pipelines.tf -Raw) -replace 'tempprojectname',$projectName) | Set-Content -Path pipelines.tf
+# ((Get-Content -path repositories.tf -Raw) -replace 'tempprojectname',$projectName) | Set-Content -Path repositories.tf
+
+    # replace repo, pipeline, resourcegroup, storageaccount... tempresourcename with $resourceName in *.tf
+    ((Get-Content -path main.tf -Raw) -replace 'tempresourcename',$resourceName) | Set-Content -Path main.tf
+    ((Get-Content -path appservices.tf -Raw) -replace 'tempresourcename',$resourceName) | Set-Content -Path appservices.tf
+    ((Get-Content -path nosqldatabases.tf -Raw) -replace 'tempresourcename',$resourceName) | Set-Content -Path nosqldatabases.tf
+    ((Get-Content -path sqldatabases.tf -Raw) -replace 'tempresourcename',$resourceName) | Set-Content -Path sqldatabases.tf
+
+    ## replace tempids with $*id in main.tf
+
+    #tempazuredevopsprojectid
+    ((Get-Content -path main.tf -Raw) -replace 'tempazuredevopsprojectid',$projectid) | Set-Content -Path main.tf
+
+    #tempazurerepositoryid
+    ((Get-Content -path main.tf -Raw) -replace 'tempazurerepositoryid',$repositoryId) | Set-Content -Path main.tf
+
+    #temppipelineid
+    ((Get-Content -path main.tf -Raw) -replace 'temppipelineid',$pipelineId) | Set-Content -Path main.tf
+
+    #tempresourcegroupid
+    ((Get-Content -path main.tf -Raw) -replace 'tempresourcegroupid',$resourcegroupId) | Set-Content -Path main.tf
+
+    #tempstorageaccountid and tempstoragekey
+    ((Get-Content -path main.tf -Raw) -replace 'tempstorageaccountid',$storageaccountId) | Set-Content -Path main.tf
+    ((Get-Content -path main.tf -Raw) -replace 'tempstoragekey',$storagekey) | Set-Content -Path main.tf
 
 cd ..
 

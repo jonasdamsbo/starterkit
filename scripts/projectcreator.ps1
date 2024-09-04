@@ -43,6 +43,12 @@ if($verifySetup -eq "y")
     & $scriptpath run #-newRepoName $newRepoName run
     read-host "Enter to proceed..."
 
+    # run chooseresources script
+    $scriptpath = $PWD.Path + '\chooseresources.ps1'
+    write-host $scriptpath
+    & $scriptpath run #-newRepoName $newRepoName run
+    read-host "Enter to proceed..."
+
     # # run createrepo script
     # $scriptpath = $PWD.Path + '\createrepo.ps1'
     # write-host $scriptpath

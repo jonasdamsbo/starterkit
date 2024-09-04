@@ -9,12 +9,20 @@ terraform {
       version = ">=0.1.0"
     }
   }
+  backend "azurerm" {
+      resource_group_name  = azurerm_resource_group.exampleResourcegroup.name
+      storage_account_name = azurerm_storage_account.exampleStorageaccount.name
+      container_name       = "terraform"
+      key                  = "terraform.tfstate"
+      access_key = "tempstoragekey"
+
+      features{}
+  }
 }
 
 provider "azurerm" {
-  features {}
-
   subscription_id = "tempsubscriptionid"
+  features {}
 }
 
 provider "azuredevops" {
@@ -22,75 +30,96 @@ provider "azuredevops" {
 }
 
 # giver det mening at terraform laver project? terraform ligger i repo, men 1 project kan have flere repos, men det her kan være main repo?
-resource "azuredevops_project" "exampleAzuredevopsproject" {
-  name               = "tempprojectnameAzuredevopsproject"
-  visibility         = "private"
-  version_control    = "Git"
-  work_item_template = "Agile"
+data "azuredevops_project" "exampleAzuredevopsproject" {
+  id                 = "tempazuredevopsprojectid"
+  name               = "tempprojectname"
+}
 
-  # prevent the possibility of accidental data loss
-  lifecycle {
-    prevent_destroy = true
+data "azuredevops_git_repository" "exampleAzurerepository" {
+  id                 = "tempazurerepositoryid"
+  name               = "tempresourcenameAzurerepository"
+  project_id         = azuredevops_project.exampleAzuredevopsproject.id
+  #
+  #default_branch     = "master"
+}
+
+data "azuredevops_build_definition" "examplePipeline" {
+  id                 = "temppipelineid"
+  name               = "tempresourcenamePipeline"
+  project_id         = azuredevops_project.exampleAzuredevopsproject.id
+
+  repository {
+    repo_id     = azuredevops_git_repository.exampleAzurerepository.id
+    yml_path    = ".azure/azure-pipelines.yml"
+    #repo_type   = "TfsGit"
+    #branch_name = azuredevops_git_repository.exampleAzurerepository.default_branch
+  }
+  #path               = "\\.azure"
+  
+  variable{
+    name  = "Storagekey"
+    value = "tempstoragekey"
   }
 }
 
-resource "azurerm_management_lock" "exampleAzuredevopsprojectlock" {
-  name = "tempprojectnameAzuredevopsprojectlock"
-  scope = azuredevops_project.exampleAzuredevopsproject.id
-  lock_level = "CanNotDelete"
-  notes = "Prevents data loss"
+data "azurerm_subscription" "exampleSubscription" {
+  id                 = "tempsubscriptionid"
+}
+
+data "azurerm_resource_group" "exampleResourcegroup" {
+  id                 = "tempresourcegroupid"
+  name               = "tempresourcenameResourcegroup"
+}
+
+data "azurerm_storage_account" "exampleStorageaccount" {
+  id                 = "tempstorageaccountid"
+  name               = "tempresourcenameStorageaccount"
+  resource_group_name =  azurerm_resource_group.exampleResourcegroup.name
 }
 
 resource "azuredevops_variable_group" "exampleVariablegroup" {
-  project_id   = azuredevops_project.exampleAzuredevopsproject.id
-  name         = "tempprojectnameVariablegroup"
-  description  = "Managed by Terraform"
-  allow_access = true
-
-  variable {
-    name  = "FOO"
-    value = "BAR"
-  }
+  project_id         = azuredevops_project.exampleAzuredevopsproject.id
+  name               = "tempresourcenameVariablegroup"
+  description        = "Managed by Terraform"
+  allow_access       = true
 
   variable {
     name  = "Organization"
     value = "temporganizationname"
   }
 
-  variable {
-    name  = "Subscription"
-    value = "tempsubscriptionid"
-  }
-}
+  # variable {
+  #   name  = "Storagekey"
+  #   value = "tempstoragekey"
+  # }
 
-# data "azurerm_billing_mca_account_scope" "exampleBillingscope" { # problematisk, få bruger til at create en subscription inden, eller kan azure cli ?
-#   billing_account_name = "tempBillingaccountname"
-#   billing_profile_name = "tempBillingprofilename"
-#   invoice_section_name = "tempInvoicesectionname"
-# }
+  # variable {
+  #   name  = "Project"
+  #   value = "tempprojectname"
+  # }
 
-# output "id" {
-#   value = data.azurerm_billing_mca_account_scope.exampleBillingscope.id
-# }
+  # variable {
+  #   name  = "Respository"
+  #   value = "tempprojectnameAzurerepository"
+  # }
 
-# resource "azurerm_subscription" "exampleSubscription" {
-#   subscription_name = "tempSubscription"
-#   billing_scope_id  = data.azurerm_billing_mca_account_scope.exampleBillingscope.id
-# }
+  # variable {
+  #   name  = "Pipeline"
+  #   value = "tempprojectnamePipeline"
+  # }
 
-resource "azurerm_resource_group" "exampleResourcegroup" {
-  name     = "tempprojectnameResourcegroup"
-  location = "North Europe"
-  #managed_by = data.azurerm_subscription.exampleSubscription.id # optional <-- need this?
+  # variable {
+  #   name  = "Subscription"
+  #   value = "tempsubscriptionname"
+  # }
 
-  # prevent the possibility of accidental data loss
-  lifecycle {
-    prevent_destroy = true
-  }
-}
-resource "azurerm_management_lock" "exampleResourcegrouplock" {
-  name = "tempprojectnameResourcegrouplock"
-  scope = azurerm_resource_group.exampleResourcegroup.id
-  lock_level = "CanNotDelete"
-  notes = "Prevents accidental database loss"
+  # variable {
+  #   name  = "Resourcegroup"
+  #   value = "tempprojectnameResourcegroup"
+  # }
+
+  # variable {
+  #   name  = "Storageaccount"
+  #   value = "tempprojectnameStorageaccount"
+  # }
 }
