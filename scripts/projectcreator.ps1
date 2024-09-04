@@ -15,6 +15,8 @@ write-host "     - A Billing profile"-ForegroundColor Green
 write-host "     - An Invoice section"-ForegroundColor Green
 write-host ""
 
+$fullOrgName = ""
+
 while($verifySetup -ne "y" -and $verifySetup -ne "n")
 {
     write-host "Have you verified the above? Otherwise the script will fail. (y/n)" -NoNewline -ForegroundColor Yellow
@@ -40,7 +42,7 @@ if($verifySetup -eq "y")
     # run chooseproject script
     $scriptpath = $PWD.Path + '\scripts\chooseproject.ps1'
     write-host $scriptpath
-    & $scriptpath run #-newRepoName $newRepoName run
+    & $scriptpath -fullOrgName $fullOrgName run #-newRepoName $newRepoName run
     read-host "Enter to proceed..."
 
     # run chooseresources script
