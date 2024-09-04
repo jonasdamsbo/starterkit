@@ -72,7 +72,7 @@ while($projectType -ne "new" -and $projectType -ne "old")
 
             # cd folder
             cd $newProjOrgFolder
-            cd "starter-kit"
+            cd "mywebrepo" # change to starter-kit when done
 
             # delete .git ref
             Remove-Item -LiteralPath ".git" -Force -Recurse -erroraction 'silentlycontinue'

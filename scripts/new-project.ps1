@@ -57,7 +57,7 @@ ELSE
 
     # cd folder
     cd $orgFolder
-    cd "starter-kit"
+    cd "mywebrepo" # change to 'starter-kit' when done
 
     # delete .git ref
     Remove-Item -LiteralPath ".git" -Force -Recurse -erroraction 'silentlycontinue'

@@ -44,6 +44,6 @@ cd ..
 cd ..
 Rename-Item -Path "starter-kit-org" -NewName $orgName
 cd $orgName
-cd "starter-kit"
+cd "mywebrepo" # change to 'starter-kit' when done
 
 read-host "Enter to exit..."
