@@ -65,7 +65,7 @@ while((($projectExists -eq "true" -or $resourcegroupExists -eq "true") -or $firs
         
         write-host "Project name can be used"
         cd ..
-        Rename-Item -Path "mywebrepo" -NewName $projectName # change to 'starter-kit' when done
+        Rename-Item -Path "starter-kit" -NewName $projectName # change to 'starter-kit' when done
         cd $projectName
 
         # create project, resourcegroup, storageaccount, repository (, pipeline?) -> remove from .tf. This way terraform can freely destroy/create
