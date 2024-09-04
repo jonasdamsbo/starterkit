@@ -1,6 +1,6 @@
-# remove these when done v
-$fullOrgName = "https://dev.azure.com/JonasDamsbo/"
-# remove these when done ^
+# # remove these when done v
+# $fullOrgName = "https://dev.azure.com/JonasDamsbo/"
+# # remove these when done ^
 
 $projectName = ""
 $projectExists = "false"
@@ -64,9 +64,9 @@ while((($projectExists -eq "true" -or $resourcegroupExists -eq "true") -or $firs
         $projectId = az devops project create --name $projectName --org $fullOrgName --query "[id]"
         
         write-host "Project name can be used"
-        cd ..
-        Rename-Item -Path "starter-kit" -NewName $projectName # change to 'starter-kit' when done
-        cd $projectName
+        # cd ..
+        # Rename-Item -Path "starter-kit" -NewName $projectName # change to 'starter-kit' when done
+        # cd $projectName
 
         # create project, resourcegroup, storageaccount, repository (, pipeline?) -> remove from .tf. This way terraform can freely destroy/create
     }

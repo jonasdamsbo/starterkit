@@ -40,11 +40,11 @@ $statusCode = az devops project delete --id $tempProjectId --organization $fullO
 read-host "Enter to proceed..."
 # test if found exists ^
 
-cd ..
-cd ..
-write-host $PWD.Path
-Rename-Item -LiteralPath "$orgFolder" -NewName $orgName
-cd $orgName
-cd "starter-kit" # change to 'starter-kit' when done
+# cd ..
+# cd ..
+# write-host $PWD.Path
+# Rename-Item -Path "$orgFolder" -NewName $orgName
+# cd $orgName
+# cd "starter-kit" # change to 'starter-kit' when done
 
 read-host "Enter to exit..."
