@@ -108,6 +108,34 @@ cd "./.terraform/"
     ((Get-Content -path main.tf -Raw) -replace 'tempstorageaccountid',$storageaccountId) | Set-Content -Path main.tf
     ((Get-Content -path main.tf -Raw) -replace 'tempstoragekey',$storagekey) | Set-Content -Path main.tf
 
+
+    ### replace apiurl and constrs, can be done in createcloud.ps1
+    # get and add apiurl for webapp
+    $apiurl = $resourceName+"Apiapp.azurewebsites.net"
+    $webappname = $resourcename+"Webapp"
+    ((Get-Content -path appservices.tf -Raw) -replace 'tempapiurl',$apiurl) | Set-Content -Path appservices.tf
+
+    # get and add mongodb and mssqldb connectionstrings for apiapp
+    $nosqlconnectionstring = "
+    mongodb+srv://
+    "+$resourceName+":
+    'P4ssw0rd'
+    @"+$resourceName+"cosmosmongodb.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
+
+    $sqlconnectionstring = "
+    Server=tcp:"+$resourceName+"sqldbserver.database.windows.net,1433;
+    Initial Catalog="+$resourceName+"sqldb;
+    Persist Security Info=False;
+    User ID="+$resourceName+";Password=P@ssw0rd;
+    MultipleActiveResultSets=False;
+    Encrypt=True;
+    TrustServerCertificate=False;
+    Connection Timeout=30;
+    "
+    $apiappname = $resourcename+"Apiapp"
+    ((Get-Content -path appservices.tf -Raw) -replace 'tempsqlconnectionstring',$sqlconnectionstring) | Set-Content -Path appservices.tf #
+    ((Get-Content -path appservices.tf -Raw) -replace 'tempnosqlconnectionstring',$nosqlconnectionstring) | Set-Content -Path appservices.tf
+
 cd ..
 
 # # # Can you create subscription+billingaccount+billingprofile+invoicesection with terraform?

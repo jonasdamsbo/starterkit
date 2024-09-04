@@ -31,26 +31,26 @@
 write-host "setting app env vars and db ips"
 $resourceName = "tempresourcename"
 
-# get apiurl for webapp
-$apiurl = $resourceName+"Apiapp.azurewebsites.net"
+# get apiurl for webapp # done in replacefiles.ps1 instead
+# $apiurl = $resourceName+"Apiapp.azurewebsites.net"
 
-# get mongodb and mssqldb connectionstrings for apiapp
-$nosqlconnectionstring = "
-mongodb+srv://
-"+$resourceName+":
-'P4ssw0rd'
-@"+$resourceName+"cosmosmongodb.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
+# get mongodb and mssqldb connectionstrings for apiapp # done in replacefiles.ps1 instead
+# $nosqlconnectionstring = "
+# mongodb+srv://
+# "+$resourceName+":
+# 'P4ssw0rd'
+# @"+$resourceName+"cosmosmongodb.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
 
-$sqlconnectionstring = "
-Server=tcp:"+$resourceName+"sqldbserver.database.windows.net,1433;
-Initial Catalog="+$resourceName+"sqldb;
-Persist Security Info=False;
-User ID="+$resourceName+";Password=P@ssw0rd;
-MultipleActiveResultSets=False;
-Encrypt=True;
-TrustServerCertificate=False;
-Connection Timeout=30;
-"
+# $sqlconnectionstring = "
+# Server=tcp:"+$resourceName+"sqldbserver.database.windows.net,1433;
+# Initial Catalog="+$resourceName+"sqldb;
+# Persist Security Info=False;
+# User ID="+$resourceName+";Password=P@ssw0rd;
+# MultipleActiveResultSets=False;
+# Encrypt=True;
+# TrustServerCertificate=False;
+# Connection Timeout=30;
+# "
 
 # get webapp ip for apiapp
 $rg = $resourceName+"resourcegroup"
@@ -67,13 +67,13 @@ $apiappip = $apiappip+"/32"
 
 
 # add apiurl to webapp
-$webappname = $resourcename+"Webapp"
-az webapp config appsettings set -g $rg -n $webappname --settings "APIURL"=$apiurl
+#$webappname = $resourcename+"Webapp" # done in replacefiles instead
+#az webapp config appsettings set -g $rg -n $webappname --settings "APIURL"=$apiurl # set in cloud
 
 # add connectionstrings to api
-$apiappname = $resourcename+"Apiapp"
-az webapp config connection-string set -g $rg -n $apiappname -t "SQLServer" --settings Mssql=$sqlconnectionstring
-az webapp config connection-string set -g $rg -n $apiappname -t "DocDb" --settings Nosql=$nosqlconnectionstring
+$apiappname = $resourcename+"Apiapp" # done in replacefiles instead
+#az webapp config connection-string set -g $rg -n $apiappname -t "SQLServer" --settings Mssql=$sqlconnectionstring # set in cloud
+#az webapp config connection-string set -g $rg -n $apiappname -t "DocDb" --settings Nosql=$nosqlconnectionstring # set in cloud
 
 # add webbapp ip to api
 az webapp config access-restriction add -g $rg -n $apiappname --rule-name "webapp" --action Allow --ip-address $webappip --priority 1
@@ -83,13 +83,13 @@ $sqlservername = $resourceName+"sqldbserver"
 az sql server firewall-rule create -g $rg -s $sqlservername -n "Apiappip" --start-ip-address $apiappip --end-ip-address $apiappip
 
 $cosmosdbaccount = $resourceName+"Cosmosdbaccount"
-#$iprange = az cosmosdb show --name $cosmosdbaccount --resource-group $resourcegroupName --query "[ip-range-filter]"
-#$iprange = $iprange.Trim("[","]")
+$iprange = az cosmosdb show --name $cosmosdbaccount --resource-group $resourcegroupName --query "[ip-range-filter]"
+$iprange = $iprange.Trim("[","]")
 # # $iprange = $iprange.Replace("]", "")
 # # $iprange = $iprange.Replace("}","")
 # # $iprange = $iprange.Replace("{","")
-#$iprange = '['+$iprange+',"'+$apiappip+'"]'
-az cosmosdb update --name $cosmosdbaccount --resource-group $rg --ip-range-filter $apiappip #$iprange
+$iprange = '['+$iprange+',"'+$apiappip+'"]'
+az cosmosdb update --name $cosmosdbaccount --resource-group $rg --ip-range-filter $iprange #$apiappip
 
 
 # # add apiurl to webapp
