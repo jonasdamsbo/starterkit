@@ -131,6 +131,9 @@ cd "./.scripts/"
 # replace temporganizationname with $orgName
 ((Get-Content -path old-project.ps1 -Raw) -replace 'temporganizationname',$orgName) | Set-Content -Path old-project.ps1
 
+#replace resourcename in createcloud.ps
+((Get-Content -path createcloud.ps1 -Raw) -replace 'tempresourcename',$resourceName) | Set-Content -Path createcloud.ps1
+
 cd ..
 
 

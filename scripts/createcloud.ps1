@@ -29,6 +29,7 @@
 #$localip = ""
 
 write-host "setting app env vars and db ips"
+$resourceName = "tempresourcename"
 
 # get apiurl for webapp
 $apiurl = $resourceName+"Apiapp.azurewebsites.net"
@@ -67,19 +68,19 @@ $apiappip = $apiappip+"/32"
 
 # add apiurl to webapp
 $webappname = $resourcename+"Webapp"
-az webapp config appsettings set -g $resourcegroupName -n $webappname --settings APIURL=$apiurl
+az webapp config appsettings set -g $rg -n $webappname --settings "APIURL"=$apiurl
 
 # add connectionstrings to api
 $apiappname = $resourcename+"Apiapp"
-az webapp config connection-string set -g $resourcegroupName -n $apiappname -t SQLServer --settings Mssql=$sqlconnectionstring
-az webapp config connection-string set -g $resourcegroupName -n $apiappname -t DocDb --settings Nosql=$nosqlconnectionstring
+az webapp config connection-string set -g $rg -n $apiappname -t "SQLServer" --settings Mssql=$sqlconnectionstring
+az webapp config connection-string set -g $rg -n $apiappname -t "DocDb" --settings Nosql=$nosqlconnectionstring
 
 # add webbapp ip to api
-az webapp config access-restriction add -g $resourcegroupName -n $apiappname --rule-name webapp --action Allow --ip-address $webappip --priority 1
+az webapp config access-restriction add -g $rg -n $apiappname --rule-name "webapp" --action Allow --ip-address $webappip --priority 1
 
 # add api ip to dbs
 $sqlservername = $resourceName+"sqldbserver"
-az sql server firewall-rule create -g $resourcegroupName -s $sqlservername -n "Apiappip" --start-ip-address $apiappip --end-ip-address $apiappip
+az sql server firewall-rule create -g $rg -s $sqlservername -n "Apiappip" --start-ip-address $apiappip --end-ip-address $apiappip
 
 $cosmosdbaccount = $resourceName+"Cosmosdbaccount"
 #$iprange = az cosmosdb show --name $cosmosdbaccount --resource-group $resourcegroupName --query "[ip-range-filter]"
@@ -88,7 +89,7 @@ $cosmosdbaccount = $resourceName+"Cosmosdbaccount"
 # # $iprange = $iprange.Replace("}","")
 # # $iprange = $iprange.Replace("{","")
 #$iprange = '['+$iprange+',"'+$apiappip+'"]'
-az cosmosdb update --name $cosmosdbaccount --resource-group $resourcegroupName --ip-range-filter $apiappip #$iprange
+az cosmosdb update --name $cosmosdbaccount --resource-group $rg --ip-range-filter $apiappip #$iprange
 
 
 # # add apiurl to webapp
