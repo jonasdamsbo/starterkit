@@ -42,7 +42,7 @@ data "azuredevops_git_repository" "exampleAzurerepository" {
   default_branch     = "main"
 }
 
-data "azuredevops_branch_policy_status_check" "examplebranchpolicy" {
+data "azuredevops_branch_policy_status_check" "exampleBranchpolicy" {
   scope {
     match_type       = azuredevops_git_repository.exampleAzurerepository.default_branch
   }
