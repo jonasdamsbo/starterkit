@@ -68,10 +68,10 @@ if($verifySetup -eq "y")
     # read-host "Enter to proceed..."
 
     # run refreshcloudips script
-    $scriptpath = $PWD.Path + '\refreshcloudips.ps1'
-    write-host $scriptpath
-    & $scriptpath run
-    read-host "Enter to proceed..."
+    # $scriptpath = $PWD.Path + '\refreshcloudips.ps1'
+    # write-host $scriptpath
+    # & $scriptpath run
+    # read-host "Enter to proceed..."
 
     # run pushtorepo script
     $scriptpath = $PWD.Path + '\pushtorepo.ps1'
