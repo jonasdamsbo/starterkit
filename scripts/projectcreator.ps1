@@ -42,7 +42,7 @@ if($verifySetup -eq "y")
     # run chooseproject script
     $scriptpath = $PWD.Path + '\scripts\chooseproject.ps1'
     write-host $scriptpath
-    & $scriptpath $fullOrgName run #-newRepoName $newRepoName run
+    & $scriptpath -$fullOrgName run #-newRepoName $newRepoName run
     read-host "Enter to proceed..."
 
     # run chooseresources script
