@@ -42,8 +42,9 @@ read-host "Enter to proceed..."
 
 cd ..
 cd ..
-Rename-Item -Path "$orgFolder" -NewName $orgName
+write-host $PWD.Path
+Rename-Item -Path "starter-kit-org" -NewName $orgName
 cd $orgName
-cd "mywebrepo" # change to 'starter-kit' when done
+cd "starter-kit" # change to 'starter-kit' when done
 
 read-host "Enter to exit..."
