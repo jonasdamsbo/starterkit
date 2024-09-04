@@ -39,8 +39,13 @@ data "azuredevops_git_repository" "exampleAzurerepository" {
   id                 = "tempazurerepositoryid"
   name               = "tempresourcenameAzurerepository"
   project_id         = azuredevops_project.exampleAzuredevopsproject.id
-  #
-  #default_branch     = "master"
+  default_branch     = "main"
+}
+
+data "azuredevops_branch_policy_status_check" "examplebranchpolicy" {
+  scope {
+    match_type       = azuredevops_git_repository.exampleAzurerepository.default_branch
+  }
 }
 
 data "azuredevops_build_definition" "examplePipeline" {
