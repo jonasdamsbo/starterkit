@@ -26,55 +26,55 @@ if($verifySetup -eq "y")
     cd $PWD.Path
 
     # run chooseorganization script
-    $scriptpath = $PWD.Path + '\chooseorganization.ps1'
+    $scriptpath = $PWD.Path + '\scripts\chooseorganization.ps1'
     write-host $scriptpath
     & $scriptpath run #-newRepoName $newRepoName run
     read-host "Enter to proceed..."
 
     # run createsubscription script
-    $scriptpath = $PWD.Path + '\choosesubscription.ps1'
+    $scriptpath = $PWD.Path + '\scripts\choosesubscription.ps1'
     write-host $scriptpath
     & $scriptpath run
     read-host "Enter to proceed..."
 
     # run chooseproject script
-    $scriptpath = $PWD.Path + '\chooseproject.ps1'
+    $scriptpath = $PWD.Path + '\scripts\chooseproject.ps1'
     write-host $scriptpath
     & $scriptpath run #-newRepoName $newRepoName run
     read-host "Enter to proceed..."
 
     # run chooseresources script
-    $scriptpath = $PWD.Path + '\chooseresources.ps1'
+    $scriptpath = $PWD.Path + '\scripts\chooseresources.ps1'
     write-host $scriptpath
     & $scriptpath run #-newRepoName $newRepoName run
     read-host "Enter to proceed..."
 
     # # run createrepo script
-    # $scriptpath = $PWD.Path + '\createrepo.ps1'
+    # $scriptpath = $PWD.Path + '\scripts\createrepo.ps1'
     # write-host $scriptpath
     # & $scriptpath run
     # read-host "Enter to proceed..."
 
     # run replace pipeline-cloud-setup-repo script
-    $scriptpath = $PWD.Path + '\replacefiles.ps1'
+    $scriptpath = $PWD.Path + '\scripts\replacefiles.ps1'
     write-host $scriptpath
     & $scriptpath run
     read-host "Enter to proceed..."
 
     # # run createpipeline script
-    # $scriptpath = $PWD.Path + '\createpipeline.ps1'
+    # $scriptpath = $PWD.Path + '\scripts\createpipeline.ps1'
     # write-host $scriptpath
     # & $scriptpath run
     # read-host "Enter to proceed..."
 
     # run refreshcloudips script
-    # $scriptpath = $PWD.Path + '\refreshcloudips.ps1'
+    # $scriptpath = $PWD.Path + '\scripts\refreshcloudips.ps1'
     # write-host $scriptpath
     # & $scriptpath run
     # read-host "Enter to proceed..."
 
     # run pushtorepo script
-    $scriptpath = $PWD.Path + '\pushtorepo.ps1'
+    $scriptpath = $PWD.Path + '\scripts\pushtorepo.ps1'
     write-host $scriptpath
     & $scriptpath run
     read-host "Enter to proceed..."
@@ -100,7 +100,7 @@ if($verifySetup -eq "y")
         if($userAnswer -eq "yes")
         {
             $installTools = "yes"
-            $scriptpath = $PWD.Path + '\tools-installer.ps1'
+            $scriptpath = $PWD.Path + '\scripts\tools-installer.ps1'
             write-host $scriptpath
             write-host 
             & $scriptpath run
