@@ -16,7 +16,7 @@ while($subExists -ne "true")
     write-host "Checking if subscription exists..."
     $tempSubName = az account show --name $subName --query "[name]" --output tsv 2>$null
     write-host "AzSub: "$tempSubName
-    read-host "hmm"
+    #read-host "hmm"
 
     if($tempSubName -eq $subName -and $tempSubName -ne "")
     {
