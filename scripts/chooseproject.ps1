@@ -62,6 +62,7 @@ while((($projectExists -eq "true" -or $resourcegroupExists -eq "true") -or $firs
     if($projectExists -eq "false")
     {
         $projectId = az devops project create --name $projectName --org $fullOrgName --query "[id]"
+        write-host $projectId
         
         write-host "Project name can be used"
         # cd ..
