@@ -67,8 +67,8 @@ if($verifySetup -eq "y")
     # & $scriptpath run
     # read-host "Enter to proceed..."
 
-    # run createcloud script
-    $scriptpath = $PWD.Path + '\createcloud.ps1'
+    # run refreshcloudips script
+    $scriptpath = $PWD.Path + '\refreshcloudips.ps1'
     write-host $scriptpath
     & $scriptpath run
     read-host "Enter to proceed..."
