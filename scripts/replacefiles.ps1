@@ -133,6 +133,16 @@ cd "./.scripts/"
 
 cd ..
 
+
+## Replacing branch-policy vars
+write-host "Replacing vars in branch-policy.json"
+cd "./.azure/"
+
+# replace tempprojectname with $projectName
+((Get-Content -path branch-policy.json -Raw) -replace 'temprepositoryid',$repositoryId) | Set-Content -Path branch-policy.json
+
+cd ..
+
 # # # replace tempazureorgit with $azureorgit
 
 # # # replace azureOrg in testazurelogin.ps1
