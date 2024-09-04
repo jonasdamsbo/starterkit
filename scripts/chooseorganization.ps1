@@ -43,7 +43,7 @@ read-host "Enter to proceed..."
 cd ..
 cd ..
 write-host $PWD.Path
-Rename-Item -Path "starter-kit-org" -NewName $orgName
+Rename-Item -Path "$orgFolder" -NewName $orgName
 cd $orgName
 cd "starter-kit" # change to 'starter-kit' when done
 
