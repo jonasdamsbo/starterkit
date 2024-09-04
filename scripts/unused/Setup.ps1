@@ -1,7 +1,7 @@
 #pre
 $projectName = "tempprojectname"
 $orgName = "temporganizationname"
-$azureorgit = ""
+#$azureorgit = ""
 
 $setupPath = $PWD.Path
 $projectType = ""
@@ -78,11 +78,11 @@ while($projectType -ne "new" -and $projectType -ne "old")
             Remove-Item -LiteralPath ".git" -Force -Recurse -erroraction 'silentlycontinue'
             Remove-Item -LiteralPath ".git" -Force -Recurse -erroraction 'silentlycontinue'
 
-            write-host "Would you like to use."
-            write-host " - Azure DevOps Repos and Pipelines"
-            write-host " - or"
-            write-host " - GitHub and GitHub Actions?"
-            $azureorgit = read-host "(azure/github)"
+            # write-host "Would you like to use."
+            # write-host " - Azure DevOps Repos and Pipelines"
+            # write-host " - or"
+            # write-host " - GitHub and GitHub Actions?"
+            # $azureorgit = read-host "(azure/github)"
 
             # run project-creator
             cd $PWD.Path
@@ -121,16 +121,16 @@ while($projectType -ne "new" -and $projectType -ne "old")
 
             # clone existing project from $repoName,
             write-host "Trying to clone existing project"
-            if($azureorgit -eq "azure")
-            {
+            # if($azureorgit -eq "azure")
+            # {
                 # azure repo clone
                 git clone "https://"+"$orgName"+"@dev.azure.com/"+"$orgName"+"/"+"$projectName"+"/_git/"+"$projectName"+"Azurerepository" $repofolder
-            }
-            else
-            {
-                # github clone
-                git clone https://github.com/+"$orgName"+"/"+"$projectName"+".git" $repofolder
-            }
+            # }
+            # else
+            # {
+            #     # github clone
+            #     git clone https://github.com/+"$orgName"+"/"+"$projectName"+".git" $repofolder
+            # }
             write-host "Cloned"
             
             # cd existing project
