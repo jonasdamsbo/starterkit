@@ -577,13 +577,26 @@ if($verifySetup -eq "y")
             #$repoDetails = az repos create --name $repositoryName --org $fullOrgName --output json
             #write-host $repoDetails
             $repositoryId = az repos create --name $repositoryName --org $fullOrgName --project $projectName --output json --query "[id]"
+            $repositoryId = $repositoryId.Replace("[","")
+            $repositoryId = $repositoryId.Replace("]","")
+            $repositoryId = $repositoryId.Replace(" ","")
             write-host $repositoryId
             write-host "Done creating repository..."
 
             # create pipeline
             #$pipelineDetails = az pipelines create --name $pipelinename --yml-path '\.azure\azure-pipelines.yml' --org $fullOrgName --repository-type "tfsgit" --repository $repositoryName
-            $pipelineId = az pipelines create --name $pipelinename --yml-path '\.azure\azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master" --output json --query "[id]"
-            write-host $pipelineId
+            #$pipelineId = az pipelines create --name $pipelinename --yml-path '\.azure\azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master" --output json --query "[id]"
+            write-host "Started creating pipeline..."
+            az pipelines create --name $pipelinename --yml-path '\.azure\azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master"
+            #$pipelineDetails = az pipelines create --name $pipelinename --yml-path '\.azure\azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master" --output tsv 2>$null
+            #write-host $pipelineDetails
+
+            $pipelineId = az pipelines show --name $pipelinename --org $fullOrgName --project $projectName --output json --query "[id]"
+            $pipelineId = $pipelineId.Replace("[","")
+            $pipelineId = $pipelineId.Replace("]","")
+            $pipelineId = $pipelineId.Replace(" ","")
+            write-host "PipelineId: "$pipelineId
+
             write-host "Done creating pipeline..."
 
             # create resourcegroup
@@ -605,9 +618,10 @@ if($verifySetup -eq "y")
             write-host "Done creating storageaccount container..."
 
             # get storageaccountkey
+            write-host "Started getting storage key..."
             $storagekey = az storage account keys list -g $resourcegroupName -n $storageaccountName --query "[0].value"
             az pipelines variable create --name "Storagekey" --value $storagekey --org $fullOrgName --pipeline-id $pipelineId
-            write-host "Done creating storage key..."
+            write-host "Done creating pipeline variable from storage key..."
         }
 
     # ################################################## run createpipeline script ##################################################
