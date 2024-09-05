@@ -526,6 +526,15 @@ if($verifySetup -eq "y")
         # # # Get-Content -path testazurelogin.ps1
         # # # Read-Host "Press enter to continue..."
 
+        #replace org, proj, repo, pipeline, subscription, resouregroup, storageaccount in readme.txt
+        ((Get-Content -path readme.txt -Raw) -replace 'temporganizationname',$orgName) | Set-Content -Path readme.txt
+        ((Get-Content -path readme.txt -Raw) -replace 'tempprojectname',$projectName) | Set-Content -Path readme.txt
+        ((Get-Content -path readme.txt -Raw) -replace 'temprepositoryname',$repositoryName) | Set-Content -Path readme.txt
+        ((Get-Content -path readme.txt -Raw) -replace 'temppipelinename',$pipelineName) | Set-Content -Path readme.txt
+        ((Get-Content -path readme.txt -Raw) -replace 'tempsubscriptionname',$subscriptionName) | Set-Content -Path readme.txt
+        ((Get-Content -path readme.txt -Raw) -replace 'tempresourcegroupname',$resourcegroupName) | Set-Content -Path readme.txt
+        ((Get-Content -path readme.txt -Raw) -replace 'tempstorageaccountname',$storageaccountName) | Set-Content -Path readme.txt
+
         read-host "Enter to proceed..."
         
         # $scriptpath = $PWD.Path + '\scripts\replacefiles.ps1'
