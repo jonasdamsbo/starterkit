@@ -261,7 +261,7 @@ if($verifySetup -eq "y")
             write-host "What would you like to call your resources?"
             write-host "   - repository, pipeline, resourcegroup, webapp, api, databases, storageaccount"
             write-host "   - ex: if you enter 'myresources', the repository will be named myresourcesRepository"
-            $resourceName = read-host ""
+            $resourceName = read-host
 
             ## check if resourcegroup exists
             write-host "Checking if resourcegroup exists..."
@@ -617,7 +617,7 @@ if($verifySetup -eq "y")
 
         ### init git and push initial commit, create branches
         write-host "Configuring and pushing to git repository"
-        
+
         # init git repo
         git init
         write-host "init done"
