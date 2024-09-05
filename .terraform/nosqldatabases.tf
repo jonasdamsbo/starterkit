@@ -1,5 +1,5 @@
 resource "azurerm_cosmosdb_account" "exampleCosmosdbaccount" {
-  name                = "tempresourcenameCosmosdbaccount"
+  name                = "tempresourcenamecosmosdbaccount"
   location            = data.azurerm_resource_group.exampleResourcegroup.location
   resource_group_name = data.azurerm_resource_group.exampleResourcegroup.name
   offer_type          = "Standard"
@@ -9,7 +9,7 @@ resource "azurerm_cosmosdb_account" "exampleCosmosdbaccount" {
 
   automatic_failover_enabled = true
 
-  ip_range_filter = ["templocalip","tempapiappip"]
+  #ip_range_filter = ["templocalip","tempapiappip"]
 
   capabilities {
     name = "EnableAggregationPipeline"
@@ -49,14 +49,14 @@ resource "azurerm_cosmosdb_account" "exampleCosmosdbaccount" {
   }
 }
 resource "azurerm_management_lock" "exampleCosmosdbaccountlock" {
-  name = "tempresourcenameCosmosdbaccountlock"
+  name = "tempresourcenamecosmosdbaccountlock"
   scope = azurerm_cosmosdb_account.exampleCosmosdbaccount.id
   lock_level = "CanNotDelete"
   notes = "Prevents nosqldb data loss"
 }
 
 resource "azurerm_cosmosdb_mongo_database" "exampleCosmosdbmongodb" {
-  name                = "tempresourcenameCosmosdbmongodb"
+  name                = "tempresourcenamecosmosdbmongodb"
   resource_group_name = azurerm_cosmosdb_account.exampleCosmosdbaccount.resource_group_name
   account_name        = azurerm_cosmosdb_account.exampleCosmosdbaccount.name
   throughput          = 400
@@ -67,7 +67,7 @@ resource "azurerm_cosmosdb_mongo_database" "exampleCosmosdbmongodb" {
   }
 }
 resource "azurerm_management_lock" "exampleCosmosdbmongodblock" {
-  name = "tempresourcenameCosmosdbmongodblock"
+  name = "tempresourcenamecosmosdbmongodblock"
   scope = azurerm_cosmosdb_mongo_database.exampleCosmosdbmongodb.id
   lock_level = "CanNotDelete"
   notes = "Prevents nosqldb data loss"

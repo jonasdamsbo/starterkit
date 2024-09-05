@@ -85,11 +85,22 @@ az sql server firewall-rule create -g $rg -s $sqlservername -n "Apiappip" --star
 $cosmosdbaccount = $resourceName+"Cosmosdbaccount"
 $iprange = az cosmosdb show --name $cosmosdbaccount --resource-group $resourcegroupName --query "[ip-range-filter]"
 $iprange = $iprange.Trim("[","]")
+$iprange = $iprange.Replace("[","")
+$iprange = $iprange.Replace("]","")
+$iprange = $iprange.Replace(" ","")
 # # $iprange = $iprange.Replace("]", "")
 # # $iprange = $iprange.Replace("}","")
 # # $iprange = $iprange.Replace("{","")
-$iprange = '['+$iprange+',"'+$apiappip+'"]'
+if($iprange.Length -lt 1)
+{
+    $iprange = '["'+$apiappip+'"]'
+}
+else
+{
+    $iprange = '['+$iprange+',"'+$apiappip+'"]'
+}
 az cosmosdb update --name $cosmosdbaccount --resource-group $rg --ip-range-filter $iprange #$apiappip
+
 
 
 # # add apiurl to webapp

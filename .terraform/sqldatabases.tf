@@ -1,5 +1,5 @@
 resource "azurerm_mssql_server" "exampleMssqlserver" {
-  name                         = "tempresourceMssqlserver"
+  name                         = "tempresourcenamemssqlserver"
   resource_group_name          = data.azurerm_resource_group.exampleResourcegroup.name
   location                     = data.azurerm_resource_group.exampleResourcegroup.location
   version                      = "12.0"
@@ -17,28 +17,28 @@ resource "azurerm_mssql_server" "exampleMssqlserver" {
   }
 }
 resource "azurerm_management_lock" "exampleMssqlserverlock" {
-  name = "tempresourceMssqlserverlock"
+  name = "tempresourcenamemssqlserverlock"
   scope = azurerm_mssql_server.exampleMssqlserver.id
   lock_level = "CanNotDelete"
   notes = "Prevents mssqldb data loss"
 }
 
-resource "azurerm_mssql_firewall_rule" "exampleMssqlfirewallruleApi" {
-  name             = "tempresourceMssqlfirewallruleApi"
-  server_id        = azurerm_mssql_server.exampleMssqlserver.id
-  start_ip_address = "tempapiappip"
-  end_ip_address   = "tempapiappip"
-}
+# resource "azurerm_mssql_firewall_rule" "exampleMssqlfirewallruleApi" {
+#   name             = "tempresourcenamemssqlfirewallruleApi"
+#   server_id        = azurerm_mssql_server.exampleMssqlserver.id
+#   start_ip_address = "tempapiappip"
+#   end_ip_address   = "tempapiappip"
+# }
 
-resource "azurerm_mssql_firewall_rule" "exampleMssqlfirewallruleLocal" {
-  name             = "tempresourceMssqlfirewallruleLocal"
-  server_id        = azurerm_mssql_server.exampleMssqlserver.id
-  start_ip_address = "templocalip"
-  end_ip_address   = "templocalip"
-}
+# resource "azurerm_mssql_firewall_rule" "exampleMssqlfirewallruleLocal" {
+#   name             = "tempresourcenamemssqlfirewallruleLocal"
+#   server_id        = azurerm_mssql_server.exampleMssqlserver.id
+#   start_ip_address = "templocalip"
+#   end_ip_address   = "templocalip"
+# }
 
 resource "azurerm_mssql_database" "exampleMssqldatabase" {
-  name           = "tempresourceMssqldatabase"
+  name           = "tempresourcenamemssqldatabase"
   server_id      = azurerm_mssql_server.exampleMssqlserver.id
   collation      = "SQL_Latin1_General_CP1_CI_AS"
   license_type   = "LicenseIncluded"
@@ -58,7 +58,7 @@ resource "azurerm_mssql_database" "exampleMssqldatabase" {
   }
 }
 resource "azurerm_management_lock" "exampleMssqllock" {
-  name = "tempresourcenameMssqllock"
+  name = "tempresourcenamemssqllock"
   scope = azurerm_mssql_database.exampleMssqldatabase.id
   lock_level = "CanNotDelete"
   notes = "Prevents mssqldb data loss"

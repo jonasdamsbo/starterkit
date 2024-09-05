@@ -32,13 +32,13 @@ provider "azuredevops" {
 # giver det mening at terraform laver project? terraform ligger i repo, men 1 project kan have flere repos, men det her kan være main repo?
 data "azuredevops_project" "exampleAzuredevopsproject" {
   project_id = "tempazuredevopsprojectid"
-  name               = "tempprojectname"
+  #name               = "tempprojectname"
 }
 
 data "azuredevops_git_repository" "exampleAzurerepository" {
   id                 = "tempazurerepositoryid"
-  name               = "tempresourcenameAzurerepository"
-  project_id         = data.azuredevops_project.exampleAzuredevopsproject.id
+  name               = "tempresourcenameazurerepository"
+  project_id         = data.azuredevops_project.exampleAzuredevopsproject.project_id
   default_branch     = "master"
 }
 
@@ -50,8 +50,8 @@ data "azuredevops_git_repository" "exampleAzurerepository" {
 
 data "azuredevops_build_definition" "examplePipeline" {
   id                 = "temppipelineid"
-  name               = "tempresourcenamePipeline"
-  project_id         = data.azuredevops_project.exampleAzuredevopsproject.id
+  name               = "tempresourcenamepipeline"
+  project_id         = data.azuredevops_project.exampleAzuredevopsproject.project_id
 
   repository {
     repo_id     = data.azuredevops_git_repository.exampleAzurerepository.id
@@ -73,18 +73,18 @@ data "azurerm_subscription" "exampleSubscription" {
 
 data "azurerm_resource_group" "exampleResourcegroup" {
   #id = "tempresourcegroupid"
-  name = "tempresourcenameResourcegroup"
+  name = "tempresourcenameresourcegroup"
 }
 
 data "azurerm_storage_account" "exampleStorageaccount" {
-  id                 = "tempstorageaccountid"
-  name               = "tempresourcenameStorageaccount"
+  #id                 = "tempstorageaccountid"
+  name               = "tempresourcenamestorageaccount"
   resource_group_name = data.azurerm_resource_group.exampleResourcegroup.name
 }
 
 resource "azuredevops_variable_group" "exampleVariablegroup" {
-  project_id         = data.azuredevops_project.exampleAzuredevopsproject.id
-  name               = "tempresourcenameVariablegroup"
+  project_id         = data.azuredevops_project.exampleAzuredevopsproject.project_id
+  name               = "tempresourcenamevariablegroup"
   description        = "Managed by Terraform"
   allow_access       = true
 

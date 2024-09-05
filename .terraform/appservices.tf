@@ -1,5 +1,5 @@
 resource "azurerm_service_plan" "exampleAppserviceplan" {
-  name                = "tempresourcenameAppserviceplan"
+  name                = "tempresourcenameappserviceplan"
   location            = data.azurerm_resource_group.exampleResourcegroup.location
   resource_group_name = data.azurerm_resource_group.exampleResourcegroup.name
   os_type             = "Windows"
@@ -7,7 +7,7 @@ resource "azurerm_service_plan" "exampleAppserviceplan" {
 }
 
 resource "azurerm_app_service" "exampleWebapp" {
-  name                = "tempresourcenameWebapp"
+  name                = "tempresourcenamewebapp"
   location            = data.azurerm_resource_group.exampleResourcegroup.location
   resource_group_name = data.azurerm_resource_group.exampleResourcegroup.name
   app_service_plan_id = azurerm_service_plan.exampleAppserviceplan.id
@@ -23,7 +23,7 @@ resource "azurerm_app_service" "exampleWebapp" {
 }
 
 resource "azurerm_windows_web_app" "exampleApiapp" {
-  name                = "tempresourcenameApiapp"
+  name                = "tempresourcenameapiapp"
   location            = data.azurerm_resource_group.exampleResourcegroup.location
   resource_group_name = data.azurerm_resource_group.exampleResourcegroup.name
   service_plan_id = azurerm_service_plan.exampleAppserviceplan.id
@@ -31,29 +31,29 @@ resource "azurerm_windows_web_app" "exampleApiapp" {
 
   site_config {
     #scm_type                 = "LocalGit"
-    ip_restriction_default_action = "deny"
+    ip_restriction_default_action = "Deny"
     
-    ip_restriction {
-      ip_address = "tempwebappip"
-      action = "Allow"
-      priority = 1
-    }
+    # ip_restriction {
+    #   ip_address = "tempwebappip"
+    #   action = "Allow"
+    #   priority = 1
+    # }
 
-    ip_restriction {
-      ip_address = "templocalip"
-      action = "Allow"
-      priority = 1
-    }
+    # ip_restriction {
+    #   ip_address = "templocalip"
+    #   action = "Allow"
+    #   priority = 1
+    # }
   }
 
   connection_string {
-    name  = "tempresourcenameMssql"
+    name  = "Mssql"
     type  = "SQLServer"
     value = "tempsqlconnectionstring"
   }
 
   connection_string {
-    name  = "tempresourcenameNosql"
+    name  = "Nosql"
     type  = "DocDb"
     value = "tempnosqlconnectionstring"
   }
