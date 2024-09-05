@@ -30,7 +30,7 @@ resource "azurerm_windows_web_app" "exampleApiapp" {
   location            = "northeurope"
   resource_group_name = data.azurerm_resource_group.exampleResourcegroup.name
   service_plan_id = azurerm_service_plan.exampleAppserviceplan.id
-  public_network_access_enabled = false
+  public_network_access_enabled = true
 
   site_config {
     #scm_type                 = "LocalGit"

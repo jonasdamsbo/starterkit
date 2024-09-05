@@ -4,7 +4,7 @@ resource "azurerm_cosmosdb_account" "exampleCosmosdbaccount" {
   resource_group_name = data.azurerm_resource_group.exampleResourcegroup.name
   offer_type          = "Standard"
   kind                = "MongoDB"
-  public_network_access_enabled = false
+  public_network_access_enabled = true
   free_tier_enabled = true
 
   automatic_failover_enabled = true

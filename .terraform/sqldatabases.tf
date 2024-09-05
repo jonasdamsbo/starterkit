@@ -5,7 +5,7 @@ resource "azurerm_mssql_server" "exampleMssqlserver" {
   version                      = "12.0"
   administrator_login          = "tempresourcename"
   administrator_login_password = "P@ssw0rd"
-  public_network_access_enabled = false
+  public_network_access_enabled = true
 
   # azuread_administrator {
   #   login_username = "AzureAD Admin"
