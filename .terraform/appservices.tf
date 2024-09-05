@@ -1,6 +1,6 @@
 resource "azurerm_service_plan" "exampleAppserviceplan" {
   name                = "tempresourcenameappserviceplan"
-  location            = data.azurerm_resource_group.exampleResourcegroup.location
+  location            = "northeurope"
   resource_group_name = data.azurerm_resource_group.exampleResourcegroup.name
   os_type             = "Windows"
   sku_name            = "F1"
@@ -8,7 +8,7 @@ resource "azurerm_service_plan" "exampleAppserviceplan" {
 
 resource "azurerm_windows_web_app" "exampleWebapp" {
   name                = "tempresourcenamewebapp"
-  location            = data.azurerm_resource_group.exampleResourcegroup.location
+  location            = "northeurope"
   resource_group_name = data.azurerm_resource_group.exampleResourcegroup.name
   service_plan_id = azurerm_service_plan.exampleAppserviceplan.id
   public_network_access_enabled = true
@@ -17,6 +17,7 @@ resource "azurerm_windows_web_app" "exampleWebapp" {
     #dotnet_framework_version = "v4.0"
     #scm_type                 = "LocalGit"
     ip_restriction_default_action = "Allow"
+    always_on = "false"
   }
 
   app_settings = {
@@ -26,7 +27,7 @@ resource "azurerm_windows_web_app" "exampleWebapp" {
 
 resource "azurerm_windows_web_app" "exampleApiapp" {
   name                = "tempresourcenameapiapp"
-  location            = data.azurerm_resource_group.exampleResourcegroup.location
+  location            = "northeurope"
   resource_group_name = data.azurerm_resource_group.exampleResourcegroup.name
   service_plan_id = azurerm_service_plan.exampleAppserviceplan.id
   public_network_access_enabled = false
@@ -34,6 +35,7 @@ resource "azurerm_windows_web_app" "exampleApiapp" {
   site_config {
     #scm_type                 = "LocalGit"
     ip_restriction_default_action = "Deny"
+    always_on = "false"
     
     # ip_restriction {
     #   ip_address = "tempwebappip"

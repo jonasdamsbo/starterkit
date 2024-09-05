@@ -14,7 +14,7 @@ terraform {
       storage_account_name = data.azurerm_storage_account.exampleStorageaccount.name
       container_name       = "terraform"
       key                  = "terraform.tfstate"
-      access_key = "tempstoragekey"
+      access_key           = "tempstoragekey"
 
       features{}
   }
@@ -85,49 +85,49 @@ data "azurerm_storage_account" "exampleStorageaccount" {
   resource_group_name = data.azurerm_resource_group.exampleResourcegroup.name
 }
 
-resource "azuredevops_variable_group" "exampleVariablegroup" {
-  project_id         = data.azuredevops_project.exampleAzuredevopsproject.project_id
-  name               = "tempresourcenamevariablegroup"
-  description        = "Managed by Terraform"
-  allow_access       = true
+# resource "azuredevops_variable_group" "exampleVariablegroup" {
+#   project_id         = data.azuredevops_project.exampleAzuredevopsproject.project_id
+#   name               = "tempresourcenamevariablegroup"
+#   description        = "Managed by Terraform"
+#   allow_access       = true
 
-  variable {
-    name  = "Organization"
-    value = "temporganizationname"
-  }
+#   variable {
+#     name  = "Organization"
+#     value = "temporganizationname"
+#   }
 
-  # variable {
-  #   name  = "Storagekey"
-  #   value = "tempstoragekey"
-  # }
+#   # variable {
+#   #   name  = "Storagekey"
+#   #   value = "tempstoragekey"
+#   # }
 
-  # variable {
-  #   name  = "Project"
-  #   value = "tempprojectname"
-  # }
+#   # variable {
+#   #   name  = "Project"
+#   #   value = "tempprojectname"
+#   # }
 
-  # variable {
-  #   name  = "Respository"
-  #   value = "tempprojectnameAzurerepository"
-  # }
+#   # variable {
+#   #   name  = "Respository"
+#   #   value = "tempprojectnameAzurerepository"
+#   # }
 
-  # variable {
-  #   name  = "Pipeline"
-  #   value = "tempprojectnamePipeline"
-  # }
+#   # variable {
+#   #   name  = "Pipeline"
+#   #   value = "tempprojectnamePipeline"
+#   # }
 
-  # variable {
-  #   name  = "Subscription"
-  #   value = "tempsubscriptionname"
-  # }
+#   # variable {
+#   #   name  = "Subscription"
+#   #   value = "tempsubscriptionname"
+#   # }
 
-  # variable {
-  #   name  = "Resourcegroup"
-  #   value = "tempprojectnameResourcegroup"
-  # }
+#   # variable {
+#   #   name  = "Resourcegroup"
+#   #   value = "tempprojectnameResourcegroup"
+#   # }
 
-  # variable {
-  #   name  = "Storageaccount"
-  #   value = "tempprojectnameStorageaccount"
-  # }
-}
+#   # variable {
+#   #   name  = "Storageaccount"
+#   #   value = "tempprojectnameStorageaccount"
+#   # }
+# }
