@@ -248,6 +248,14 @@ if($verifySetup -eq "y")
         }
 
         read-host "Enter to proceed..."
+
+
+
+        ######## INSERT Project service provider prompt here ########
+        ######## INSERT Project service provider prompt here ########
+        ######## INSERT Project service provider prompt here ########
+
+        
         
         # $scriptpath = $PWD.Path + '\scripts\chooseproject.ps1'
         # write-host $scriptpath
