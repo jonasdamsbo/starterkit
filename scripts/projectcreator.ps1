@@ -28,7 +28,7 @@ if($verifySetup -eq "y")
     ################################################## run chooseorganization script ##################################################
 
         ## prompt to enter organisation name name
-        #az login
+        az login
         $orgExists = "false"
         while($orgExists -eq "false")
         {
@@ -634,7 +634,8 @@ if($verifySetup -eq "y")
         # init git repo
         git init
         write-host "init done"
-        $remotename = "https://"+"$orgName"+"@dev.azure.com/"+"$orgName$projectName"+"_git/"+"$projectName"
+        $remotename = "https://"+"$orgName"+"@dev.azure.com/"+"$orgName"+"/"+"$projectName"+"_git/"+"$projectName"
+        write-host "remotename: "$remotename
         git remote add $repository $remotename
         write-host "remote add done"
 
@@ -660,7 +661,7 @@ if($verifySetup -eq "y")
         git push $repository
 
         # add master branch lock
-        az repos policy create --config '\.azure\branch-policy.json'
+        az repos policy create --config '\.azure\branch-policy.json' --org $fullOrgName
 
 
         Read-Host "Press enter to continue..."
