@@ -1,7 +1,7 @@
 resource "azurerm_cosmosdb_account" "exampleCosmosdbaccount" {
   name                = "tempresourcenameCosmosdbaccount"
-  location            = azurerm_resource_group.exampleResourcegroup.location
-  resource_group_name = azurerm_resource_group.exampleResourcegroup.name
+  location            = data.azurerm_resource_group.exampleResourcegroup.location
+  resource_group_name = data.azurerm_resource_group.exampleResourcegroup.name
   offer_type          = "Standard"
   kind                = "MongoDB"
   public_network_access_enabled = false

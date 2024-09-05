@@ -1,15 +1,15 @@
 resource "azurerm_service_plan" "exampleAppserviceplan" {
   name                = "tempresourcenameAppserviceplan"
-  location            = azurerm_resource_group.exampleResourcegroup.location
-  resource_group_name = azurerm_resource_group.exampleResourcegroup.name
+  location            = data.azurerm_resource_group.exampleResourcegroup.location
+  resource_group_name = data.azurerm_resource_group.exampleResourcegroup.name
   os_type             = "Windows"
   sku_name            = "F1"
 }
 
 resource "azurerm_app_service" "exampleWebapp" {
   name                = "tempresourcenameWebapp"
-  location            = azurerm_resource_group.exampleResourcegroup.location
-  resource_group_name = azurerm_resource_group.exampleResourcegroup.name
+  location            = data.azurerm_resource_group.exampleResourcegroup.location
+  resource_group_name = data.azurerm_resource_group.exampleResourcegroup.name
   app_service_plan_id = azurerm_service_plan.exampleAppserviceplan.id
 
   site_config {
@@ -24,8 +24,8 @@ resource "azurerm_app_service" "exampleWebapp" {
 
 resource "azurerm_windows_web_app" "exampleApiapp" {
   name                = "tempresourcenameApiapp"
-  location            = azurerm_resource_group.exampleResourcegroup.location
-  resource_group_name = azurerm_resource_group.exampleResourcegroup.name
+  location            = data.azurerm_resource_group.exampleResourcegroup.location
+  resource_group_name = data.azurerm_resource_group.exampleResourcegroup.name
   service_plan_id = azurerm_service_plan.exampleAppserviceplan.id
   public_network_access_enabled = false
 

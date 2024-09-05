@@ -10,8 +10,8 @@ terraform {
     }
   }
   backend "azurerm" {
-      resource_group_name  = azurerm_resource_group.exampleResourcegroup.name
-      storage_account_name = azurerm_storage_account.exampleStorageaccount.name
+      resource_group_name  = data.azurerm_resource_group.exampleResourcegroup.name
+      storage_account_name = data.azurerm_storage_account.exampleStorageaccount.name
       container_name       = "terraform"
       key                  = "terraform.tfstate"
       access_key = "tempstoragekey"
@@ -38,23 +38,23 @@ data "azuredevops_project" "exampleAzuredevopsproject" {
 data "azuredevops_git_repository" "exampleAzurerepository" {
   id                 = "tempazurerepositoryid"
   name               = "tempresourcenameAzurerepository"
-  project_id         = azuredevops_project.exampleAzuredevopsproject.id
+  project_id         = data.azuredevops_project.exampleAzuredevopsproject.id
   default_branch     = "master"
 }
 
 data "azuredevops_branch_policy_status_check" "exampleBranchpolicy" {
   scope {
-    match_type       = azuredevops_git_repository.exampleAzurerepository.default_branch
+    match_type       = data.azuredevops_git_repository.exampleAzurerepository.default_branch
   }
 }
 
 data "azuredevops_build_definition" "examplePipeline" {
   id                 = "temppipelineid"
   name               = "tempresourcenamePipeline"
-  project_id         = azuredevops_project.exampleAzuredevopsproject.id
+  project_id         = data.azuredevops_project.exampleAzuredevopsproject.id
 
   repository {
-    repo_id     = azuredevops_git_repository.exampleAzurerepository.id
+    repo_id     = data.azuredevops_git_repository.exampleAzurerepository.id
     yml_path    = ".azure/azure-pipelines.yml"
     #repo_type   = "TfsGit"
     #branch_name = azuredevops_git_repository.exampleAzurerepository.default_branch
@@ -79,11 +79,11 @@ data "azurerm_resource_group" "exampleResourcegroup" {
 data "azurerm_storage_account" "exampleStorageaccount" {
   id                 = "tempstorageaccountid"
   name               = "tempresourcenameStorageaccount"
-  resource_group_name =  azurerm_resource_group.exampleResourcegroup.name
+  resource_group_name =  data.azurerm_resource_group.exampleResourcegroup.name
 }
 
 resource "azuredevops_variable_group" "exampleVariablegroup" {
-  project_id         = azuredevops_project.exampleAzuredevopsproject.id
+  project_id         = data.azuredevops_project.exampleAzuredevopsproject.id
   name               = "tempresourcenameVariablegroup"
   description        = "Managed by Terraform"
   allow_access       = true

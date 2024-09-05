@@ -1,7 +1,7 @@
 resource "azurerm_mssql_server" "exampleMssqlserver" {
   name                         = "tempresourceMssqlserver"
-  resource_group_name          = azurerm_resource_group.exampleResourcegroup.name
-  location                     = azurerm_resource_group.exampleResourcegroup.location
+  resource_group_name          = data.azurerm_resource_group.exampleResourcegroup.name
+  location                     = data.azurerm_resource_group.exampleResourcegroup.location
   version                      = "12.0"
   administrator_login          = "tempresourcename"
   administrator_login_password = "P@ssw0rd"
