@@ -28,7 +28,7 @@ if($verifySetup -eq "y")
     ################################################## run chooseorganization script ##################################################
 
         ## prompt to enter organisation name name
-        az login
+        #az login
         $orgExists = "false"
         while($orgExists -eq "false")
         {
@@ -594,6 +594,7 @@ if($verifySetup -eq "y")
             # create storageaccount and container
             #$saDetails = az storage account create -l "northeurope" -n $storageaccountName -g $resourcegroupName
             write-host "Started creating storageaccount..."
+            Connect-AzAccount
             $storageaccountId = az storage account create -l "northeurope" -n $storageaccountName -g $resourcegroupName --sku Standard_LRS --output json --query "[id]"
             write-host "Done creating storageaccount..."
 
