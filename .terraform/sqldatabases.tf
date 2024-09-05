@@ -40,15 +40,15 @@ resource "azurerm_mssql_server" "exampleMssqlserver" {
 resource "azurerm_mssql_database" "exampleMssqldatabase" {
   name           = "tempresourcenamemssqldatabase"
   server_id      = azurerm_mssql_server.exampleMssqlserver.id
+  read_scale     = false
+  sku_name       = "GP_S_Gen5_2"
+  min_capacity   = 0.5
+  auto_pause_delay_in_minutes = 60
   collation      = "SQL_Latin1_General_CP1_CI_AS"
   #license_type   = "LicenseIncluded"
   max_size_gb    = 4
-  read_scale     = true
-  sku_name       = "GP_S_Gen5_2"
   zone_redundant = true
   enclave_type   = "VBS"
-  min_capacity   = 0.5
-  auto_pause_delay_in_minutes = 60
 
   tags = {
     foo = "bar"
