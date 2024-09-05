@@ -353,7 +353,6 @@ if($verifySetup -eq "y")
         }
 
         read-host "Enter to proceed..."
-        write-host 
         
         # $scriptpath = $PWD.Path + '\scripts\chooseresources.ps1'
         # write-host $scriptpath
@@ -558,7 +557,6 @@ if($verifySetup -eq "y")
         # # # Read-Host "Press enter to continue..."
 
         read-host "Enter to proceed..."
-        write-host 
         
         # $scriptpath = $PWD.Path + '\scripts\replacefiles.ps1'
         # write-host $scriptpath
@@ -598,6 +596,7 @@ if($verifySetup -eq "y")
             write-host "Started creating storageaccount..."
             $storageaccountId = az storage account create -l "northeurope" -n $storageaccountName -g $resourcegroupName --sku Standard_LRS --output json --query "[id]"
             write-host "Done creating storageaccount..."
+
             write-host "Started creating storageaccount container..."
             az storage container create --name "terraform" --account-name $storageaccountName
             write-host $storageaccountId
@@ -628,14 +627,15 @@ if($verifySetup -eq "y")
     ################################################## run pushtorepo script ##################################################
 
         # push repofolder to repo
-
+        write-host 
         ### init git and push initial commit, create branches
         write-host "Configuring and pushing to git repository"
 
         # init git repo
         git init
         write-host "init done"
-        git remote add $repository "https://"+"$orgName"+"@dev.azure.com/"+"$orgName$projectName"+"_git/"+"$projectName"
+        $remotename = "https://"+"$orgName"+"@dev.azure.com/"+"$orgName$projectName"+"_git/"+"$projectName"
+        git remote add $repository $remotename
         write-host "remote add done"
 
         # push
