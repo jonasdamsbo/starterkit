@@ -48,6 +48,7 @@ resource "azurerm_mssql_database" "exampleMssqldatabase" {
   zone_redundant = true
   enclave_type   = "VBS"
   min_capacity   = 0.5
+  auto_pause_delay_in_minutes = 60
 
   tags = {
     foo = "bar"
