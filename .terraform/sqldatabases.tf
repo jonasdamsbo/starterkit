@@ -57,9 +57,9 @@ resource "azurerm_mssql_database" "exampleMssqldatabase" {
     prevent_destroy = true
   }
 }
-resource "azurerm_management_lock" "exampleMssqllock" {
-  name = "tempresourcenamemssqllock"
-  scope = azurerm_mssql_database.exampleMssqldatabase.id
-  lock_level = "CanNotDelete"
-  notes = "Prevents mssqldb data loss"
-}
+# resource "azurerm_management_lock" "exampleMssqllock" {
+#   name = "tempresourcenamemssqllock"
+#   scope = azurerm_mssql_database.exampleMssqldatabase.id
+#   lock_level = "CanNotDelete"
+#   notes = "Prevents mssqldb data loss"
+# }
