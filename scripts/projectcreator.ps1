@@ -67,6 +67,7 @@ if($verifySetup -eq "y")
         $statusCode = az devops project delete --id $tempProjectId --organization $fullOrgName -y --output tsv 2>$null
         #write-host "Statuscode: $statusCode 321"
         read-host "Enter to proceed..."
+        write-host 
         # test if found exists ^
 
         # cd ..
@@ -129,6 +130,7 @@ if($verifySetup -eq "y")
         }
 
         read-host "Enter to proceed..."
+        write-host 
         
         # $scriptpath = $PWD.Path + '\scripts\choosesubscription.ps1'
         # write-host $scriptpath
@@ -245,7 +247,8 @@ if($verifySetup -eq "y")
             write-host "Done checking if project..."
         }
 
-        read-host "Enter to exit..."
+        read-host "Enter to proceed..."
+        write-host 
         
         # $scriptpath = $PWD.Path + '\scripts\chooseproject.ps1'
         # write-host $scriptpath
@@ -343,41 +346,7 @@ if($verifySetup -eq "y")
             # create resources if resource names dont already exist, else retry
             if($resourcegroupExists -eq "false" -and $repositoryExists -eq "false" -and $pipelineExists -eq "false" -and $storageaccountExists -eq "false")
             {
-                # create resources
-                read-host "Creating resources..."
-                write-host "path: "$PWD.Path
-
-                # create repo - 
-                #$repoDetails = az repos create --name $repositoryName --org $fullOrgName --output json
-                #write-host $repoDetails
-                $repositoryId = az repos create --name $repositoryName --org $fullOrgName --project $projectName --output json --query "[id]"
-                write-host $repositoryId
-                write-host "Done creating repository..."
-
-                # create pipeline
-                #$pipelineDetails = az pipelines create --name $pipelinename --yml-path '\.azure\azure-pipelines.yml' --org $fullOrgName --repository-type "tfsgit" --repository $repositoryName
-                $pipelineId = az pipelines create --name $pipelinename --yml-path '\.azure\azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "main" --output json --query "[id]"
-                write-host $pipelineId
-                write-host "Done creating pipeline..."
-
-                # create resourcegroup
-                #$rgDetails = az group create -l "northeurope" -n $resourcegroupName
-                $resourcegroupId = az group create -l "northeurope" -n $resourcegroupName --output json --query "[id]"
-                write-host $resourcegroupId
-                write-host "Done creating resourcegroup..."
-
-                # create storageaccount and container
-                #$saDetails = az storage account create -l "northeurope" -n $storageaccountName -g $resourcegroupName
-                $storageaccountId = az storage account create -l "northeurope" -n $storageaccountName -g $resourcegroupName --output json --query "[id]"
-                az storage container create --name "terraform" --account-name $storageaccountName
-                write-host $storageaccountId
-                write-host "Done creating storageaccount..."
-
-                # get storageaccountkey
-                $storagekey = (Get-AzureRmStorageAccountKey -ResourceGroupname $resourcegroupName -AccountName $storageaccountName)[0].value
-                az pipelines variable create --name "Storagekey" --value $storagekey --org $fullOrgName --pipeline-id $pipelineId
-                write-host "Done creating storage key..."
-                
+                $resourcesDontExist = "true"
             }
             elseif($resourcegroupExists -eq "true" -or $repositoryExists -eq "true" -or $pipelineExists -eq "true" -or $storageaccountExists -eq "true")
             {
@@ -385,7 +354,8 @@ if($verifySetup -eq "y")
             }
         }
 
-        read-host "Enter to exit..."
+        read-host "Enter to proceed..."
+        write-host 
         
         # $scriptpath = $PWD.Path + '\scripts\chooseresources.ps1'
         # write-host $scriptpath
@@ -464,7 +434,7 @@ if($verifySetup -eq "y")
 
         cd ..
 
-        Read-Host "Press enter to continue..."
+        write-host 
 
 
         ### replace cloud # replace temp vars in terraform files in project/.terraform folder with projectname, + subscription&organization, + principalname?, 
@@ -551,7 +521,7 @@ if($verifySetup -eq "y")
         # # # replace billingaccount, billingprofile and invoicesection in main.tf
         # # # az account create --enrollment-account-name --offer-type {MS-AZR-0017P, MS-AZR-0148P, MS-AZR-USGOV-0015P, MS-AZR-USGOV-0017P, MS-AZR-USGOV-0148P}
 
-        Read-Host "Press enter to continue..."
+        write-host 
 
 
         ### replace old-project # (tempprojectname with $projectName & temporganizationname with $orgName) in old-project script in new folder # azuregit etc?, 
@@ -593,13 +563,55 @@ if($verifySetup -eq "y")
         # # # Get-Content -path testazurelogin.ps1
         # # # Read-Host "Press enter to continue..."
 
-        Read-Host "Press enter to continue..."
+        read-host "Enter to proceed..."
+        write-host 
         
         # $scriptpath = $PWD.Path + '\scripts\replacefiles.ps1'
         # write-host $scriptpath
         # & $scriptpath run
         # read-host "Enter to proceed..."
 
+
+    # ################################################## run create resources script #################################################
+
+        if($resourcesDontExist -eq "true")
+        {
+            # create resources
+            read-host "Creating resources..."
+            write-host "path: "$PWD.Path
+
+            # create repo - 
+            #$repoDetails = az repos create --name $repositoryName --org $fullOrgName --output json
+            #write-host $repoDetails
+            $repositoryId = az repos create --name $repositoryName --org $fullOrgName --project $projectName --output json --query "[id]"
+            write-host $repositoryId
+            write-host "Done creating repository..."
+
+            # create pipeline
+            #$pipelineDetails = az pipelines create --name $pipelinename --yml-path '\.azure\azure-pipelines.yml' --org $fullOrgName --repository-type "tfsgit" --repository $repositoryName
+            $pipelineId = az pipelines create --name $pipelinename --yml-path '\.azure\azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "main" --output json --query "[id]"
+            write-host $pipelineId
+            write-host "Done creating pipeline..."
+
+            # create resourcegroup
+            #$rgDetails = az group create -l "northeurope" -n $resourcegroupName
+            $resourcegroupId = az group create -l "northeurope" -n $resourcegroupName --managed-by $fullSubId --output json --query "[id]"
+            write-host $resourcegroupId
+            write-host "Done creating resourcegroup..."
+
+            # create storageaccount and container
+            #$saDetails = az storage account create -l "northeurope" -n $storageaccountName -g $resourcegroupName
+            write-host "Started creating storageaccount..."
+            $storageaccountId = az storage account create -l "northeurope" -n $storageaccountName -g $resourcegroupName --output json --query "[id]"
+            az storage container create --name "terraform" --account-name $storageaccountName
+            write-host $storageaccountId
+            write-host "Done creating storageaccount..."
+
+            # get storageaccountkey
+            $storagekey = (Get-AzStorageAccountKey -ResourceGroupname $resourcegroupName -AccountName $storageaccountName)[0].value
+            az pipelines variable create --name "Storagekey" --value $storagekey --org $fullOrgName --pipeline-id $pipelineId
+            write-host "Done creating storage key..."
+        }
 
     # ################################################## run createpipeline script ##################################################
 
