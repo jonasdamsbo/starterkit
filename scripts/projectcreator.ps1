@@ -255,7 +255,7 @@ if($verifySetup -eq "y")
         ######## INSERT Project service provider prompt here ########
         ######## INSERT Project service provider prompt here ########
 
-        
+
         
         # $scriptpath = $PWD.Path + '\scripts\chooseproject.ps1'
         # write-host $scriptpath
@@ -264,6 +264,7 @@ if($verifySetup -eq "y")
 
 
     ################################################## run chooseresources script ##################################################
+
         $resourcegroupExists = "true"
         while($resourcegroupExists -eq "true" -or $repositoryExists -eq "true" -or $pipelineExists -eq "true" -or $storageaccountExists -eq "true")
         {
@@ -275,7 +276,7 @@ if($verifySetup -eq "y")
 
             ## check if resourcegroup exists
             write-host "Checking if resourcegroup exists..."
-            $resourcegroupName = $resourceName+"Resourcegroup"
+            $resourcegroupName = $resourceName+"resourcegroup"
             $resourcegroupExists = "false"
             $listOfResourcegroups = az group show --name $resourcegroupName --query "[name]" --output tsv 2>$null
 
@@ -315,7 +316,7 @@ if($verifySetup -eq "y")
 
             # check if repository exists
             write-host "Checking if repository exists..."
-            $repositoryName = "$resourceName"+"Repository"
+            $repositoryName = "$resourceName"+"repository"
             write-host "reponame: "$repositoryName
             $repositoryExists = "false"
             $listOfRepositories = az repos show -r $repositoryName --org $fullOrgName --query "[name]" --output tsv 2>$null
@@ -334,7 +335,7 @@ if($verifySetup -eq "y")
 
             # check if pipeline exists
             write-host "Checking if pipeline exists..."
-            $pipelineName = $resourceName+"Pipeline"
+            $pipelineName = $resourceName+"pipeline"
             $pipelineExists = "false"
             $listOfPipelines = az pipelines show --name $pipelineName --org $fullOrgName --query "[name]" --output tsv 2>$null
 

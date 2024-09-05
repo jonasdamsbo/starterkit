@@ -8,7 +8,7 @@ while($resourcegroupExists -eq "true" -or $repositoryExists -eq "true" -or $pipe
 
     ## check if resourcegroup exists
     write-host "Checking if resourcegroup exists..."
-    $resourcegroupName = $resourceName+"Resourcegroup"
+    $resourcegroupName = $resourceName+"resourcegroup"
     $resourcegroupExists = "false"
     $listOfResourcegroups = az group show --name $resourcegroupName --query "[name]" --output tsv 2>$null
 
@@ -29,7 +29,7 @@ while($resourcegroupExists -eq "true" -or $repositoryExists -eq "true" -or $pipe
     {
         ## check if resourcegroup exists
         write-host "Checking if storageaccount exists..."
-        $storageaccountName = $resourceName+"Storageaccount"
+        $storageaccountName = $resourceName+"storageaccount"
         $storageaccountExists = "false"
         $listOfStorageaccount = az storage account show -g $resourcegroupName -n $storageaccountName --query "[name]" --output tsv 2>$null
 
@@ -48,7 +48,7 @@ while($resourcegroupExists -eq "true" -or $repositoryExists -eq "true" -or $pipe
 
     # check if repository exists
     write-host "Checking if repository exists..."
-    $repositoryName = $resourceName+"Repository"
+    $repositoryName = $resourceName+"repository"
     $repositoryExists = "false"
     $listOfRepositories = az repos show -r $repositoryName --org $fullOrgName --query "[name]" --output tsv 2>$null
 
@@ -66,7 +66,7 @@ while($resourcegroupExists -eq "true" -or $repositoryExists -eq "true" -or $pipe
 
     # check if pipeline exists
     write-host "Checking if pipeline exists..."
-    $pipelineName = $resourceName+"Pipeline"
+    $pipelineName = $resourceName+"pipeline"
     $pipelineExists = "false"
     $listOfPipelines = az pipelines show --name $pipelineName --org $fullOrgName --query "[name]" --output tsv 2>$null
 
