@@ -463,34 +463,17 @@ if($verifySetup -eq "y")
 
             ## replace tempids with $*id in main.tf
 
-            #tempazuredevopsprojectid
-            ((Get-Content -path main.tf -Raw) -replace 'tempazuredevopsprojectid',$projectid) | Set-Content -Path main.tf
-
-            #tempazurerepositoryid
-            ((Get-Content -path main.tf -Raw) -replace 'tempazurerepositoryid',$repositoryId) | Set-Content -Path main.tf
-
-            #temppipelineid
-            ((Get-Content -path main.tf -Raw) -replace 'temppipelineid',$pipelineId) | Set-Content -Path main.tf
-
-            #tempresourcegroupid
-            ((Get-Content -path main.tf -Raw) -replace 'tempresourcegroupid',$resourcegroupId) | Set-Content -Path main.tf
-
-            #tempstorageaccountid and tempstoragekey
-            ((Get-Content -path main.tf -Raw) -replace 'tempstorageaccountid',$storageaccountId) | Set-Content -Path main.tf
-            ((Get-Content -path main.tf -Raw) -replace 'tempstoragekey',$storagekey) | Set-Content -Path main.tf
-
-
             ### replace apiurl and constrs, can be done in refreshcloudips.ps1
             # get and add apiurl for webapp
-            $apiurl = $resourceName+"Apiapp.azurewebsites.net"
-            $webappname = $resourcename+"Webapp"
+            $apiurl = $resourceName+"apiapp.azurewebsites.net"
+            $webappname = $resourcename+"webapp"
             ((Get-Content -path appservices.tf -Raw) -replace 'tempapiurl',$apiurl) | Set-Content -Path appservices.tf
 
             # get and add mongodb and mssqldb connectionstrings for apiapp
             $nosqlconnectionstring = "mongodb+srv://"+$resourceName+":'P4ssw0rd'@"+$resourceName+"cosmosmongodb.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
 
             $sqlconnectionstring = "Server=tcp:"+$resourceName+"sqldbserver.database.windows.net,1433;Initial Catalog="+$resourceName+"sqldb;Persist Security Info=False;User ID="+$resourceName+";Password=P@ssw0rd;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
-            $apiappname = $resourcename+"Apiapp"
+            $apiappname = $resourcename+"apiapp"
             ((Get-Content -path appservices.tf -Raw) -replace 'tempsqlconnectionstring',$sqlconnectionstring) | Set-Content -Path appservices.tf #
             ((Get-Content -path appservices.tf -Raw) -replace 'tempnosqlconnectionstring',$nosqlconnectionstring) | Set-Content -Path appservices.tf
 
@@ -517,16 +500,6 @@ if($verifySetup -eq "y")
 
         #replace resourcename in refreshcloudips.ps
         ((Get-Content -path refreshcloudips.ps1 -Raw) -replace 'tempresourcename',$resourceName) | Set-Content -Path refreshcloudips.ps1
-
-        cd ..
-
-
-        ## Replacing branch-policy vars
-        write-host "Replacing vars in branch-policy.json"
-        cd "./.azure/"
-
-        # replace tempprojectname with $projectName
-        ((Get-Content -path branch-policy.json -Raw) -replace 'temprepositoryid',$repositoryId) | Set-Content -Path branch-policy.json
 
         cd ..
 
@@ -610,6 +583,35 @@ if($verifySetup -eq "y")
             az pipelines variable create --name "Storagekey" --value $storagekey --org $fullOrgName --project $projectName --pipeline-id $pipelineId
             write-host "Done creating pipeline variable from storage key..."
         }
+
+    # ################################################## replace after creationg #################################################
+        
+        cd "./scripts/"
+        #tempazuredevopsprojectid
+        ((Get-Content -path main.tf -Raw) -replace 'tempazuredevopsprojectid',$projectid) | Set-Content -Path main.tf
+
+        #tempazurerepositoryid
+        ((Get-Content -path main.tf -Raw) -replace 'tempazurerepositoryid',$repositoryId) | Set-Content -Path main.tf
+
+        #temppipelineid
+        ((Get-Content -path main.tf -Raw) -replace 'temppipelineid',$pipelineId) | Set-Content -Path main.tf
+
+        #tempresourcegroupid
+        ((Get-Content -path main.tf -Raw) -replace 'tempresourcegroupid',$resourcegroupId) | Set-Content -Path main.tf
+
+        #tempstorageaccountid and tempstoragekey
+        ((Get-Content -path main.tf -Raw) -replace 'tempstorageaccountid',$storageaccountId) | Set-Content -Path main.tf
+        ((Get-Content -path main.tf -Raw) -replace 'tempstoragekey',$storagekey) | Set-Content -Path main.tf
+        cd ..
+
+        ## Replacing branch-policy vars
+        write-host "Replacing vars in branch-policy.json"
+        cd "./.azure/"
+
+        # replace tempprojectname with $projectName
+        ((Get-Content -path branch-policy.json -Raw) -replace 'temprepositoryid',$repositoryId) | Set-Content -Path branch-policy.json
+
+        cd ..
 
     # ################################################## run createpipeline script ##################################################
 
