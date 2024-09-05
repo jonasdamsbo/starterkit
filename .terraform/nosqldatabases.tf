@@ -34,12 +34,12 @@ resource "azurerm_cosmosdb_account" "exampleCosmosdbaccount" {
   }
 
   geo_location {
-    location          = "northeu"
+    location          = "southindia"
     failover_priority = 1
   }
 
   geo_location {
-    location          = "northeu"
+    location          = "southindia"
     failover_priority = 0
   }
 

@@ -345,32 +345,38 @@ if($verifySetup -eq "y")
             {
                 # create resources
                 read-host "Creating resources..."
+                write-host "path: "$PWD.Path
 
                 # create repo - 
                 #$repoDetails = az repos create --name $repositoryName --org $fullOrgName --output json
                 #write-host $repoDetails
                 $repositoryId = az repos create --name $repositoryName --org $fullOrgName --project $projectName --output json --query "[id]"
                 write-host $repositoryId
+                write-host "Done creating repository..."
 
                 # create pipeline
                 #$pipelineDetails = az pipelines create --name $pipelinename --yml-path '\.azure\azure-pipelines.yml' --org $fullOrgName --repository-type "tfsgit" --repository $repositoryName
-                $pipelineId = az pipelines create --name $pipelinename --yml-path '\.azure\azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --output json --query "[id]"
+                $pipelineId = az pipelines create --name $pipelinename --yml-path '\.azure\azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "main" --output json --query "[id]"
                 write-host $pipelineId
+                write-host "Done creating pipeline..."
 
                 # create resourcegroup
-                #$rgDetails = az group create -l "northeu" -n $resourcegroupName
-                $resourcegroupId = az group create -l "northeu" -n $resourcegroupName --output json --query "[id]"
+                #$rgDetails = az group create -l "northeurope" -n $resourcegroupName
+                $resourcegroupId = az group create -l "northeurope" -n $resourcegroupName --output json --query "[id]"
                 write-host $resourcegroupId
+                write-host "Done creating resourcegroup..."
 
                 # create storageaccount and container
-                #$saDetails = az storage account create -l "northeu" -n $storageaccountName -g $resourcegroupName
-                $storageaccountId = az storage account create -l "northeu" -n $storageaccountName -g $resourcegroupName --output json --query "[id]"
+                #$saDetails = az storage account create -l "northeurope" -n $storageaccountName -g $resourcegroupName
+                $storageaccountId = az storage account create -l "northeurope" -n $storageaccountName -g $resourcegroupName --output json --query "[id]"
                 az storage container create --name "terraform" --account-name $storageaccountName
                 write-host $storageaccountId
+                write-host "Done creating storageaccount..."
 
                 # get storageaccountkey
                 $storagekey = (Get-AzureRmStorageAccountKey -ResourceGroupname $resourcegroupName -AccountName $storageaccountName)[0].value
                 az pipelines variable create --name "Storagekey" --value $storagekey --org $fullOrgName --pipeline-id $pipelineId
+                write-host "Done creating storage key..."
                 
             }
             elseif($resourcegroupExists -eq "true" -or $repositoryExists -eq "true" -or $pipelineExists -eq "true" -or $storageaccountExists -eq "true")
