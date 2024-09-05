@@ -441,7 +441,7 @@ if($verifySetup -eq "y")
         ((Get-Content -path main.tf -Raw) -replace 'temporganizationname',$fullOrgName) | Set-Content -Path main.tf
 
         # replace tempsubscriptionid with $fullSubId in main.tf
-        ((Get-Content -path main.tf -Raw) -replace 'tempsubscriptionid',$fullSubId) | Set-Content -Path main.tf
+        ((Get-Content -path main.tf -Raw) -replace 'tempsubscriptionid',$subId) | Set-Content -Path main.tf
 
         # replace tempprincipalname with $principalname in repositories.tf
         # $principalname = $resourceName

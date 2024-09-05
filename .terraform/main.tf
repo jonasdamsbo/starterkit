@@ -21,12 +21,12 @@ terraform {
 }
 
 provider "azurerm" {
-  subscription_id = "tempsubscriptionid"
+  subscription_id = data.azurerm_subscription.exampleSubscription.subscription_id
   features {}
 }
 
 provider "azuredevops" {
-  
+  org_service_url = "https://dev.azure.com/MY-ORG/"
 }
 
 # giver det mening at terraform laver project? terraform ligger i repo, men 1 project kan have flere repos, men det her kan være main repo?
