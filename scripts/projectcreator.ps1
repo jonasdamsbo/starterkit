@@ -649,6 +649,20 @@ if($verifySetup -eq "y")
 
     ################################################## run pushtorepo script ##################################################
 
+        write-host "Before running your pipeline:"
+        write-host " - Go to your Azure DevOps project"
+        write-host " - Project settings"
+        write-host " - Pipelines > Service Connections"
+        write-host " - New service connection"
+        write-host " - Azure Resource Manager"
+        write-host " - Service Principal (automatic)"
+        write-host " - Select subscription"
+        write-host " - Leave resource group blank"
+        write-host " - Write 'Azure Resource Manager' in service connection name"
+        write-host " - Check 'Grant access permissions to all pipelines' under security"
+        write-host
+        read-host "Press enter when done..."
+
         # push repofolder to repo
         write-host 
         ### init git and push initial commit, create branches
@@ -705,20 +719,6 @@ if($verifySetup -eq "y")
         # read-host "Enter to proceed..."
 
     ################################################## before pipeline and tools-installer ##################################################
-
-        write-host "Before running your pipeline:"
-        write-host " - Go to your Azure DevOps project"
-        write-host " - Project settings"
-        write-host " - Pipelines > Service Connections"
-        write-host " - New service connection"
-        write-host " - Azure Resource Manager"
-        write-host " - Service Principal (automatic)"
-        write-host " - Select subscription"
-        write-host " - Leave resource group blank"
-        write-host " - Write 'Azure Resource Manager' in service connection name"
-        write-host " - Check 'Grant access permissions to all pipelines' under security"
-        write-host
-        read-host "Press enter when done..."
 
         # run install tools script
         while($installTools -ne "yes" -and $installTools -ne "no")
