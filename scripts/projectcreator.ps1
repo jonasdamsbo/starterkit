@@ -666,7 +666,7 @@ if($verifySetup -eq "y")
 
         # add master branch lock
         write-host "Creating no push to master policy"
-        az repos policy create --config '\.azure\branch-policy.json' --org $fullOrgName --project $projectName
+        az repos policy create --config '.\.azure\branch-policy.json' --org $fullOrgName --project $projectName
 
 
         Read-Host "Press enter to continue..."
