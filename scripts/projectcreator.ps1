@@ -654,9 +654,9 @@ if($verifySetup -eq "y")
         git checkout -b "pre-production"
         git checkout -b "production"
         git checkout "master"
-        git push origin "test"
-        git push origin "pre-production"
-        git push origin "production"
+        git push "test"
+        git push "pre-production"
+        git push "production"
         git branch -a
 
         # push
@@ -665,6 +665,7 @@ if($verifySetup -eq "y")
         # git push $repositoryName
 
         # add master branch lock
+        write-host "Creating no push to master policy"
         az repos policy create --config '\.azure\branch-policy.json' --org $fullOrgName --project $projectName
 
 
