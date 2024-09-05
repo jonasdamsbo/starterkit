@@ -549,7 +549,7 @@ if($verifySetup -eq "y")
 
         ### replace old-project # (tempprojectname with $projectName & temporganizationname with $orgName) in old-project script in new folder # azuregit etc?, 
         write-host "Replacing vars in old-project.ps1"
-        cd "./.scripts/"
+        cd "./scripts/"
 
         # replace tempprojectname with $projectName
         ((Get-Content -path old-project.ps1 -Raw) -replace 'tempprojectname',$projectName) | Set-Content -Path old-project.ps1
