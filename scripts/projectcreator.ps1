@@ -67,7 +67,7 @@ if($verifySetup -eq "y")
         $statusCode = az devops project delete --id $tempProjectId --organization $fullOrgName -y --output tsv 2>$null
         #write-host "Statuscode: $statusCode 321"
         read-host "Enter to proceed..."
-        write-host 
+        #write-host 
         # test if found exists ^
 
         # cd ..
@@ -130,7 +130,6 @@ if($verifySetup -eq "y")
         }
 
         read-host "Enter to proceed..."
-        write-host 
         
         # $scriptpath = $PWD.Path + '\scripts\choosesubscription.ps1'
         # write-host $scriptpath
@@ -248,7 +247,6 @@ if($verifySetup -eq "y")
         }
 
         read-host "Enter to proceed..."
-        write-host 
         
         # $scriptpath = $PWD.Path + '\scripts\chooseproject.ps1'
         # write-host $scriptpath
@@ -434,8 +432,6 @@ if($verifySetup -eq "y")
 
         cd ..
 
-        write-host 
-
 
         ### replace cloud # replace temp vars in terraform files in project/.terraform folder with projectname, + subscription&organization, + principalname?, 
         write-host "Replacing vars in *.tf"
@@ -521,8 +517,6 @@ if($verifySetup -eq "y")
         # # # replace billingaccount, billingprofile and invoicesection in main.tf
         # # # az account create --enrollment-account-name --offer-type {MS-AZR-0017P, MS-AZR-0148P, MS-AZR-USGOV-0015P, MS-AZR-USGOV-0017P, MS-AZR-USGOV-0148P}
 
-        write-host 
-
 
         ### replace old-project # (tempprojectname with $projectName & temporganizationname with $orgName) in old-project script in new folder # azuregit etc?, 
         write-host "Replacing vars in old-project.ps1"
@@ -602,10 +596,12 @@ if($verifySetup -eq "y")
             # create storageaccount and container
             #$saDetails = az storage account create -l "northeurope" -n $storageaccountName -g $resourcegroupName
             write-host "Started creating storageaccount..."
-            $storageaccountId = az storage account create -l "northeurope" -n $storageaccountName -g $resourcegroupName --output json --query "[id]"
+            $storageaccountId = az storage account create -l "northeurope" -n $storageaccountName -g $resourcegroupName --sku Standard_LRS --output json --query "[id]"
+            write-host "Done creating storageaccount..."
+            write-host "Started creating storageaccount container..."
             az storage container create --name "terraform" --account-name $storageaccountName
             write-host $storageaccountId
-            write-host "Done creating storageaccount..."
+            write-host "Done creating storageaccount container..."
 
             # get storageaccountkey
             $storagekey = (Get-AzStorageAccountKey -ResourceGroupname $resourcegroupName -AccountName $storageaccountName)[0].value
@@ -639,13 +635,13 @@ if($verifySetup -eq "y")
         # init git repo
         git init
         write-host "init done"
-        git remote add origin "https://"+"$orgName"+"@dev.azure.com/"+"$orgName$projectName"+"_git/"+"$projectName"
+        git remote add $repository "https://"+"$orgName"+"@dev.azure.com/"+"$orgName$projectName"+"_git/"+"$projectName"
         write-host "remote add done"
 
         # push
         git add .
         git commit -m "initial commit"
-        git push
+        git push $repository
 
         # create test and production branches
         git fetch
@@ -661,7 +657,7 @@ if($verifySetup -eq "y")
         # push
         git add .
         git commit -m "created branches"
-        git push
+        git push $repository
 
         # add master branch lock
         az repos policy create --config '\.azure\branch-policy.json'
