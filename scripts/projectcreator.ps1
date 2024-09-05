@@ -13,6 +13,7 @@ write-host "   - A Subscription in Azure Portal or create a new one, which subse
 write-host "     - A Billing account"-ForegroundColor Green
 write-host "     - A Billing profile"-ForegroundColor Green
 write-host "     - An Invoice section"-ForegroundColor Green
+write-host "   - Go to your Subscription > Resource providers > Search for Microsoft.Storage > Select and register"
 write-host ""
 
 while($verifySetup -ne "y" -and $verifySetup -ne "n")
@@ -287,7 +288,7 @@ if($verifySetup -eq "y")
             {
                 ## check if resourcegroup exists
                 write-host "Checking if storageaccount exists..."
-                $storageaccountName = $resourceName+"Storageaccount"
+                $storageaccountName = $resourceName+"storageaccount"
                 $storageaccountExists = "false"
                 $listOfStorageaccount = az storage account show -g $resourcegroupName -n $storageaccountName --query "[name]" --output tsv 2>$null
 
@@ -649,21 +650,22 @@ if($verifySetup -eq "y")
         # create test and production branches
         git fetch
         git pull
-        git branch "test"
-        git branch "pre-production"
-        git branch "production"
+        git checkout -b "test"
+        git checkout -b "pre-production"
+        git checkout -b "production"
         git checkout "master"
         git push origin "test"
         git push origin "pre-production"
         git push origin "production"
+        git branch -a
 
         # push
-        git add .
-        git commit -m "created branches"
-        git push $repositoryName
+        # git add .
+        # git commit -m "created branches"
+        # git push $repositoryName
 
         # add master branch lock
-        az repos policy create --config '\.azure\branch-policy.json' --org $fullOrgName
+        az repos policy create --config '\.azure\branch-policy.json' --org $fullOrgName --project $projectName
 
 
         Read-Host "Press enter to continue..."
