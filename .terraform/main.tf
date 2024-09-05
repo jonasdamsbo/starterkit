@@ -79,7 +79,7 @@ data "azurerm_resource_group" "exampleResourcegroup" {
 data "azurerm_storage_account" "exampleStorageaccount" {
   id                 = "tempstorageaccountid"
   name               = "tempresourcenameStorageaccount"
-  resource_group_name =  data.azurerm_resource_group.exampleResourcegroup.name
+  resource_group_name = data.azurerm_resource_group.exampleResourcegroup.name
 }
 
 resource "azuredevops_variable_group" "exampleVariablegroup" {
