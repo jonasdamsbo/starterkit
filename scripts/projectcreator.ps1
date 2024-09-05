@@ -33,8 +33,8 @@ if($verifySetup -eq "y")
         while($orgExists -eq "false")
         {
             $orgName = read-host "What is the name your Azure DevOps organization?" # used to check project and repo name before accepting chosen projectname, and git init
-            write-host $orgName"?"
-            read-host "(y/n)"
+            #write-host $orgName"?"
+            #read-host "(y/n)"
             $fullOrgName = "https://dev.azure.com/"+$orgName+"/"
             $fullOrgName = $fullOrgName.Replace(" ","")
             write-host $fullOrgName
@@ -55,7 +55,7 @@ if($verifySetup -eq "y")
             }
             
             write-host "Done checking if organization exists..."
-            read-host "Enter to proceed..."
+            #read-host "Enter to proceed..."
         }
 
         $tempProjectId = az devops project show --project lolsjgdhej --organization $fullOrgName --query "[id]" --output tsv 2>$null
@@ -76,12 +76,12 @@ if($verifySetup -eq "y")
         # cd $orgName
         # cd "starter-kit" # change to 'starter-kit' when done
 
-        read-host "Enter to exit..."
+        #read-host "Enter to exit..."
         
         # $scriptpath = $PWD.Path + '\scripts\chooseorganization.ps1'
         # write-host $scriptpath
         # & $scriptpath run #-newRepoName $newRepoName run
-        read-host "Enter to proceed..."
+        #read-host "Enter to proceed..."
 
 
     ################################################## run createsubscription script ##################################################
@@ -154,9 +154,9 @@ if($verifySetup -eq "y")
         {
             $firstRun = "false"
             $projectName = read-host "What do you want to name your new project?"
-            write-host $projectName"?"
-            read-host "(y/n)"
-            write-host $fullOrgName$projectName"/"
+            #write-host $projectName"?"
+            #read-host "(y/n)"
+            #write-host $fullOrgName$projectName"/"
 
             ## check if project with name already exists
             write-host "Checking if project exists..."
@@ -175,7 +175,7 @@ if($verifySetup -eq "y")
             # compare names of repos with desired name
             write-host $listOfProjects -erroraction 'silentlycontinue'
             write-host $projectExists
-            read-host
+            #read-host
 
             # $tempProjectList = $listOfProjects[0]
 
@@ -616,7 +616,8 @@ if($verifySetup -eq "y")
         # push repofolder to repo
 
         ### init git and push initial commit, create branches
-
+        write-host "Configuring and pushing to git repository"
+        
         # init git repo
         git init
         write-host "init done"
@@ -684,6 +685,6 @@ if($verifySetup -eq "y")
                 & $scriptpath run
             }
         }
-        read-host "Enter to proceed..."
+        #read-host "Enter to proceed..."
 }
 read-host "Enter to exit..."
