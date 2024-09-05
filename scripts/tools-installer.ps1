@@ -146,7 +146,7 @@ do {
                 }
                 Write-Host 
 
-                $repofolder = $gitfolder+"mywebrepo"
+                $repofolder = $gitfolder+"starter-kit"
                 If (Test-Path -Path "$repofolder" -PathType Container)
                 { Write-Host "Folder $repofolder already exists" -ForegroundColor Red}
                 ELSE
