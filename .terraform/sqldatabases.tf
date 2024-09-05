@@ -47,6 +47,7 @@ resource "azurerm_mssql_database" "exampleMssqldatabase" {
   sku_name       = "GP_S_Gen5_2"
   zone_redundant = true
   enclave_type   = "VBS"
+  min_capacity   = 0.5
 
   tags = {
     foo = "bar"
