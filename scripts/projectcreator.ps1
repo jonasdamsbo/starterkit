@@ -305,7 +305,8 @@ if($verifySetup -eq "y")
 
             # check if repository exists
             write-host "Checking if repository exists..."
-            $repositoryName = $resourceName+"Repository"
+            $repositoryName = "$resourceName"+"Repository"
+            write-host "reponame: "$repositoryName
             $repositoryExists = "false"
             $listOfRepositories = az repos show -r $repositoryName --org $fullOrgName --query "[name]" --output tsv 2>$null
 
@@ -618,7 +619,9 @@ if($verifySetup -eq "y")
 
         # init git repo
         git init
-        git remote add origin "https://"+"$orgName"+"@dev.azure.com/"+"$orgName$projectName"+"_git/"+"$repositoryName"
+        write-host "init done"
+        git remote add origin "https://"+"$orgName"+"@dev.azure.com/"+"$orgName$projectName"+"_git/"+"$projectName"
+        write-host "remote add done"
 
         # push
         git add .
