@@ -581,7 +581,7 @@ if($verifySetup -eq "y")
 
             # create pipeline
             #$pipelineDetails = az pipelines create --name $pipelinename --yml-path '\.azure\azure-pipelines.yml' --org $fullOrgName --repository-type "tfsgit" --repository $repositoryName
-            $pipelineId = az pipelines create --name $pipelinename --yml-path '\.azure\azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "main" --output json --query "[id]"
+            $pipelineId = az pipelines create --name $pipelinename --yml-path '\.azure\azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master" --output json --query "[id]"
             write-host $pipelineId
             write-host "Done creating pipeline..."
 
@@ -634,15 +634,16 @@ if($verifySetup -eq "y")
         # init git repo
         git init
         write-host "init done"
-        $remotename = "https://"+"$orgName"+"@dev.azure.com/"+"$orgName"+"/"+"$projectName"+"_git/"+"$projectName"
+        $remotename = "https://"+"$orgName"+"@dev.azure.com/"+"$orgName"+"/"+"$projectName"+"_git/"+"$repositoryName"
         write-host "remotename: "$remotename
-        git remote add $repository $remotename
+        git remote add $repositoryName $remotename
         write-host "remote add done"
 
         # push
         git add .
         git commit -m "initial commit"
-        git push $repository
+        git push --set-upstream $repositoryName master
+        git push  jgdmytestyRepository 
 
         # create test and production branches
         git fetch
@@ -650,7 +651,7 @@ if($verifySetup -eq "y")
         git branch "test"
         git branch "pre-production"
         git branch "production"
-        git checkout "main"
+        git checkout "master"
         git push origin "test"
         git push origin "pre-production"
         git push origin "production"
@@ -658,7 +659,7 @@ if($verifySetup -eq "y")
         # push
         git add .
         git commit -m "created branches"
-        git push $repository
+        git push $repositoryName
 
         # add master branch lock
         az repos policy create --config '\.azure\branch-policy.json' --org $fullOrgName
