@@ -71,16 +71,16 @@ $apiappip = $apiappip+"/32"
 #az webapp config appsettings set -g $rg -n $webappname --settings "APIURL"=$apiurl # set in cloud
 
 # add connectionstrings to api
-$apiappname = $resourcename+"Apiapp" # done in replacefiles instead
+$apiappname = $resourcename+"apiapp" # done in replacefiles instead
 #az webapp config connection-string set -g $rg -n $apiappname -t "SQLServer" --settings Mssql=$sqlconnectionstring # set in cloud
 #az webapp config connection-string set -g $rg -n $apiappname -t "DocDb" --settings Nosql=$nosqlconnectionstring # set in cloud
 
 # add webbapp ip to api
-az webapp config access-restriction add -g $rg -n $apiappname --rule-name "webapp" --action Allow --ip-address $webappip --priority 1
+az webapp config access-restriction add -g $rg -n $apiappname --rule-name "webappip" --action Allow --ip-address $webappip --priority 1
 
 # add api ip to dbs
 $sqlservername = $resourceName+"sqldbserver"
-az sql server firewall-rule create -g $rg -s $sqlservername -n "Apiappip" --start-ip-address $apiappip --end-ip-address $apiappip
+az sql server firewall-rule create -g $rg -s $sqlservername -n "apiappip" --start-ip-address $apiappip --end-ip-address $apiappip
 
 $cosmosdbaccount = $resourceName+"Cosmosdbaccount"
 $iprange = az cosmosdb show --name $cosmosdbaccount --resource-group $resourcegroupName --query "[ip-range-filter]"
