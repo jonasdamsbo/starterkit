@@ -56,6 +56,10 @@ $resourceName = "tempresourcename"
 $rg = $resourceName+"resourcegroup"
 $wa = $resourceName+"webapp"
 $webappip = az webapp config hostname get-external-ip --resource-group $rg --webapp-name $wa --query "[ip]"
+$webappip = $webappip.Trim("[","]")
+$webappip = $webappip.Replace("[","")
+$webappip = $webappip.Replace("]","")
+$webappip = $webappip.Replace(" ","")
 $webappip = $webappip+"/32"
 # az resource show --query "[]."
 # nslookup $projectName+".azurewebsites.net"
@@ -63,6 +67,10 @@ $webappip = $webappip+"/32"
 # get api ip for databases
 $wa = $resourceName+"apiapp"
 $apiappip = az webapp config hostname get-external-ip --resource-group $rg --webapp-name $wa --query "[ip]"
+$apiappip = $apiappip.Trim("[","]")
+$apiappip = $apiappip.Replace("[","")
+$apiappip = $apiappip.Replace("]","")
+$apiappip = $apiappip.Replace(" ","")
 $apiappip = $apiappip+"/32"
 
 
