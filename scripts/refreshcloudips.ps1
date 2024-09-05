@@ -61,6 +61,7 @@ $webappip = $webappip.Replace("[","")
 $webappip = $webappip.Replace("]","")
 $webappip = $webappip.Replace(" ","")
 $webappip = $webappip+"/32"
+$webappip = $webappip.Replace(" ","")
 # az resource show --query "[]."
 # nslookup $projectName+".azurewebsites.net"
 
@@ -72,6 +73,7 @@ $apiappip = $apiappip.Replace("[","")
 $apiappip = $apiappip.Replace("]","")
 $apiappip = $apiappip.Replace(" ","")
 $apiappip = $apiappip+"/32"
+$apiappip = $apiappip.Replace(" ","")
 
 
 # add apiurl to webapp
@@ -106,6 +108,7 @@ else
     $iprange = $iprange.Replace("]","")
     $iprange = $iprange.Replace(" ","")
     $iprange = '['+$iprange+',"'+$apiappip+'"]'
+    $iprange = $iprange.Replace(" ","")
 }
 az cosmosdb update --name $cosmosdbaccount --resource-group $rg --ip-range-filter $iprange #$apiappip
 
