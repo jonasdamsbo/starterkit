@@ -142,7 +142,7 @@ if($verifySetup -eq "y")
         # $fullOrgName = "https://dev.azure.com/JonasDamsbo/"
         # # remove these when done ^
 
-        $fullOrgName = $args[0]
+        #$fullOrgName = $args[0]
 
         $projectName = ""
         $projectExists = "false"
