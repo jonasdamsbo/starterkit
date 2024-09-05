@@ -254,7 +254,7 @@ if($verifySetup -eq "y")
 
 
     ################################################## run chooseresources script ##################################################
-
+        $resourcegroupExists = "true"
         while($resourcegroupExists -eq "true" -or $repositoryExists -eq "true" -or $pipelineExists -eq "true" -or $storageaccountExists -eq "true")
         {
             #choose resource name
