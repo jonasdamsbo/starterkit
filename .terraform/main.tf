@@ -53,18 +53,18 @@ data "azuredevops_build_definition" "examplePipeline" {
   name               = "tempresourcenamepipeline"
   project_id         = data.azuredevops_project.exampleAzuredevopsproject.project_id
 
-  repository {
-    #repo_id     = data.azuredevops_git_repository.exampleAzurerepository.id
-    yml_path    = ".azure/azure-pipelines.yml"
-    #repo_type   = "TfsGit"
-    #branch_name = azuredevops_git_repository.exampleAzurerepository.default_branch
-  }
+  # repository {
+  #   #repo_id     = data.azuredevops_git_repository.exampleAzurerepository.id
+  #   yml_path    = ".azure/azure-pipelines.yml"
+  #   #repo_type   = "TfsGit"
+  #   #branch_name = azuredevops_git_repository.exampleAzurerepository.default_branch
+  # }
   #path               = "\\.azure"
   
-  variable{
-    name  = "Storagekey"
-    value = "tempstoragekey"
-  }
+  # variable{
+  #   name  = "Storagekey"
+  #   value = "tempstoragekey"
+  # }
 }
 
 data "azurerm_subscription" "exampleSubscription" {
