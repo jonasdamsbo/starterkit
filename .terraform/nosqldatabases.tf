@@ -57,8 +57,8 @@ resource "azurerm_management_lock" "exampleCosmosdbaccountlock" {
 
 resource "azurerm_cosmosdb_mongo_database" "exampleCosmosdbmongodb" {
   name                = "tempresourcenameCosmosdbmongodb"
-  resource_group_name = data.azurerm_cosmosdb_account.example.resource_group_name
-  account_name        = data.azurerm_cosmosdb_account.example.name
+  resource_group_name = azurerm_cosmosdb_account.exampleCosmosdbaccount.resource_group_name
+  account_name        = azurerm_cosmosdb_account.exampleCosmosdbaccount.name
   throughput          = 400
 
   # prevent the possibility of accidental data loss
