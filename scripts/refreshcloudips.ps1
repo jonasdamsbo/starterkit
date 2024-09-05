@@ -92,10 +92,6 @@ az sql server firewall-rule create -g $rg -s $sqlservername -n "apiappip" --star
 
 $cosmosdbaccount = $resourceName+"Cosmosdbaccount"
 $iprange = az cosmosdb show --name $cosmosdbaccount --resource-group $resourcegroupName --query "[ip-range-filter]"
-$iprange = $iprange.Trim("[","]")
-$iprange = $iprange.Replace("[","")
-$iprange = $iprange.Replace("]","")
-$iprange = $iprange.Replace(" ","")
 # # $iprange = $iprange.Replace("]", "")
 # # $iprange = $iprange.Replace("}","")
 # # $iprange = $iprange.Replace("{","")
@@ -105,6 +101,10 @@ if($iprange.Length -lt 1)
 }
 else
 {
+    $iprange = $iprange.Trim("[","]")
+    $iprange = $iprange.Replace("[","")
+    $iprange = $iprange.Replace("]","")
+    $iprange = $iprange.Replace(" ","")
     $iprange = '['+$iprange+',"'+$apiappip+'"]'
 }
 az cosmosdb update --name $cosmosdbaccount --resource-group $rg --ip-range-filter $iprange #$apiappip
