@@ -620,7 +620,7 @@ if($verifySetup -eq "y")
             # get storageaccountkey
             write-host "Started getting storage key..."
             $storagekey = az storage account keys list -g $resourcegroupName -n $storageaccountName --query "[0].value"
-            az pipelines variable create --name "Storagekey" --value $storagekey --org $fullOrgName --pipeline-id $pipelineId
+            az pipelines variable create --name "Storagekey" --value $storagekey --org $fullOrgName --project $projectName --pipeline-id $pipelineId
             write-host "Done creating pipeline variable from storage key..."
         }
 
@@ -682,7 +682,7 @@ if($verifySetup -eq "y")
         write-host
         write-host $PWD.Path
         write-host "Creating no push to master policy"
-        az repos policy approver-count create --allow-downvotes true --blocking true --branch master --creator-vote-counts false --enabled true --minimum-approver-count 1 --repository-id $repositoryId --reset-on-source-push false
+        az repos policy approver-count create --allow-downvotes true --blocking true --branch master --creator-vote-counts false --enabled true --minimum-approver-count 1 --repository-id $repositoryId --org $fullOrgName --project $projectName --reset-on-source-push false
         
         #az repos policy create --config '.azure\branch-policy.json' --org $fullOrgName --project $projectName
         #az storage account or-policy create -g $resourcegroupName -n $storageaccountName --policy default
