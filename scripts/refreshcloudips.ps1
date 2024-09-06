@@ -54,7 +54,10 @@ $resourceName = "tempresourcename"
 
 # get webapp ip for apiapp
 $rg = $resourceName+"resourcegroup"
+$rg = $rg.Replace(" ","")
+
 $wa = $resourceName+"webapp"
+$wa = $wa.Replace(" ","")
 $webappip = az webapp config hostname get-external-ip --resource-group $rg --webapp-name $wa --query "[ip]"
 $webappip = $webappip.Trim("[","]")
 $webappip = $webappip.Replace("[","")
@@ -67,6 +70,7 @@ $webappip = $webappip.Replace(" ","")
 
 # get api ip for databases
 $wa = $resourceName+"apiapp"
+$wa = $wa.Replace(" ","")
 $apiappip = az webapp config hostname get-external-ip --resource-group $rg --webapp-name $wa --query "[ip]"
 $apiappip = $apiappip.Trim("[","]")
 $apiappip = $apiappip.Replace("[","")
@@ -86,12 +90,15 @@ $apiappname = $resourcename+"apiapp" # done in replacefiles instead
 #az webapp config connection-string set -g $rg -n $apiappname -t "DocDb" --settings Nosql=$nosqlconnectionstring # set in cloud
 
 # add webbapp ip to api
-az webapp config access-restriction add -g $rg -n $apiappname --rule-name "webappip" --action Allow --ip-address $webappip --priority 1
+write-host "Adding webappip to api"
+az webapp config access-restriction add --resource-group $rg --name $apiappname --rule-name "webappip" --action Allow --ip-address $webappip --priority 1
 
 # add api ip to dbs
+write-host "Adding apiappip to mssqldb"
 $sqlservername = $resourceName+"sqldbserver"
-az sql server firewall-rule create -g $rg -s $sqlservername -n "apiappip" --start-ip-address $apiappip --end-ip-address $apiappip
+az sql server firewall-rule create --resource-group $rg -s $sqlservername --name "apiappip" --start-ip-address $apiappip --end-ip-address $apiappip
 
+write-host "Adding apiappip to nosqldb"
 $cosmosdbaccount = $resourceName+"Cosmosdbaccount"
 $iprange = az cosmosdb show --name $cosmosdbaccount --resource-group $resourcegroupName --query "[ip-range-filter]"
 # # $iprange = $iprange.Replace("]", "")
