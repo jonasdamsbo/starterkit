@@ -474,14 +474,14 @@ if($verifySetup -eq "y")
 
             ### replace apiurl and constrs, can be done in refreshcloudips.ps1
             # get and add apiurl for webapp
-            $apiurl = $resourceName+"apiapp.azurewebsites.net"
+            $apiurl = "https://"+$resourceName+"apiapp.azurewebsites.net/"
             $webappname = $resourcename+"webapp"
             ((Get-Content -path appservices.tf -Raw) -replace 'tempapiurl',$apiurl) | Set-Content -Path appservices.tf
 
             # get and add mongodb and mssqldb connectionstrings for apiapp
             $nosqlconnectionstring = "mongodb+srv://"+$resourceName+":'P4ssw0rd'@"+$resourceName+"cosmosmongodb.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
 
-            $sqlconnectionstring = "Server=tcp:"+$resourceName+"sqldbserver.database.windows.net,1433;Initial Catalog="+$resourceName+"sqldb;Persist Security Info=False;User ID="+$resourceName+";Password=P@ssw0rd;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+            $sqlconnectionstring = "Server=tcp:"+$resourceName+"mssqlserver.database.windows.net,1433;Initial Catalog="+$resourceName+"mssqldatabase;Persist Security Info=False;User ID="+$resourceName+";Password=P@ssw0rd;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
             $apiappname = $resourcename+"apiapp"
             ((Get-Content -path appservices.tf -Raw) -replace 'tempsqlconnectionstring',$sqlconnectionstring) | Set-Content -Path appservices.tf #
             ((Get-Content -path appservices.tf -Raw) -replace 'tempnosqlconnectionstring',$nosqlconnectionstring) | Set-Content -Path appservices.tf
