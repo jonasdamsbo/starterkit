@@ -96,7 +96,8 @@ az webapp config access-restriction add --resource-group $rg --name $apiappname 
 # add api ip to dbs
 write-host "Adding apiappip to mssqldb"
 $sqlservername = $resourceName+"sqldbserver"
-az sql server firewall-rule create --resource-group $rg -s $sqlservername --name "apiappip" --start-ip-address $apiappip --end-ip-address $apiappip
+$apiappipnobackslash = $apiappip.Trim("[","]")
+az sql server firewall-rule create --resource-group $rg -s $sqlservername --name "apiappip" --start-ip-address $apiappipnobackslash --end-ip-address $apiappipnobackslash
 
 write-host "Adding apiappip to nosqldb"
 $cosmosdbaccount = $resourceName+"Cosmosdbaccount"
@@ -107,6 +108,7 @@ $iprange = az cosmosdb show --name $cosmosdbaccount --resource-group $resourcegr
 if($iprange.Length -lt 1)
 {
     $iprange = '["'+$apiappip+'"]'
+    $iprange = $iprange.Replace(" ","")
 }
 else
 {
@@ -117,6 +119,9 @@ else
     $iprange = '['+$iprange+',"'+$apiappip+'"]'
     $iprange = $iprange.Replace(" ","")
 }
+#$iprangenobraces = $iprange.Trim('[',']')
+#$iprangenoquotes = $iprange.Replace('"','')
+#$iprangenoquotesandbraces = $iprangenobraces.Replace('"','')
 az cosmosdb update --name $cosmosdbaccount --resource-group $rg --ip-range-filter $iprange #$apiappip
 
 
