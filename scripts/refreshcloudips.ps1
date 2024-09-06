@@ -90,16 +90,16 @@ $apiappname = $resourcename+"apiapp" # done in replacefiles instead
 #az webapp config connection-string set -g $rg -n $apiappname -t "DocDb" --settings Nosql=$nosqlconnectionstring # set in cloud
 
 # add webbapp ip to api
-write-host "Adding webappip to api"
+write-host "################################ Adding webappip to api ################################"
 az webapp config access-restriction add --resource-group $rg --name $apiappname --rule-name "webappip" --action Allow --ip-address $webappip --priority 1
 
 # add api ip to dbs
-write-host "Adding apiappip to mssqldb"
+write-host "################################ Adding apiappip to mssqldb ################################"
 $sqlservername = $resourceName+"sqldbserver"
-$apiappipnobackslash = $apiappip.Trim("[","]")
+$apiappipnobackslash = $apiappip.Replace("/32","")
 az sql server firewall-rule create --resource-group $rg -s $sqlservername --name "apiappip" --start-ip-address $apiappipnobackslash --end-ip-address $apiappipnobackslash
 
-write-host "Adding apiappip to nosqldb"
+write-host "################################ Adding apiappip to nosqldb ################################"
 $cosmosdbaccount = $resourceName+"Cosmosdbaccount"
 $iprange = az cosmosdb show --name $cosmosdbaccount --resource-group $resourcegroupName --query "[ip-range-filter]"
 # # $iprange = $iprange.Replace("]", "")
@@ -155,7 +155,7 @@ az cosmosdb update --name $cosmosdbaccount --resource-group $rg --ip-range-filte
 #cd ..
 
 
-read-host "Enter to proceed..."
+#read-host "Enter to proceed..."
 # # # get webappurl -> put webappurl in readme?
 
 # # # Replace cloud vars in new-project.ps1 + pipeline.yml and push, own file? # uses data after cloud is created
