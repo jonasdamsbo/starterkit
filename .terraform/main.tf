@@ -32,6 +32,17 @@ provider "azuredevops" {
   org_service_url = "https://dev.azure.com/MY-ORG/"
 }
 
+data "azurerm_resource_group" "exampleResourcegroup" {
+  #id = "tempresourcegroupid"
+  name = "tempresourcenameresourcegroup"
+}
+
+data "azurerm_storage_account" "exampleStorageaccount" {
+  #id                 = "tempstorageaccountid"
+  name               = "tempresourcenamestorageaccount"
+  resource_group_name = data.azurerm_resource_group.exampleResourcegroup.name
+}
+
 # giver det mening at terraform laver project? terraform ligger i repo, men 1 project kan have flere repos, men det her kan være main repo?
 # data "azuredevops_project" "exampleAzuredevopsproject" {
 #   project_id = "tempazuredevopsprojectid"
@@ -73,17 +84,6 @@ provider "azuredevops" {
 # data "azurerm_subscription" "exampleSubscription" {
 #   subscription_id = "tempsubscriptionid"
 # }
-
-data "azurerm_resource_group" "exampleResourcegroup" {
-  #id = "tempresourcegroupid"
-  name = "tempresourcenameresourcegroup"
-}
-
-data "azurerm_storage_account" "exampleStorageaccount" {
-  #id                 = "tempstorageaccountid"
-  name               = "tempresourcenamestorageaccount"
-  resource_group_name = data.azurerm_resource_group.exampleResourcegroup.name
-}
 
 # resource "azuredevops_variable_group" "exampleVariablegroup" {
 #   project_id         = data.azuredevops_project.exampleAzuredevopsproject.project_id
