@@ -44,9 +44,9 @@ resource "azurerm_cosmosdb_account" "exampleCosmosdbaccount" {
   }
 
 # prevent the possibility of accidental data loss
-  lifecycle {
-    prevent_destroy = true
-  }
+  # lifecycle {
+  #   prevent_destroy = true
+  # }
 }
 # resource "azurerm_management_lock" "exampleCosmosdbaccountlock" {
 #   name = "tempresourcenamecosmosdbaccountlock"
@@ -62,9 +62,9 @@ resource "azurerm_cosmosdb_mongo_database" "exampleCosmosdbmongodb" {
   throughput          = 400
 
   # prevent the possibility of accidental data loss
-  lifecycle {
-    prevent_destroy = true
-  }
+  # lifecycle {
+  #   prevent_destroy = true
+  # }
 }
 # resource "azurerm_management_lock" "exampleCosmosdbmongodblock" {
 #   name = "tempresourcenamecosmosdbmongodblock"

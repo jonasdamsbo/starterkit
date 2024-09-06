@@ -55,9 +55,9 @@ resource "azurerm_mssql_database" "exampleMssqldatabase" {
   }
 
   # prevent the possibility of accidental data loss
-  lifecycle {
-    prevent_destroy = true
-  }
+  # lifecycle {
+  #   prevent_destroy = true
+  # }
 }
 # resource "azurerm_management_lock" "exampleMssqllock" {
 #   name = "tempresourcenamemssqllock"
