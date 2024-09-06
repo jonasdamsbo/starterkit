@@ -65,6 +65,8 @@ $webappip = $webappip.Replace("]","")
 $webappip = $webappip.Replace(" ","")
 $webappip = $webappip+"/32"
 $webappip = $webappip.Replace(" ","")
+$webappipquotes = '"'+$webappip+'"'
+$webappipquotes = $webappipquotes.Replace(" ","")
 $webappipnobackslash = $webappip.Replace("/32","")
 # az resource show --query "[]."
 # nslookup $projectName+".azurewebsites.net"
@@ -102,7 +104,8 @@ az sql server firewall-rule create --resource-group $rg -s $sqlservername --name
 
 write-host "################################ Adding apiappip to nosqldb ################################"
 $cosmosdbaccount = $resourceName+"cosmosdbaccount"
-$iprange = az cosmosdb show --name $cosmosdbaccount --resource-group $resourcegroupName --query "[ip-range-filter]"
+write-host "### Show cosmosdb"
+$iprange = az cosmosdb show --name $cosmosdbaccount --resource-group $rg --query "ipRules" --output tsv
 # # $iprange = $iprange.Replace("]", "")
 # # $iprange = $iprange.Replace("}","")
 # # $iprange = $iprange.Replace("{","")
@@ -124,6 +127,10 @@ $iprangenobraces = $iprange.Trim('[',']')
 #$iprangenoquotes = $iprange.Replace('"','')
 $iprangenoquotesandbraces = $iprangenobraces.Replace('"','')
 #$iprangenoquotesbracesbackslash = $iprangenoquotesandbraces.Replace('/32','')
+#$iprangequotes = '"'+$iprangenoquotesandbraces+'"'
+#$iprangequotes = $iprangequotes.Replace(" ","")
+write-host "Iprange: "$iprangequotes
+write-host "### Update cosmosdb"
 az cosmosdb update --name $cosmosdbaccount --resource-group $rg --ip-range-filter $iprangenoquotesandbraces #$apiappip
 
 
