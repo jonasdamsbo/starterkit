@@ -21,7 +21,7 @@ resource "azurerm_windows_web_app" "exampleWebapp" {
   }
 
   app_settings = {
-    "APIURL" = "tempapiurl"
+    "MyAppSettings:APIURL" = "tempapiurl"
   }
 }
 
