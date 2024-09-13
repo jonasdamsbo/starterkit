@@ -386,14 +386,14 @@ if($verifySetup -eq "y")
         $appDetails = az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/$subscriptionid"
         write-host "appdetails: $appDetails"
 
-        $clientid = appDetails["appId"]
-        write-host "clientid: $appDetails"
+        $clientid = $appDetails.appId
+        write-host "clientid: $clientid"
 
-        $clientsecret = appDetails["password"]
-        write-host "clientsecret: $appDetails"
+        $clientsecret = $appDetails.password
+        write-host "clientsecret: $clientsecret"
 
-        $tenantid = appDetails["tenant"]
-        write-host "tenantid: $appDetails"
+        $tenantid = $appDetails.tenant
+        write-host "tenantid: $tenantid"
 
         read-host "continue?..."
 
