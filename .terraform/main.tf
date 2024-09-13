@@ -23,13 +23,13 @@ terraform {
 provider "azurerm" {
   subscription_id = "tempsubscriptionid"
   features {}
-  client_id       = "6cb8d31e-87f0-443c-abc6-66a8ae0a9763"
-  client_secret   = "2b38Q~7FdKjSYscZMg-ib3aAABJKga~YqUAN_cYw"
-  tenant_id       = "ec481362-ae50-4bfb-8524-b7c76d7b4cd8"
+  client_id       = "tempclientid" #"6cb8d31e-87f0-443c-abc6-66a8ae0a9763"
+  client_secret   = "tempclientsecret" #"2b38Q~7FdKjSYscZMg-ib3aAABJKga~YqUAN_cYw"
+  tenant_id       = "temptenantid" #"ec481362-ae50-4bfb-8524-b7c76d7b4cd8"
 }
 
 provider "azuredevops" {
-  org_service_url = "https://dev.azure.com/MY-ORG/"
+  org_service_url = "https://dev.azure.com/temporganizationname/"
 }
 
 data "azurerm_resource_group" "exampleResourcegroup" {

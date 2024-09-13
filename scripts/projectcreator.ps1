@@ -377,8 +377,40 @@ if($verifySetup -eq "y")
         # & $scriptpath run
         # read-host "Enter to proceed..."
 
+    
+    # ########################################### register enterprise app and get tenantid, clientid and clientsecret #########################################
+
+        write-host "Getting and replacing tenantid, clientid, clientsecret..."
+        $subscriptionId = $subscriptionId
+
+        $appDetails = az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/$subscriptionid"
+        write-host "appdetails: $appDetails"
+
+        $clientid = appDetails["appId"]
+        write-host "clientid: $appDetails"
+
+        $clientsecret = appDetails["password"]
+        write-host "clientsecret: $appDetails"
+
+        $tenantid = appDetails["tenant"]
+        write-host "tenantid: $appDetails"
+
+        read-host "continue?..."
+
 
     ################################################## run replace pipeline-cloud-setup-repo script ##################################################
+
+        # replace tempclientid with $clientid in main.tf
+        ((Get-Content -path main.tf -Raw) -replace 'tempclientid',$clientid) | Set-Content -Path main.tf
+
+        # replace tempclientsecret with $clientsecret in main.tf
+        ((Get-Content -path main.tf -Raw) -replace 'tempclientsecret',$clientsecret) | Set-Content -Path main.tf
+
+        # replace temptenantid with $tenantid in main.tf
+        ((Get-Content -path main.tf -Raw) -replace 'temptenantid',$tenantid) | Set-Content -Path main.tf
+
+        read-host "clientid, clientsecret, tenantid replace... continue?"
+
 
         # # ### Replace temp vars, uses projectname
 
