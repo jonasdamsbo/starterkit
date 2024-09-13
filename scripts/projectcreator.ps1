@@ -383,7 +383,8 @@ if($verifySetup -eq "y")
         write-host "Getting and replacing tenantid, clientid, clientsecret..."
         $subscriptionId = $subscriptionId
 
-        $appDetails = az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/$subscriptionid"
+        $applicationName = $resourcename"application"
+        $appDetails = az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/$subscriptionid" --name $applicationName
         write-host "appdetails: $appDetails"
 
         $clientid = $appDetails.appId
