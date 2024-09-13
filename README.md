@@ -7,5 +7,6 @@ Project: tempprojectname
 Repository: temprepositoryname
 Pipeline: temppipelinename
 Subscription: tempsubscriptionname
+Enterprise application: tempenterpriseapplicationname
 Resource group: tempresourcegroupname
 Storage account: tempstorageaccountname

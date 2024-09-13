@@ -410,6 +410,9 @@ if($verifySetup -eq "y")
         # replace temptenantid with $tenantid in main.tf
         ((Get-Content -path main.tf -Raw) -replace 'temptenantid',$tenantid) | Set-Content -Path main.tf
 
+        # replace tempenterpriseapplicationname with $applicationName in readme.md
+        ((Get-Content -path readme.md -Raw) -replace 'tempenterpriseapplicationname',$applicationName) | Set-Content -Path readme.md
+
         read-host "clientid, clientsecret, tenantid replace... continue?"
 
 
