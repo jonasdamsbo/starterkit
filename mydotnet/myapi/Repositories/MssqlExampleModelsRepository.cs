@@ -14,31 +14,62 @@ namespace myapi.Repositories
 			_context = context;
 		}
 
-		public async Task AddAsync(MssqlExampleModel example)
+		public async Task<MssqlExampleModel> AddAsync(MssqlExampleModel example)
 		{
 			// service
 			//var example = new MssqlExampleModel(exampleDTO);
 
 			// repo
-			_context.Add(example);
-			await _context.SaveChangesAsync();
+			try
+			{
+				_context.Add(example);
+				await _context.SaveChangesAsync();
+				return example;
+			}
+			catch (Exception ex)
+			{
+				return null;
+				//throw;
+			}
 		}
 
-		public async Task DeleteAsync(int id)
+		public async Task<MssqlExampleModel> DeleteAsync(int id)
 		{
 			// service
-			var example = await _context.ExampleModels.FindAsync(id);
-			if(example != null)
+			
+
+			try
 			{
-				// repo
-				_context.ExampleModels.Remove(example);
-				await _context.SaveChangesAsync();
+				var example = await _context.ExampleModels.FindAsync(id);
+				if (example != null)
+				{
+					// repo
+					_context.ExampleModels.Remove(example);
+					await _context.SaveChangesAsync();
+				}
+				return example;
+			}
+			catch (Exception ex)
+			{
+				return null;
+				//throw;
 			}
 		}
 
 		public async Task<List<MssqlExampleModel>> GetAllAsync()
 		{
-			var examples = await _context.ExampleModels.ToListAsync();
+			try
+			{
+				var examples = await _context.ExampleModels.ToListAsync();
+				return examples;
+			}
+			catch (Exception ex)
+			{
+				return new List<MssqlExampleModel>();
+				//throw;
+			}
+
+			
 
 			//List<ExampleDTO> exampleDTOS = new List<ExampleDTO>();
 			//foreach (var example in examples)
@@ -47,30 +78,48 @@ namespace myapi.Repositories
 			//}
 
 			//return exampleDTOS;
-			return examples;
 		}
 
 		public async Task<MssqlExampleModel> GetByIdAsync(int id)
 		{
-			var example = await _context.ExampleModels.FindAsync(id);
+			try
+			{
+
+				var example = await _context.ExampleModels.FindAsync(id);
+				return example;
+			}
+			catch (Exception ex)
+			{
+				return null;
+				//throw;
+			}
 			//var exampleDto = new ExampleDTO(example);
 			//return exampleDto;
-			return example;
 		}
 
-		public async Task UpdateAsync(int id, MssqlExampleModel updatedExample)
+		public async Task<MssqlExampleModel> UpdateAsync(int id, MssqlExampleModel updatedExample)
 		{
-			// service
-			var dbModel = await _context.ExampleModels.FindAsync(id);
-			//var updatedDbModel = new MssqlExampleModel(updatedExample);
-			if (dbModel != null)
+			try
 			{
-				// repo
-				dbModel.Title = updatedExample.Title;
-				dbModel.Description = updatedExample.Description;
-				//dbProject.WebUrl = projectDTO.WebUrl;
+				// service
+				var example = await GetByIdAsync(id);
+				//var updatedDbModel = new MssqlExampleModel(updatedExample);
+				if (example != null)
+				{
+					// repo
+					example.Title = updatedExample.Title;
+					example.Description = updatedExample.Description;
+					//dbProject.WebUrl = projectDTO.WebUrl;
 
-				await _context.SaveChangesAsync();
+					await _context.SaveChangesAsync();
+				}
+				example = await GetByIdAsync(id);
+				return example;
+			}
+			catch (Exception ex)
+			{
+				return null;
+				//throw;
 			}
 		}
 	}

@@ -101,7 +101,10 @@ namespace myapi.Repositories
 			try
 			{
 				var example = await GetByIdAsync(id);
-				await _nosqlExampleCollection.DeleteOneAsync(x => x.Id == id);
+				if (example != null)
+				{
+					await _nosqlExampleCollection.DeleteOneAsync(x => x.Id == id);
+				}
 				return example;
 			}
 			catch (Exception ex)
