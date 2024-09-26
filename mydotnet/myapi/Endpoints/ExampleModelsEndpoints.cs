@@ -2,36 +2,38 @@
 using myapi.Data;
 using myshared.Models;
 using myshared.DTOs;
+using myapi.Repositories;
 using myapi.Services;
 
 namespace myapi.Endpoints // minimal apis
 {
-	public static class PortfolioProjectsEndpoints
+	public static class ExampleModelsEndpoints
 	{
-		public static void MapPortfolioProjectsEndpoints(this WebApplication app)
+		public static void MapExampleModelsEndpoints(this WebApplication app)
 		{
-			var group = app.MapGroup("api/portfolioprojects");
-			group.MapGet("/", GetAllPortfolioProjects);
-			group.MapGet("/{id}", GetPortfolioProject);
-			group.MapPost("/", CreatePortfolioProject);
-			group.MapPut("/{id}", UpdatePortfolioProject);
-			group.MapDelete("/{id}", DeletePortfolioProject);
+			var group = app.MapGroup("api/examplemodels");
+			group.MapGet("/", GetAllAsync);
+			group.MapGet("/{id}", GetByIdAsync);
+			group.MapPost("/", AddAsync);
+			group.MapPut("/{id}", UpdateAsync);
+			group.MapDelete("/{id}", DeleteAsync);
 		}
 
-		static async Task<IResult> GetAllPortfolioProjects(IPortfolioService portfolioService)
+		static async Task<IResult> GetAllAsync(ExampleService exampleService)
 		{
-			return TypedResults.Ok(await portfolioService.GetAllProjectsAsync());
+			return TypedResults.Ok(await exampleService.GetAllAsync());
+			//return TypedResults.Ok(await mssqlExampleRepository.GetAllProjectsAsync());
 		}
 
-		static async Task<IResult> GetPortfolioProject(int id, IPortfolioService portfolioService)
+		static async Task<IResult> GetByIdAsync(int id, ExampleService exampleService)
 		{
-			return await portfolioService.GetProjectByIdAsync(id)
-				is PortfolioProjectDTO portfolioProjectDTO
-					? TypedResults.Ok(portfolioProjectDTO)
+			return await exampleService.GetByIdAsync(id)
+				is ExampleDTO exampleDTO
+					? TypedResults.Ok(exampleDTO)
 					: TypedResults.NotFound();
 		}
 
-		static async Task<IResult> CreatePortfolioProject(PortfolioProjectDTO portfolioProjectDTO, IPortfolioService portfolioService)
+		static async Task<IResult> AddAsync(ExampleDTO exampleDTO, ExampleService exampleService)
 		{
 			/*var portfolioProjectDTO = new PortfolioProjectDTO
 			{
@@ -39,29 +41,29 @@ namespace myapi.Endpoints // minimal apis
 				Description = portfolioProjectDTO.Description
 			};*/
 
-			await portfolioService.AddProjectAsync(portfolioProjectDTO);
+			await exampleService.AddAsync(exampleDTO);
 
 			//portfolioProjectDTO = new PortfolioProjectDTO(portfolioProject);
 
-			return TypedResults.Created($"/portfolioProjects/{portfolioProjectDTO.Id}", portfolioProjectDTO);
+			return TypedResults.Created($"/portfolioProjects/{exampleDTO.Id}", exampleDTO);
 		}
 
-		static async Task<IResult> UpdatePortfolioProject(int id, PortfolioProjectDTO updatedPortfolioProjectDTO, IPortfolioService portfolioService)
+		static async Task<IResult> UpdateAsync(int id, ExampleDTO updatedExampleDTO, ExampleService exampleService)
 		{
-			var portfolioProjectDTO = await portfolioService.GetProjectByIdAsync(id);
+			var exampleDTO = await exampleService.GetByIdAsync(id);
 
-			if (portfolioProjectDTO is null) return TypedResults.NotFound();
+			if (exampleDTO is null) return TypedResults.NotFound();
 
-			await portfolioService.UpdateProjectAsync(updatedPortfolioProjectDTO, id);
+			await exampleService.UpdateAsync(id, updatedExampleDTO);
 
 			return TypedResults.NoContent();
 		}
 
-		static async Task<IResult> DeletePortfolioProject(int id, IPortfolioService portfolioService)
+		static async Task<IResult> DeleteAsync(int id, ExampleService exampleService)
 		{
-			if (await portfolioService.GetProjectByIdAsync(id) is PortfolioProjectDTO)
+			if (await exampleService.GetByIdAsync(id) is ExampleDTO)
 			{
-				await portfolioService.DeleteProjectAsync(id);
+				await exampleService.DeleteAsync(id);
 				return TypedResults.NoContent();
 			}
 

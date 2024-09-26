@@ -1,5 +1,5 @@
-﻿@page "/edit-project"
-@page "/edit-project/{Id:int}"
+﻿@page "/edit-example"
+@page "/edit-example/{Id:int}"
 @inject NavigationManager NavigationManager
 @inject EnvironmentVariableService EnvironmentVariableService
 @rendermode InteractiveServer
@@ -52,8 +52,8 @@ else
 	[Parameter]
 	public int? Id { get; set; }
 
-	public PortfolioProjectDTO CurrentProject { get; set; } = new();
-	public PortfolioProjectDTO CurrentProjectDTO { get; set; } = new();
+	public ExampleDTO CurrentProject { get; set; } = new();
+	public ExampleDTO CurrentProjectDTO { get; set; } = new();
 	private HttpResponseMessage response = new();
 
 	protected override async Task OnParametersSetAsync()
@@ -64,8 +64,8 @@ else
 
 			var APIURL = EnvironmentVariableService.GetApiUrl();
 			HttpClient httpClient = new HttpClient();
-			response = await httpClient.GetAsync(APIURL + "api/PortfolioProjects/" + (int)Id);
-			var project = JsonConvert.DeserializeObject<PortfolioProjectDTO>(await response.Content.ReadAsStringAsync()) ?? new PortfolioProjectDTO();
+			response = await httpClient.GetAsync(APIURL + "api/ExampleModels/" + (int)Id);
+			var project = JsonConvert.DeserializeObject<ExampleDTO>(await response.Content.ReadAsStringAsync()) ?? new ExampleDTO();
 			httpClient.Dispose();
 
 			if(project is not null)
@@ -89,10 +89,10 @@ else
 			string jsonContent = JsonConvert.SerializeObject(CurrentProjectDTO);
 			HttpContent httpContent = new StringContent(jsonContent);
 			httpContent.Headers.ContentType.MediaType = "application/json";
-			response = await httpClient.PutAsync(APIURL + "api/PortfolioProjects/" + (int)Id, httpContent);
+			response = await httpClient.PutAsync(APIURL + "api/ExampleModels/" + (int)Id, httpContent);
 			httpClient.Dispose();
 
-			NavigationManager.NavigateTo("/portfolio");
+			NavigationManager.NavigateTo("/example");
 		}
 		else
 		{
@@ -106,10 +106,10 @@ else
 			string jsonContent = JsonConvert.SerializeObject(CurrentProject);
 			HttpContent httpContent = new StringContent(jsonContent);
 			httpContent.Headers.ContentType.MediaType = "application/json";
-			response = await httpClient.PostAsync(APIURL + "api/PortfolioProjects/", httpContent);
+			response = await httpClient.PostAsync(APIURL + "api/ExampleModels/", httpContent);
 			httpClient.Dispose();
 
-			NavigationManager.NavigateTo("/portfolio");
+			NavigationManager.NavigateTo("/example");
 		}
 	}
 }

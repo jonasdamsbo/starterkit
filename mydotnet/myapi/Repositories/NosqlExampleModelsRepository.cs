@@ -4,11 +4,11 @@ using MongoDB.Driver;
 
 namespace myapi.Repositories
 {
-	public class NosqlExampleRepository
+	public class NosqlExampleModelsRepository
 	{
 		private readonly IMongoCollection<NosqlExampleModel> _nosqlExampleCollection;
 
-		public NosqlExampleRepository(
+		public NosqlExampleModelsRepository(
 			IOptions<NosqlExampleDatabaseSettings> nosqlExampleDatabaseSettings)
 		{
 			var mongoClient = new MongoClient(
@@ -21,19 +21,19 @@ namespace myapi.Repositories
 				nosqlExampleDatabaseSettings.Value.NosqlExampleCollectionName);
 		}
 
-		public async Task<List<NosqlExampleModel>> GetAsync() =>
+		public async Task<List<NosqlExampleModel>> GetAllAsync() =>
 			await _nosqlExampleCollection.Find(_ => true).ToListAsync();
 
-		public async Task<NosqlExampleModel?> GetAsync(int id) =>
+		public async Task<NosqlExampleModel?> GetByIdAsync(int id) =>
 			await _nosqlExampleCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
-		public async Task CreateAsync(NosqlExampleModel newModel) =>
+		public async Task AddAsync(NosqlExampleModel newModel) =>
 			await _nosqlExampleCollection.InsertOneAsync(newModel);
 
 		public async Task UpdateAsync(int id, NosqlExampleModel updatedModel) =>
 			await _nosqlExampleCollection.ReplaceOneAsync(x => x.Id == id, updatedModel);
 
-		public async Task RemoveAsync(int id) =>
+		public async Task DeleteAsync(int id) =>
 			await _nosqlExampleCollection.DeleteOneAsync(x => x.Id == id);
 	}
 }

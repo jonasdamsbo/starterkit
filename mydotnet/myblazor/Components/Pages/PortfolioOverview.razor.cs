@@ -30,7 +30,7 @@ namespace myblazor.Components.Pages
 		//}
 
 		// properties
-		List<PortfolioProjectDTO> projects = new List<PortfolioProjectDTO>();
+		List<ExampleDTO> projects = new List<ExampleDTO>();
 		private HttpResponseMessage response = new();
 
 		// methods
@@ -42,8 +42,8 @@ namespace myblazor.Components.Pages
 			//controlllers
 			var APIURL = EnvironmentVariableService.GetApiUrl();
 			HttpClient httpClient = new HttpClient();
-			response = await httpClient.GetAsync(APIURL + "api/PortfolioProjects");
-			projects = JsonConvert.DeserializeObject<List<PortfolioProjectDTO>>(await response.Content.ReadAsStringAsync()) ?? new List<PortfolioProjectDTO>();
+			response = await httpClient.GetAsync(APIURL + "api/ExampleModels");
+			projects = JsonConvert.DeserializeObject<List<ExampleDTO>>(await response.Content.ReadAsStringAsync()) ?? new List<ExampleDTO>();
 			httpClient.Dispose();
 
 			//minimal api
@@ -56,7 +56,7 @@ namespace myblazor.Components.Pages
 
 		void EditProject(int id)
 		{
-			NavigationManager.NavigateTo($"/edit-project/{id}");
+			NavigationManager.NavigateTo($"/edit-example/{id}");
 		}
 
 		async Task DeleteProject(int id)
@@ -66,21 +66,21 @@ namespace myblazor.Components.Pages
 
 			var APIURL = EnvironmentVariableService.GetApiUrl();
 			HttpClient httpClient = new HttpClient();
-			await httpClient.DeleteAsync(APIURL + "api/PortfolioProjects/" + id);
+			await httpClient.DeleteAsync(APIURL + "api/ExampleModels/" + id);
 			//response = await httpClient.DeleteAsync(APIURL + "api/PortfolioProjects/" + id);
 			//projects = JsonConvert.DeserializeObject<List<PortfolioProjectDTO>>(await response.Content.ReadAsStringAsync()) ?? new List<PortfolioProjectDTO>();
 			//httpClient.Dispose();
 
 			// workaround because deleting does not update projects, so it loads forever
-			response = await httpClient.GetAsync(APIURL + "api/PortfolioProjects");
-			projects = JsonConvert.DeserializeObject<List<PortfolioProjectDTO>>(await response.Content.ReadAsStringAsync()) ?? new List<PortfolioProjectDTO>();
+			response = await httpClient.GetAsync(APIURL + "api/ExampleModels");
+			projects = JsonConvert.DeserializeObject<List<ExampleDTO>>(await response.Content.ReadAsStringAsync()) ?? new List<ExampleDTO>();
 			//NavigationManager.NavigateTo("/portfolio");
 			httpClient.Dispose();
 		}
 
 		void AddProject()
 		{
-			NavigationManager.NavigateTo($"/edit-project");
+			NavigationManager.NavigateTo($"/edit-example");
 		}
 	}
 }

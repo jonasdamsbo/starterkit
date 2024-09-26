@@ -15,8 +15,8 @@ namespace myshared.Models
         public string? WebUrl { get; set; }
 
 		public NosqlExampleModel() { }
-		public NosqlExampleModel(PortfolioProjectDTO portfolioProjectDTO) =>
-		(Id, Title, Description) = (portfolioProjectDTO.Id, portfolioProjectDTO.Title, portfolioProjectDTO.Description);
+		public NosqlExampleModel(ExampleDTO exampleDTO) =>
+		(Id, Title, Description) = (exampleDTO.Id, exampleDTO.Title, exampleDTO.Description);
 	}
 
 	public class NosqlExampleDatabaseSettings

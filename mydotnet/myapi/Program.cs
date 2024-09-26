@@ -19,7 +19,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("Mssql")));
 
 // controllers
-builder.Services.AddScoped<IPortfolioRepository, PortfolioRepository>(); 
+builder.Services.AddScoped<IMssqlExampleModelsRepository, MssqlExampleModelsRepository>(); 
 //builder.Services.AddScoped<EnvironmentVariableService>();
 //builder.Services.AddScoped<BackupService>();
 
@@ -36,7 +36,7 @@ builder.Services.Configure<IISOptions>(options =>
 builder.Services.Configure<NosqlExampleDatabaseSettings>(
 	builder.Configuration.GetSection("NosqlDatabase"));
 
-builder.Services.AddSingleton<NosqlExampleRepository>();
+builder.Services.AddSingleton<NosqlExampleModelsRepository>();
 
 // nosql end
 
@@ -99,11 +99,12 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
-// controllers
+// controllers - incomment this and outcomment below to use controllers v
 //app.MapControllers();
 
-// minimal api endpoints
-app.MapPortfolioProjectsEndpoints();
+// minimal api endpoints - outcomment this and incomment above to use controllers ^
+app.MapExampleModelsEndpoints();
+
 /*app.MapGroup("/portfolioprojects")
 	.MapPortfolioProjectsEndpoints()
 	.WithTags("Public");*/
