@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using myapi.Data;
 using myapi.Repositories;
 using myshared.DTOs;
@@ -20,17 +21,17 @@ namespace myapi.Services
 		public async Task<List<ExampleDTO>> GetAllAsync()
 		{
 			//var exampleModels = await _context.ExampleModels.ToListAsync();
+			var exampleModels = await _nosqlrepo.GetAllAsync();
 
-			try
+			if (exampleModels.IsNullOrEmpty())
 			{
-				var exampleModels = await _nosqlrepo.GetAllAsync();
+				return new List<ExampleDTO>();
+			}
+			else
+			{
 				var exampleDTOs = exampleModels.Select(x => new ExampleDTO(x)).ToList();
 
 				return exampleDTOs;
-			}
-			catch (Exception ex) 
-			{ 
-				return new List<ExampleDTO>();
 			}
 			
 		}
@@ -38,17 +39,15 @@ namespace myapi.Services
 		public async Task<ExampleDTO?> GetByIdAsync(int id)
 		{
 			//var exampleModel = await _context.ExampleModels.FindAsync(id);
+			var exampleModel = await _nosqlrepo.GetByIdAsync(id);
 
-			try
-			{
-				var exampleModel = await _nosqlrepo.GetByIdAsync(id);
-
-				return new ExampleDTO(exampleModel);
-			}
-			catch (Exception ex)
+			if(exampleModel == null)
 			{
 				return null;
-				//throw;
+			}
+			else
+			{
+				return new ExampleDTO(exampleModel);
 			}
 
 			//if (exampleModel == null)
@@ -66,16 +65,16 @@ namespace myapi.Services
 			};*/
 
 			var exampleModel = new NosqlExampleModel(exampleDTO);
+			exampleModel = await _nosqlrepo.AddAsync(exampleModel);
 
-			try
-			{
-				await _nosqlrepo.AddAsync(exampleModel);
-				return new ExampleDTO(exampleModel);
-			}
-			catch (Exception ex)
+			if(exampleModel == null)
 			{
 				return null;
 				//throw;
+			}
+			else
+			{
+				return new ExampleDTO(exampleModel);
 			}
 
 			//portfolioProjectDTO = new PortfolioProjectDTO(portfolioProject);
@@ -85,17 +84,16 @@ namespace myapi.Services
 		public async Task<ExampleDTO?> UpdateAsync(int id, ExampleDTO updatedExampleDTO)
 		{
 			var updatedExampleModel = new NosqlExampleModel(updatedExampleDTO);
+			updatedExampleModel = await _nosqlrepo.UpdateAsync(id, updatedExampleModel);
 
-			try
-			{
-				var exampleModel = await _nosqlrepo.GetByIdAsync(id);
-				await _nosqlrepo.UpdateAsync(id, updatedExampleModel);
-				return new ExampleDTO(updatedExampleModel);
-			}
-			catch (Exception ex)
+			if(updatedExampleModel == null)
 			{
 				return null;
 				//throw;
+			}
+			else
+			{
+				return new ExampleDTO(updatedExampleModel);
 			}
 
 			//if (exampleModel is null) return null;
@@ -103,16 +101,18 @@ namespace myapi.Services
 
 		public async Task<ExampleDTO?> DeleteAsync(int id)
 		{
-			try
-			{
-				var exampleModel = await _nosqlrepo.GetByIdAsync(id);
-				await _nosqlrepo.DeleteAsync(id);
-				return new ExampleDTO(exampleModel);
-			}
-			catch (Exception ex)
+			var exampleModel = await _nosqlrepo.DeleteAsync(id);
+
+			if(exampleModel == null)
 			{
 				return null;
 				//throw;
+			}
+			else
+			{
+				//var exampleModel = await _nosqlrepo.GetByIdAsync(id);
+
+				return new ExampleDTO(exampleModel);
 			}
 
 			//if (exampleModel is NosqlExampleModel)
