@@ -19,35 +19,47 @@ namespace myapi.Services
 			_mssqlrepo = mssqlExampleRepository;
 		}
 
-		public async Task<IResult> GetAllAsync()
+		public async Task<List<ExampleDTO>> GetAllAsync()
 		{
 			//var exampleModels = await _context.ExampleModels.ToListAsync();
 
-			var exampleModels = await _nosqlrepo.GetAllAsync();
-			var exampleDTOs = exampleModels.Select(x => new ExampleDTO(x)).ToList();
+			try
+			{
+				var exampleModels = await _nosqlrepo.GetAllAsync();
+				var exampleDTOs = exampleModels.Select(x => new ExampleDTO(x)).ToList();
 
-			return TypedResults.Ok(exampleDTOs);
+				return exampleDTOs;
+			}
+			catch (Exception ex) 
+			{ 
+				return new List<ExampleDTO>();
+			}
+			
 		}
 
-		public async Task<IResult> GetByIdAsync(int id)
+		public async Task<ExampleDTO?> GetByIdAsync(int id)
 		{
 			//var exampleModel = await _context.ExampleModels.FindAsync(id);
-			var exampleModel = await _nosqlrepo.GetByIdAsync(id);
+
+			try
+			{
+				var exampleModel = await _nosqlrepo.GetByIdAsync(id);
+
+				return new ExampleDTO(exampleModel);
+			}
+			catch (Exception ex)
+			{
+				return null;
+				//throw;
+			}
 
 			//if (exampleModel == null)
 			//{
-			//	return NotFound();
+			//	return null;
 			//}
-
-			var exampleDTO = new ExampleDTO(exampleModel);
-
-			return await _nosqlrepo.GetByIdAsync(id)
-				is NosqlExampleModel
-					? TypedResults.Ok(exampleDTO)
-					: TypedResults.NotFound();
 		}
 
-		public async Task<IResult> AddAsync(ExampleDTO exampleDTO)
+		public async Task<ExampleDTO> AddAsync(ExampleDTO exampleDTO)
 		{
 			/*var portfolioProjectDTO = new PortfolioProjectDTO
 			{
@@ -56,34 +68,62 @@ namespace myapi.Services
 			};*/
 
 			var exampleModel = new NosqlExampleModel(exampleDTO);
-			await _nosqlrepo.AddAsync(exampleModel);
+
+			try
+			{
+				await _nosqlrepo.AddAsync(exampleModel);
+				return new ExampleDTO(exampleModel);
+			}
+			catch (Exception ex)
+			{
+				return null;
+				//throw;
+			}
 
 			//portfolioProjectDTO = new PortfolioProjectDTO(portfolioProject);
 
-			return TypedResults.Created($"/exampleModels/{exampleDTO.Id}", exampleDTO);
 		}
 
-		public async Task<IResult> UpdateAsync(int id, ExampleDTO updatedExampleDTO)
+		public async Task<ExampleDTO?> UpdateAsync(int id, ExampleDTO updatedExampleDTO)
 		{
-			var exampleModel = await _nosqlrepo.GetByIdAsync(id);
-
-			if (exampleModel is null) return TypedResults.NotFound();
-
 			var updatedExampleModel = new NosqlExampleModel(updatedExampleDTO);
-			await _nosqlrepo.UpdateAsync(id, updatedExampleModel);
 
-			return TypedResults.NoContent();
-		}
-
-		public async Task<IResult> DeleteAsync(int id)
-		{
-			if (await _nosqlrepo.GetByIdAsync(id) is NosqlExampleModel)
+			try
 			{
-				await _nosqlrepo.DeleteAsync(id);
-				return TypedResults.NoContent();
+				var exampleModel = await _nosqlrepo.GetByIdAsync(id);
+				await _nosqlrepo.UpdateAsync(id, updatedExampleModel);
+				return new ExampleDTO(updatedExampleModel);
+			}
+			catch (Exception ex)
+			{
+				return null;
+				//throw;
 			}
 
-			return TypedResults.NotFound();
+			//if (exampleModel is null) return null;
+		}
+
+		public async Task<ExampleDTO?> DeleteAsync(int id)
+		{
+			try
+			{
+				var exampleModel = await _nosqlrepo.GetByIdAsync(id);
+				await _nosqlrepo.DeleteAsync(id);
+				return new ExampleDTO(exampleModel);
+			}
+			catch (Exception ex)
+			{
+				return null;
+				//throw;
+			}
+
+			//if (exampleModel is NosqlExampleModel)
+			//{
+			//	await _nosqlrepo.DeleteAsync(id);
+			//	return new ExampleDTO(exampleModel);
+			//}
+			//
+			//return null;
 		}
 	}
 }
