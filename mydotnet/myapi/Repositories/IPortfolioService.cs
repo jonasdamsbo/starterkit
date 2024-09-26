@@ -1,9 +1,9 @@
 ﻿using myshared.Models;
 using myshared.DTOs;
 
-namespace myapi.Services
+namespace myapi.Repositories
 {
-	public interface IPortfolioService
+	public interface IPortfolioRepository
 	{
 		Task<List<PortfolioProjectDTO>> GetAllProjectsAsync();
 		Task<PortfolioProjectDTO> GetProjectByIdAsync(int id);

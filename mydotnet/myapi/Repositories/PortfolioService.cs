@@ -3,13 +3,13 @@ using myapi.Data;
 using myshared.DTOs;
 using myshared.Models;
 
-namespace myapi.Services
+namespace myapi.Repositories
 {
-	public class PortfolioService : IPortfolioService
+	public class PortfolioRepository : IPortfolioRepository
 	{
 		private readonly DataContext _context;
 
-		public PortfolioService(DataContext context)
+		public PortfolioRepository(DataContext context)
 		{
 			_context = context;
 		}
