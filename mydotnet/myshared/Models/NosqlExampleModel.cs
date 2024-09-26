@@ -25,6 +25,6 @@ namespace myshared.Models
 
 		public string DatabaseName { get; set; } = null!;
 
-		public string NosqlExampleCollectionName { get; set; } = null!;
+		public string ExampleCollectionName { get; set; } = null!;
 	}
 }

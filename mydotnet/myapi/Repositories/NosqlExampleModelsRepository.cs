@@ -18,7 +18,7 @@ namespace myapi.Repositories
 				nosqlExampleDatabaseSettings.Value.DatabaseName);
 
 			_nosqlExampleCollection = mongoDatabase.GetCollection<NosqlExampleModel>(
-				nosqlExampleDatabaseSettings.Value.NosqlExampleCollectionName);
+				nosqlExampleDatabaseSettings.Value.ExampleCollectionName);
 		}
 
 		//public async Task<List<NosqlExampleModel>> GetAllAsync() =>
