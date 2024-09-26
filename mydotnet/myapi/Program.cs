@@ -2,8 +2,9 @@ using EFCore.AutomaticMigrations;
 using Microsoft.EntityFrameworkCore;
 using myapi.Data;
 using myapi.Endpoints;
-using myapi.Services;
+using myapi.Repositories;
 using myshared.Services;
+using myshared.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +19,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("Mssql")));
 
 // controllers
-builder.Services.AddScoped<IPortfolioService, PortfolioService>(); 
+builder.Services.AddScoped<IPortfolioRepository, PortfolioRepository>(); 
 //builder.Services.AddScoped<EnvironmentVariableService>();
 //builder.Services.AddScoped<BackupService>();
 
@@ -29,6 +30,17 @@ builder.Services.Configure<IISOptions>(options =>
 
 // minimal api
 //builder.Services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("PortfolioProjects"));
+
+// nosql start
+
+builder.Services.Configure<NosqlExampleDatabaseSettings>(
+	builder.Configuration.GetSection("NosqlDatabase"));
+
+builder.Services.AddSingleton<NosqlExampleRepository>();
+
+// nosql end
+
+
 
 var app = builder.Build();
 
