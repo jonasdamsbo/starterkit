@@ -4,6 +4,7 @@ using myshared.Models;
 using myshared.DTOs;
 using myapi.Repositories;
 using myapi.Services;
+using Microsoft.IdentityModel.Tokens;
 
 namespace myapi.Endpoints // minimal apis
 {
@@ -21,16 +22,33 @@ namespace myapi.Endpoints // minimal apis
 
 		static async Task<IResult> GetAllAsync(ExampleService exampleService)
 		{
-			return TypedResults.Ok(await exampleService.GetAllAsync());
+			var examples = await exampleService.GetAllAsync();
+
+			if (examples.IsNullOrEmpty())
+			{
+				return TypedResults.BadRequest();
+			}
+
+			return TypedResults.Ok(examples);
+
 			//return TypedResults.Ok(await mssqlExampleRepository.GetAllProjectsAsync());
 		}
 
 		static async Task<IResult> GetByIdAsync(int id, ExampleService exampleService)
 		{
-			return await exampleService.GetByIdAsync(id)
-				is ExampleDTO exampleDTO
-					? TypedResults.Ok(exampleDTO)
-					: TypedResults.NotFound();
+			var example = await exampleService.GetByIdAsync(id);
+
+			if (example == null)
+			{
+				return TypedResults.NotFound();
+			}
+
+			return TypedResults.Ok(example);
+
+			//return example
+			//	is ExampleDTO exampleDTO
+			//		? TypedResults.Ok(exampleDTO)
+			//		: TypedResults.NotFound();
 		}
 
 		static async Task<IResult> AddAsync(ExampleDTO exampleDTO, ExampleService exampleService)
@@ -41,7 +59,12 @@ namespace myapi.Endpoints // minimal apis
 				Description = portfolioProjectDTO.Description
 			};*/
 
-			await exampleService.AddAsync(exampleDTO);
+			var example = await exampleService.AddAsync(exampleDTO);
+
+			if (example == null)
+			{
+				return TypedResults.BadRequest();
+			}
 
 			//portfolioProjectDTO = new PortfolioProjectDTO(portfolioProject);
 
@@ -61,13 +84,21 @@ namespace myapi.Endpoints // minimal apis
 
 		static async Task<IResult> DeleteAsync(int id, ExampleService exampleService)
 		{
-			if (await exampleService.GetByIdAsync(id) is ExampleDTO)
+			//if (await exampleService.GetByIdAsync(id) is ExampleDTO)
+			//{
+			//	await exampleService.DeleteAsync(id);
+			//	return TypedResults.NoContent();
+			//}
+			var example = await exampleService.GetByIdAsync(id);
+
+			if (example == null)
 			{
-				await exampleService.DeleteAsync(id);
-				return TypedResults.NoContent();
+				return TypedResults.NotFound();
 			}
 
-			return TypedResults.NotFound();
+			await exampleService.DeleteAsync(id);
+			return TypedResults.NoContent();
+
 		}
 
 

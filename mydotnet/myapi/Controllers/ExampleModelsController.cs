@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using myapi.Data;
 using myapi.Repositories;
 using myapi.Services;
@@ -38,6 +39,11 @@ namespace myapi.Controllers // controllers
 
             var examples = await _exampleService.GetAllAsync();
 
+            if (examples.IsNullOrEmpty())
+            {
+                return NotFound();
+            }
+
 			return Ok(examples);
 
 		}
@@ -57,6 +63,11 @@ namespace myapi.Controllers // controllers
 			//var exampleDTO = new ExampleDTO(exampleModel);
 
             var example = await _exampleService.GetByIdAsync(id);
+
+			if (example is null)
+			{
+				return NotFound();
+			}
 
 			return Ok(example);
         }
@@ -96,9 +107,14 @@ namespace myapi.Controllers // controllers
             //    }
             //}
 
-            await _exampleService.UpdateAsync(id, exampleDTO);
+            var example = await _exampleService.UpdateAsync(id, exampleDTO);
 
-            return NoContent();
+			if (example == null)
+			{
+				return BadRequest();
+			}
+
+			return NoContent();
         }
 
         // POST: api/PortfolioProjects
@@ -110,9 +126,14 @@ namespace myapi.Controllers // controllers
             //_nosqlcontext.AddAsync(exampleModel);
             // await _context.SaveChangesAsync(); // incomment if using mssql, not nosql
 
-            await _exampleService.AddAsync(exampleDTO);
+            var example = await _exampleService.AddAsync(exampleDTO);
 
-            return CreatedAtAction("GetExampleModel", new { id = exampleDTO.Id }, exampleDTO);
+			if (example == null)
+			{
+				return BadRequest();
+			}
+
+			return CreatedAtAction("GetExampleModel", new { id = exampleDTO.Id }, exampleDTO);
         }
 
         // DELETE: api/PortfolioProjects/5
@@ -128,9 +149,14 @@ namespace myapi.Controllers // controllers
             //_context.ExampleModels.Remove(exampleModel);
             //await _context.SaveChangesAsync();
 
-            await _exampleService.DeleteAsync(id);
+            var example = await _exampleService.DeleteAsync(id);
 
-            return NoContent();
+			if (example == null)
+			{
+				return BadRequest();
+			}
+
+			return NoContent();
         }
 
         private bool ExampleModelExists(int id)
