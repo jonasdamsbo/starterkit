@@ -84,8 +84,12 @@ namespace myapi.Repositories
 		{
 			try
 			{
-				await _nosqlExampleCollection.ReplaceOneAsync(x => x.Id == id, updatedModel);
 				var example = await GetByIdAsync(id);
+				if (example != null)
+				{
+					await _nosqlExampleCollection.ReplaceOneAsync(x => x.Id == id, updatedModel);
+					example = await GetByIdAsync(id);
+				}
 				return example;
 			}
 			catch (Exception ex)

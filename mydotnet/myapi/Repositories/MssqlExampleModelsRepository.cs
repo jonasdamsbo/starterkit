@@ -112,8 +112,8 @@ namespace myapi.Repositories
 					//dbProject.WebUrl = projectDTO.WebUrl;
 
 					await _context.SaveChangesAsync();
+					example = await GetByIdAsync(id);
 				}
-				example = await GetByIdAsync(id);
 				return example;
 			}
 			catch (Exception ex)
