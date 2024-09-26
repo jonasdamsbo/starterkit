@@ -8,13 +8,11 @@ namespace myapi.Services
 {
 	public class ExampleService
 	{
-		private readonly DataContext _context;
 		private readonly NosqlExampleModelsRepository _nosqlrepo;
 		private readonly MssqlExampleModelsRepository _mssqlrepo;
 
-		public ExampleService(DataContext context, NosqlExampleModelsRepository nosqlExampleRepository, MssqlExampleModelsRepository mssqlExampleRepository)
+		public ExampleService(NosqlExampleModelsRepository nosqlExampleRepository, MssqlExampleModelsRepository mssqlExampleRepository)
 		{
-			_context = context;
 			_nosqlrepo = nosqlExampleRepository;
 			_mssqlrepo = mssqlExampleRepository;
 		}

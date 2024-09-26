@@ -14,10 +14,10 @@ namespace myapi.Repositories
 			_context = context;
 		}
 
-		public async Task AddAsync(ExampleDTO exampleDTO)
+		public async Task AddAsync(MssqlExampleModel example)
 		{
 			// service
-			var example = new MssqlExampleModel(exampleDTO);
+			//var example = new MssqlExampleModel(exampleDTO);
 
 			// repo
 			_context.Add(example);
@@ -58,16 +58,16 @@ namespace myapi.Repositories
 			return example;
 		}
 
-		public async Task UpdateAsync(ExampleDTO exampleDTO, int id)
+		public async Task UpdateAsync(int id, MssqlExampleModel updatedExample)
 		{
 			// service
 			var dbModel = await _context.ExampleModels.FindAsync(id);
-			var updatedDbModel = new MssqlExampleModel(exampleDTO);
+			//var updatedDbModel = new MssqlExampleModel(updatedExample);
 			if (dbModel != null)
 			{
 				// repo
-				dbModel.Title = updatedDbModel.Title;
-				dbModel.Description = updatedDbModel.Description;
+				dbModel.Title = updatedExample.Title;
+				dbModel.Description = updatedExample.Description;
 				//dbProject.WebUrl = projectDTO.WebUrl;
 
 				await _context.SaveChangesAsync();

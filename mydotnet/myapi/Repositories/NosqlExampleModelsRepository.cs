@@ -4,7 +4,7 @@ using MongoDB.Driver;
 
 namespace myapi.Repositories
 {
-	public class NosqlExampleModelsRepository
+	public class NosqlExampleModelsRepository : INosqlExampleModelsRepository
 	{
 		private readonly IMongoCollection<NosqlExampleModel> _nosqlExampleCollection;
 
@@ -24,7 +24,7 @@ namespace myapi.Repositories
 		public async Task<List<NosqlExampleModel>> GetAllAsync() =>
 			await _nosqlExampleCollection.Find(_ => true).ToListAsync();
 
-		public async Task<NosqlExampleModel?> GetByIdAsync(int id) =>
+		public async Task<NosqlExampleModel> GetByIdAsync(int id) =>
 			await _nosqlExampleCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
 
 		public async Task AddAsync(NosqlExampleModel newModel) =>
