@@ -24,10 +24,7 @@ namespace myapi.Endpoints // minimal apis
 		{
 			var examples = await exampleService.GetAllAsync();
 
-			if (examples.IsNullOrEmpty())
-			{
-				return TypedResults.BadRequest();
-			}
+			if (examples.IsNullOrEmpty()) return TypedResults.BadRequest();
 
 			return TypedResults.Ok(examples);
 
@@ -38,10 +35,7 @@ namespace myapi.Endpoints // minimal apis
 		{
 			var example = await exampleService.GetByIdAsync(id);
 
-			if (example == null)
-			{
-				return TypedResults.NotFound();
-			}
+			if (example is null) return TypedResults.NotFound();
 
 			return TypedResults.Ok(example);
 
@@ -61,10 +55,7 @@ namespace myapi.Endpoints // minimal apis
 
 			var example = await exampleService.AddAsync(exampleDTO);
 
-			if (example == null)
-			{
-				return TypedResults.BadRequest();
-			}
+			if (example is null) return TypedResults.BadRequest();
 
 			//portfolioProjectDTO = new PortfolioProjectDTO(portfolioProject);
 
@@ -91,10 +82,7 @@ namespace myapi.Endpoints // minimal apis
 			//}
 			var example = await exampleService.GetByIdAsync(id);
 
-			if (example == null)
-			{
-				return TypedResults.NotFound();
-			}
+			if (example is null) return TypedResults.NotFound();
 
 			await exampleService.DeleteAsync(id);
 			return TypedResults.NoContent();

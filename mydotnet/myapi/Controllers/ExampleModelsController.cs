@@ -39,10 +39,7 @@ namespace myapi.Controllers // controllers
 
             var examples = await _exampleService.GetAllAsync();
 
-            if (examples.IsNullOrEmpty())
-            {
-                return NotFound();
-            }
+            if (examples.IsNullOrEmpty()) return NotFound();
 
 			return Ok(examples);
 
@@ -64,10 +61,7 @@ namespace myapi.Controllers // controllers
 
             var example = await _exampleService.GetByIdAsync(id);
 
-			if (example is null)
-			{
-				return NotFound();
-			}
+			if (example is null) return NotFound();
 
 			return Ok(example);
         }
@@ -77,10 +71,7 @@ namespace myapi.Controllers // controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync(int id, ExampleDTO exampleDTO)
         {
-			if (id != exampleDTO.Id)
-            {
-                return BadRequest();
-            }
+			if (id != exampleDTO.Id) return BadRequest();
 
 			//var exampleModel = await _context.ExampleModels.FindAsync(id);
 			//var exampleModel = await _nosqlcontext.GetByIdAsync(id);
@@ -109,10 +100,7 @@ namespace myapi.Controllers // controllers
 
             var example = await _exampleService.UpdateAsync(id, exampleDTO);
 
-			if (example == null)
-			{
-				return BadRequest();
-			}
+			if (example == null) return BadRequest();
 
 			return NoContent();
         }
@@ -128,10 +116,7 @@ namespace myapi.Controllers // controllers
 
             var example = await _exampleService.AddAsync(exampleDTO);
 
-			if (example == null)
-			{
-				return BadRequest();
-			}
+			if (example == null) return BadRequest();
 
 			return CreatedAtAction("GetExampleModel", new { id = exampleDTO.Id }, exampleDTO);
         }
@@ -151,17 +136,9 @@ namespace myapi.Controllers // controllers
 
             var example = await _exampleService.DeleteAsync(id);
 
-			if (example == null)
-			{
-				return BadRequest();
-			}
+			if (example == null) return BadRequest();
 
 			return NoContent();
-        }
-
-        private bool ExampleModelExists(int id)
-        {
-            return _context.ExampleModels.Any(e => e.Id == id);
         }
     }
 }
