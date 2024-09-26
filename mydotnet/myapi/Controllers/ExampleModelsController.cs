@@ -71,7 +71,7 @@ namespace myapi.Controllers // controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync(int id, ExampleDTO exampleDTO)
         {
-			if (id != exampleDTO.Id) return BadRequest();
+			//if (id != exampleDTO.Id) return BadRequest();
 
 			//var exampleModel = await _context.ExampleModels.FindAsync(id);
 			//var exampleModel = await _nosqlcontext.GetByIdAsync(id);
