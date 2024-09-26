@@ -98,7 +98,6 @@ namespace myapi.Endpoints // minimal apis
 
 			await exampleService.DeleteAsync(id);
 			return TypedResults.NoContent();
-
 		}
 
 
