@@ -39,7 +39,7 @@ namespace myapi.Controllers // controllers
 
             var examples = await _exampleService.GetAllAsync();
 
-            if (examples.IsNullOrEmpty()) return NotFound();
+            if (examples.IsNullOrEmpty()) return BadRequest();
 
 			return Ok(examples);
 

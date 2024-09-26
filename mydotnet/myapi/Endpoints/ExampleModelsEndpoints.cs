@@ -64,11 +64,9 @@ namespace myapi.Endpoints // minimal apis
 
 		static async Task<IResult> UpdateAsync(int id, ExampleDTO updatedExampleDTO, ExampleService exampleService)
 		{
-			var exampleDTO = await exampleService.GetByIdAsync(id);
+			var exampleDTO = await exampleService.UpdateAsync(id, updatedExampleDTO);
 
-			if (exampleDTO is null) return TypedResults.NotFound();
-
-			await exampleService.UpdateAsync(id, updatedExampleDTO);
+			if (exampleDTO is null) return TypedResults.BadRequest();
 
 			return TypedResults.NoContent();
 		}
@@ -80,11 +78,10 @@ namespace myapi.Endpoints // minimal apis
 			//	await exampleService.DeleteAsync(id);
 			//	return TypedResults.NoContent();
 			//}
-			var example = await exampleService.GetByIdAsync(id);
+			var example = await exampleService.DeleteAsync(id);
 
-			if (example is null) return TypedResults.NotFound();
+			if (example is null) return TypedResults.BadRequest();
 
-			await exampleService.DeleteAsync(id);
 			return TypedResults.NoContent();
 		}
 
