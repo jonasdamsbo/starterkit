@@ -29,8 +29,8 @@ services:
     volumes:
      - ./entrypoint:/entrypoint # use to mount scripts to a folder in container
      - mssqldata:/var/opt/mssql/data
-    entrypoint: # use to run scripts after building
-      - ./entrypoint/sql-entrypoint.sh
+    #entrypoint: # use to run scripts after building
+    #  - ./entrypoint/sql-entrypoint.sh
 
 volumes:
   mssqldata:

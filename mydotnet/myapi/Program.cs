@@ -5,6 +5,7 @@ using myapi.Endpoints;
 using myapi.Repositories;
 using myshared.Services;
 using myshared.Models;
+using myapi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +20,8 @@ builder.Services.AddDbContext<MssqlDataContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("Mssql")));
 
 // controllers
-builder.Services.AddScoped<IMssqlExampleModelRepository, MssqlExampleModelRepository>(); 
+builder.Services.AddScoped<MssqlExampleModelRepository>();
+//builder.Services.AddScoped<IMssqlExampleModelRepository, MssqlExampleModelRepository>();
 //builder.Services.AddScoped<EnvironmentVariableService>();
 //builder.Services.AddScoped<BackupService>();
 
@@ -32,13 +34,19 @@ builder.Services.Configure<IISOptions>(options =>
 //builder.Services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("PortfolioProjects"));
 
 // nosql start
-
+builder.Services.AddScoped<NosqlDataContext>();
 builder.Services.Configure<NosqlDataContext>(
 	builder.Configuration.GetSection("NosqlDatabase"));
 
-builder.Services.AddSingleton<NosqlExampleModelRepository>();
+builder.Services.AddScoped<NosqlExampleModelRepository>();
+
+builder.Services.AddScoped<ExampleService>();
+
+//builder.Services.AddSingleton<ExampleService>();
 
 // nosql end
+
+builder.Services.AddScoped<ExampleModelRepository>();
 
 
 

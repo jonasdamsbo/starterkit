@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 using myshared.Models;
 
@@ -10,16 +11,19 @@ namespace myapi.Data
 
 		public string DatabaseName { get; set; } = null!;
 
-		//public string ExampleCollectionName { get; set; } = null!;
-
 		public IOptions<NosqlDataContext> NosqlDataContextOptions { get; set; } = null!;
 
 		public MongoClient MongoClient { get; set; } = null!;
 
 		public IMongoDatabase MongoDatabase { get; set; } = null!;
 
-		public string ExampleCollectionName { get; set; } = null!;
-		public IMongoCollection<NosqlExampleModel> ExampleCollection { get; set; } = null!;
+		//public string ExampleCollectionName { get; set; } = null!;
+		//public IMongoCollection<ExampleModel> ExampleCollection { get; set; } = null!;
+		public IMongoCollection<ExampleModel> ExampleModels { get; set; } = null!;
+
+		public NosqlDataContext() : base()
+		{
+		}
 
 		public NosqlDataContext(IOptions<NosqlDataContext> nosqlDataContextOptions)
 		{
@@ -28,7 +32,8 @@ namespace myapi.Data
 			MongoDatabase = MongoClient.GetDatabase(NosqlDataContextOptions.Value.DatabaseName);
 
 			//ExampleCollection = MongoDatabase.GetCollection<NosqlExampleModel>(NosqlDataContextOptions.Value.ExampleCollectionName);
-			ExampleCollection = MongoDatabase.GetCollection<NosqlExampleModel>("NosqlExampleCollection");
+			//ExampleCollection = MongoDatabase.GetCollection<NosqlExampleModel>("NosqlExampleCollection");
+			ExampleModels = MongoDatabase.GetCollection<ExampleModel>("ExampleModels");
 		}
 
 		//public IMongoCollection<NosqlExampleModel> GetNosqlExampleCollection()

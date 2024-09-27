@@ -47,7 +47,7 @@ namespace myapi.Controllers // controllers
 
         // GET: api/PortfolioProjects/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<ExampleDTO>> GetByIdAsync(int id)
+        public async Task<ActionResult<ExampleDTO>> GetByIdAsync(string id)
         {
             //var exampleModel = await _context.ExampleModels.FindAsync(id);
 			//var exampleModel = await _nosqlcontext.GetByIdAsync(id);
@@ -69,7 +69,7 @@ namespace myapi.Controllers // controllers
         // PUT: api/PortfolioProjects/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAsync(int id, ExampleDTO exampleDTO)
+        public async Task<IActionResult> UpdateAsync(string id, ExampleDTO exampleDTO)
         {
 			//if (id != exampleDTO.Id) return BadRequest();
 
@@ -123,7 +123,7 @@ namespace myapi.Controllers // controllers
 
         // DELETE: api/PortfolioProjects/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAsync(int id)
+        public async Task<IActionResult> DeleteAsync(string id)
         {
             //var exampleModel = await _context.ExampleModels.FindAsync(id);
             //if (exampleModel == null)

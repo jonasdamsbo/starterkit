@@ -8,7 +8,7 @@ namespace myshared.Models
     {
 		[BsonId]
 		[BsonRepresentation(BsonType.ObjectId)]
-		public int Id { get; set; }
+		public string Id { get; set; }
 		[BsonElement("Title")]
 		public string? Title { get; set; }
         public string? Description { get; set; }
@@ -16,6 +16,6 @@ namespace myshared.Models
 
 		public NosqlExampleModel() { }
 		public NosqlExampleModel(ExampleDTO exampleDTO) =>
-		(Id, Title, Description) = (exampleDTO.Id, exampleDTO.Title, exampleDTO.Description);
+		(Id, Title, Description) = (exampleDTO.Id.ToString(), exampleDTO.Title, exampleDTO.Description);
 	}
 }

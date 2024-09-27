@@ -14,6 +14,93 @@ namespace myapi.Repositories
 			_context = context;
 		}
 
+		public async Task<List<ExampleModel>> GetAllAsync()
+		{
+			try
+			{
+				var examples = await _context.ExampleModels.Find(_ => true).ToListAsync();
+				return examples;
+			}
+			catch (Exception ex)
+			{
+				return new List<ExampleModel>();
+				//throw;
+			}
+		}
+
+		public async Task<ExampleModel> GetByIdAsync(string id)
+		{
+			try
+			{
+				var example = await _context.ExampleModels.Find(x => x.Id == id.ToString()).FirstOrDefaultAsync();
+				return example;
+			}
+			catch (Exception ex)
+			{
+				return null;
+				//throw;
+			}
+		}
+
+		public async Task<ExampleModel> AddAsync(ExampleModel newModel)
+		{
+			try
+			{
+				await _context.ExampleModels.InsertOneAsync(newModel);
+
+				var example = await GetByIdAsync(newModel.Id);
+				return example;
+			}
+			catch (Exception ex)
+			{
+				return null;
+				//throw;
+			}
+		}
+
+		public async Task<ExampleModel> UpdateAsync(string id, ExampleModel updatedModel)
+		{
+			try
+			{
+				var example = await GetByIdAsync(id);
+				if (example != null)
+				{
+					await _context.ExampleModels.ReplaceOneAsync(x => x.Id == id.ToString(), updatedModel);
+					
+					
+					
+					example = await GetByIdAsync(id);
+				}
+				return example;
+			}
+			catch (Exception ex)
+			{
+				return null;
+				//throw;
+			}
+		}
+			
+		public async Task<ExampleModel> DeleteAsync(string id)
+		{
+			try
+			{
+				var example = await GetByIdAsync(id);
+				if (example != null)
+				{
+					await _context.ExampleModels.DeleteOneAsync(x => x.Id == id.ToString());
+
+				}
+				return example;
+			}
+			catch (Exception ex)
+			{
+				return null;
+				//throw;
+			}
+		}
+
+		// ### simple version: ###
+
 		//public async Task<List<NosqlExampleModel>> GetAllAsync() =>
 		//	await _nosqlExampleCollection.Find(_ => true).ToListAsync();
 
@@ -28,88 +115,6 @@ namespace myapi.Repositories
 
 		//public async Task DeleteAsync(int id) =>
 		//	await _nosqlExampleCollection.DeleteOneAsync(x => x.Id == id);
-
-		public async Task<List<NosqlExampleModel>> GetAllAsync()
-		{
-			try
-			{
-				var examples = await _context.ExampleCollection.Find(_ => true).ToListAsync();
-				return examples;
-			}
-			catch (Exception ex)
-			{
-				return new List<NosqlExampleModel>();
-				//throw;
-			}
-		}
-
-		public async Task<NosqlExampleModel> GetByIdAsync(int id)
-		{
-			try
-			{
-				var example = await _context.ExampleCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
-				return example;
-			}
-			catch (Exception ex)
-			{
-				return null;
-				//throw;
-			}
-		}
-			
-
-		public async Task<NosqlExampleModel> AddAsync(NosqlExampleModel newModel)
-		{
-			try
-			{
-				await _context.ExampleCollection.InsertOneAsync(newModel);
-				var example = await GetByIdAsync(newModel.Id);
-				return example;
-			}
-			catch (Exception ex)
-			{
-				return null;
-				//throw;
-			}
-		}
-
-		public async Task<NosqlExampleModel> UpdateAsync(int id, NosqlExampleModel updatedModel)
-		{
-			try
-			{
-				var example = await GetByIdAsync(id);
-				if (example != null)
-				{
-					await _context.ExampleCollection.ReplaceOneAsync(x => x.Id == id, updatedModel);
-					example = await GetByIdAsync(id);
-				}
-				return example;
-			}
-			catch (Exception ex)
-			{
-				return null;
-				//throw;
-			}
-		}
-			
-
-		public async Task<NosqlExampleModel> DeleteAsync(int id)
-		{
-			try
-			{
-				var example = await GetByIdAsync(id);
-				if (example != null)
-				{
-					await _context.ExampleCollection.DeleteOneAsync(x => x.Id == id);
-				}
-				return example;
-			}
-			catch (Exception ex)
-			{
-				return null;
-				//throw;
-			}
-		}
 	}
 }
 

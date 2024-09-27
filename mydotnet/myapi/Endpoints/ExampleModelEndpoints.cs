@@ -12,7 +12,7 @@ namespace myapi.Endpoints // minimal apis
 	{
 		public static void MapExampleModelEndpoints(this WebApplication app)
 		{
-			var group = app.MapGroup("api/examplemodel");
+			var group = app.MapGroup("api/ExampleModel");
 			group.MapGet("/", GetAllAsync);
 			group.MapGet("/{id}", GetByIdAsync);
 			group.MapPost("/", AddAsync);
@@ -22,16 +22,25 @@ namespace myapi.Endpoints // minimal apis
 
 		static async Task<IResult> GetAllAsync(ExampleService exampleService)
 		{
-			var examples = await exampleService.GetAllAsync();
+			try
+			{
+				var examples = await exampleService.GetAllAsync();
 
-			if (examples.IsNullOrEmpty()) return TypedResults.BadRequest();
+				if (examples.IsNullOrEmpty()) return TypedResults.BadRequest();
 
-			return TypedResults.Ok(examples);
+				return TypedResults.Ok(examples);
+
+			}
+			catch (Exception ex)
+			{
+
+				throw;
+			}
 
 			//return TypedResults.Ok(await mssqlExampleRepository.GetAllProjectsAsync());
 		}
 
-		static async Task<IResult> GetByIdAsync(int id, ExampleService exampleService)
+		static async Task<IResult> GetByIdAsync(string id, ExampleService exampleService)
 		{
 			var example = await exampleService.GetByIdAsync(id);
 
@@ -59,10 +68,10 @@ namespace myapi.Endpoints // minimal apis
 
 			//portfolioProjectDTO = new PortfolioProjectDTO(portfolioProject);
 
-			return TypedResults.Created($"/exampleModel/{exampleDTO.Id}", exampleDTO);
+			return TypedResults.Created($"/ExampleModel/{exampleDTO.Id}", exampleDTO);
 		}
 
-		static async Task<IResult> UpdateAsync(int id, ExampleDTO updatedExampleDTO, ExampleService exampleService)
+		static async Task<IResult> UpdateAsync(string id, ExampleDTO updatedExampleDTO, ExampleService exampleService)
 		{
 			var exampleDTO = await exampleService.UpdateAsync(id, updatedExampleDTO);
 
@@ -71,7 +80,7 @@ namespace myapi.Endpoints // minimal apis
 			return TypedResults.NoContent();
 		}
 
-		static async Task<IResult> DeleteAsync(int id, ExampleService exampleService)
+		static async Task<IResult> DeleteAsync(string id, ExampleService exampleService)
 		{
 			//if (await exampleService.GetByIdAsync(id) is ExampleDTO)
 			//{

@@ -9,7 +9,7 @@ namespace myapi.Data
         {
         }
 
-		public DbSet<MssqlExampleModel> ExampleModels => Set<MssqlExampleModel>();
+		public DbSet<ExampleModel> ExampleModels => Set<ExampleModel>();
 		//public DbSet<MssqlExampleModel> ExampleModels { get; set; }
 		//public DbSet<PortfolioProject> PortfolioProjects { get; set; }
 
@@ -17,10 +17,10 @@ namespace myapi.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<MssqlExampleModel>().HasData(
-                new MssqlExampleModel { Id = 1, Title = "First project", Description = "Alot of fun", WebUrl = "google.dk" },
-                new MssqlExampleModel { Id = 2, Title = "Second project", Description = "Alot of fun", WebUrl = "google.dk" },
-                new MssqlExampleModel { Id = 3, Title = "Third project", Description = "Alot of fun", WebUrl = "google.dk" }
+            modelBuilder.Entity<ExampleModel>().HasData(
+                new ExampleModel { Id = "1", Title = "First project", Description = "Alot of fun", WebUrl = "google.dk" },
+                new ExampleModel { Id = "2", Title = "Second project", Description = "Alot of fun", WebUrl = "google.dk" },
+                new ExampleModel { Id = "3", Title = "Third project", Description = "Alot of fun", WebUrl = "google.dk" }
             );
 
             //modelBuilder.Entity<PortfolioProject>();

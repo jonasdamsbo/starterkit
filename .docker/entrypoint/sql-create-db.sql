@@ -14,12 +14,12 @@ GO
 USE [mydb];
 GO
 
---DROP TABLE IF EXISTS [dbo].[PortfolioProject];
+--DROP TABLE IF EXISTS [dbo].[ExampleModels];
 --GO
 
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'PortfolioProject')
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'ExampleModels')
 BEGIN
-  CREATE TABLE [dbo].[PortfolioProject] (
+  CREATE TABLE [dbo].[ExampleModels] (
     [Id] UNIQUEIDENTIFIER PRIMARY KEY,
     [Title] NVARCHAR(100),
     [Description] NVARCHAR(100),

@@ -3,12 +3,12 @@ using myshared.DTOs;
 
 namespace myapi.Repositories
 {
-	public interface IMssqlExampleModelRepository
+	public interface IMssqlExampleModelRepository : IRepository
 	{
-		Task<List<MssqlExampleModel>> GetAllAsync();
-		Task<MssqlExampleModel> GetByIdAsync(int id);
-		Task<MssqlExampleModel> AddAsync(MssqlExampleModel example);
-		Task<MssqlExampleModel> UpdateAsync(int id, MssqlExampleModel example);
-		Task<MssqlExampleModel> DeleteAsync(int id);
+		Task<List<ExampleModel>> GetAllAsync();
+		Task<ExampleModel> GetByIdAsync(string id);
+		Task<ExampleModel> AddAsync(ExampleModel example);
+		Task<ExampleModel> UpdateAsync(string id, ExampleModel example);
+		Task<ExampleModel> DeleteAsync(string id);
 	}
 }

@@ -43,7 +43,15 @@ namespace myblazor.Components.Pages
 			var APIURL = EnvironmentVariableService.GetApiUrl();
 			HttpClient httpClient = new HttpClient();
 			response = await httpClient.GetAsync(APIURL + "api/ExampleModel");
-			examples = JsonConvert.DeserializeObject<List<ExampleDTO>>(await response.Content.ReadAsStringAsync()) ?? new List<ExampleDTO>();
+			try
+			{
+				examples = JsonConvert.DeserializeObject<List<ExampleDTO>>(await response.Content.ReadAsStringAsync()) ?? new List<ExampleDTO>();
+			}
+			catch (Exception ex)
+			{
+
+				throw;
+			}
 			httpClient.Dispose();
 
 			//minimal api
@@ -54,12 +62,12 @@ namespace myblazor.Components.Pages
 			httpClient.Dispose();*/
 		}
 
-		void EditExample(int id)
+		void EditExample(string id)
 		{
 			NavigationManager.NavigateTo($"/edit-example/{id}");
 		}
 
-		async Task DeleteExample(int id)
+		async Task DeleteExample(string id)
 		{
 			/*await PortfolioService.DeleteProjectAsync(id);
 			projects = await PortfolioService.GetAllProjectsAsync(); */

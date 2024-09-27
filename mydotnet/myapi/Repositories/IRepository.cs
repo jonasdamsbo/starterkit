@@ -1,10 +1,9 @@
 ﻿using myshared.Models;
-using myshared.DTOs;
 
 namespace myapi.Repositories
 {
-	public interface INosqlExampleModelRepository : IRepository
-	{
+    public interface IRepository
+    {
 		Task<List<ExampleModel>> GetAllAsync();
 		Task<ExampleModel> GetByIdAsync(string id);
 		Task<ExampleModel> AddAsync(ExampleModel example);

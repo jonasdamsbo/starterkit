@@ -2,22 +2,22 @@ db = connect( 'mongodb://sa:P@ssw0rd@localhost:27017' );
 
 db = db.getSiblingDB('mydb');
 
-db.createCollection('portfolioProject');
+db.createCollection('ExampleModels');
 
-db.portfolioProject.insertMany( [
+db.ExampleModels.insertMany( [
    {
-      title: 'title1',
-      description: 'some description',
-      weburl: 'weburl@example.com'
+      Title: 'title1',
+      Description: 'some description',
+      Weburl: 'weburl@example.com'
    },
    {
-    title: 'title2',
-    description: 'some description',
-    weburl: 'weburl@example.com'
+    Title: 'title2',
+    Description: 'some description',
+    Weburl: 'weburl@example.com'
    },
    {
-    title: 'title3',
-    description: 'some description',
-    weburl: 'weburl@example.com'
+    Title: 'title3',
+    Description: 'some description',
+    Weburl: 'weburl@example.com'
    }
 ] )

@@ -1,7 +1,7 @@
 USE mydb;
 GO
 
-IF NOT EXISTS (SELECT * FROM PortfolioProject)
+IF NOT EXISTS (SELECT * FROM ExampleModels)
 BEGIN
 
 	DECLARE @counter INT = 1;
@@ -9,7 +9,7 @@ BEGIN
 	WHILE @counter <= 100
 	BEGIN
 		DECLARE @guid UNIQUEIDENTIFIER = NEWID();
-		INSERT INTO [dbo].[PortfolioProject] ([Id], [Title], [Description], [WebUrl])
+		INSERT INTO [dbo].[ExampleModels] ([Id], [Title], [Description], [WebUrl])
 		VALUES (
 			@guid,
 			'title' + CONVERT(VARCHAR(10), @counter),
@@ -20,7 +20,7 @@ BEGIN
 
 	DECLARE @value UNIQUEIDENTIFIER
 	DECLARE db_cursor CURSOR FOR
-	SELECT Id FROM [dbo].[PortfolioProject]
+	SELECT Id FROM [dbo].[ExampleModels]
 	OPEN db_cursor
 	FETCH NEXT FROM db_cursor INTO @value
 
