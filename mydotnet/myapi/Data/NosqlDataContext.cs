@@ -21,14 +21,14 @@ namespace myapi.Data
 		public string ExampleCollectionName { get; set; } = null!;
 		public IMongoCollection<NosqlExampleModel> ExampleCollection { get; set; } = null!;
 
-		public NosqlDataContext(
-			IOptions<NosqlDataContext> nosqlDataContextOptions)
+		public NosqlDataContext(IOptions<NosqlDataContext> nosqlDataContextOptions)
 		{
 			NosqlDataContextOptions = nosqlDataContextOptions;
 			MongoClient = new MongoClient(NosqlDataContextOptions.Value.ConnectionString);
 			MongoDatabase = MongoClient.GetDatabase(NosqlDataContextOptions.Value.DatabaseName);
 
-			ExampleCollection = MongoDatabase.GetCollection<NosqlExampleModel>(NosqlDataContextOptions.Value.ExampleCollectionName);
+			//ExampleCollection = MongoDatabase.GetCollection<NosqlExampleModel>(NosqlDataContextOptions.Value.ExampleCollectionName);
+			ExampleCollection = MongoDatabase.GetCollection<NosqlExampleModel>("NosqlExampleCollection");
 		}
 
 		//public IMongoCollection<NosqlExampleModel> GetNosqlExampleCollection()
