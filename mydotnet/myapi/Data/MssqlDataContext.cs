@@ -10,8 +10,6 @@ namespace myapi.Data
         }
 
 		public DbSet<ExampleModel> ExampleModels => Set<ExampleModel>();
-		//public DbSet<MssqlExampleModel> ExampleModels { get; set; }
-		//public DbSet<PortfolioProject> PortfolioProjects { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -23,8 +21,8 @@ namespace myapi.Data
                 new ExampleModel { Id = "3", Title = "Third project", Description = "Alot of fun", WebUrl = "google.dk" }
             );
 
-            //modelBuilder.Entity<PortfolioProject>();
-            //modelBuilder.Entity<PortfolioProject>().ToTable("PortfolioProjects");
+            //modelBuilder.Entity<ExampleModel>();
+            //modelBuilder.Entity<ExampleModel>().ToTable("ExampleModels");
         }
     }
 }

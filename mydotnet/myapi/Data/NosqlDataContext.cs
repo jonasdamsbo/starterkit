@@ -7,6 +7,10 @@ namespace myapi.Data
 {
 	public class NosqlDataContext
 	{
+		public NosqlDataContext() : base()
+		{
+		}
+
 		public string ConnectionString { get; set; } = null!;
 
 		public string DatabaseName { get; set; } = null!;
@@ -17,13 +21,7 @@ namespace myapi.Data
 
 		public IMongoDatabase MongoDatabase { get; set; } = null!;
 
-		//public string ExampleCollectionName { get; set; } = null!;
-		//public IMongoCollection<ExampleModel> ExampleCollection { get; set; } = null!;
 		public IMongoCollection<ExampleModel> ExampleModels { get; set; } = null!;
-
-		public NosqlDataContext() : base()
-		{
-		}
 
 		public NosqlDataContext(IOptions<NosqlDataContext> nosqlDataContextOptions)
 		{
@@ -31,16 +29,12 @@ namespace myapi.Data
 			MongoClient = new MongoClient(NosqlDataContextOptions.Value.ConnectionString);
 			MongoDatabase = MongoClient.GetDatabase(NosqlDataContextOptions.Value.DatabaseName);
 
-			//ExampleCollection = MongoDatabase.GetCollection<NosqlExampleModel>(NosqlDataContextOptions.Value.ExampleCollectionName);
-			//ExampleCollection = MongoDatabase.GetCollection<NosqlExampleModel>("NosqlExampleCollection");
 			ExampleModels = MongoDatabase.GetCollection<ExampleModel>("ExampleModels");
+
+			//ExampleCollection = MongoDatabase.GetCollection<NosqlExampleModel>(NosqlDataContextOptions.Value.ExampleCollectionName);
 		}
 
-		//public IMongoCollection<NosqlExampleModel> GetNosqlExampleCollection()
-		//{
-		//	var nosqlExampleCollection = MongoDatabase.GetCollection<NosqlExampleModel>(NosqlDataContextOptions.Value.ExampleCollectionName);
-
-		//	return nosqlExampleCollection;
-		//}
+		//public string ExampleCollectionName { get; set; } = null!;
+		//public IMongoCollection<ExampleModel> ExampleCollection { get; set; } = null!;
 	}
 }

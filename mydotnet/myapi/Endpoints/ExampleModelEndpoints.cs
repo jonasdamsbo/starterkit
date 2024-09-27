@@ -27,8 +27,6 @@ namespace myapi.Endpoints // minimal apis
 			if (examples.IsNullOrEmpty()) return TypedResults.BadRequest();
 
 			return TypedResults.Ok(examples);
-
-			//return TypedResults.Ok(await mssqlExampleRepository.GetAllProjectsAsync());
 		}
 
 		static async Task<IResult> GetByIdAsync(string id, ExampleService exampleService)
@@ -38,26 +36,13 @@ namespace myapi.Endpoints // minimal apis
 			if (example is null) return TypedResults.NotFound();
 
 			return TypedResults.Ok(example);
-
-			//return example
-			//	is ExampleDTO exampleDTO
-			//		? TypedResults.Ok(exampleDTO)
-			//		: TypedResults.NotFound();
 		}
 
 		static async Task<IResult> AddAsync(ExampleDTO exampleDTO, ExampleService exampleService)
 		{
-			/*var portfolioProjectDTO = new PortfolioProjectDTO
-			{
-				Title = portfolioProjectDTO.Title,
-				Description = portfolioProjectDTO.Description
-			};*/
-
 			var example = await exampleService.AddAsync(exampleDTO);
 
 			if (example is null) return TypedResults.BadRequest();
-
-			//portfolioProjectDTO = new PortfolioProjectDTO(portfolioProject);
 
 			return TypedResults.Created($"/ExampleModel/{exampleDTO.Id}", exampleDTO);
 		}
@@ -73,11 +58,6 @@ namespace myapi.Endpoints // minimal apis
 
 		static async Task<IResult> DeleteAsync(string id, ExampleService exampleService)
 		{
-			//if (await exampleService.GetByIdAsync(id) is ExampleDTO)
-			//{
-			//	await exampleService.DeleteAsync(id);
-			//	return TypedResults.NoContent();
-			//}
 			var example = await exampleService.DeleteAsync(id);
 
 			if (example is null) return TypedResults.BadRequest();

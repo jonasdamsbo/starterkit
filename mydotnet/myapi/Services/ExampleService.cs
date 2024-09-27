@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using myapi.Data;
+﻿using Microsoft.IdentityModel.Tokens;
 using myapi.Repositories;
 using myshared.DTOs;
 using myshared.Models;
@@ -9,15 +7,10 @@ namespace myapi.Services
 {
 	public class ExampleService
 	{
-		/*private NosqlExampleModelRepository _nosqlrepo;
-		private MssqlExampleModelRepository _mssqlrepo;*/
-		//private IRepository _context;
 		private ExampleModelRepository _exampleModelRepository;
 
-		public ExampleService(ExampleModelRepository exampleModelRepository/*, NosqlExampleModelRepository nosqlExampleRepository, MssqlExampleModelRepository mssqlExampleRepository*/)
+		public ExampleService(ExampleModelRepository exampleModelRepository)
 		{
-			/*_nosqlrepo = nosqlExampleRepository;
-			_mssqlrepo = mssqlExampleRepository;*/
 			_exampleModelRepository = exampleModelRepository;
 		}
 
@@ -29,8 +22,6 @@ namespace myapi.Services
 			
 			var exampleDTOs = exampleModels.Select(x => new ExampleDTO(x)).ToList();
 			return exampleDTOs;
-
-			//var exampleModels = await _context.ExampleModels.ToListAsync();
 		}
 
 		public async Task<ExampleDTO?> GetByIdAsync(string id)
@@ -40,13 +31,6 @@ namespace myapi.Services
 			if(exampleModel == null) return null;
 
 			return new ExampleDTO(exampleModel);
-
-
-			//var exampleModel = await _context.ExampleModels.FindAsync(id);
-			//if (exampleModel == null)
-			//{
-			//	return null;
-			//}
 		}
 
 		public async Task<ExampleDTO> AddAsync(ExampleDTO exampleDTO)
@@ -56,16 +40,6 @@ namespace myapi.Services
 
 			if(exampleModel == null) return null;
 			return new ExampleDTO(exampleModel);
-
-
-			/*var portfolioProjectDTO = new PortfolioProjectDTO
-			{
-				Title = portfolioProjectDTO.Title,
-				Description = portfolioProjectDTO.Description
-			};*/
-			//throw;
-
-			//portfolioProjectDTO = new PortfolioProjectDTO(portfolioProject);
 		}
 
 		public async Task<ExampleDTO?> UpdateAsync(string id, ExampleDTO updatedExampleDTO)
@@ -75,11 +49,6 @@ namespace myapi.Services
 
 			if(updatedExampleModel == null) return null;
 			return new ExampleDTO(updatedExampleModel);
-
-
-			//throw;
-
-			//if (exampleModel is null) return null;
 		}
 
 		public async Task<ExampleDTO?> DeleteAsync(string id)
@@ -88,18 +57,6 @@ namespace myapi.Services
 
 			if(exampleModel == null) return null;
 			return new ExampleDTO(exampleModel);
-
-
-			//throw;
-			//var exampleModel = await _nosqlrepo.GetByIdAsync(id);
-
-			//if (exampleModel is NosqlExampleModel)
-			//{
-			//	await _nosqlrepo.DeleteAsync(id);
-			//	return new ExampleDTO(exampleModel);
-			//}
-			//
-			//return null;
 		}
 	}
 }

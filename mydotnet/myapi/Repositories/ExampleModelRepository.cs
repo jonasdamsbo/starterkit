@@ -2,7 +2,6 @@
 using MongoDB.Bson;
 using MongoDB.Driver;
 using myapi.Data;
-using myshared.DTOs;
 using myshared.Models;
 
 namespace myapi.Repositories
@@ -11,7 +10,8 @@ namespace myapi.Repositories
 	{
 		private readonly dynamic _context;
 
-		public ExampleModelRepository(/*MssqlDataContext context*/NosqlDataContext context) // repo is database agnostic, flip to use nosql/mssql database
+		// repo is database agnostic, flip to use nosql/mssql database
+		public ExampleModelRepository(NosqlDataContext context/*MssqlDataContext context*//*NosqlDataContext context*/)
 		{
 			_context = context;
 		}
