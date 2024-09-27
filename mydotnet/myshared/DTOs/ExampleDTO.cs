@@ -11,9 +11,5 @@ namespace myshared.DTOs
 		public ExampleDTO() { }
 		public ExampleDTO(ExampleModel example) =>
 		(Id, Title, Description) = (example.Id, example.Title, example.Description);
-		public ExampleDTO(MssqlExampleModel example) =>
-		(Id, Title, Description) = (example.Id, example.Title, example.Description);
-		public ExampleDTO(NosqlExampleModel example) =>
-		(Id, Title, Description) = (example.Id, example.Title, example.Description);
 	}
 }

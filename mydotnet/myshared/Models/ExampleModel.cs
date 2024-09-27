@@ -6,10 +6,10 @@ namespace myshared.Models
 {
     public class ExampleModel
     {
-		[BsonId] // for nosql
-		[BsonRepresentation(BsonType.ObjectId)] // for nosql
+		[BsonId] // required for nosql
+		[BsonRepresentation(BsonType.ObjectId)] // required for nosql
 		public string Id { get; set; }
-		[BsonElement("Title")] // for nosql
+		[BsonElement("Title")] // required for nosql
 		public string? Title { get; set; }
         public string? Description { get; set; }
         public string? WebUrl { get; set; }

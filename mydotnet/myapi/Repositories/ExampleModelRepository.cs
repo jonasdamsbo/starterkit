@@ -8,6 +8,8 @@ namespace myapi.Repositories
 {
 	public class ExampleModelRepository// : IRepository
 	{
+		//private readonly MssqlDataContext _context;
+		//private readonly NosqlDataContext _context;
 		private readonly dynamic _context;
 
 		// repo is database agnostic, flip to use nosql/mssql database
@@ -22,7 +24,9 @@ namespace myapi.Repositories
 			{
 				var examples = new List<ExampleModel>();
 
-				if(_context is MssqlDataContext)
+				//examples = await _context.ExampleModels.ToListAsync();
+				//examples = await (_context as NosqlDataContext).ExampleModels.Find(_ => true).ToListAsync();
+				if (_context is MssqlDataContext)
 				{
 					examples = await (_context as MssqlDataContext).ExampleModels.ToListAsync();
 				}
@@ -43,6 +47,8 @@ namespace myapi.Repositories
 			{
 				ExampleModel example = new ExampleModel();
 
+				//example = await _context.ExampleModels.FindAsync(id);
+				//example = await _context.ExampleModels.Find(x => x.Id == id.ToString()).FirstOrDefaultAsync();
 				if (_context is MssqlDataContext)
 				{
 					example = await (_context as MssqlDataContext).ExampleModels.FindAsync(id);
@@ -62,6 +68,10 @@ namespace myapi.Repositories
 		{
 			try
 			{
+				/*newModel.Id = ObjectId.GenerateNewId().ToString();
+				_context.Add(newModel);
+				await _context.SaveChangesAsync();*/
+				//await _context.ExampleModels.InsertOneAsync(newModel);
 				if (_context is MssqlDataContext)
 				{
 					newModel.Id = ObjectId.GenerateNewId().ToString();
@@ -87,6 +97,10 @@ namespace myapi.Repositories
 				var example = await GetByIdAsync(id);
 				if (example != null)
 				{
+					/*example.Title = updatedModel.Title;
+					example.Description = updatedModel.Description;
+					await _context.SaveChangesAsync();*/
+					//await _context.ExampleModels.ReplaceOneAsync(x => x.Id == id.ToString(), updatedModel);
 					if (_context is MssqlDataContext)
 					{
 						example.Title = updatedModel.Title;
@@ -114,6 +128,9 @@ namespace myapi.Repositories
 				var example = await GetByIdAsync(id);
 				if (example != null)
 				{
+					/*_context.ExampleModels.Remove(example);
+					await _context.SaveChangesAsync();*/
+					//await _context.ExampleModels.DeleteOneAsync(x => x.Id == id.ToString());
 					if (_context is MssqlDataContext)
 					{
 						_context.ExampleModels.Remove(example);
@@ -129,5 +146,22 @@ namespace myapi.Repositories
 				//throw;
 			}
 		}
+
+		// ### nosql repo simple version: ###
+
+		//public async Task<List<NosqlExampleModel>> GetAllAsync() =>
+		//	await _nosqlExampleCollection.Find(_ => true).ToListAsync();
+
+		//public async Task<NosqlExampleModel> GetByIdAsync(int id) =>
+		//	await _nosqlExampleCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+
+		//public async Task AddAsync(NosqlExampleModel newModel) =>
+		//	await _nosqlExampleCollection.InsertOneAsync(newModel);
+
+		//public async Task UpdateAsync(int id, NosqlExampleModel updatedModel) =>
+		//	await _nosqlExampleCollection.ReplaceOneAsync(x => x.Id == id, updatedModel);
+
+		//public async Task DeleteAsync(int id) =>
+		//	await _nosqlExampleCollection.DeleteOneAsync(x => x.Id == id);
 	}
 }

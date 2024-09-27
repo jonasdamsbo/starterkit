@@ -20,8 +20,6 @@ builder.Services.AddDbContext<MssqlDataContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("Mssql")));
 
 // controllers
-builder.Services.AddScoped<MssqlExampleModelRepository>();
-//builder.Services.AddScoped<IMssqlExampleModelRepository, MssqlExampleModelRepository>();
 //builder.Services.AddScoped<EnvironmentVariableService>();
 //builder.Services.AddScoped<BackupService>();
 
@@ -37,8 +35,6 @@ builder.Services.Configure<IISOptions>(options =>
 builder.Services.AddScoped<NosqlDataContext>();
 builder.Services.Configure<NosqlDataContext>(
 	builder.Configuration.GetSection("NosqlDatabase"));
-
-builder.Services.AddScoped<NosqlExampleModelRepository>();
 
 builder.Services.AddScoped<ExampleService>();
 

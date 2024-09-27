@@ -55,7 +55,7 @@ namespace myapi.Controllers // controllers
 		// POST: api/ExampleModel
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPost]
-        public async Task<ActionResult<MssqlExampleModel>> AddAsync(ExampleDTO exampleDTO)
+        public async Task<ActionResult<ExampleDTO>> AddAsync(ExampleDTO exampleDTO)
         {
             var example = await _exampleService.AddAsync(exampleDTO);
 
