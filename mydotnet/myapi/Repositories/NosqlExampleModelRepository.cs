@@ -5,11 +5,11 @@ using myapi.Data;
 
 namespace myapi.Repositories
 {
-	public class NosqlExampleModelsRepository : INosqlExampleModelsRepository
+	public class NosqlExampleModelRepository : INosqlExampleModelRepository
 	{
 		private readonly IMongoCollection<NosqlExampleModel> _nosqlExampleCollection;
 
-		public NosqlExampleModelsRepository(
+		public NosqlExampleModelRepository(
 			IOptions<NosqlDataContext> nosqlDataContext)
 		{
 			var mongoClient = new MongoClient(

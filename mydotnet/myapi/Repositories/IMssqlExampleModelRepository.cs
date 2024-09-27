@@ -3,7 +3,7 @@ using myshared.DTOs;
 
 namespace myapi.Repositories
 {
-	public interface IMssqlExampleModelsRepository
+	public interface IMssqlExampleModelRepository
 	{
 		Task<List<MssqlExampleModel>> GetAllAsync();
 		Task<MssqlExampleModel> GetByIdAsync(int id);

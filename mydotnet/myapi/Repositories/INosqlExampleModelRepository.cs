@@ -3,7 +3,7 @@ using myshared.DTOs;
 
 namespace myapi.Repositories
 {
-	public interface INosqlExampleModelsRepository
+	public interface INosqlExampleModelRepository
 	{
 		Task<List<NosqlExampleModel>> GetAllAsync();
 		Task<NosqlExampleModel> GetByIdAsync(int id);

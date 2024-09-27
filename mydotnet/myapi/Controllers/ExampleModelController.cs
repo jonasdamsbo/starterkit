@@ -16,13 +16,13 @@ namespace myapi.Controllers // controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ExampleModelsController : ControllerBase
+    public class ExampleModelController : ControllerBase
     {
-        private readonly DataContext _context;
-		private readonly NosqlExampleModelsRepository _nosqlcontext;
+        private readonly MssqlDataContext _context;
+		private readonly NosqlExampleModelRepository _nosqlcontext;
         private readonly ExampleService _exampleService;
 
-		public ExampleModelsController(DataContext context, NosqlExampleModelsRepository nosqlExampleRepository, ExampleService exampleService)
+		public ExampleModelController(MssqlDataContext context, NosqlExampleModelRepository nosqlExampleRepository, ExampleService exampleService)
         {
             _context = context;
             _nosqlcontext = nosqlExampleRepository;

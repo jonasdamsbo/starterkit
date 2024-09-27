@@ -8,11 +8,11 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace myapi.Endpoints // minimal apis
 {
-	public static class ExampleModelsEndpoints
+	public static class ExampleModelEndpoints
 	{
-		public static void MapExampleModelsEndpoints(this WebApplication app)
+		public static void MapExampleModelEndpoints(this WebApplication app)
 		{
-			var group = app.MapGroup("api/examplemodels");
+			var group = app.MapGroup("api/examplemodel");
 			group.MapGet("/", GetAllAsync);
 			group.MapGet("/{id}", GetByIdAsync);
 			group.MapPost("/", AddAsync);
@@ -59,7 +59,7 @@ namespace myapi.Endpoints // minimal apis
 
 			//portfolioProjectDTO = new PortfolioProjectDTO(portfolioProject);
 
-			return TypedResults.Created($"/portfolioProjects/{exampleDTO.Id}", exampleDTO);
+			return TypedResults.Created($"/exampleModel/{exampleDTO.Id}", exampleDTO);
 		}
 
 		static async Task<IResult> UpdateAsync(int id, ExampleDTO updatedExampleDTO, ExampleService exampleService)

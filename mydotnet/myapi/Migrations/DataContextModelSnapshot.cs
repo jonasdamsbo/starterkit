@@ -9,7 +9,7 @@ using myapi.Data;
 
 namespace myapi.Migrations
 {
-    [DbContext(typeof(DataContext))]
+    [DbContext(typeof(MssqlDataContext))]
     partial class DataContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

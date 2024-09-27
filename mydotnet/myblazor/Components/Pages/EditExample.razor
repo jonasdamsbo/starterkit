@@ -64,7 +64,7 @@ else
 
 			var APIURL = EnvironmentVariableService.GetApiUrl();
 			HttpClient httpClient = new HttpClient();
-			response = await httpClient.GetAsync(APIURL + "api/ExampleModels/" + (int)Id);
+			response = await httpClient.GetAsync(APIURL + "api/ExampleModel/" + (int)Id);
 			var project = JsonConvert.DeserializeObject<ExampleDTO>(await response.Content.ReadAsStringAsync()) ?? new ExampleDTO();
 			httpClient.Dispose();
 
@@ -89,7 +89,7 @@ else
 			string jsonContent = JsonConvert.SerializeObject(CurrentProjectDTO);
 			HttpContent httpContent = new StringContent(jsonContent);
 			httpContent.Headers.ContentType.MediaType = "application/json";
-			response = await httpClient.PutAsync(APIURL + "api/ExampleModels/" + (int)Id, httpContent);
+			response = await httpClient.PutAsync(APIURL + "api/ExampleModel/" + (int)Id, httpContent);
 			httpClient.Dispose();
 
 			NavigationManager.NavigateTo("/example");
@@ -106,7 +106,7 @@ else
 			string jsonContent = JsonConvert.SerializeObject(CurrentProject);
 			HttpContent httpContent = new StringContent(jsonContent);
 			httpContent.Headers.ContentType.MediaType = "application/json";
-			response = await httpClient.PostAsync(APIURL + "api/ExampleModels/", httpContent);
+			response = await httpClient.PostAsync(APIURL + "api/ExampleModel/", httpContent);
 			httpClient.Dispose();
 
 			NavigationManager.NavigateTo("/example");

@@ -5,11 +5,11 @@ using myshared.Models;
 
 namespace myapi.Repositories
 {
-	public class MssqlExampleModelsRepository : IMssqlExampleModelsRepository
+	public class MssqlExampleModelRepository : IMssqlExampleModelRepository
 	{
-		private readonly DataContext _context;
+		private readonly MssqlDataContext _context;
 
-		public MssqlExampleModelsRepository(DataContext context)
+		public MssqlExampleModelRepository(MssqlDataContext context)
 		{
 			_context = context;
 		}
@@ -40,11 +40,11 @@ namespace myapi.Repositories
 
 			try
 			{
-				var example = await _context.ExampleModels.FindAsync(id);
+				var example = await _context.ExampleModel.FindAsync(id);
 				if (example != null)
 				{
 					// repo
-					_context.ExampleModels.Remove(example);
+					_context.ExampleModel.Remove(example);
 					await _context.SaveChangesAsync();
 				}
 				return example;
@@ -60,7 +60,7 @@ namespace myapi.Repositories
 		{
 			try
 			{
-				var examples = await _context.ExampleModels.ToListAsync();
+				var examples = await _context.ExampleModel.ToListAsync();
 				return examples;
 			}
 			catch (Exception ex)
@@ -85,7 +85,7 @@ namespace myapi.Repositories
 			try
 			{
 
-				var example = await _context.ExampleModels.FindAsync(id);
+				var example = await _context.ExampleModel.FindAsync(id);
 				return example;
 			}
 			catch (Exception ex)

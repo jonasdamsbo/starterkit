@@ -3,13 +3,13 @@ using myshared.Models;
 
 namespace myapi.Data
 {
-    public class DataContext : DbContext
+    public class MssqlDataContext : DbContext
     {
-        public DataContext(DbContextOptions<DataContext> options) : base (options)
+        public MssqlDataContext(DbContextOptions<MssqlDataContext> options) : base (options)
         {
         }
 
-		public DbSet<MssqlExampleModel> ExampleModels => Set<MssqlExampleModel>();
+		public DbSet<MssqlExampleModel> ExampleModel => Set<MssqlExampleModel>();
 		//public DbSet<PortfolioProject> PortfolioProjects { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

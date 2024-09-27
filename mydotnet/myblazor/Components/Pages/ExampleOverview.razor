@@ -1,0 +1,38 @@
+﻿@page "/example"
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+
+<PageTitle>Example</PageTitle>
+<h3>Examples Overview</h3>
+
+@if (examples.Count == 0)
+{
+	<p><em>Loading examples...</em></p>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Title</th>
+				<th>Description</th>
+				<!--<th>WebUrl</th>-->
+				<th></th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach(var example in examples)
+			{
+				<tr>
+					<td>@example.Title</td>
+					<td>@example.Description</td>
+					<!--<td>@example.WebUrl</td>-->
+					<td><button class="btn btn-primary" @onclick="@(() => EditExample(example.Id))">Edit</button></td>
+					<td><button class="btn btn-primary" @onclick="@(() => DeleteExample(example.Id))">Delete</button></td>
+				</tr>
+			}
+		</tbody>
+	</table>
+
+	<button @onclick="AddExample">Add a new example</button>
+}

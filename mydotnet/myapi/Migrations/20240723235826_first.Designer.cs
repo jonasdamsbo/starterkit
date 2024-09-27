@@ -10,7 +10,7 @@ using myapi.Data;
 
 namespace myapi.Migrations
 {
-    [DbContext(typeof(DataContext))]
+    [DbContext(typeof(MssqlDataContext))]
     [Migration("20240723235826_first")]
     partial class first
     {

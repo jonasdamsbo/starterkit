@@ -15,11 +15,11 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<DataContext>(options =>
+builder.Services.AddDbContext<MssqlDataContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("Mssql")));
 
 // controllers
-builder.Services.AddScoped<IMssqlExampleModelsRepository, MssqlExampleModelsRepository>(); 
+builder.Services.AddScoped<IMssqlExampleModelRepository, MssqlExampleModelRepository>(); 
 //builder.Services.AddScoped<EnvironmentVariableService>();
 //builder.Services.AddScoped<BackupService>();
 
@@ -36,7 +36,7 @@ builder.Services.Configure<IISOptions>(options =>
 builder.Services.Configure<NosqlDataContext>(
 	builder.Configuration.GetSection("NosqlDatabase"));
 
-builder.Services.AddSingleton<NosqlExampleModelsRepository>();
+builder.Services.AddSingleton<NosqlExampleModelRepository>();
 
 // nosql end
 
@@ -52,7 +52,7 @@ using (var scope = app.Services.CreateScope())
 	//var backupService = services.GetRequiredService<BackupService>();
 	//backupService.BackupDb();
 
-	var context = services.GetRequiredService<DataContext>();
+	var context = services.GetRequiredService<MssqlDataContext>();
 
     // using your manually created migrations, automatically runs update-database 
     context.Database.Migrate();
@@ -103,7 +103,7 @@ app.UseAuthorization();
 //app.MapControllers();
 
 // minimal api endpoints - outcomment this and incomment above to use controllers ^
-app.MapExampleModelsEndpoints();
+app.MapExampleModelEndpoints();
 
 /*app.MapGroup("/portfolioprojects")
 	.MapPortfolioProjectsEndpoints()

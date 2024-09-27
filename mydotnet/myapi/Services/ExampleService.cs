@@ -9,10 +9,10 @@ namespace myapi.Services
 {
 	public class ExampleService
 	{
-		private readonly NosqlExampleModelsRepository _nosqlrepo;
-		private readonly MssqlExampleModelsRepository _mssqlrepo;
+		private readonly NosqlExampleModelRepository _nosqlrepo;
+		private readonly MssqlExampleModelRepository _mssqlrepo;
 
-		public ExampleService(NosqlExampleModelsRepository nosqlExampleRepository, MssqlExampleModelsRepository mssqlExampleRepository)
+		public ExampleService(NosqlExampleModelRepository nosqlExampleRepository, MssqlExampleModelRepository mssqlExampleRepository)
 		{
 			_nosqlrepo = nosqlExampleRepository;
 			_mssqlrepo = mssqlExampleRepository;
