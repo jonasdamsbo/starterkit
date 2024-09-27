@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using myapi.Data;
 using myshared.DTOs;
@@ -12,7 +13,7 @@ namespace myapi.Repositories
 
 		public ExampleModelRepository(MssqlDataContext mssqlcontext, NosqlDataContext nosqlcontext)
 		{
-			_context = nosqlcontext;
+			_context = mssqlcontext;
 		}
 
 		public async Task<List<ExampleModel>> GetAllAsync()
@@ -69,6 +70,7 @@ namespace myapi.Repositories
 			{
 				if (_context is MssqlDataContext)
 				{
+					newModel.Id = ObjectId.GenerateNewId().ToString();
 					(_context as MssqlDataContext).Add(newModel);
 					await (_context as MssqlDataContext).SaveChangesAsync();
 				}
