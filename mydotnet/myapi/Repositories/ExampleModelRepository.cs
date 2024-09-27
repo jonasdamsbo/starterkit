@@ -26,10 +26,7 @@ namespace myapi.Repositories
 				{
 					examples = await (_context as MssqlDataContext).ExampleModels.ToListAsync();
 				}
-				else if(_context is NosqlDataContext)
-				{
-					examples = await (_context as NosqlDataContext).ExampleModels.Find(_ => true).ToListAsync();
-				}
+				else examples = await (_context as NosqlDataContext).ExampleModels.Find(_ => true).ToListAsync();
 
 				return examples;
 			}
@@ -50,10 +47,7 @@ namespace myapi.Repositories
 				{
 					example = await (_context as MssqlDataContext).ExampleModels.FindAsync(id);
 				}
-				else if (_context is NosqlDataContext)
-				{
-					example = await (_context as NosqlDataContext).ExampleModels.Find(x => x.Id == id.ToString()).FirstOrDefaultAsync();
-				}
+				else example = await (_context as NosqlDataContext).ExampleModels.Find(x => x.Id == id.ToString()).FirstOrDefaultAsync();
 
 				return example;
 			}
@@ -74,10 +68,7 @@ namespace myapi.Repositories
 					(_context as MssqlDataContext).Add(newModel);
 					await (_context as MssqlDataContext).SaveChangesAsync();
 				}
-				else if (_context is NosqlDataContext)
-				{
-					await (_context as NosqlDataContext).ExampleModels.InsertOneAsync(newModel);
-				}
+				else await (_context as NosqlDataContext).ExampleModels.InsertOneAsync(newModel);
 
 				var example = await GetByIdAsync(newModel.Id);
 				return example;
@@ -103,10 +94,7 @@ namespace myapi.Repositories
 
 						await (_context as MssqlDataContext).SaveChangesAsync();
 					}
-					else if (_context is NosqlDataContext)
-					{
-						await (_context as NosqlDataContext).ExampleModels.ReplaceOneAsync(x => x.Id == id.ToString(), updatedModel);
-					}
+					else await (_context as NosqlDataContext).ExampleModels.ReplaceOneAsync(x => x.Id == id.ToString(), updatedModel);
 
 					example = await GetByIdAsync(id);
 				}
@@ -131,10 +119,7 @@ namespace myapi.Repositories
 						_context.ExampleModels.Remove(example);
 						await (_context as MssqlDataContext).SaveChangesAsync();
 					}
-					else if (_context is NosqlDataContext)
-					{
-						await (_context as NosqlDataContext).ExampleModels.DeleteOneAsync(x => x.Id == id.ToString());
-					}
+					else await (_context as NosqlDataContext).ExampleModels.DeleteOneAsync(x => x.Id == id.ToString());
 				}
 				return example;
 			}
