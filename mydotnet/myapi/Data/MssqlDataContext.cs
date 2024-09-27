@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MongoDB.Bson;
 using myshared.Models;
 
 namespace myapi.Data
@@ -16,9 +17,9 @@ namespace myapi.Data
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<ExampleModel>().HasData(
-                new ExampleModel { Id = "1", Title = "First project", Description = "Alot of fun", WebUrl = "google.dk" },
-                new ExampleModel { Id = "2", Title = "Second project", Description = "Alot of fun", WebUrl = "google.dk" },
-                new ExampleModel { Id = "3", Title = "Third project", Description = "Alot of fun", WebUrl = "google.dk" }
+                new ExampleModel { Id = ObjectId.GenerateNewId().ToString(), Title = "First project", Description = "Alot of fun", WebUrl = "google.dk" },
+                new ExampleModel { Id = ObjectId.GenerateNewId().ToString(), Title = "Second project", Description = "Alot of fun", WebUrl = "google.dk" },
+                new ExampleModel { Id = ObjectId.GenerateNewId().ToString(), Title = "Third project", Description = "Alot of fun", WebUrl = "google.dk" }
             );
 
             //modelBuilder.Entity<ExampleModel>();

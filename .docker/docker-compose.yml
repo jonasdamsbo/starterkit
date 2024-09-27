@@ -5,7 +5,7 @@ services:
     ports:
       - "13337:27017"
     volumes:
-      - ./entrypoint/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro # use to mount script mongo-init.js script that runs on build
+      #- ./entrypoint/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro # use to mount script mongo-init.js script that runs on build
       - mongodata:/data/db
     environment:
             MONGO_INITDB_ROOT_USERNAME: sa
@@ -27,7 +27,7 @@ services:
       ACCEPT_EULA: "Y"
       MSSQL_SA_PASSWORD: "P@ssw0rd"
     volumes:
-     - ./entrypoint:/entrypoint # use to mount scripts to a folder in container
+    # - ./entrypoint:/entrypoint # use to mount scripts to a folder in container
      - mssqldata:/var/opt/mssql/data
     #entrypoint: # use to run scripts after building
     #  - ./entrypoint/sql-entrypoint.sh
