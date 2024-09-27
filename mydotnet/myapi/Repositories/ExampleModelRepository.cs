@@ -7,13 +7,13 @@ using myshared.Models;
 
 namespace myapi.Repositories
 {
-	public class ExampleModelRepository : IRepository
+	public class ExampleModelRepository// : IRepository
 	{
 		private readonly dynamic _context;
 
-		public ExampleModelRepository(/*MssqlDataContext context*/NosqlDataContext context)
+		public ExampleModelRepository(/*MssqlDataContext context*/NosqlDataContext context) // repo is database agnostic, flip to use nosql/mssql database
 		{
-			_context = context; // repo is database agnostic, flip to use nosql/mssql database
+			_context = context;
 		}
 
 		public async Task<List<ExampleModel>> GetAllAsync()

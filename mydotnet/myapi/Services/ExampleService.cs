@@ -11,18 +11,19 @@ namespace myapi.Services
 	{
 		/*private NosqlExampleModelRepository _nosqlrepo;
 		private MssqlExampleModelRepository _mssqlrepo;*/
-		private IRepository _context;
+		//private IRepository _context;
+		private ExampleModelRepository _exampleModelRepository;
 
-		public ExampleService(ExampleModelRepository exampleRepository/*, NosqlExampleModelRepository nosqlExampleRepository, MssqlExampleModelRepository mssqlExampleRepository*/)
+		public ExampleService(ExampleModelRepository exampleModelRepository/*, NosqlExampleModelRepository nosqlExampleRepository, MssqlExampleModelRepository mssqlExampleRepository*/)
 		{
 			/*_nosqlrepo = nosqlExampleRepository;
 			_mssqlrepo = mssqlExampleRepository;*/
-			_context = exampleRepository;
+			_exampleModelRepository = exampleModelRepository;
 		}
 
 		public async Task<List<ExampleDTO>> GetAllAsync()
 		{
-			var exampleModels = await _context.GetAllAsync();
+			var exampleModels = await _exampleModelRepository.GetAllAsync();
 
 			if (exampleModels.IsNullOrEmpty()) return new List<ExampleDTO>();
 			
@@ -34,7 +35,7 @@ namespace myapi.Services
 
 		public async Task<ExampleDTO?> GetByIdAsync(string id)
 		{
-			var exampleModel = await _context.GetByIdAsync(id);
+			var exampleModel = await _exampleModelRepository.GetByIdAsync(id);
 
 			if(exampleModel == null) return null;
 
@@ -51,7 +52,7 @@ namespace myapi.Services
 		public async Task<ExampleDTO> AddAsync(ExampleDTO exampleDTO)
 		{
 			var exampleModel = new ExampleModel(exampleDTO);
-			exampleModel = await _context.AddAsync(exampleModel);
+			exampleModel = await _exampleModelRepository.AddAsync(exampleModel);
 
 			if(exampleModel == null) return null;
 			return new ExampleDTO(exampleModel);
@@ -70,7 +71,7 @@ namespace myapi.Services
 		public async Task<ExampleDTO?> UpdateAsync(string id, ExampleDTO updatedExampleDTO)
 		{
 			var updatedExampleModel = new ExampleModel(updatedExampleDTO);
-			updatedExampleModel = await _context.UpdateAsync(id, updatedExampleModel);
+			updatedExampleModel = await _exampleModelRepository.UpdateAsync(id, updatedExampleModel);
 
 			if(updatedExampleModel == null) return null;
 			return new ExampleDTO(updatedExampleModel);
@@ -83,7 +84,7 @@ namespace myapi.Services
 
 		public async Task<ExampleDTO?> DeleteAsync(string id)
 		{
-			var exampleModel = await _context.DeleteAsync(id);
+			var exampleModel = await _exampleModelRepository.DeleteAsync(id);
 
 			if(exampleModel == null) return null;
 			return new ExampleDTO(exampleModel);

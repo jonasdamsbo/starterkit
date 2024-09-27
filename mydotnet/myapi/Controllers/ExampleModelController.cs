@@ -18,14 +18,10 @@ namespace myapi.Controllers // controllers
     [ApiController]
     public class ExampleModelController : ControllerBase
     {
-        private readonly MssqlDataContext _context;
-		private readonly NosqlExampleModelRepository _nosqlcontext;
         private readonly ExampleService _exampleService;
 
-		public ExampleModelController(MssqlDataContext context, NosqlExampleModelRepository nosqlExampleRepository, ExampleService exampleService)
+		public ExampleModelController(ExampleService exampleService)
         {
-            _context = context;
-            _nosqlcontext = nosqlExampleRepository;
             _exampleService = exampleService;
 		}
 

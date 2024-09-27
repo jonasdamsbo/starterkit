@@ -22,20 +22,11 @@ namespace myapi.Endpoints // minimal apis
 
 		static async Task<IResult> GetAllAsync(ExampleService exampleService)
 		{
-			try
-			{
-				var examples = await exampleService.GetAllAsync();
+			var examples = await exampleService.GetAllAsync();
 
-				if (examples.IsNullOrEmpty()) return TypedResults.BadRequest();
+			if (examples.IsNullOrEmpty()) return TypedResults.BadRequest();
 
-				return TypedResults.Ok(examples);
-
-			}
-			catch (Exception ex)
-			{
-
-				throw;
-			}
+			return TypedResults.Ok(examples);
 
 			//return TypedResults.Ok(await mssqlExampleRepository.GetAllProjectsAsync());
 		}
