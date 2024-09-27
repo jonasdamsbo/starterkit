@@ -40,7 +40,7 @@ namespace myblazor.Components.Pages
 			projects = await PortfolioService.GetAllProjectsAsync();*/
 
 			//controlllers
-			var APIURL = EnvironmentVariableService.GetApiUrl();
+			var APIURL = EnvironmentVariableService.GetEnvironmentVariable("MyAppSettings:APIURL");
 			HttpClient httpClient = new HttpClient();
 			response = await httpClient.GetAsync(APIURL + "api/ExampleModel");
 			try
@@ -72,7 +72,7 @@ namespace myblazor.Components.Pages
 			/*await PortfolioService.DeleteProjectAsync(id);
 			projects = await PortfolioService.GetAllProjectsAsync(); */
 
-			var APIURL = EnvironmentVariableService.GetApiUrl();
+			var APIURL = EnvironmentVariableService.GetEnvironmentVariable("MyAppSettings:APIURL");
 			HttpClient httpClient = new HttpClient();
 			await httpClient.DeleteAsync(APIURL + "api/ExampleModel/" + id);
 			//response = await httpClient.DeleteAsync(APIURL + "api/PortfolioProjects/" + id);

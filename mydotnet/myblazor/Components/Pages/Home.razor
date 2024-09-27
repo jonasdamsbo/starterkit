@@ -7,13 +7,12 @@
 
 <h1>Hello, frontend!</h1>
 
-Welcome to your new app.
-<p>current conStr: @conn</p>
-<p>current env: @env</p>
-<p>current proj: @proj</p>
-<p>current url: @url</p>
+<p>current environment: @env</p>
+<p>current apiurl: @url</p>
+@*<p>current connectionstring: @conn</p>*@
+@*<p>current project: @proj</p>*@
 
-<button @onclick="(() => ToggleComments())" style="padding: 0; border: none;border-top: 2px black dashed;height: auto; width: 100%; background-color: rgb(228, 228, 228, 1);">
+@* <button @onclick="(() => ToggleComments())" style="padding: 0; border: none;border-top: 2px black dashed;height: auto; width: 100%; background-color: rgb(228, 228, 228, 1);">
 	<b>Comments</b>
 </button>
 <div class="@commentsClass">
@@ -23,78 +22,78 @@ Welcome to your new app.
 	</div>
 </div>
 <div>comment below</div>
-<div>another comment below</div>
+<div>another comment below</div> *@
 
 <style>
 	/* WITH GRID */
-	.comments {
+	/* .comments {
 		display: grid;
 		grid-template-rows: 0fr;
 		transition: grid-template-rows .5s;
 	}
 
-		.comments > div {
-			overflow: hidden;
-		}
+	.comments > div {
+		overflow: hidden;
+	}
 
 	.show, button:hover ~ .comments {
 		grid-template-rows: 1fr;
-	}
+	} */
 
 	/* WITHOUT GRID */
-	/*
-		.comment {
-			background-color: red;
-			height: 0;
-			transition: all .3s ease;
-			transform: scaleY(0);
-			opacity: 0;
-			visibility: hidden;
-			margin-bottom: 0;
-			translate: 0 -50%;
-		}
+	
+	/* .comments {
+		background-color: red;
+		height: 0;
+		transition: all .3s ease;
+		transform: scaleY(0);
+		opacity: 0;
+		visibility: hidden;
+		margin-bottom: 0;
+		translate: 0 -50%;
+	}
 
-		.show {
-			opacity: 1;
-			visibility: visible;
-			margin-bottom: 0%;
-			height: 100%;
-			transform: scaleY(1);
-			translate: 0 0%;
-		}
-		*/
+	.show, button:hover ~ .comments {
+		opacity: 1;
+		visibility: visible;
+		margin-bottom: 0%;
+		height: 100%;
+		transform: scaleY(1);
+		translate: 0 0%;
+	} */
+		
 </style>
 
 @code
 {
-	private string commentsClass = "comments";
+	// private string commentsClass = "comments";
 
-	private void ToggleComments()
-	{
-		if (commentsClass == "comments show")
-		{
-			commentsClass = "comments";
-		}
-		else
-		{
-			commentsClass = "comments show";
-		}
-	}
+	// private void ToggleComments()
+	// {
+	// 	if (commentsClass == "comments show")
+	// 	{
+	// 		commentsClass = "comments";
+	// 	}
+	// 	else
+	// 	{
+	// 		commentsClass = "comments show";
+	// 	}
+	// }
 
-	public string conn = "empty";
 	public string env = "empty";
-	public string proj = "empty";
 	public string url = "empty";
+	// public string conn = "empty";
+	// public string proj = "empty";
 
 	protected override async Task OnAfterRenderAsync(bool firstRender)
 	{
 		if (!firstRender) return;
 
 		await Task.Delay(500);
-		conn = someClass.GetConnStr();
-		env = someClass.GetEnvVar();
-		proj = someClass.GetProj();
-		url = someClass.GetApiUrl();
+		env = someClass.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+		url = someClass.GetEnvironmentVariable("MyAppSettings:APIURL");
+		// conn = someClass.GetConnectionString("DefaultConnection");
+		// proj = someClass.GetEnvironmentVariable("Project");
 
 		StateHasChanged();
 	}

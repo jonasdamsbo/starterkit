@@ -62,7 +62,7 @@ else
 		{
 			/*var project = await PortfolioService.GetProjectByIdAsync((int)Id);*/
 
-			var APIURL = EnvironmentVariableService.GetApiUrl();
+			var APIURL = EnvironmentVariableService.GetEnvironmentVariable("MyAppSettings:APIURL");
 			HttpClient httpClient = new HttpClient();
 			response = await httpClient.GetAsync(APIURL + "api/ExampleModel/" + Id);
 			var project = JsonConvert.DeserializeObject<ExampleDTO>(await response.Content.ReadAsStringAsync()) ?? new ExampleDTO();
@@ -83,7 +83,7 @@ else
 			/*await PortfolioService.UpdateProjectAsync(CurrentProject, (int)Id);
 			NavigationManager.NavigateTo("/portfolio");*/
 
-			var APIURL = EnvironmentVariableService.GetApiUrl();
+			var APIURL = EnvironmentVariableService.GetEnvironmentVariable("MyAppSettings:APIURL");
 
 			HttpClient httpClient = new HttpClient();
 			string jsonContent = JsonConvert.SerializeObject(CurrentProjectDTO);
@@ -100,7 +100,7 @@ else
 			/*await PortfolioService.AddProjectAsync(CurrentProject);
 			NavigationManager.NavigateTo("/portfolio");*/
 
-			var APIURL = EnvironmentVariableService.GetApiUrl();
+			var APIURL = EnvironmentVariableService.GetEnvironmentVariable("MyAppSettings:APIURL");
 
 			HttpClient httpClient = new HttpClient();
 			string jsonContent = JsonConvert.SerializeObject(CurrentProject);
