@@ -16,6 +16,6 @@ namespace myshared.Models
 
 		public NosqlExampleModel() { }
 		public NosqlExampleModel(ExampleDTO exampleDTO) =>
-		(Id, Title, Description) = (exampleDTO.Id.ToString(), exampleDTO.Title, exampleDTO.Description);
+		(Id, Title, Description) = (exampleDTO.Id, exampleDTO.Title, exampleDTO.Description);
 	}
 }

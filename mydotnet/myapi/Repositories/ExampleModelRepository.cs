@@ -11,9 +11,9 @@ namespace myapi.Repositories
 	{
 		private readonly dynamic _context;
 
-		public ExampleModelRepository(MssqlDataContext mssqlcontext, NosqlDataContext nosqlcontext)
+		public ExampleModelRepository(/*MssqlDataContext context*/NosqlDataContext context)
 		{
-			_context = mssqlcontext;
+			_context = context; // repo is database agnostic, flip to use nosql/mssql database
 		}
 
 		public async Task<List<ExampleModel>> GetAllAsync()
