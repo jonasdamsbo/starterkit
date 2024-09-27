@@ -9,7 +9,7 @@ namespace myapi.Data
         {
         }
 
-		public DbSet<MssqlExampleModel> ExampleModel => Set<MssqlExampleModel>();
+		public DbSet<MssqlExampleModel> ExampleModels => Set<MssqlExampleModel>();
 		//public DbSet<PortfolioProject> PortfolioProjects { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

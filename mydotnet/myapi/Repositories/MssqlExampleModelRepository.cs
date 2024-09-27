@@ -14,7 +14,7 @@ namespace myapi.Repositories
 			_context = context;
 		}
 
-		public async Task<MssqlExampleModel> AddAsync(MssqlExampleModel example)
+		public async Task<MssqlExampleModel> AddAsync(MssqlExampleModel newModel)
 		{
 			// service
 			//var example = new MssqlExampleModel(exampleDTO);
@@ -22,8 +22,9 @@ namespace myapi.Repositories
 			// repo
 			try
 			{
-				_context.Add(example);
+				_context.Add(newModel);
 				await _context.SaveChangesAsync();
+				var example = await GetByIdAsync(newModel.Id);
 				return example;
 			}
 			catch (Exception ex)
@@ -40,11 +41,11 @@ namespace myapi.Repositories
 
 			try
 			{
-				var example = await _context.ExampleModel.FindAsync(id);
+				var example = await _context.ExampleModels.FindAsync(id);
 				if (example != null)
 				{
 					// repo
-					_context.ExampleModel.Remove(example);
+					_context.ExampleModels.Remove(example);
 					await _context.SaveChangesAsync();
 				}
 				return example;
@@ -60,7 +61,7 @@ namespace myapi.Repositories
 		{
 			try
 			{
-				var examples = await _context.ExampleModel.ToListAsync();
+				var examples = await _context.ExampleModels.ToListAsync();
 				return examples;
 			}
 			catch (Exception ex)
@@ -85,7 +86,7 @@ namespace myapi.Repositories
 			try
 			{
 
-				var example = await _context.ExampleModel.FindAsync(id);
+				var example = await _context.ExampleModels.FindAsync(id);
 				return example;
 			}
 			catch (Exception ex)

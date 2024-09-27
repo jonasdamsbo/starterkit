@@ -7,19 +7,11 @@ namespace myapi.Repositories
 {
 	public class NosqlExampleModelRepository : INosqlExampleModelRepository
 	{
-		private readonly IMongoCollection<NosqlExampleModel> _nosqlExampleCollection;
+		private readonly NosqlDataContext _context;
 
-		public NosqlExampleModelRepository(
-			IOptions<NosqlDataContext> nosqlDataContext)
+		public NosqlExampleModelRepository(NosqlDataContext context)
 		{
-			var mongoClient = new MongoClient(
-				nosqlDataContext.Value.ConnectionString);
-
-			var mongoDatabase = mongoClient.GetDatabase(
-				nosqlDataContext.Value.DatabaseName);
-
-			_nosqlExampleCollection = mongoDatabase.GetCollection<NosqlExampleModel>(
-				nosqlDataContext.Value.ExampleCollectionName);
+			_context = context;
 		}
 
 		//public async Task<List<NosqlExampleModel>> GetAllAsync() =>
@@ -41,7 +33,7 @@ namespace myapi.Repositories
 		{
 			try
 			{
-				var examples = await _nosqlExampleCollection.Find(_ => true).ToListAsync();
+				var examples = await _context.ExampleCollection.Find(_ => true).ToListAsync();
 				return examples;
 			}
 			catch (Exception ex)
@@ -55,7 +47,7 @@ namespace myapi.Repositories
 		{
 			try
 			{
-				var example = await _nosqlExampleCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
+				var example = await _context.ExampleCollection.Find(x => x.Id == id).FirstOrDefaultAsync();
 				return example;
 			}
 			catch (Exception ex)
@@ -70,7 +62,7 @@ namespace myapi.Repositories
 		{
 			try
 			{
-				await _nosqlExampleCollection.InsertOneAsync(newModel);
+				await _context.ExampleCollection.InsertOneAsync(newModel);
 				var example = await GetByIdAsync(newModel.Id);
 				return example;
 			}
@@ -88,7 +80,7 @@ namespace myapi.Repositories
 				var example = await GetByIdAsync(id);
 				if (example != null)
 				{
-					await _nosqlExampleCollection.ReplaceOneAsync(x => x.Id == id, updatedModel);
+					await _context.ExampleCollection.ReplaceOneAsync(x => x.Id == id, updatedModel);
 					example = await GetByIdAsync(id);
 				}
 				return example;
@@ -108,7 +100,7 @@ namespace myapi.Repositories
 				var example = await GetByIdAsync(id);
 				if (example != null)
 				{
-					await _nosqlExampleCollection.DeleteOneAsync(x => x.Id == id);
+					await _context.ExampleCollection.DeleteOneAsync(x => x.Id == id);
 				}
 				return example;
 			}
