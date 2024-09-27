@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using myshared.Models;
 using MongoDB.Driver;
+using myapi.Data;
 
 namespace myapi.Repositories
 {
@@ -9,16 +10,16 @@ namespace myapi.Repositories
 		private readonly IMongoCollection<NosqlExampleModel> _nosqlExampleCollection;
 
 		public NosqlExampleModelsRepository(
-			IOptions<NosqlExampleDatabaseSettings> nosqlExampleDatabaseSettings)
+			IOptions<NosqlDataContext> nosqlDataContext)
 		{
 			var mongoClient = new MongoClient(
-				nosqlExampleDatabaseSettings.Value.ConnectionString);
+				nosqlDataContext.Value.ConnectionString);
 
 			var mongoDatabase = mongoClient.GetDatabase(
-				nosqlExampleDatabaseSettings.Value.DatabaseName);
+				nosqlDataContext.Value.DatabaseName);
 
 			_nosqlExampleCollection = mongoDatabase.GetCollection<NosqlExampleModel>(
-				nosqlExampleDatabaseSettings.Value.ExampleCollectionName);
+				nosqlDataContext.Value.ExampleCollectionName);
 		}
 
 		//public async Task<List<NosqlExampleModel>> GetAllAsync() =>

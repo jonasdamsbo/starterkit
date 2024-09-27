@@ -33,7 +33,7 @@ builder.Services.Configure<IISOptions>(options =>
 
 // nosql start
 
-builder.Services.Configure<NosqlExampleDatabaseSettings>(
+builder.Services.Configure<NosqlDataContext>(
 	builder.Configuration.GetSection("NosqlDatabase"));
 
 builder.Services.AddSingleton<NosqlExampleModelsRepository>();

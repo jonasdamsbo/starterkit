@@ -18,13 +18,4 @@ namespace myshared.Models
 		public NosqlExampleModel(ExampleDTO exampleDTO) =>
 		(Id, Title, Description) = (exampleDTO.Id, exampleDTO.Title, exampleDTO.Description);
 	}
-
-	public class NosqlExampleDatabaseSettings
-	{
-		public string ConnectionString { get; set; } = null!;
-
-		public string DatabaseName { get; set; } = null!;
-
-		public string ExampleCollectionName { get; set; } = null!;
-	}
 }
