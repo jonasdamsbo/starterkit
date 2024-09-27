@@ -44,8 +44,6 @@ builder.Services.AddScoped<ExampleService>();
 
 builder.Services.AddScoped<ExampleModelRepository>();
 
-
-
 var app = builder.Build();
 
 // update-database on build
@@ -61,21 +59,21 @@ using (var scope = app.Services.CreateScope())
     // using your manually created migrations, automatically runs update-database 
     context.Database.Migrate();
 
-    // runs update-database without the need for migrations
-    //MigrateDatabaseToLatestVersion.Execute(context, new DbMigrationsOptions { AutomaticMigrationDataLossAllowed = true });
+	// runs update-database without the need for migrations
+	//MigrateDatabaseToLatestVersion.Execute(context, new DbMigrationsOptions { AutomaticMigrationDataLossAllowed = true });
 
 
-    //context.Database.EnsureCreated();
-    //context.Database.Migrate();
+	//context.Database.EnsureCreated();
+	//context.Database.Migrate();
 
-    // without having to manually create migrations, fully automatic, requires NuGet EFCode.AutomaticMigrations
-    // without options 
-    //MigrateDatabaseToLatestVersion.Execute(context);
-    //var envVarService = services.GetRequiredService<EnvironmentVariableService>();
-    //Console.WriteLine(envVarService.GetConnStr());
+	// without having to manually create migrations, fully automatic, requires NuGet EFCode.AutomaticMigrations
+	// without options 
+	//MigrateDatabaseToLatestVersion.Execute(context);
+	//var envVarService = services.GetRequiredService<EnvironmentVariableService>();
+	//Console.WriteLine(envVarService.GetConnStr());
 
-    // with options
-    /*try
+	// with options
+	/*try
 	{
 		MigrateDatabaseToLatestVersion.Execute(context,
 			new DbMigrationsOptions
@@ -89,7 +87,11 @@ using (var scope = app.Services.CreateScope())
 		Console.WriteLine(e.ToString());
 	}*/
 
-    //Console.WriteLine(envVarService.GetConnStr()); 
+	//Console.WriteLine(envVarService.GetConnStr()); 
+
+	// check nosql db if db and collections exists, if not, create
+	var nosqlcontext = services.GetRequiredService<NosqlDataContext>();
+	nosqlcontext.CheckNosqlDbState();
 }
 
 // Configure the HTTP request pipeline. 

@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using myshared.Models;
 
@@ -32,6 +34,26 @@ namespace myapi.Data
 			ExampleModels = MongoDatabase.GetCollection<ExampleModel>("ExampleModels");
 
 			//ExampleCollection = MongoDatabase.GetCollection<NosqlExampleModel>(NosqlDataContextOptions.Value.ExampleCollectionName);
+		}
+
+		public async void CheckNosqlDbState()
+		{
+			var col = MongoClient.GetDatabase(NosqlDataContextOptions.Value.DatabaseName).GetCollection<ExampleModel>("ExampleModels");
+
+			if (col.Find(_ => true).ToListAsync().Result.IsNullOrEmpty())
+			{
+				var data = new List<ExampleModel> {
+					new ExampleModel { Id = ObjectId.GenerateNewId().ToString(), Title = "First project", Description = "Alot of fun", WebUrl = "google.dk" },
+					new ExampleModel { Id = ObjectId.GenerateNewId().ToString(), Title = "Second project", Description = "Alot of fun", WebUrl = "google.dk" },
+					new ExampleModel { Id = ObjectId.GenerateNewId().ToString(), Title = "Third project", Description = "Alot of fun", WebUrl = "google.dk" }
+				};
+				//ExampleModels.InsertManyAsync(data);
+				var result = col.InsertManyAsync(data);
+			}
+			else
+			{
+
+			}
 		}
 
 		//public string ExampleCollectionName { get; set; } = null!;
