@@ -383,7 +383,7 @@ if($verifySetup -eq "y")
         write-host "Getting and replacing tenantid, clientid, clientsecret..."
         $subscriptionId = $subscriptionId
 
-        $applicationName = $resourcename"enterpriseapplication"
+        $applicationName = $resourcename+"enterpriseapplication"
         $appDetails = az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/$subscriptionid" --name $applicationName
         write-host "appdetails: $appDetails"
 
@@ -515,11 +515,11 @@ if($verifySetup -eq "y")
             ((Get-Content -path appservices.tf -Raw) -replace 'tempapiurl',$apiurl) | Set-Content -Path appservices.tf
 
             # get and add mongodb and mssqldb connectionstrings for apiapp
-            $nosqlconnectionstring = "mongodb+srv://"+$resourceName+":'P4ssw0rd'@"+$resourceName+"cosmosmongodb.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
+            $nosqlconnectionstring = "mongodb+srv://sa:'P%40ssw0rd'@"+$resourceName+"cosmosmongodb.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
 
             $sqlconnectionstring = "Server=tcp:"+$resourceName+"mssqlserver.database.windows.net,1433;Initial Catalog="+$resourceName+"mssqldatabase;Persist Security Info=False;User ID="+$resourceName+";Password=P@ssw0rd;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
             $apiappname = $resourcename+"apiapp"
-            ((Get-Content -path appservices.tf -Raw) -replace 'tempsqlconnectionstring',$sqlconnectionstring) | Set-Content -Path appservices.tf #
+            ((Get-Content -path appservices.tf -Raw) -replace 'tempsqlconnectionstring',$sqlconnectionstring) | Set-Content -Path appservices.tf
             ((Get-Content -path appservices.tf -Raw) -replace 'tempnosqlconnectionstring',$nosqlconnectionstring) | Set-Content -Path appservices.tf
 
         cd ..

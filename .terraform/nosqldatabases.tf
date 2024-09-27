@@ -55,8 +55,8 @@ resource "azurerm_cosmosdb_account" "exampleCosmosdbaccount" {
 #   notes = "Prevents nosqldb data loss"
 # }
 
-resource "azurerm_cosmosdb_mongo_database" "exampleCosmosdbmongodb" {
-  name                = "tempresourcenamecosmosdbmongodb"
+resource "azurerm_cosmosdb_mongo_database" "exampleCosmosmongodb" {
+  name                = "tempresourcenamecosmosmongodb"
   resource_group_name = azurerm_cosmosdb_account.exampleCosmosdbaccount.resource_group_name
   account_name        = azurerm_cosmosdb_account.exampleCosmosdbaccount.name
   throughput          = 400

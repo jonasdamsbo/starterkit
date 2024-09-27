@@ -50,15 +50,20 @@ resource "azurerm_windows_web_app" "exampleApiapp" {
     # }
   }
 
+  app_settings = {
+    "NosqlDatabase:ConnectionString" = "tempnosqlconnectionstring"
+    "NosqlDatabase:DatabaseName" = "tempresourcenamecosmosmongodb"
+  }
+
   connection_string {
     name  = "Mssql"
     type  = "SQLServer"
     value = "tempsqlconnectionstring"
   }
 
-  connection_string {
-    name  = "Nosql"
-    type  = "DocDb"
-    value = "tempnosqlconnectionstring"
-  }
+  # connection_string {
+  #   name  = "Nosql"
+  #   type  = "DocDb"
+  #   value = "tempnosqlconnectionstring"
+  # }
 }
