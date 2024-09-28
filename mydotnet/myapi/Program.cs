@@ -11,7 +11,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+//builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+	// use these options to avoid swagger error when endpoint/controller methods has same names
+	c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+});
 
 // mssql database context and connectionstring
 builder.Services.AddDbContext<MssqlDataContext>(options =>
@@ -37,7 +42,6 @@ builder.Services.Configure<IISOptions>(options =>
 	options.ForwardClientCertificate = false;
 });
 
-// controllers
 //builder.Services.AddScoped<EnvironmentVariableService>();
 //builder.Services.AddScoped<BackupService>();
 

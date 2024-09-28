@@ -8,10 +8,13 @@ builder.Services.AddRazorComponents()
 	.AddInteractiveServerComponents()
 	.AddInteractiveWebAssemblyComponents();
 
+// add services
 builder.Services.AddScoped<EnvironmentVariableService>();
 
+// detailed frontend errors
 builder.Services.AddServerSideBlazor().AddCircuitOptions(options => { options.DetailedErrors = true; });
 
+// to run/deploy 2 projects in a single app
 builder.Services.Configure<IISOptions>(options =>
 {
 	options.ForwardClientCertificate = false;
