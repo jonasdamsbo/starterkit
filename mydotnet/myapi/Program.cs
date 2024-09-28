@@ -3,47 +3,48 @@ using Microsoft.EntityFrameworkCore;
 using myapi.Data;
 using myapi.Endpoints;
 using myapi.Repositories;
-using myshared.Services;
-using myshared.Models;
 using myapi.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
+// Add services to the container. // standard
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// mssql database context and connectionstring
 builder.Services.AddDbContext<MssqlDataContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("Mssql")));
 
-// controllers
-//builder.Services.AddScoped<EnvironmentVariableService>();
-//builder.Services.AddScoped<BackupService>();
+// nosql database context and connectionstring/section in appsettings.cs
+builder.Services.AddScoped<NosqlDataContext>();
+builder.Services.Configure<NosqlDataContext>(
+	builder.Configuration.GetSection("NosqlDatabase"));
 
+// add services
+builder.Services.AddScoped<ExampleService>();
+//builder.Services.AddSingleton<ExampleService>();
+
+// add repositories
+builder.Services.AddScoped<ExampleModelRepository>();
+builder.Services.AddScoped<ExampleMssqlRepository>();
+builder.Services.AddScoped<ExampleNosqlRepository>();
+
+// to run/deploy 2 projects in a single app
 builder.Services.Configure<IISOptions>(options =>
 {
 	options.ForwardClientCertificate = false;
 });
 
+// controllers
+//builder.Services.AddScoped<EnvironmentVariableService>();
+//builder.Services.AddScoped<BackupService>();
+
 // minimal api
 //builder.Services.AddDbContext<DataContext>(opt => opt.UseInMemoryDatabase("PortfolioProjects"));
 
-// nosql start
-builder.Services.AddScoped<NosqlDataContext>();
-builder.Services.Configure<NosqlDataContext>(
-	builder.Configuration.GetSection("NosqlDatabase"));
-
-builder.Services.AddScoped<ExampleService>();
-
-//builder.Services.AddSingleton<ExampleService>();
-
-// nosql end
-
-builder.Services.AddScoped<ExampleModelRepository>();
-
+// build app
 var app = builder.Build();
 
 // update-database on build
@@ -51,17 +52,16 @@ using (var scope = app.Services.CreateScope())
 {
 	var services = scope.ServiceProvider;
 
-	//var backupService = services.GetRequiredService<BackupService>();
-	//backupService.BackupDb();
+	// check nosql db if db and collections exists, if not, create
+	var nosqlcontext = services.GetRequiredService<NosqlDataContext>();
+	nosqlcontext.CheckNosqlDbState();
 
+	// using your manually created migrations, automatically runs update-database 
 	var context = services.GetRequiredService<MssqlDataContext>();
-
-    // using your manually created migrations, automatically runs update-database 
     context.Database.Migrate();
 
 	// runs update-database without the need for migrations
 	//MigrateDatabaseToLatestVersion.Execute(context, new DbMigrationsOptions { AutomaticMigrationDataLossAllowed = true });
-
 
 	//context.Database.EnsureCreated();
 	//context.Database.Migrate();
@@ -89,9 +89,8 @@ using (var scope = app.Services.CreateScope())
 
 	//Console.WriteLine(envVarService.GetConnStr()); 
 
-	// check nosql db if db and collections exists, if not, create
-	var nosqlcontext = services.GetRequiredService<NosqlDataContext>();
-	nosqlcontext.CheckNosqlDbState();
+	//var backupService = services.GetRequiredService<BackupService>();
+	//backupService.BackupDb();
 }
 
 // Configure the HTTP request pipeline. 
@@ -110,7 +109,6 @@ app.UseAuthorization();
 
 // minimal api endpoints - outcomment this and incomment above to use controllers ^
 app.MapExampleModelEndpoints();
-
 /*app.MapGroup("/portfolioprojects")
 	.MapPortfolioProjectsEndpoints()
 	.WithTags("Public");*/
