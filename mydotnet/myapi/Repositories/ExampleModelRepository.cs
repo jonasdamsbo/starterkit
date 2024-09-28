@@ -6,7 +6,7 @@ using myshared.Models;
 
 namespace myapi.Repositories
 {
-	public class ExampleModelRepository// : IRepository
+	public class ExampleModelRepository// : IRepository // Combined to be nosql/mssql agnostic
 	{
 		//private readonly MssqlDataContext _context;
 		//private readonly NosqlDataContext _context;
