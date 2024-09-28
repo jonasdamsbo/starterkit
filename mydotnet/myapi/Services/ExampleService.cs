@@ -36,6 +36,7 @@ namespace myapi.Services
 		public async Task<ExampleDTO> AddAsync(ExampleDTO exampleDTO)
 		{
 			var exampleModel = new ExampleModel(exampleDTO);
+
 			exampleModel = await _exampleModelRepository.AddAsync(exampleModel);
 
 			if(exampleModel == null) return null;

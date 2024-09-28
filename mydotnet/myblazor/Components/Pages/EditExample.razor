@@ -9,14 +9,14 @@
 	<PageTitle>Add a new project</PageTitle>
 	<h3>Add a new project</h3>
 
-	<EditForm Model="CurrentProject" OnSubmit="HandleSubmit">
+	<EditForm Model="CurrentProjectDTO" OnSubmit="HandleSubmit">
 		<div>
 			<label for="title">Title</label>
-			<InputText id="title" @bind-Value="CurrentProject.Title" class="form-control" />
+			<InputText id="title" @bind-Value="CurrentProjectDTO.Title" class="form-control" />
 		</div>
 		<div>
 			<label for="description">Description</label>
-			<InputText id="description" @bind-Value="CurrentProject.Description" class="form-control" />
+			<InputText id="description" @bind-Value="CurrentProjectDTO.Description" class="form-control" />
 		</div>
 		@*<div>
 			<label for="weburl">WebUrl</label>
@@ -103,10 +103,12 @@ else
 			var APIURL = EnvironmentVariableService.GetEnvironmentVariable("MyAppSettings:APIURL");
 
 			HttpClient httpClient = new HttpClient();
-			string jsonContent = JsonConvert.SerializeObject(CurrentProject);
+			CurrentProjectDTO.Id = "0";
+			string jsonContent = JsonConvert.SerializeObject(CurrentProjectDTO);
 			HttpContent httpContent = new StringContent(jsonContent);
 			httpContent.Headers.ContentType.MediaType = "application/json";
 			response = await httpClient.PostAsync(APIURL + "api/ExampleModel/", httpContent);
+
 			httpClient.Dispose();
 
 			NavigationManager.NavigateTo("/example");

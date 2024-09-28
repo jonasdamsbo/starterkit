@@ -55,9 +55,9 @@ namespace myapi.Controllers // controllers
 		// POST: api/ExampleModel
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPost]
-        public async Task<ActionResult<ExampleDTO>> AddAsync(ExampleDTO exampleDTO)
+        public async Task<ActionResult<ExampleDTO>> AddAsync(ExampleDTO exampleDTO, ExampleService exampleService)
         {
-            var example = await _exampleService.AddAsync(exampleDTO);
+            var example = await exampleService.AddAsync(exampleDTO);
 
 			if (example == null) return BadRequest();
 

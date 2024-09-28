@@ -13,7 +13,7 @@ namespace myapi.Repositories
 		private readonly dynamic _context;
 
 		// repo is database agnostic, flip to use nosql/mssql database
-		public ExampleModelRepository(NosqlDataContext context/*MssqlDataContext context*//*NosqlDataContext context*/)
+		public ExampleModelRepository(MssqlDataContext context/*MssqlDataContext context*//*NosqlDataContext context*/)
 		{
 			_context = context;
 		}
@@ -72,9 +72,9 @@ namespace myapi.Repositories
 				_context.Add(newModel);
 				await _context.SaveChangesAsync();*/
 				//await _context.ExampleModels.InsertOneAsync(newModel);
+				newModel.Id = ObjectId.GenerateNewId().ToString();
 				if (_context is MssqlDataContext)
 				{
-					newModel.Id = ObjectId.GenerateNewId().ToString();
 					(_context as MssqlDataContext).Add(newModel);
 					await (_context as MssqlDataContext).SaveChangesAsync();
 				}
