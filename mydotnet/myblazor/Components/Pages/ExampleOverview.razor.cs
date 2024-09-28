@@ -39,13 +39,39 @@ namespace myblazor.Components.Pages
 			/*await Task.Delay(500);
 			projects = await PortfolioService.GetAllProjectsAsync();*/
 
+			// use this to use inmemory examples until syncing with db examples 1/2
+			examples = EnvironmentVariableService.Examples;
+
 			//controlllers
 			var APIURL = EnvironmentVariableService.GetEnvironmentVariable("MyAppSettings:APIURL");
 			HttpClient httpClient = new HttpClient();
 			response = await httpClient.GetAsync(APIURL + "api/ExampleModel");
 			try
 			{
-				examples = JsonConvert.DeserializeObject<List<ExampleDTO>>(await response.Content.ReadAsStringAsync()) ?? new List<ExampleDTO>();
+				//examples = JsonConvert.DeserializeObject<List<ExampleDTO>>(await response.Content.ReadAsStringAsync()) ?? new List<ExampleDTO>();
+
+				// use this instead to use inmemory examples until syncing with db examples 2/2
+				var newExamples = JsonConvert.DeserializeObject<List<ExampleDTO>>(await response.Content.ReadAsStringAsync()) ?? new List<ExampleDTO>();
+				var isEqual = true;
+				if (newExamples.Any() == false && examples.Any() == false) isEqual = true;
+				else if (newExamples.Any() == true && examples.Any() == false) isEqual = false;
+				else if ((newExamples.Any() == false && examples.Any() == true)) isEqual = false;
+				else if (newExamples.Count != examples.Count) isEqual = false;
+				else if (newExamples.Count == examples.Count)
+				{
+					for (int i = 0; i < newExamples.Count; i++)
+					{
+						if (newExamples[i].Id != examples[i].Id)
+						{
+							isEqual = false;
+						}
+					}
+				}
+				if (!isEqual)
+				{
+					EnvironmentVariableService.Examples = newExamples;
+					examples = newExamples;
+				}
 			}
 			catch (Exception ex)
 			{
@@ -82,6 +108,7 @@ namespace myblazor.Components.Pages
 			// workaround because deleting does not update projects, so it loads forever
 			response = await httpClient.GetAsync(APIURL + "api/ExampleModel");
 			examples = JsonConvert.DeserializeObject<List<ExampleDTO>>(await response.Content.ReadAsStringAsync()) ?? new List<ExampleDTO>();
+			EnvironmentVariableService.Examples = examples;
 			//NavigationManager.NavigateTo("/portfolio");
 			httpClient.Dispose();
 		}

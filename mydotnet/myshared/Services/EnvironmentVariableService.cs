@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using Microsoft.Extensions.Configuration;
+using myshared.DTOs;
 
 namespace myshared.Services
 {
@@ -7,7 +8,10 @@ namespace myshared.Services
     {
         private IConfiguration _configuration;
 
-        public EnvironmentVariableService(IConfiguration configuration)
+		public List<ExampleDTO> Examples { get; set; } = new List<ExampleDTO>();
+
+
+		public EnvironmentVariableService(IConfiguration configuration)
         {
             _configuration = configuration;
         }
