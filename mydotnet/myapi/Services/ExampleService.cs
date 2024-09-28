@@ -18,8 +18,9 @@ namespace myapi.Services
 		{
 			var exampleModels = await _exampleModelRepository.GetAllAsync();
 
-			if (exampleModels.IsNullOrEmpty()) return new List<ExampleDTO>();
-			
+			if (exampleModels == new List<ExampleModel>()) return new List<ExampleDTO>();
+			if (exampleModels is null) return null;
+
 			var exampleDTOs = exampleModels.Select(x => new ExampleDTO(x)).ToList();
 			return exampleDTOs;
 		}
@@ -28,7 +29,8 @@ namespace myapi.Services
 		{
 			var exampleModel = await _exampleModelRepository.GetByIdAsync(id);
 
-			if(exampleModel == null) return null;
+			if (exampleModel == new ExampleModel()) return new ExampleDTO();
+			if (exampleModel is null) return null;
 
 			return new ExampleDTO(exampleModel);
 		}
@@ -39,7 +41,9 @@ namespace myapi.Services
 
 			exampleModel = await _exampleModelRepository.AddAsync(exampleModel);
 
-			if(exampleModel == null) return null;
+			if (exampleModel == new ExampleModel()) return new ExampleDTO();
+			if (exampleModel is null) return null;
+
 			return new ExampleDTO(exampleModel);
 		}
 
@@ -48,7 +52,9 @@ namespace myapi.Services
 			var updatedExampleModel = new ExampleModel(updatedExampleDTO);
 			updatedExampleModel = await _exampleModelRepository.UpdateAsync(id, updatedExampleModel);
 
-			if(updatedExampleModel == null) return null;
+			if (updatedExampleModel == new ExampleModel()) return new ExampleDTO();
+			if (updatedExampleModel is null) return null;
+
 			return new ExampleDTO(updatedExampleModel);
 		}
 
@@ -56,7 +62,9 @@ namespace myapi.Services
 		{
 			var exampleModel = await _exampleModelRepository.DeleteAsync(id);
 
-			if(exampleModel == null) return null;
+			if (exampleModel == new ExampleModel()) return new ExampleDTO();
+			if (exampleModel is null) return null;
+
 			return new ExampleDTO(exampleModel);
 		}
 	}

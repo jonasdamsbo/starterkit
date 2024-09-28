@@ -32,11 +32,13 @@ namespace myapi.Repositories
 				}
 				else examples = await (_context as NosqlDataContext).ExampleModels.Find(_ => true).ToListAsync();
 
+				if(examples is null) return new List<ExampleModel>();
+
 				return examples;
 			}
 			catch (Exception ex)
 			{
-				return new List<ExampleModel>();
+				return null;
 				//throw;
 			}
 		}
@@ -54,6 +56,8 @@ namespace myapi.Repositories
 					example = await (_context as MssqlDataContext).ExampleModels.FindAsync(id);
 				}
 				else example = await (_context as NosqlDataContext).ExampleModels.Find(x => x.Id == id.ToString()).FirstOrDefaultAsync();
+
+				if (example is null) return new ExampleModel();
 
 				return example;
 			}
@@ -81,6 +85,9 @@ namespace myapi.Repositories
 				else await (_context as NosqlDataContext).ExampleModels.InsertOneAsync(newModel);
 
 				var example = await GetByIdAsync(newModel.Id);
+
+				if (example is null) return new ExampleModel();
+
 				return example;
 			}
 			catch (Exception ex)
@@ -112,6 +119,9 @@ namespace myapi.Repositories
 
 					example = await GetByIdAsync(id);
 				}
+
+				if (example is null) return new ExampleModel();
+
 				return example;
 			}
 			catch (Exception ex)
@@ -138,6 +148,9 @@ namespace myapi.Repositories
 					}
 					else await (_context as NosqlDataContext).ExampleModels.DeleteOneAsync(x => x.Id == id.ToString());
 				}
+
+				if (example is null) return new ExampleModel();
+
 				return example;
 			}
 			catch (Exception ex)

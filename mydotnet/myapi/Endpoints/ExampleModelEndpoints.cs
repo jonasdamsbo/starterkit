@@ -24,7 +24,8 @@ namespace myapi.Endpoints // minimal apis
 		{
 			var examples = await exampleService.GetAllAsync();
 
-			if (examples.IsNullOrEmpty()) return TypedResults.BadRequest();
+			if (examples == new List<ExampleDTO>()) return TypedResults.NotFound();
+			if (examples is null) return TypedResults.BadRequest();
 
 			return TypedResults.Ok(examples);
 		}
@@ -33,7 +34,8 @@ namespace myapi.Endpoints // minimal apis
 		{
 			var example = await exampleService.GetByIdAsync(id);
 
-			if (example is null) return TypedResults.NotFound();
+			if (example == new ExampleDTO()) return TypedResults.NotFound();
+			if (example is null) return TypedResults.BadRequest();
 
 			return TypedResults.Ok(example);
 		}
@@ -42,6 +44,7 @@ namespace myapi.Endpoints // minimal apis
 		{
 			var example = await exampleService.AddAsync(exampleDTO);
 
+			if (example == new ExampleDTO()) return TypedResults.NotFound();
 			if (example is null) return TypedResults.BadRequest();
 
 			return TypedResults.Created($"/ExampleModel/{exampleDTO.Id}", exampleDTO);
@@ -49,9 +52,10 @@ namespace myapi.Endpoints // minimal apis
 
 		static async Task<IResult> UpdateAsync(string id, ExampleDTO updatedExampleDTO, ExampleService exampleService)
 		{
-			var exampleDTO = await exampleService.UpdateAsync(id, updatedExampleDTO);
+			var example = await exampleService.UpdateAsync(id, updatedExampleDTO);
 
-			if (exampleDTO is null) return TypedResults.BadRequest();
+			if (example == new ExampleDTO()) return TypedResults.NotFound();
+			if (example is null) return TypedResults.BadRequest();
 
 			return TypedResults.NoContent();
 		}
@@ -60,6 +64,7 @@ namespace myapi.Endpoints // minimal apis
 		{
 			var example = await exampleService.DeleteAsync(id);
 
+			if (example == new ExampleDTO()) return TypedResults.NotFound();
 			if (example is null) return TypedResults.BadRequest();
 
 			return TypedResults.NoContent();

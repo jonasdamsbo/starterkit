@@ -23,7 +23,8 @@ namespace myapi.Controllers // controllers
         {
             var examples = await _exampleService.GetAllAsync();
 
-            if (examples.IsNullOrEmpty()) return BadRequest();
+			if (examples == new List<ExampleDTO>()) return NotFound();
+			if (examples is null) return BadRequest();
 
 			return Ok(examples);
 
@@ -35,10 +36,24 @@ namespace myapi.Controllers // controllers
         {
             var example = await _exampleService.GetByIdAsync(id);
 
-			if (example is null) return NotFound();
+			if (example == new ExampleDTO()) return NotFound();
+			if (example is null) return BadRequest();
 
 			return Ok(example);
         }
+
+		// POST: api/ExampleModel
+		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[HttpPost]
+		public async Task<ActionResult<ExampleDTO>> AddAsync(ExampleDTO exampleDTO, ExampleService exampleService)
+		{
+			var example = await exampleService.AddAsync(exampleDTO);
+
+			if (example == new ExampleDTO()) return NotFound();
+			if (example is null) return BadRequest();
+
+			return CreatedAtAction("GetExampleModel", new { id = exampleDTO.Id }, exampleDTO);
+		}
 
 		// PUT: api/ExampleModel/5
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -47,21 +62,10 @@ namespace myapi.Controllers // controllers
         {
             var example = await _exampleService.UpdateAsync(id, exampleDTO);
 
-			if (example == null) return BadRequest();
+			if (example == new ExampleDTO()) return NotFound();
+			if (example is null) return BadRequest();
 
 			return NoContent();
-        }
-
-		// POST: api/ExampleModel
-		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-		[HttpPost]
-        public async Task<ActionResult<ExampleDTO>> AddAsync(ExampleDTO exampleDTO, ExampleService exampleService)
-        {
-            var example = await exampleService.AddAsync(exampleDTO);
-
-			if (example == null) return BadRequest();
-
-			return CreatedAtAction("GetExampleModel", new { id = exampleDTO.Id }, exampleDTO);
         }
 
 		// DELETE: api/ExampleModel/5
@@ -70,7 +74,8 @@ namespace myapi.Controllers // controllers
         {
             var example = await _exampleService.DeleteAsync(id);
 
-			if (example == null) return BadRequest();
+			if (example == new ExampleDTO()) return NotFound();
+			if (example is null) return BadRequest();
 
 			return NoContent();
         }
