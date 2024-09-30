@@ -61,7 +61,9 @@ namespace myblazor.Components.Pages
 				{
 					for (int i = 0; i < newExamples.Count; i++)
 					{
-						if (newExamples[i].Id != examples[i].Id)
+						if (newExamples[i].Id != examples[i].Id 
+							|| newExamples[i].Title != examples[i].Title 
+							|| newExamples[i].Description != examples[i].Description)
 						{
 							isEqual = false;
 						}

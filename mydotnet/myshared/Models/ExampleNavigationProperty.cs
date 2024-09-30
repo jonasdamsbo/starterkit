@@ -1,14 +1,14 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson;
 using myshared.DTOs;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
+using System.ComponentModel.DataAnnotations;
 
 namespace myshared.Models
 {
-    public class ExampleModel // Combined to be nosql/mssql agnostic
-    {
+    public class ExampleNavigationProperty // Combined to be nosql/mssql agnostic
+	{
 		// primary key
 		[Key] // required for mssql
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)] // required for mssql
@@ -17,14 +17,11 @@ namespace myshared.Models
 		public string Id { get; set; }
 		[BsonElement("Title")] // required for nosql
 		public string? Title { get; set; }
-        public string? Description { get; set; }
-        public string? WebUrl { get; set; }
 
+		// foreign key
 		[JsonIgnore] // required for mssql
-		public virtual List<ExampleNavigationProperty> ExampleNavigationProperty { get; set; }
-
-		public ExampleModel() { }
-		public ExampleModel(ExampleDTO exampleDTO) =>
-		(Id, Title, Description) = (exampleDTO.Id, exampleDTO.Title, exampleDTO.Description);
+		public virtual ExampleModel ExampleModel { get; set; }
+		[ForeignKey(nameof(ExampleModel))] // required for mssql
+		public string ExampleModelId { get; set; }
 	}
 }

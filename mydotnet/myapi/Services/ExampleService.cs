@@ -8,15 +8,24 @@ namespace myapi.Services
 	public class ExampleService
 	{
 		private ExampleModelRepository _exampleModelRepository;
+		private ExampleNavigationPropertyRepository _exampleNavigationPropertyRepository;
+		//private bool sql = true;
 
-		public ExampleService(ExampleModelRepository exampleModelRepository)
+		public ExampleService(
+			ExampleModelRepository exampleModelRepository, 
+			ExampleNavigationPropertyRepository exampleNavigationPropertyRepository
+		)
 		{
 			_exampleModelRepository = exampleModelRepository;
+			_exampleNavigationPropertyRepository = exampleNavigationPropertyRepository;
 		}
 
 		public async Task<List<ExampleDTO>> GetAllAsync()
 		{
-			var exampleModels = await _exampleModelRepository.GetAllAsync();
+			var exampleModels = await _exampleModelRepository.GetAllAsync(); 
+			if(exampleModels.First().ExampleNavigationProperty.IsNullOrEmpty()) exampleModels.ForEach(async x => x.ExampleNavigationProperty = await _exampleNavigationPropertyRepository.GetAllRelatedToIdAsync(x.Id)); // required for mssql
+			//if (sql) exampleModels.ForEach(async x => x.ExampleNavigationProperty = await _exampleNavigationPropertyRepository.GetAllRelatedToIdAsync(x.Id)); // required for mssql
+
 
 			if (exampleModels == new List<ExampleModel>()) return new List<ExampleDTO>();
 			if (exampleModels is null) return null;
@@ -28,6 +37,8 @@ namespace myapi.Services
 		public async Task<ExampleDTO?> GetByIdAsync(string id)
 		{
 			var exampleModel = await _exampleModelRepository.GetByIdAsync(id);
+			if (exampleModel.ExampleNavigationProperty.IsNullOrEmpty()) exampleModel.ExampleNavigationProperty = await _exampleNavigationPropertyRepository.GetAllRelatedToIdAsync(exampleModel.Id); // required for mssql
+			//if (sql) exampleModel.ExampleNavigationProperty = await _exampleNavigationPropertyRepository.GetAllRelatedToIdAsync(exampleModel.Id); // required for mssql
 
 			if (exampleModel == new ExampleModel()) return new ExampleDTO();
 			if (exampleModel is null) return null;

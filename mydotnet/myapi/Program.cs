@@ -20,7 +20,8 @@ builder.Services.AddSwaggerGen(c =>
 
 // mssql database context and connectionstring
 builder.Services.AddDbContext<MssqlDataContext>(options =>
-	options.UseSqlServer(builder.Configuration.GetConnectionString("Mssql")));
+	options.UseSqlServer(builder.Configuration.GetConnectionString("Mssql"))
+	.EnableSensitiveDataLogging(true));
 
 // nosql database context and connectionstring/section in appsettings.cs
 builder.Services.AddScoped<NosqlDataContext>();
@@ -33,8 +34,7 @@ builder.Services.AddScoped<ExampleService>();
 
 // add repositories
 builder.Services.AddScoped<ExampleModelRepository>();
-builder.Services.AddScoped<ExampleMssqlRepository>();
-builder.Services.AddScoped<ExampleNosqlRepository>();
+builder.Services.AddScoped<ExampleNavigationPropertyRepository>();
 
 // to run/deploy 2 projects in a single app
 builder.Services.Configure<IISOptions>(options =>
@@ -58,7 +58,7 @@ using (var scope = app.Services.CreateScope())
 
 	// check nosql db if db and collections exists, if not, create
 	var nosqlcontext = services.GetRequiredService<NosqlDataContext>();
-	nosqlcontext.CheckNosqlDbState();
+	nosqlcontext.Initialize();
 
 	// using your manually created migrations, automatically runs update-database 
 	var context = services.GetRequiredService<MssqlDataContext>();
@@ -109,10 +109,10 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 // controllers - incomment this and outcomment below to use controllers v
-//app.MapControllers();
+app.MapControllers();
 
 // minimal api endpoints - outcomment this and incomment above to use controllers ^
-app.MapExampleModelEndpoints();
+//app.MapExampleModelEndpoints();
 /*app.MapGroup("/portfolioprojects")
 	.MapPortfolioProjectsEndpoints()
 	.WithTags("Public");*/

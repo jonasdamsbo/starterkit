@@ -22,10 +22,11 @@ namespace myapi.Repositories
 		{
 			try
 			{
-				var examples = new List<ExampleModel>();
 
-				//examples = await _context.ExampleModels.ToListAsync();
-				//examples = await (_context as NosqlDataContext).ExampleModels.Find(_ => true).ToListAsync();
+				//
+				//var examples = await _context.ExampleModels.ToListAsync();
+				//var examples = await (_context as NosqlDataContext).ExampleModels.Find(_ => true).ToListAsync();
+				var examples = new List<ExampleModel>();
 				if (_context is MssqlDataContext)
 				{
 					examples = await (_context as MssqlDataContext).ExampleModels.ToListAsync();
@@ -47,10 +48,11 @@ namespace myapi.Repositories
 		{
 			try
 			{
-				ExampleModel example = new ExampleModel();
 
-				//example = await _context.ExampleModels.FindAsync(id);
-				//example = await _context.ExampleModels.Find(x => x.Id == id.ToString()).FirstOrDefaultAsync();
+				//
+				//var example = await _context.ExampleModels.FindAsync(id);
+				//var example = await _context.ExampleModels.Find(x => x.Id == id.ToString()).FirstOrDefaultAsync();
+				ExampleModel example = new ExampleModel();
 				if (_context is MssqlDataContext)
 				{
 					example = await (_context as MssqlDataContext).ExampleModels.FindAsync(id);
@@ -72,11 +74,12 @@ namespace myapi.Repositories
 		{
 			try
 			{
-				/*newModel.Id = ObjectId.GenerateNewId().ToString();
-				_context.Add(newModel);
+				newModel.Id = ObjectId.GenerateNewId().ToString();
+
+				//
+				/*_context.Add(newModel);
 				await _context.SaveChangesAsync();*/
 				//await _context.ExampleModels.InsertOneAsync(newModel);
-				newModel.Id = ObjectId.GenerateNewId().ToString();
 				if (_context is MssqlDataContext)
 				{
 					(_context as MssqlDataContext).Add(newModel);
@@ -101,6 +104,8 @@ namespace myapi.Repositories
 		{
 			try
 			{
+
+				//
 				var example = await GetByIdAsync(id);
 				if (example != null)
 				{
@@ -135,6 +140,8 @@ namespace myapi.Repositories
 		{
 			try
 			{
+
+				//
 				var example = await GetByIdAsync(id);
 				if (example != null)
 				{
