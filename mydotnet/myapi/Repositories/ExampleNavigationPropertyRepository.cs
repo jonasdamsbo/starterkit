@@ -140,8 +140,9 @@ namespace myapi.Repositories
 				else
 				{
 					var exampleModel = await (_context as NosqlDataContext).ExampleModels.Find(x => x.Id == newModel.ExampleModelId.ToString()).FirstOrDefaultAsync();
+					newModel.ExampleModelId = exampleModel.Id;
 					exampleModel.ExampleNavigationProperty.Add(newModel);
-					await (_context as NosqlDataContext).ExampleModels.ReplaceOneAsync(x => x.Id == newModel.ExampleModelId.ToString(), exampleModel);
+					await (_context as NosqlDataContext).ExampleModels.ReplaceOneAsync(x => x.Id == exampleModel.Id, exampleModel);
 					//await (_context as NosqlDataContext).ExampleNavigationProperties.InsertOneAsync(newModel);
 				}
 
