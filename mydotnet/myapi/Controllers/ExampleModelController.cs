@@ -11,10 +11,12 @@ namespace myapi.Controllers // controllers
     public class ExampleModelController : ControllerBase
     {
         private readonly ExampleService _exampleService;
+		private readonly ExampleNavPropService _exampleNavPropService;
 
-		public ExampleModelController(ExampleService exampleService)
+		public ExampleModelController(ExampleService exampleService, ExampleNavPropService exampleNavPropService)
         {
             _exampleService = exampleService;
+			_exampleNavPropService = exampleNavPropService;
 		}
 
         // GET: api/ExampleModel
@@ -24,6 +26,19 @@ namespace myapi.Controllers // controllers
             var examples = await _exampleService.GetAllAsync();
 
 			if (examples == new List<ExampleDTO>()) return NotFound();
+			if (examples is null) return BadRequest();
+
+			return Ok(examples);
+
+		}
+
+		// GET: api/ExampleModel
+		[HttpGet("ExampleNavigationProperty")]
+		public async Task<ActionResult<IEnumerable<ExampleDTO>>> GetAllNavPropsAsync()
+		{
+			var examples = await _exampleNavPropService.GetAllAsync();
+
+			if (examples == new List<ExampleNavigationProperty>()) return NotFound();
 			if (examples is null) return BadRequest();
 
 			return Ok(examples);

@@ -25,6 +25,6 @@ namespace myshared.Models
 
 		public ExampleModel() { }
 		public ExampleModel(ExampleDTO exampleDTO) =>
-		(Id, Title, Description) = (exampleDTO.Id, exampleDTO.Title, exampleDTO.Description);
+		(Id, Title, Description, ExampleNavigationProperty) = (exampleDTO.Id, exampleDTO.Title, exampleDTO.Description, exampleDTO.ExampleNavigationProperty);
 	}
 }

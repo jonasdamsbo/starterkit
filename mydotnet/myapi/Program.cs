@@ -8,7 +8,10 @@ using myapi.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container. // standard
+
+// controller - outcomment to use endpoints v
 builder.Services.AddControllers();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 //builder.Services.AddSwaggerGen();
@@ -30,6 +33,7 @@ builder.Services.Configure<NosqlDataContext>(
 
 // add services
 builder.Services.AddScoped<ExampleService>();
+builder.Services.AddScoped<ExampleNavPropService>();
 //builder.Services.AddSingleton<ExampleService>();
 
 // add repositories
@@ -106,9 +110,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
 
 // controllers - incomment this and outcomment below to use controllers v
+app.UseAuthorization();
 app.MapControllers();
 
 // minimal api endpoints - outcomment this and incomment above to use controllers ^

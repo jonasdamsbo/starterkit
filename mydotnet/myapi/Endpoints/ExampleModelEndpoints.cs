@@ -14,6 +14,7 @@ namespace myapi.Endpoints // minimal apis
 		{
 			var group = app.MapGroup("api/ExampleModel");
 			group.MapGet("/", GetAllAsync);
+			group.MapGet("/ExampleNavigationProperty", GetAllNavPropsAsync);
 			group.MapGet("/{id}", GetByIdAsync);
 			group.MapPost("/", AddAsync);
 			group.MapPut("/{id}", UpdateAsync);
@@ -25,6 +26,16 @@ namespace myapi.Endpoints // minimal apis
 			var examples = await exampleService.GetAllAsync();
 
 			if (examples == new List<ExampleDTO>()) return TypedResults.NotFound();
+			if (examples is null) return TypedResults.BadRequest();
+
+			return TypedResults.Ok(examples);
+		}
+
+		static async Task<IResult> GetAllNavPropsAsync(ExampleNavPropService exampleNavPropService)
+		{
+			var examples = await exampleNavPropService.GetAllAsync();
+
+			if (examples == new List<ExampleNavigationProperty>()) return TypedResults.NotFound();
 			if (examples is null) return TypedResults.BadRequest();
 
 			return TypedResults.Ok(examples);
