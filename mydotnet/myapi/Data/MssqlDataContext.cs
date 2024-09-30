@@ -38,7 +38,7 @@ namespace myapi.Data
 			exampleList.Add(new ExampleModel { Id = ObjectId.GenerateNewId().ToString(), Title = "Third project", Description = "Alot of fun", WebUrl = "google.dk", ExampleNavigationProperty = new List<ExampleNavigationProperty>() });
 
             navPropList.Add(new ExampleNavigationProperty { Id = ObjectId.GenerateNewId().ToString(), Title = "First navprop", ExampleModelId = exampleList[0].Id });
-            navPropList.Add(new ExampleNavigationProperty { Id = ObjectId.GenerateNewId().ToString(), Title = "Second navprop", ExampleModelId = exampleList[1].Id });
+            navPropList.Add(new ExampleNavigationProperty { Id = ObjectId.GenerateNewId().ToString(), Title = "Second navprop", ExampleModelId = exampleList[0].Id });
             navPropList.Add(new ExampleNavigationProperty { Id = ObjectId.GenerateNewId().ToString(), Title = "Third navprop", ExampleModelId = exampleList[1].Id });
 
             //exampleList[0].ExampleNavigationProperty.Add(navPropList[0]);
