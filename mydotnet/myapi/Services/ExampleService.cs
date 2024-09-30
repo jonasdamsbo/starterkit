@@ -23,7 +23,7 @@ namespace myapi.Services
 		public async Task<List<ExampleDTO>> GetAllAsync()
 		{
 			var exampleModels = await _exampleModelRepository.GetAllAsync(); 
-			if(exampleModels.First().ExampleNavigationProperty.IsNullOrEmpty()) exampleModels.ForEach(async x => x.ExampleNavigationProperty = await _exampleNavigationPropertyRepository.GetAllRelatedToIdAsync(x.Id)); // required for mssql
+			if(exampleModels.First().ExampleNavigationProperty.IsNullOrEmpty()) exampleModels.ForEach(x => x.ExampleNavigationProperty = _exampleNavigationPropertyRepository.GetAllRelatedToIdAsync(x.Id).GetAwaiter().GetResult()); // required for mssql
 			//if (sql) exampleModels.ForEach(async x => x.ExampleNavigationProperty = await _exampleNavigationPropertyRepository.GetAllRelatedToIdAsync(x.Id)); // required for mssql
 
 

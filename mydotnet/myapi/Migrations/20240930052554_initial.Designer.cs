@@ -11,7 +11,7 @@ using myapi.Data;
 namespace myapi.Migrations
 {
     [DbContext(typeof(MssqlDataContext))]
-    [Migration("20240929122719_initial")]
+    [Migration("20240930052554_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -46,21 +46,21 @@ namespace myapi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "66f947a6f07409117ffa68e4",
+                            Id = "66fa36617d14c57921515156",
                             Description = "Alot of fun",
                             Title = "First project",
                             WebUrl = "google.dk"
                         },
                         new
                         {
-                            Id = "66f947a6f07409117ffa68e5",
+                            Id = "66fa36617d14c57921515157",
                             Description = "Alot of fun",
                             Title = "Second project",
                             WebUrl = "google.dk"
                         },
                         new
                         {
-                            Id = "66f947a6f07409117ffa68e6",
+                            Id = "66fa36617d14c57921515158",
                             Description = "Alot of fun",
                             Title = "Third project",
                             WebUrl = "google.dk"
@@ -89,20 +89,20 @@ namespace myapi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "66f947a6f07409117ffa68e7",
-                            ExampleModelId = "66f947a6f07409117ffa68e4",
+                            Id = "66fa36617d14c57921515159",
+                            ExampleModelId = "66fa36617d14c57921515156",
                             Title = "First navprop"
                         },
                         new
                         {
-                            Id = "66f947a6f07409117ffa68e8",
-                            ExampleModelId = "66f947a6f07409117ffa68e5",
+                            Id = "66fa36617d14c5792151515a",
+                            ExampleModelId = "66fa36617d14c57921515156",
                             Title = "Second navprop"
                         },
                         new
                         {
-                            Id = "66f947a6f07409117ffa68e9",
-                            ExampleModelId = "66f947a6f07409117ffa68e5",
+                            Id = "66fa36617d14c5792151515b",
+                            ExampleModelId = "66fa36617d14c57921515157",
                             Title = "Third navprop"
                         });
                 });
