@@ -107,7 +107,7 @@ else
 			string jsonContent = JsonConvert.SerializeObject(CurrentProjectDTO);
 			HttpContent httpContent = new StringContent(jsonContent);
 			httpContent.Headers.ContentType.MediaType = "application/json";
-			response = await httpClient.PostAsync(APIURL + "api/ExampleModel/", httpContent);
+			response = await httpClient.PostAsync(APIURL + "api/ExampleModel", httpContent);
 
 			httpClient.Dispose();
 
