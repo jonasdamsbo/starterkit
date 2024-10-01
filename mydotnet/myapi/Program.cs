@@ -35,6 +35,7 @@ builder.Services.Configure<NosqlDataContext>(
 builder.Services.AddScoped<ExampleService>();
 builder.Services.AddScoped<ExampleNavPropService>();
 //builder.Services.AddSingleton<ExampleService>();
+//builder.Services.AddSingleton<ILogger>();
 
 // add repositories
 builder.Services.AddScoped<ExampleModelRepository>();

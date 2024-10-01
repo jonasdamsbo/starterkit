@@ -12,21 +12,22 @@ namespace myapi.Repositories
 		//private readonly MssqlDataContext _context;
 		//private readonly NosqlDataContext _context;
 		private readonly dynamic _context;
-		//private ILogger _log;
+		private ILogger<ExampleNavigationPropertyRepository> _log;
 
 		// repo is database agnostic, flip to use nosql/mssql database
-		public ExampleNavigationPropertyRepository(MssqlDataContext context/*, ILogger log*/)
+		public ExampleNavigationPropertyRepository(MssqlDataContext context, ILogger<ExampleNavigationPropertyRepository> log)
 		{
 			_context = context;
-			//_log = log;
+			_log = log;
 		}
 
-		public async Task<List<ExampleNavigationProperty>> GetAllAsync()
+		public async Task<List<ExampleNavigationProperty>> GetAllAsync(/*, ILogger _log*/)
 		{
 			try
 			{
 
 				//
+				_log.LogInformation("\r\n" + "### Getting all ExampleNavigationProperties ###"+ "\r\n");
 				var examples = new List<ExampleNavigationProperty>();
 				if (_context is MssqlDataContext)
 				{
@@ -47,6 +48,8 @@ namespace myapi.Repositories
 			}
 			catch (Exception ex)
 			{
+				_log.LogError("\r\n" + "### Exception thrown at 'ExampleNavigationPropertyRepository/UpdateAsync/line164' --> " + ex.ToString() + " <-- ###" + "\r\n"); // shown in logs, also in azure
+				//Console.WriteLine("Exception thrown at 'ExampleNavigationPropertyRepository/UpdateAsync/line164': " + ex.ToString()); // shown in app console
 				return null;
 				//throw;
 			}
@@ -161,7 +164,7 @@ namespace myapi.Repositories
 			}
 		}
 
-		public async Task<ExampleNavigationProperty> UpdateAsync(string id, ExampleNavigationProperty updatedModel/*, ILogger _log*/)
+		public async Task<ExampleNavigationProperty> UpdateAsync(string id, ExampleNavigationProperty updatedModel)
 		{
 			try
 			{
@@ -195,8 +198,6 @@ namespace myapi.Repositories
 			}
 			catch (Exception ex)
 			{
-				//_log.LogInformation("Exception thrown at 'ExampleNavigationPropertyRepository/UpdateAsync/line164': " + ex.ToString()); // shown in logs, also in azure
-				//Console.WriteLine("Exception thrown at 'ExampleNavigationPropertyRepository/UpdateAsync/line164': " + ex.ToString()); // shown in app console
 				return null;
 				//throw;
 			}
