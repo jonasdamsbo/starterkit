@@ -12,13 +12,13 @@ namespace myapi.Repositories
 		//private readonly MssqlDataContext _context;
 		//private readonly NosqlDataContext _context;
 		private readonly dynamic _context;
-		private ILogger _log;
+		//private ILogger _log;
 
 		// repo is database agnostic, flip to use nosql/mssql database
-		public ExampleNavigationPropertyRepository(MssqlDataContext context, ILogger log)
+		public ExampleNavigationPropertyRepository(MssqlDataContext context/*, ILogger log*/)
 		{
 			_context = context;
-			_log = log;
+			//_log = log;
 		}
 
 		public async Task<List<ExampleNavigationProperty>> GetAllAsync()
