@@ -61,8 +61,8 @@ using (var scope = app.Services.CreateScope())
 	var services = scope.ServiceProvider;
 
 	// check nosql db if db and collections exists, if not, create
-	//var nosqlcontext = services.GetRequiredService<NosqlDataContext>();
-	//nosqlcontext.Initialize();
+	var nosqlcontext = services.GetRequiredService<NosqlDataContext>();
+	nosqlcontext.Initialize();
 
 	// using your manually created migrations, automatically runs update-database 
 	var context = services.GetRequiredService<MssqlDataContext>();
