@@ -11,11 +11,13 @@ namespace myapi.Repositories
 		//private readonly MssqlDataContext _context;
 		//private readonly NosqlDataContext _context;
 		private readonly dynamic _context;
+		private ILogger<ExampleNavigationPropertyRepository> _log;
 
 		// repo is database agnostic, flip to use nosql/mssql database
-		public ExampleModelRepository(MssqlDataContext context/*MssqlDataContext context*//*NosqlDataContext context*/)
+		public ExampleModelRepository(MssqlDataContext context/*MssqlDataContext context*//*NosqlDataContext context*/, ILogger<ExampleNavigationPropertyRepository> log)
 		{
 			_context = context;
+			_log = log;
 		}
 
 		public async Task<List<ExampleModel>> GetAllAsync()
@@ -24,6 +26,7 @@ namespace myapi.Repositories
 			{
 
 				//
+				_log.LogInformation("\r\n" + "### Getting all ExampleModels ###" + "\r\n");
 				//var examples = await _context.ExampleModels.ToListAsync();
 				//var examples = await (_context as NosqlDataContext).ExampleModels.Find(_ => true).ToListAsync();
 				var examples = new List<ExampleModel>();
