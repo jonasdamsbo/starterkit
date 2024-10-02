@@ -13,8 +13,8 @@ namespace myapi.Repositories
 		private readonly dynamic _context;
 		private ILogger<ExampleNavigationPropertyRepository> _log;
 
-		// repo is database agnostic, flip to use nosql/mssql database
-		public ExampleModelRepository(MssqlDataContext context/*MssqlDataContext context*//*NosqlDataContext context*/, ILogger<ExampleNavigationPropertyRepository> log)
+		// repo is database agnostic, flip to use nosql/mssql database, /*MssqlDataContext context*//*NosqlDataContext context*/
+		public ExampleModelRepository(MssqlDataContext context, ILogger<ExampleNavigationPropertyRepository> log)
 		{
 			_context = context;
 			_log = log;
@@ -24,9 +24,12 @@ namespace myapi.Repositories
 		{
 			try
 			{
-
 				//
-				_log.LogInformation("\r\n" + "### Getting all ExampleModels ###" + "\r\n");
+				_log.LogInformation("### LOG INFORMATION TEST ###");
+				_log.LogWarning("### LOG WARNING TEST ###");
+				_log.LogError("### LOG ERROR TEST ###");
+				//_log.LogInformation("\r\n" + "\r\n" + "### Getting all ExampleModels loginfo ###" + "\r\n");
+				//Console.WriteLine("\r\n" + "### Getting all ExampleModels consolelog ###" + "\r\n");
 				//var examples = await _context.ExampleModels.ToListAsync();
 				//var examples = await (_context as NosqlDataContext).ExampleModels.Find(_ => true).ToListAsync();
 				var examples = new List<ExampleModel>();
@@ -42,6 +45,8 @@ namespace myapi.Repositories
 			}
 			catch (Exception ex)
 			{
+				//_log.LogError("\r\n" + "\r\n" + "### Exception thrown at 'ExampleModelRepository/GetAllAsync/line25' --> " + ex.ToString() + " <-- ###" + "\r\n"); // saved to apptracelogs in azure
+				//Console.WriteLine("Exception thrown at 'ExampleNavigationPropertyRepository/UpdateAsync/line164': " + ex.ToString()); // shown in app console
 				return null;
 				//throw;
 			}

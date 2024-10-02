@@ -23,8 +23,8 @@ builder.Services.AddSwaggerGen(c =>
 
 // mssql database context and connectionstring
 builder.Services.AddDbContext<MssqlDataContext>(options =>
-	options.UseSqlServer(builder.Configuration.GetConnectionString("Mssql"))
-	.EnableSensitiveDataLogging(true));
+	options.UseSqlServer(builder.Configuration.GetConnectionString("Mssql")));
+	//.EnableSensitiveDataLogging(true));
 
 // nosql database context and connectionstring/section in appsettings.cs
 builder.Services.AddScoped<NosqlDataContext>();
