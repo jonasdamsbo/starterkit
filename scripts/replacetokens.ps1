@@ -60,7 +60,13 @@ Write-Host "TOKENS ARE BEING REPLACED"
 
 # check files before
     write-host "printing content of main.tf"
-    write-host (Get-Content -path /**/main.tf -Raw)
+    write-host "path: "+$PWD.Path
+    cd ..
+    write-host "path: "+$PWD.Path
+    cd .terraform
+    write-host "path: "+$PWD.Path
+
+    write-host (Get-Content -path main.tf -Raw)
     write-host "done printing content of main.tf"
 
     # write-host "printing content of appservices.tf"
@@ -113,6 +119,12 @@ write-host "started replacing"
 # replace setcloudvars.ps1 tokens
     #replace values
     #((Get-Content -path setcloudvars.ps1 -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path setcloudvars.ps1
+
+    cd ..
+    write-host "path: "+$PWD.Path
+    cd scripts
+    write-host "path: "+$PWD.Path
+
     ((Get-Content -path setcloudvars.ps1 -Raw) -replace 'tempapiurl',$apiurl) | Set-Content -Path setcloudvars.ps1
     ((Get-Content -path setcloudvars.ps1 -Raw) -replace 'tempnosqlconnectionstring',$nosqlconnectionstring) | Set-Content -Path setcloudvars.ps1
     ((Get-Content -path setcloudvars.ps1 -Raw) -replace 'tempmssqlconnectionstring',$mssqlconnectionstring) | Set-Content -Path setcloudvars.ps1
@@ -130,6 +142,12 @@ write-host "started replacing"
 write-host "done replacing"
 
 # check files after
+
+    cd ..
+    write-host "path: "+$PWD.Path
+    cd .terraform
+    write-host "path: "+$PWD.Path
+
     write-host "printing content of main.tf"
     write-host (Get-Content -path main.tf -Raw)
     write-host "done printing content of main.tf"
@@ -145,6 +163,11 @@ write-host "done replacing"
     write-host "printing content of nosqldatabases.tf"
     write-host (Get-Content -path nosqldatabases.tf -Raw)
     write-host "done printing content of nosqldatabases.tf"
+
+    cd ..
+    write-host "path: "+$PWD.Path
+    cd scripts
+    write-host "path: "+$PWD.Path
 
     write-host "printing content of setcloudvars.ps1"
     write-host (Get-Content -path setcloudvars.ps1 -Raw)
