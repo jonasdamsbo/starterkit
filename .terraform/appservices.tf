@@ -21,7 +21,8 @@ resource "azurerm_windows_web_app" "exampleWebapp" {
   }
 
   app_settings = {
-    "MyAppSettings:APIURL" = "tempapiurl"
+    #"MyAppSettings:APIURL" = "tempapiurl"
+    "ASPNETCORE_ENVIRONMENT" = "Production"
   }
 }
 
@@ -51,15 +52,21 @@ resource "azurerm_windows_web_app" "exampleApiapp" {
   }
 
   app_settings = {
-    "NosqlDatabase:ConnectionString" = "tempnosqlconnectionstring"
-    "NosqlDatabase:DatabaseName" = "tempresourcenamecosmosmongodb"
+    #"NosqlDatabase:ConnectionString" = "tempnosqlconnectionstring"
+    #"NosqlDatabase:DatabaseName" = "tempresourcenamecosmosmongodb"
+
+    # "MyApiSettings:DatabaseName" = "tempresourcenamemssqldatabase"
+    # "MyApiSettings:AzureStorageConnectionString" = "tempmyapisettingsstoragekey"
+    # "MyApiSettings:StorageContainerName" = "tempmyapisettingsstoragecontainer"
+
+    "ASPNETCORE_ENVIRONMENT" = "Production"
   }
 
-  connection_string {
-    name  = "Mssql"
-    type  = "SQLServer"
-    value = "tempsqlconnectionstring"
-  }
+  # connection_string {
+  #   name  = "Mssql"
+  #   type  = "SQLServer"
+  #   value = "tempsqlconnectionstring"
+  # }
 
   # connection_string {
   #   name  = "Nosql"

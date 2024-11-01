@@ -32,14 +32,16 @@ write-host "setting app env vars and db ips"
 $resourceName = "tempresourcename"
 
 # get apiurl for webapp # done in replacefiles.ps1 instead
-# $apiurl = $resourceName+"Apiapp.azurewebsites.net"
+#$apiurl = $resourceName+"Apiapp.azurewebsites.net"
+$apiurl = "tempapiurl"
 
 # get mongodb and mssqldb connectionstrings for apiapp # done in replacefiles.ps1 instead
 # $nosqlconnectionstring = "
 # mongodb+srv://
 # "+$resourceName+":
-# 'P4ssw0rd'
+# 'P%40ssw0rd'
 # @"+$resourceName+"cosmosmongodb.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
+$nosqlconnectionstring = "tempnosqlconnectionstring"
 
 # $sqlconnectionstring = "
 # Server=tcp:"+$resourceName+"sqldbserver.database.windows.net,1433;
@@ -51,13 +53,17 @@ $resourceName = "tempresourcename"
 # TrustServerCertificate=False;
 # Connection Timeout=30;
 # "
+$sqlconnectionstring = "tempsqlconnectionstring"
 
 # get webapp ip for apiapp
-$rg = $resourceName+"resourcegroup"
-$rg = $rg.Replace(" ","")
+# $rg = $resourceName+"resourcegroup"
+# $rg = $rg.Replace(" ","")
+$rg = "tempresourcegroupname"
 
-$wa = $resourceName+"webapp"
-$wa = $wa.Replace(" ","")
+# $wa = $resourceName+"webapp"
+# $wa = $wa.Replace(" ","")
+$wa = "tempwebappname"
+
 $webappip = az webapp config hostname get-external-ip --resource-group $rg --webapp-name $wa --query "[ip]"
 $webappip = $webappip.Trim("[","]")
 $webappip = $webappip.Replace("[","")
@@ -72,8 +78,10 @@ $webappipnobackslash = $webappip.Replace("/32","")
 # nslookup $projectName+".azurewebsites.net"
 
 # get api ip for databases
-$wa = $resourceName+"apiapp"
-$wa = $wa.Replace(" ","")
+# $wa = $resourceName+"apiapp"
+# $wa = $wa.Replace(" ","")
+$wa = "tempapiappname"
+
 $apiappip = az webapp config hostname get-external-ip --resource-group $rg --webapp-name $wa --query "[ip]"
 $apiappip = $apiappip.Trim("[","]")
 $apiappip = $apiappip.Replace("[","")
@@ -84,26 +92,49 @@ $apiappip = $apiappip.Replace(" ","")
 $apiappipnobackslash = $apiappip.Replace("/32","")
 
 
+# add backupdbservice environmentvars
+# $apiappname = $resourceName+"apiapp"
+$apiappname = "tempapiappname"
+# $mssqlname = $resourceName+"mssqldatabase"
+$mssqlname = "tempmssqldatabasename"
+# $storageaccountName = $resourceName+"storageaccount"
+$storageaccountName = "tempstorageaccountname"
+$storagekey = az storage account keys list -g $rg -n $storageaccountName --query "[0].value"
+# $containername = "dbbackup"
+$containername = "tempdbbackupcontainername"
+az webapp config appsettings set -g $rg -n $apiappname --settings "MyApiSettings:DatabaseName"=$mssqlname
+az webapp config appsettings set -g $rg -n $apiappname --settings "MyApiSettings:AzureStorageConnectionString"=$storagekey
+az webapp config appsettings set -g $rg -n $apiappname --settings "MyApiSettings:StorageContainerName"=$containername
+
 # add apiurl to webapp
-#$webappname = $resourcename+"Webapp" # done in replacefiles instead
-#az webapp config appsettings set -g $rg -n $webappname --settings "APIURL"=$apiurl # set in cloud
+# $webappname = $resourceName+"Webapp" # done in replacefiles instead
+$webappname = "tempwebappname"
+az webapp config appsettings set -g $rg -n $webappname --settings "APIURL"=$apiurl # set in cloud
 
 # add connectionstrings to api
-$apiappname = $resourcename+"apiapp" # done in replacefiles instead
+#$apiappname = $resourceName+"apiapp" # done in replacefiles instead
 #az webapp config connection-string set -g $rg -n $apiappname -t "SQLServer" --settings Mssql=$sqlconnectionstring # set in cloud
 #az webapp config connection-string set -g $rg -n $apiappname -t "DocDb" --settings Nosql=$nosqlconnectionstring # set in cloud
+az webapp config connection-string set -g $rg -n $apiappname -t "SQLServer" --settings Mssql=$sqlconnectionstring
+az webapp config appsettings set -g $rg -n $apiappname --settings "NosqlDatabase:ConnectionString"=$nosqlconnectionstring
+# $nosqldbname = $resourceName+"cosmosmongodb"
+$nosqldbname = "tempcosmosmongodbname"
+az webapp config appsettings set -g $rg -n $apiappname --settings "NosqlDatabase:DatabaseName"=$nosqldbname
 
 # add webbapp ip to api
 write-host "################################ Adding webappip to api ################################"
+#$apiappname = $resourceName+"apiapp"
 az webapp config access-restriction add --resource-group $rg --name $apiappname --rule-name "webappip" --action Allow --ip-address $webappipnobackslash --priority 1
 
 # add api ip to dbs
 write-host "################################ Adding apiappip to mssqldb ################################"
-$sqlservername = $resourceName+"mssqlserver"
+# $sqlservername = $resourceName+"mssqlserver"
+$sqlservername = "tempmssqlservername"
 az sql server firewall-rule create --resource-group $rg -s $sqlservername --name "apiappip" --start-ip-address $apiappipnobackslash --end-ip-address $apiappipnobackslash
 
 write-host "################################ Adding apiappip to nosqldb ################################"
-$cosmosdbaccount = $resourceName+"cosmosdbaccount"
+# $cosmosdbaccount = $resourceName+"cosmosdbaccount"
+$cosmosdbaccount = "tempcosmosdbaccountname"
 write-host "### Show cosmosdb"
 $iprange = az cosmosdb show --name $cosmosdbaccount --resource-group $rg --query "ipRules" --output tsv
 # # $iprange = $iprange.Replace("]", "")

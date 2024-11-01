@@ -4,6 +4,7 @@ using myapi.Data;
 using myapi.Endpoints;
 using myapi.Repositories;
 using myapi.Services;
+using myshared.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,6 +37,8 @@ builder.Services.AddScoped<ExampleService>();
 builder.Services.AddScoped<ExampleNavPropService>();
 //builder.Services.AddSingleton<ExampleService>();
 //builder.Services.AddSingleton<ILogger>();
+builder.Services.AddScoped<BackupDBService>();
+builder.Services.AddScoped<EnvironmentVariableService>();
 
 // add repositories
 builder.Services.AddScoped<ExampleModelRepository>();
@@ -61,8 +64,13 @@ using (var scope = app.Services.CreateScope())
 {
 	var services = scope.ServiceProvider;
 
-	// check nosql db if db and collections exists, if not, create
-	var nosqlcontext = services.GetRequiredService<NosqlDataContext>();
+	// backup db if on production env
+	var backupDbService = services.GetRequiredService<BackupDBService>();
+    backupDbService.InitBackup();
+    //await backupDbService.InitBackup();
+
+    // check nosql db if db and collections exists, if not, create
+    var nosqlcontext = services.GetRequiredService<NosqlDataContext>();
 	nosqlcontext.Initialize();
 
 	// using your manually created migrations, automatically runs update-database 

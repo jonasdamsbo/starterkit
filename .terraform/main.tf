@@ -10,13 +10,13 @@ terraform {
     }
   }
   backend "azurerm" {
-      resource_group_name  = data.azurerm_resource_group.exampleResourcegroup.name
-      storage_account_name = data.azurerm_storage_account.exampleStorageaccount.name
+      resource_group_name  = "tempresourcenameresourcegroup" #data.azurerm_resource_group.exampleResourcegroup.name
+      storage_account_name = "tempresourcenamestorageaccount" #data.azurerm_storage_account.exampleStorageaccount.name
       container_name       = "terraform"
       key                  = "terraform.tfstate"
-      access_key           = "tempstoragekey"
+      access_key           = "tempstoragekey" # use library secret/var?
 
-      features{}
+      #features{}
   }
 }
 
@@ -32,16 +32,16 @@ provider "azuredevops" {
   org_service_url = "https://dev.azure.com/temporganizationname/"
 }
 
-data "azurerm_resource_group" "exampleResourcegroup" {
-  #id = "tempresourcegroupid"
-  name = "tempresourcenameresourcegroup"
-}
+#data "azurerm_resource_group" "exampleResourcegroup" {
+#  #id = "tempresourcegroupid"
+#  name = "tempresourcenameresourcegroup"
+#}
 
-data "azurerm_storage_account" "exampleStorageaccount" {
-  #id                 = "tempstorageaccountid"
-  name               = "tempresourcenamestorageaccount"
-  resource_group_name = data.azurerm_resource_group.exampleResourcegroup.name
-}
+#data "azurerm_storage_account" "exampleStorageaccount" {
+#  #id                 = "tempstorageaccountid"
+#  name               = "tempresourcenamestorageaccount"
+#  resource_group_name = data.azurerm_resource_group.exampleResourcegroup.name
+#}
 
 # giver det mening at terraform laver project? terraform ligger i repo, men 1 project kan have flere repos, men det her kan være main repo?
 # data "azuredevops_project" "exampleAzuredevopsproject" {

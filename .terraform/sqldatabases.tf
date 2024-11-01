@@ -1,6 +1,6 @@
 resource "azurerm_mssql_server" "exampleMssqlserver" {
   name                         = "tempresourcenamemssqlserver"
-  resource_group_name          = data.azurerm_resource_group.exampleResourcegroup.name
+  resource_group_name          = azurerm_resource_group.exampleResourcegroup.name
   location                     = "northeurope"
   version                      = "12.0"
   administrator_login          = "tempresourcename"
