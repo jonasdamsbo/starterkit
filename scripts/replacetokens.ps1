@@ -27,6 +27,34 @@
     $tenantid = "$env:TENANTID"
     $clientsecret = "$env:CLIENTSECRET"
     $clientid = "$env:CLIENTID"
+    
+    write-host "printing env vars from lib vars"
+    write-host $resourcename
+    write-host $apiurl
+    write-host $nosqlconnectionstring
+    write-host $mssqlconnectionstring
+    write-host $resourcegroupname
+    write-host $webappname
+    write-host $apiappname
+    write-host $mssqlservername
+    write-host $mssqldatabasename
+    write-host $storageaccountname
+    write-host $storagekey
+    write-host $dbbackupcontainername
+    write-host $nosqlaccountname
+    write-host $nosqldatabasename
+    write-host $projectname
+    write-host $storageaccountid
+    write-host $resourcegroupid
+    write-host $pipelineid
+    write-host $projectid
+    write-host $repositoryid
+    write-host $subscriptionid
+    write-host $organizationname
+    write-host $tenantid
+    write-host $clientsecret
+    write-host $clientid
+    write-host "done printing env vars from lib vars"
 
 # replace terraform .tf tokens
     #replace values
@@ -73,3 +101,8 @@
     ((Get-Content -path setcloudvars.ps1 -Raw) -replace 'tempdbbackupcontainername',$dbbackupcontainername) | Set-Content -Path setcloudvars.ps1
     ((Get-Content -path setcloudvars.ps1 -Raw) -replace 'tempcosmosdbaccountname',$nosqlaccountname) | Set-Content -Path setcloudvars.ps1
     ((Get-Content -path setcloudvars.ps1 -Raw) -replace 'tempcosmosmongodbname',$nosqldatabasename) | Set-Content -Path setcloudvars.ps1
+
+# check files
+write-host "printing content of main.tf"
+write-host (Get-Content -path setcloudvars.ps1 -Raw)
+write-host "done printing content of main.tf"
