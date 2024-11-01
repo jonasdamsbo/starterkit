@@ -12,13 +12,14 @@ Write-Host "TOKENS ARE BEING REPLACED"
     $apiappname = "$env:APIAPPNAME"
     $mssqlservername = "$env:MSSQLSERVERNAME"
     $mssqldatabasename = "$env:MSSQLDATABASENAME"
-    $storageaccountname = "$env:STORAGEACCOUNTNAME"
     $storagekey = "$env:STORAGEKEY"
     $dbbackupcontainername = "$env:DBBACKUPCONTAINERNAME"
+    $terraformcontainername = "$env:TERRAFORMCONTAINERNAME"
     $nosqlaccountname = "$env:NOSQLACCOUNTNAME"
     $nosqldatabasename = "$env:NOSQLDATABASENAME"
     $projectname = "$env:PROJECTNAME"
     $storageaccountid = "$env:STORAGEACCOUNTID"
+    $storageaccountname = "$env:STORAGEACCOUNTNAME"
     $resourcegroupid = "$env:RESOURCEGROUPID"
     $pipelineid = "$env:PIPELINEID"
     $projectid = "$env:PROJECTID"
@@ -43,6 +44,7 @@ Write-Host "TOKENS ARE BEING REPLACED"
     write-host $storageaccountname
     write-host $storagekey
     write-host $dbbackupcontainername
+    write-host $terraformcontainername
     write-host $nosqlaccountname
     write-host $nosqldatabasename
     write-host $projectname
@@ -69,11 +71,16 @@ Write-Host "TOKENS ARE BEING REPLACED"
     Select-Object -Expand Directory -Unique |
     Select-Object -Expand FullName
 
+    $pipelinespath = Get-ChildItem -Path $myrootpath -Filter 'azure-pipelines-destroy.yml' -Recurse -ErrorAction SilentlyContinue |
+    Select-Object -Expand Directory -Unique |
+    Select-Object -Expand FullName
+
     $maintfpath = $terraformpath+"/main.tf"
     $appservicestfpath = $terraformpath+"/appservices.tf"
     $nosqldatabasestfpath = $terraformpath+"/nosqldatabases.tf"
     $sqldatabasestfpath = $terraformpath+"/sqldatabases.tf"
     $setcloudvarsps1path = $scriptspath+"/setcloudvars.ps1"
+    $azurepipelinesdestroyymlpath = $scriptspath+"/azure-pipelines-destroy.yml"
 
     write-host "path: "$myrootpath
     write-host "path: "$terraformpath
@@ -126,7 +133,7 @@ write-host "started replacing"
     ((Get-Content -path $maintfpath -Raw) -replace 'tempresourcegroupid',$resourcegroupid) | Set-Content -Path $maintfpath
     ((Get-Content -path $maintfpath -Raw) -replace 'tempstorageaccountid',$storageaccountid) | Set-Content -Path $maintfpath
     ((Get-Content -path $maintfpath -Raw) -replace 'tempstoragekey',$storagekey) | Set-Content -Path $maintfpath
-    ((Get-Content -path $maintfpath -Raw) -replace 'tempterraformcontainername',$storageaccountid) | Set-Content -Path $maintfpath
+    ((Get-Content -path $maintfpath -Raw) -replace 'tempterraformcontainername',$terraformcontainername) | Set-Content -Path $maintfpath
 
     ((Get-Content -path $appservicestfpath -Raw) -replace 'tempprojectname',$projectname) | Set-Content -Path $appservicestfpath
     ((Get-Content -path $appservicestfpath -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path $appservicestfpath
@@ -163,6 +170,14 @@ write-host "started replacing"
     ((Get-Content -path $setcloudvarsps1path -Raw) -replace 'tempcosmosdbaccountname',$nosqlaccountname) | Set-Content -Path $setcloudvarsps1path
     ((Get-Content -path $setcloudvarsps1path -Raw) -replace 'tempcosmosmongodbname',$nosqldatabasename) | Set-Content -Path $setcloudvarsps1path
 
+
+# replace azure-pipelines-destroy.yml tokens
+    #replace values
+    ((Get-Content -path $azurepipelinesdestroyymlpath -Raw) -replace 'tempresourcename',$apiurl) | Set-Content -Path $azurepipelinesdestroyymlpath
+    ((Get-Content -path $azurepipelinesdestroyymlpath -Raw) -replace 'tempstorageaccountname',$storageaccountname) | Set-Content -Path $azurepipelinesdestroyymlpath
+    ((Get-Content -path $azurepipelinesdestroyymlpath -Raw) -replace 'tempterraformcontainername',$terraformcontainername) | Set-Content -Path $azurepipelinesdestroyymlpath
+
+    
 write-host "done replacing"
 
 # check files after
@@ -196,6 +211,15 @@ write-host "done replacing"
     write-host "printing content of setcloudvars.ps1"
     write-host (Get-Content -path $setcloudvarsps1path -Raw)
     write-host "done printing content of setcloudvars.ps1"
+
+    # cd ..
+    # write-host "path: "$myrootpath
+    # cd .azure
+    # write-host "path: "$myrootpath
+
+    write-host "printing content of azure-pipelines-destroy.yml"
+    write-host (Get-Content -path $azurepipelinesdestroyymlpath -Raw)
+    write-host "done printing content of azure-pipelines-destroy.yml"
 
 
 write-host "TOKENS WAS REPLACED"
