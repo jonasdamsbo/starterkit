@@ -547,6 +547,9 @@ if($verifySetup -eq "y")
 
         # replace temporganizationname with $orgName
         ((Get-Content -path old-project.ps1 -Raw) -replace 'temporganizationname',$orgName) | Set-Content -Path old-project.ps1
+        
+        # replace tempresourcename with $resourceName
+        ((Get-Content -path old-project.ps1 -Raw) -replace 'tempresourcename',$resourceName) | Set-Content -Path old-project.ps1
 
         #replace resourcename in setcloudvars.ps
         # ((Get-Content -path setcloudvars.ps1 -Raw) -replace 'tempresourcename',$resourceName) | Set-Content -Path setcloudvars.ps1
