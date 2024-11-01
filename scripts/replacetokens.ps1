@@ -80,7 +80,7 @@ Write-Host "TOKENS ARE BEING REPLACED"
     $nosqldatabasestfpath = $terraformpath+"/nosqldatabases.tf"
     $sqldatabasestfpath = $terraformpath+"/sqldatabases.tf"
     $setcloudvarsps1path = $scriptspath+"/setcloudvars.ps1"
-    $azurepipelinesdestroyymlpath = $scriptspath+"/azure-pipelines-destroy.yml"
+    $azurepipelinesdestroyymlpath = $pipelinespath+"/azure-pipelines-destroy.yml"
 
     write-host "path: "$myrootpath
     write-host "path: "$terraformpath
