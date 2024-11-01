@@ -12,7 +12,7 @@ terraform {
   backend "azurerm" {
       resource_group_name  = "tempresourcenameresourcegroup" #data.azurerm_resource_group.exampleResourcegroup.name
       storage_account_name = "tempresourcenamestorageaccount" #data.azurerm_storage_account.exampleStorageaccount.name
-      container_name       = "terraform"
+      container_name       = "tempterraformcontainername"
       key                  = "terraform.tfstate"
       access_key           = "tempstoragekey" # use library secret/var?
 

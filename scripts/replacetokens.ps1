@@ -43,6 +43,7 @@
     ((Get-Content -path main.tf -Raw) -replace 'tempresourcegroupid',$resourcegroupid) | Set-Content -Path main.tf
     ((Get-Content -path main.tf -Raw) -replace 'tempstorageaccountid',$storageaccountid) | Set-Content -Path main.tf
     ((Get-Content -path main.tf -Raw) -replace 'tempstoragekey',$storagekey) | Set-Content -Path main.tf
+    ((Get-Content -path main.tf -Raw) -replace 'tempterraformcontainername',$storageaccountid) | Set-Content -Path main.tf
 
     ((Get-Content -path appservices.tf -Raw) -replace 'tempprojectname',$projectname) | Set-Content -Path appservices.tf
     ((Get-Content -path appservices.tf -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path appservices.tf
