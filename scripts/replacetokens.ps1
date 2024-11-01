@@ -60,7 +60,7 @@ Write-Host "TOKENS ARE BEING REPLACED"
 
 # check files before
     write-host "printing content of main.tf"
-    write-host (Get-Content -path main.tf -Raw)
+    write-host (Get-Content -path /**/main.tf -Raw)
     write-host "done printing content of main.tf"
 
     # write-host "printing content of appservices.tf"
@@ -150,5 +150,5 @@ write-host "done replacing"
     write-host (Get-Content -path setcloudvars.ps1 -Raw)
     write-host "done printing content of setcloudvars.ps1"
 
-    
+
 write-host "TOKENS WAS REPLACED"
