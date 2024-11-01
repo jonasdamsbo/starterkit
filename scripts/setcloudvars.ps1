@@ -29,7 +29,7 @@
 #$localip = ""
 
 write-host "setting app env vars and db ips"
-$resourceName = "tempresourcename"
+#$resourceName = "tempresourcename"
 
 # get apiurl for webapp # done in replacefiles.ps1 instead
 #$apiurl = $resourceName+"Apiapp.azurewebsites.net"
