@@ -14,6 +14,9 @@
 # azure cosmos account
 # azure cosmos mongodb
 
+### setting app env vars and db ips
+write-host "SETTING CLOUD VARS"
+
 # cd terraform folder
 #cd ".terraform"
 
@@ -28,7 +31,6 @@
 # get local ip for apiapp and databases
 #$localip = ""
 
-write-host "setting app env vars and db ips"
 #$resourceName = "tempresourcename"
 
 # get apiurl for webapp # done in replacefiles.ps1 instead
@@ -201,3 +203,5 @@ az cosmosdb update --name $cosmosdbaccount --resource-group $rg --ip-range-filte
 # # # Replace cloud vars in new-project.ps1 + pipeline.yml and push, own file? # uses data after cloud is created
 
 # # # replace temp vars in readme, -> org/subscription?, (project?+add connectionstrings, webappurl and apiurl to readme?)?
+
+write-host "DONE SETTING CLOUD VARS"

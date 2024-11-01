@@ -512,6 +512,7 @@ if($verifySetup -eq "y")
             # get and add apiurl for webapp
             $apiurl = "https://"+$resourceName+"apiapp.azurewebsites.net/"
             $webappname = $resourceName+"webapp"
+            $appserviceplanname = $resourceName+"appserviceplan"
             #((Get-Content -path appservices.tf -Raw) -replace 'tempapiurl',$apiurl) | Set-Content -Path appservices.tf
 
             # get and add mongodb and mssqldb connectionstrings for apiapp
@@ -790,6 +791,7 @@ if($verifySetup -eq "y")
                 az pipelines variable-group variable create --id $variableGroupId --name "dbbackupcontainername" --value "dbbackup"
                 
                 #terraform resources variables
+                az pipelines variable-group variable create --id $variableGroupId --name "appserviceplanname" --value $appserviceplanname
                 az pipelines variable-group variable create --id $variableGroupId --name "webappname" --value $webappname
                 az pipelines variable-group variable create --id $variableGroupId --name "apiappname" --value $apiappname
                 az pipelines variable-group variable create --id $variableGroupId --name "mssqlservername" --value $sqlservername

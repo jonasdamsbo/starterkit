@@ -1,4 +1,5 @@
 ### replace tokens in scripts after terraform before deploy
+Write-Host "TOKENS ARE BEING REPLACED"
 
 # get lib vars
     # get values
@@ -57,6 +58,29 @@
     write-host $clientid
     write-host "done printing env vars from lib vars"
 
+# check files before
+    write-host "printing content of main.tf"
+    write-host (Get-Content -path main.tf -Raw)
+    write-host "done printing content of main.tf"
+
+    # write-host "printing content of appservices.tf"
+    # write-host (Get-Content -path appservices.tf -Raw)
+    # write-host "done printing content of appservices.tf"
+
+    # write-host "printing content of sqldatabases.tf"
+    # write-host (Get-Content -path sqldatabases.tf -Raw)
+    # write-host "done printing content of sqldatabases.tf"
+
+    # write-host "printing content of nosqldatabases.tf"
+    # write-host (Get-Content -path nosqldatabases.tf -Raw)
+    # write-host "done printing content of nosqldatabases.tf"
+
+    # write-host "printing content of setcloudvars.ps1"
+    # write-host (Get-Content -path setcloudvars.ps1 -Raw)
+    # write-host "done printing content of setcloudvars.ps1"
+
+write-host "started replacing"
+
 # replace terraform .tf tokens
     #replace values
     ((Get-Content -path main.tf -Raw) -replace 'tempclientid',$clientid) | Set-Content -Path main.tf
@@ -103,23 +127,28 @@
     ((Get-Content -path setcloudvars.ps1 -Raw) -replace 'tempcosmosdbaccountname',$nosqlaccountname) | Set-Content -Path setcloudvars.ps1
     ((Get-Content -path setcloudvars.ps1 -Raw) -replace 'tempcosmosmongodbname',$nosqldatabasename) | Set-Content -Path setcloudvars.ps1
 
-# check files
-write-host "printing content of main.tf"
-write-host (Get-Content -path main.tf -Raw)
-write-host "done printing content of main.tf"
+write-host "done replacing"
 
-write-host "printing content of appservices.tf"
-write-host (Get-Content -path appservices.tf -Raw)
-write-host "done printing content of appservices.tf"
+# check files after
+    write-host "printing content of main.tf"
+    write-host (Get-Content -path main.tf -Raw)
+    write-host "done printing content of main.tf"
 
-write-host "printing content of sqldatabases.tf"
-write-host (Get-Content -path sqldatabases.tf -Raw)
-write-host "done printing content of sqldatabases.tf"
+    write-host "printing content of appservices.tf"
+    write-host (Get-Content -path appservices.tf -Raw)
+    write-host "done printing content of appservices.tf"
 
-write-host "printing content of nosqldatabases.tf"
-write-host (Get-Content -path nosqldatabases.tf -Raw)
-write-host "done printing content of nosqldatabases.tf"
+    write-host "printing content of sqldatabases.tf"
+    write-host (Get-Content -path sqldatabases.tf -Raw)
+    write-host "done printing content of sqldatabases.tf"
 
-write-host "printing content of setcloudvars.ps1"
-write-host (Get-Content -path setcloudvars.ps1 -Raw)
-write-host "done printing content of setcloudvars.ps1"
+    write-host "printing content of nosqldatabases.tf"
+    write-host (Get-Content -path nosqldatabases.tf -Raw)
+    write-host "done printing content of nosqldatabases.tf"
+
+    write-host "printing content of setcloudvars.ps1"
+    write-host (Get-Content -path setcloudvars.ps1 -Raw)
+    write-host "done printing content of setcloudvars.ps1"
+
+    
+write-host "TOKENS WAS REPLACED"
