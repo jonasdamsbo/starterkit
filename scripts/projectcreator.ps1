@@ -576,6 +576,11 @@ if($verifySetup -eq "y")
         # ((Get-Content -path readme.txt -Raw) -replace 'tempresourcegroupname',$resourcegroupName) | Set-Content -Path readme.txt
         # ((Get-Content -path readme.txt -Raw) -replace 'tempstorageaccountname',$storageaccountName) | Set-Content -Path readme.txt
 
+        ((Get-Content -path readme.txt -Raw) -replace 'temporganizationname',$orgName) | Set-Content -Path readme.txt
+        ((Get-Content -path readme.txt -Raw) -replace 'tempprojectname',$projectName) | Set-Content -Path readme.txt
+        ((Get-Content -path readme.txt -Raw) -replace 'tempsubscriptionname',$subscriptionName) | Set-Content -Path readme.txt
+        ((Get-Content -path readme.txt -Raw) -replace 'tempresourcename',$resourceName) | Set-Content -Path readme.txt
+
         read-host "Enter to proceed..."
         
         # $scriptpath = $PWD.Path + '\scripts\replacefiles.ps1'
