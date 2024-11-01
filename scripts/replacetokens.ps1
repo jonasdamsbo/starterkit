@@ -73,7 +73,7 @@ Write-Host "TOKENS ARE BEING REPLACED"
     $appservicestfpath = $terraformpath+"/appservices.tf"
     $nosqldatabasestfpath = $terraformpath+"/nosqldatabases.tf"
     $sqldatabasestfpath = $terraformpath+"/sqldatabases.tf"
-    $setcloudvarsps1path = $scriptspath+"/setcloudvars.tf"
+    $setcloudvarsps1path = $scriptspath+"/setcloudvars.ps1"
 
     write-host "path: "$myrootpath
     write-host "path: "$terraformpath
