@@ -830,7 +830,23 @@ if($verifySetup -eq "y")
                 
         Read-Host "Press enter to continue..."
 
+    ################################################## prompt set up release in azure devops ##################################################
+        write-host 
+        write-host "Finally, you need to setup your release in Azure DevOps (See the development guide for help):"
+        write-host " - Go to your Azure DevOps project"
+        write-host " - Pipelines > Releases > +New v > New release pipeline"
+        write-host " - Template > Select empty job > setup 4 stages:"
+        write-host " - - Stage 1: Setup a replace tokens Azure CLI ps1 script task stage"
+        write-host " - - Stage 2: Setup a Terraform install/init/plan/validate/apply stage"
+        write-host " - - Stage 3: Setup a set cloud vars Azure CLI ps1 script task stage"
+        write-host " - - Stage 4: Setup two parallel deploy stages for webapp and apiapp"
+        write-host 
+        read-host "Press enter when done..."
+        write-host 
+
     ################################################## before pipeline and tools-installer ##################################################
+
+        write-host "Your project is set up!"
 
         # run install tools script
         while($installTools -ne "yes" -and $installTools -ne "no")
