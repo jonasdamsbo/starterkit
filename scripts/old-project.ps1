@@ -51,7 +51,7 @@ while($installTools -ne "x")
 {
     write-host "Choose an option:"
     write-host " - Install developer tools (i)"
-    write-host " - Manage existing project (m)"
+    #write-host " - Manage existing project (m)"
     write-host " - Exit program (x)"
     $installTools = read-host
 
@@ -65,15 +65,15 @@ while($installTools -ne "x")
         read-host "Developer tools script will run"
         & $scriptpath run
     }
-    elseif($installTools -eq "m")
-    {
-        # prompt install Azure CLI
-        $scriptpath = $PWD.Path + '\resource-manager.ps1'
-        write-host $scriptpath
-        write-host
-        read-host "Project manager script will run"
-        & $scriptpath run
-    }
+    # elseif($installTools -eq "m")
+    # {
+    #     # prompt install Azure CLI
+    #     $scriptpath = $PWD.Path + '\resource-manager.ps1'
+    #     write-host $scriptpath
+    #     write-host
+    #     read-host "Project manager script will run"
+    #     & $scriptpath run
+    # }
     elseif($installTools -eq "x")
     {
         write-host "Program will exit"
