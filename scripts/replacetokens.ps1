@@ -28,6 +28,7 @@
     $clientsecret = "$env:CLIENTSECRET"
     $clientid = "$env:CLIENTID"
     
+# check lib vars
     write-host "printing env vars from lib vars"
     write-host $resourcename
     write-host $apiurl
