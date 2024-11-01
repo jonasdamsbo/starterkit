@@ -104,5 +104,21 @@
 
 # check files
 write-host "printing content of main.tf"
-write-host (Get-Content -path setcloudvars.ps1 -Raw)
+write-host (Get-Content -path main.tf -Raw)
 write-host "done printing content of main.tf"
+
+write-host "printing content of appservices.tf"
+write-host (Get-Content -path appservices.tf -Raw)
+write-host "done printing content of appservices.tf"
+
+write-host "printing content of sqldatabases.tf"
+write-host (Get-Content -path sqldatabases.tf -Raw)
+write-host "done printing content of sqldatabases.tf"
+
+write-host "printing content of nosqldatabases.tf"
+write-host (Get-Content -path nosqldatabases.tf -Raw)
+write-host "done printing content of nosqldatabases.tf"
+
+write-host "printing content of setcloudvars.ps1"
+write-host (Get-Content -path setcloudvars.ps1 -Raw)
+write-host "done printing content of setcloudvars.ps1"
