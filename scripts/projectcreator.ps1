@@ -826,6 +826,10 @@ if($verifySetup -eq "y")
                 az pipelines variable-group variable create --id $variableGroupId --name "cosmosdbaccount" --value $cosmosdbaccount
                 az pipelines variable-group variable create --id $variableGroupId --name "cosmosmongodbname" --value $cosmosmongodbname
 
+                # hmm
+                az pipelines variable-group variable create --id $variableGroupId --name "nosqlpassword" --value "P%40ssw0rd"
+                az pipelines variable-group variable create --id $variableGroupId --name "sqlpassword" --value "P@ssw0rd"
+
                 #cloud env vars
                 az pipelines variable-group variable create --id $variableGroupId --name "sqlconnectionstring" --value $sqlconnectionstring
                 az pipelines variable-group variable create --id $variableGroupId --name "nosqlconnectionstring" --value $nosqlconnectionstring

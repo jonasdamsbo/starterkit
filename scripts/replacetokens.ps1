@@ -29,6 +29,9 @@ Write-Host "TOKENS ARE BEING REPLACED"
     $tenantid = "$env:TENANTID"
     $clientsecret = "$env:CLIENTSECRET"
     $clientid = "$env:CLIENTID"
+
+    $nosqlpassword = "$end:NOSQLPASSWORD"
+    $sqlpassword = "$end:SQLPASSWORD"
     
 # check lib vars
     write-host "printing env vars from lib vars"
@@ -58,6 +61,10 @@ Write-Host "TOKENS ARE BEING REPLACED"
     write-host $tenantid
     write-host $clientsecret
     write-host $clientid
+
+    write-host $sqlpassword
+    write-host $nosqlpassword
+
     write-host "done printing env vars from lib vars"
 
 # check files before
@@ -147,8 +154,12 @@ write-host "started replacing"
     ((Get-Content -path $sqldatabasestfpath -Raw) -replace 'tempprojectname',$projectname) | Set-Content -Path $sqldatabasestfpath
     ((Get-Content -path $sqldatabasestfpath -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path $sqldatabasestfpath
 
+    ((Get-Content -path $sqldatabasestfpath -Raw) -replace 'tempsqlpassword',$sqlpassword) | Set-Content -Path $sqldatabasestfpath
+
     ((Get-Content -path $nosqldatabasestfpath -Raw) -replace 'tempprojectname',$projectname) | Set-Content -Path $nosqldatabasestfpath
     ((Get-Content -path $nosqldatabasestfpath -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path $nosqldatabasestfpath
+
+    ((Get-Content -path $nosqldatabasestfpath -Raw) -replace 'tempnosqlpassword',$nosqlpassword) | Set-Content -Path $setclnosqldatabasestfpathoudvarsps1path
 
 # replace setcloudvars.ps1 tokens
     #replace values
@@ -172,6 +183,9 @@ write-host "started replacing"
     ((Get-Content -path $setcloudvarsps1path -Raw) -replace 'tempdbbackupcontainername',$dbbackupcontainername) | Set-Content -Path $setcloudvarsps1path
     ((Get-Content -path $setcloudvarsps1path -Raw) -replace 'tempcosmosdbaccountname',$cosmosdbaccountname) | Set-Content -Path $setcloudvarsps1path
     ((Get-Content -path $setcloudvarsps1path -Raw) -replace 'tempcosmosmongodbname',$cosmosmongodbname) | Set-Content -Path $setcloudvarsps1path
+
+    ((Get-Content -path $setcloudvarsps1path -Raw) -replace 'tempnosqlpassword',$nosqlpassword) | Set-Content -Path $setcloudvarsps1path
+    ((Get-Content -path $setcloudvarsps1path -Raw) -replace 'tempsqlpassword',$sqlpassword) | Set-Content -Path $setcloudvarsps1path
 
 
 # replace azure-pipelines-destroy.yml tokens

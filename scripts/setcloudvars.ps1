@@ -43,7 +43,9 @@ $apiurl = "tempapiurl"
 # "+$resourceName+":
 # 'P%40ssw0rd'
 # @"+$resourceName+"cosmosmongodb.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
-$nosqlconnectionstring = "tempnosqlconnectionstring"
+#$nosqlconnectionstring = "tempnosqlconnectionstring"
+$nosqlpassword = "tempnosqlpassword"
+$nosqlconnectionstring = "mongodb+srv://sa:'"+$nosqlpassword+"'@"+$resourceName+"cosmosmongodb.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
 
 # $sqlconnectionstring = "
 # Server=tcp:"+$resourceName+"sqldbserver.database.windows.net,1433;
@@ -55,7 +57,9 @@ $nosqlconnectionstring = "tempnosqlconnectionstring"
 # TrustServerCertificate=False;
 # Connection Timeout=30;
 # "
-$sqlconnectionstring = "tempsqlconnectionstring"
+#$sqlconnectionstring = "tempsqlconnectionstring"
+$sqlpassword = "tempsqlpassword"
+$sqlconnectionstring = "Server=tcp:"+$resourceName+"mssqlserver.database.windows.net,1433;Initial Catalog="+$resourceName+"mssqldatabase;Persist Security Info=False;User ID="+$resourceName+";Password="+$sqlpassword+";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
 
 # get webapp ip for apiapp
 # $rg = $resourceName+"resourcegroup"

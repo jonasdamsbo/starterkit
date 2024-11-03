@@ -4,7 +4,7 @@ resource "azurerm_mssql_server" "exampleMssqlserver" {
   location                     = "northeurope"
   version                      = "12.0"
   administrator_login          = "tempresourcename"
-  administrator_login_password = "P@ssw0rd"
+  administrator_login_password = "tempsqlpassword"
   public_network_access_enabled = true
 
   # azuread_administrator {

@@ -76,5 +76,5 @@ resource "azurerm_cosmosdb_mongo_database" "exampleCosmosmongodb" {
 # resource "azurerm_cosmosdb_mongo_user_definition" "exampleCosmosdbmongodbuserdefinition" {
 #   cosmos_mongo_database_id = azurerm_cosmosdb_mongo_database.exampleCosmosdbmongodb.id
 #   username                 = "tempresourcename"
-#   password                 = "P4ssw0rd"
+#   password                 = "tempnosqlpassword"
 # }
