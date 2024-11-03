@@ -64,9 +64,10 @@ $rg = "tempresourcegroupname"
 
 # $wa = $resourceName+"webapp"
 # $wa = $wa.Replace(" ","")
-$wa = "tempwebappname"
+#$wa = "tempwebappname"
+$webappname = "tempwebappname"
 
-$webappip = az webapp config hostname get-external-ip --resource-group $rg --webapp-name $wa --query "[ip]"
+$webappip = az webapp config hostname get-external-ip --resource-group $rg --webapp-name $webappname --query "[ip]"
 $webappip = $webappip.Trim("[","]")
 $webappip = $webappip.Replace("[","")
 $webappip = $webappip.Replace("]","")
@@ -82,9 +83,10 @@ $webappipnobackslash = $webappip.Replace("/32","")
 # get api ip for databases
 # $wa = $resourceName+"apiapp"
 # $wa = $wa.Replace(" ","")
-$wa = "tempapiappname"
+#$wa = "tempapiappname"
+$apiappname = "tempapiappname"
 
-$apiappip = az webapp config hostname get-external-ip --resource-group $rg --webapp-name $wa --query "[ip]"
+$apiappip = az webapp config hostname get-external-ip --resource-group $rg --webapp-name $apiappname --query "[ip]"
 $apiappip = $apiappip.Trim("[","]")
 $apiappip = $apiappip.Replace("[","")
 $apiappip = $apiappip.Replace("]","")
@@ -96,12 +98,12 @@ $apiappipnobackslash = $apiappip.Replace("/32","")
 
 # add backupdbservice environmentvars
 # $apiappname = $resourceName+"apiapp"
-$apiappname = "tempapiappname"
+#$apiappname = "tempapiappname"
 # $mssqlname = $resourceName+"mssqldatabase"
 $mssqlname = "tempmssqldatabasename"
 # $storageaccountName = $resourceName+"storageaccount"
-$storageaccountName = "tempstorageaccountname"
-$storagekey = az storage account keys list -g $rg -n $storageaccountName --query "[0].value"
+#$storageaccountName = "tempstorageaccountname"
+$storagekey = "tempstoragekey" #az storage account keys list -g $rg -n $storageaccountName --query "[0].value"
 # $containername = "dbbackup"
 $containername = "tempdbbackupcontainername"
 az webapp config appsettings set -g $rg -n $apiappname --settings "MyApiSettings:DatabaseName"=$mssqlname
@@ -110,7 +112,7 @@ az webapp config appsettings set -g $rg -n $apiappname --settings "MyApiSettings
 
 # add apiurl to webapp
 # $webappname = $resourceName+"Webapp" # done in replacefiles instead
-$webappname = "tempwebappname"
+#$webappname = "tempwebappname"
 az webapp config appsettings set -g $rg -n $webappname --settings "APIURL"=$apiurl # set in cloud
 
 # add connectionstrings to api
@@ -125,46 +127,46 @@ az webapp config appsettings set -g $rg -n $apiappname --settings "NosqlDatabase
 
 # add webbapp ip to api
 write-host "################################ Adding webappip to api ################################"
-#$apiappname = $resourceName+"apiapp"
-az webapp config access-restriction add --resource-group $rg --name $apiappname --rule-name "webappip" --action Allow --ip-address $webappipnobackslash --priority 1
+    #$apiappname = $resourceName+"apiapp"
+    az webapp config access-restriction add --resource-group $rg --name $apiappname --rule-name "webappip" --action Allow --ip-address $webappipnobackslash --priority 1
 
 # add api ip to dbs
 write-host "################################ Adding apiappip to mssqldb ################################"
-# $sqlservername = $resourceName+"mssqlserver"
-$sqlservername = "tempmssqlservername"
-az sql server firewall-rule create --resource-group $rg -s $sqlservername --name "apiappip" --start-ip-address $apiappipnobackslash --end-ip-address $apiappipnobackslash
+    # $sqlservername = $resourceName+"mssqlserver"
+    $sqlservername = "tempmssqlservername"
+    az sql server firewall-rule create --resource-group $rg -s $sqlservername --name "apiappip" --start-ip-address $apiappipnobackslash --end-ip-address $apiappipnobackslash
 
 write-host "################################ Adding apiappip to nosqldb ################################"
-# $cosmosdbaccount = $resourceName+"cosmosdbaccount"
-$cosmosdbaccount = "tempcosmosdbaccountname"
-write-host "### Show cosmosdb"
-$iprange = az cosmosdb show --name $cosmosdbaccount --resource-group $rg --query "ipRules" --output tsv
-# # $iprange = $iprange.Replace("]", "")
-# # $iprange = $iprange.Replace("}","")
-# # $iprange = $iprange.Replace("{","")
-if($iprange.Length -lt 1)
-{
-    $iprange = '["'+$apiappip+'"]'
-    $iprange = $iprange.Replace(" ","")
-}
-else
-{
-    $iprange = $iprange.Trim("[","]")
-    $iprange = $iprange.Replace("[","")
-    $iprange = $iprange.Replace("]","")
-    $iprange = $iprange.Replace(" ","")
-    $iprange = '['+$iprange+','+$apiappip+']'
-    $iprange = $iprange.Replace(" ","")
-}
-$iprangenobraces = $iprange.Trim('[',']')
-#$iprangenoquotes = $iprange.Replace('"','')
-$iprangenoquotesandbraces = $iprangenobraces.Replace('"','')
-#$iprangenoquotesbracesbackslash = $iprangenoquotesandbraces.Replace('/32','')
-#$iprangequotes = '"'+$iprangenoquotesandbraces+'"'
-#$iprangequotes = $iprangequotes.Replace(" ","")
-write-host "Iprange: "$iprangequotes
-write-host "### Update cosmosdb"
-az cosmosdb update --name $cosmosdbaccount --resource-group $rg --ip-range-filter $iprangenoquotesandbraces #$apiappip
+    # $cosmosdbaccount = $resourceName+"cosmosdbaccount"
+    $cosmosdbaccount = "tempcosmosdbaccountname"
+    write-host "### Show cosmosdb" # questionable ip update
+    $iprange = az cosmosdb show --name $cosmosdbaccount --resource-group $rg --query "ipRules" --output tsv
+    # # $iprange = $iprange.Replace("]", "")
+    # # $iprange = $iprange.Replace("}","")
+    # # $iprange = $iprange.Replace("{","")
+    if($iprange.Length -lt 1)
+    {
+        $iprange = '["'+$apiappip+'"]'
+        $iprange = $iprange.Replace(" ","")
+    }
+    else
+    {
+        $iprange = $iprange.Trim("[","]")
+        $iprange = $iprange.Replace("[","")
+        $iprange = $iprange.Replace("]","")
+        $iprange = $iprange.Replace(" ","")
+        $iprange = '['+$iprange+','+$apiappip+']'
+        $iprange = $iprange.Replace(" ","")
+    }
+    $iprangenobraces = $iprange.Trim('[',']')
+    #$iprangenoquotes = $iprange.Replace('"','')
+    $iprangenoquotesandbraces = $iprangenobraces.Replace('"','')
+    #$iprangenoquotesbracesbackslash = $iprangenoquotesandbraces.Replace('/32','')
+    #$iprangequotes = '"'+$iprangenoquotesandbraces+'"'
+    #$iprangequotes = $iprangequotes.Replace(" ","")
+    write-host "Iprange: "$iprangequotes
+    write-host "### Update cosmosdb"
+    az cosmosdb update --name $cosmosdbaccount --resource-group $rg --ip-range-filter $iprangenoquotesandbraces #$apiappip
 
 
 

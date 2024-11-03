@@ -6,7 +6,7 @@ Write-Host "TOKENS ARE BEING REPLACED"
     $resourcename = "$env:RESOURCENAME"
     $apiurl = "$env:APIURL"
     $nosqlconnectionstring = "$env:NOSQLCONNECTIONSTRING"
-    $mssqlconnectionstring = "$env:MSSQLCONNECTIONSTRING"
+    $sqlconnectionstring = "$env:SQLCONNECTIONSTRING"
     $resourcegroupname = "$env:RESOURCEGROUPNAME"
     $webappname = "$env:WEBAPPNAME"
     $apiappname = "$env:APIAPPNAME"
@@ -15,8 +15,8 @@ Write-Host "TOKENS ARE BEING REPLACED"
     $storagekey = "$env:STORAGEKEY"
     $dbbackupcontainername = "$env:DBBACKUPCONTAINERNAME"
     $terraformcontainername = "$env:TERRAFORMCONTAINERNAME"
-    $nosqlaccountname = "$env:NOSQLACCOUNTNAME"
-    $nosqldatabasename = "$env:NOSQLDATABASENAME"
+    $cosmosdbaccountname = "$env:COSMOSDBACCOUNTNAME"
+    $cosmosmongodbname = "$env:COSMOSMONGODBNAME"
     $projectname = "$env:PROJECTNAME"
     $storageaccountid = "$env:STORAGEACCOUNTID"
     $storageaccountname = "$env:STORAGEACCOUNTNAME"
@@ -35,7 +35,7 @@ Write-Host "TOKENS ARE BEING REPLACED"
     write-host $resourcename
     write-host $apiurl
     write-host $nosqlconnectionstring
-    write-host $mssqlconnectionstring
+    write-host $sqlconnectionstring
     write-host $resourcegroupname
     write-host $webappname
     write-host $apiappname
@@ -45,8 +45,8 @@ Write-Host "TOKENS ARE BEING REPLACED"
     write-host $storagekey
     write-host $dbbackupcontainername
     write-host $terraformcontainername
-    write-host $nosqlaccountname
-    write-host $nosqldatabasename
+    write-host $cosmosdbaccountname
+    write-host $cosmosmongodbname
     write-host $projectname
     write-host $storageaccountid
     write-host $resourcegroupid
@@ -141,7 +141,7 @@ write-host "started replacing"
     ((Get-Content -path $appservicestfpath -Raw) -replace 'tempprojectname',$projectname) | Set-Content -Path $appservicestfpath
     ((Get-Content -path $appservicestfpath -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path $appservicestfpath
     ((Get-Content -path $appservicestfpath -Raw) -replace 'tempapiurl',$apiurl) | Set-Content -Path $appservicestfpath
-    ((Get-Content -path $appservicestfpath -Raw) -replace 'tempsqlconnectionstring',$mssqlconnectionstring) | Set-Content -Path $appservicestfpath
+    ((Get-Content -path $appservicestfpath -Raw) -replace 'tempsqlconnectionstring',$sqlconnectionstring) | Set-Content -Path $appservicestfpath
     ((Get-Content -path $appservicestfpath -Raw) -replace 'tempnosqlconnectionstring',$nosqlconnectionstring) | Set-Content -Path $appservicestfpath
 
     ((Get-Content -path $sqldatabasestfpath -Raw) -replace 'tempprojectname',$projectname) | Set-Content -Path $sqldatabasestfpath
@@ -161,17 +161,17 @@ write-host "started replacing"
 
     ((Get-Content -path $setcloudvarsps1path -Raw) -replace 'tempapiurl',$apiurl) | Set-Content -Path $setcloudvarsps1path
     ((Get-Content -path $setcloudvarsps1path -Raw) -replace 'tempnosqlconnectionstring',$nosqlconnectionstring) | Set-Content -Path $setcloudvarsps1path
-    ((Get-Content -path $setcloudvarsps1path -Raw) -replace 'tempmssqlconnectionstring',$mssqlconnectionstring) | Set-Content -Path $setcloudvarsps1path
+    ((Get-Content -path $setcloudvarsps1path -Raw) -replace 'tempsqlconnectionstring',$sqlconnectionstring) | Set-Content -Path $setcloudvarsps1path
     ((Get-Content -path $setcloudvarsps1path -Raw) -replace 'tempresourcegroupname',$resourcegroupname) | Set-Content -Path $setcloudvarsps1path
     ((Get-Content -path $setcloudvarsps1path -Raw) -replace 'tempwebappname',$webappname) | Set-Content -Path $setcloudvarsps1path
     ((Get-Content -path $setcloudvarsps1path -Raw) -replace 'tempapiappname',$apiappname) | Set-Content -Path $setcloudvarsps1path
     ((Get-Content -path $setcloudvarsps1path -Raw) -replace 'tempmssqlservername',$mssqlservername) | Set-Content -Path $setcloudvarsps1path
     ((Get-Content -path $setcloudvarsps1path -Raw) -replace 'tempmssqldatabasename',$mssqldatabasename) | Set-Content -Path $setcloudvarsps1path
-    ((Get-Content -path $setcloudvarsps1path -Raw) -replace 'tempstorageaccountname',$storageaccountname) | Set-Content -Path $setcloudvarsps1path
+    #((Get-Content -path $setcloudvarsps1path -Raw) -replace 'tempstorageaccountname',$storageaccountname) | Set-Content -Path $setcloudvarsps1path
     ((Get-Content -path $setcloudvarsps1path -Raw) -replace 'tempstoragekey',$storagekey) | Set-Content -Path $setcloudvarsps1path
     ((Get-Content -path $setcloudvarsps1path -Raw) -replace 'tempdbbackupcontainername',$dbbackupcontainername) | Set-Content -Path $setcloudvarsps1path
-    ((Get-Content -path $setcloudvarsps1path -Raw) -replace 'tempcosmosdbaccountname',$nosqlaccountname) | Set-Content -Path $setcloudvarsps1path
-    ((Get-Content -path $setcloudvarsps1path -Raw) -replace 'tempcosmosmongodbname',$nosqldatabasename) | Set-Content -Path $setcloudvarsps1path
+    ((Get-Content -path $setcloudvarsps1path -Raw) -replace 'tempcosmosdbaccountname',$cosmosdbaccountname) | Set-Content -Path $setcloudvarsps1path
+    ((Get-Content -path $setcloudvarsps1path -Raw) -replace 'tempcosmosmongodbname',$cosmosmongodbname) | Set-Content -Path $setcloudvarsps1path
 
 
 # replace azure-pipelines-destroy.yml tokens

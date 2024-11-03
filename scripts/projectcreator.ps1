@@ -24,7 +24,7 @@ while($verifySetup -ne "y" -and $verifySetup -ne "n")
 
 if($verifySetup -eq "y")
 {
-    cd $PWD.Path
+    Set-Location $PWD.Path
 
     ################################################## run chooseorganization script ##################################################
 
@@ -152,7 +152,8 @@ if($verifySetup -eq "y")
         $bypass = "false"
 
         ## prompt desired repo/project name
-        while((($projectExists -eq "true" -or $resourcegroupExists -eq "true") -or $firstRun -eq "true") -and $bypass -ne "true")
+        #while((($projectExists -eq "true" -or $resourcegroupExists -eq "true") -or $firstRun -eq "true") -and $bypass -ne "true")
+        while((($projectExists -eq "true") -or $firstRun -eq "true") -and $bypass -ne "true")
         {
             $firstRun = "false"
             $projectName = read-host "What do you want to name your new project?"
@@ -265,16 +266,17 @@ if($verifySetup -eq "y")
 
     ################################################## run chooseresources script ##################################################
 
+    ## repeat loop if any resource with the desired name already exists
         $resourcegroupExists = "true"
         while($resourcegroupExists -eq "true" -or $repositoryExists -eq "true" -or $pipelineExists -eq "true" -or $storageaccountExists -eq "true")
         {
-            #choose resource name
+    ## choose resource name
             write-host "What would you like to call your resources?"
             write-host "   - repository, pipeline, resourcegroup, webapp, api, databases, storageaccount"
             write-host "   - ex: if you enter 'myresources', the repository will be named myresourcesRepository"
             $resourceName = read-host
 
-            ## check if resourcegroup exists
+    ## check if resourcegroup exists
             write-host "Checking if resourcegroup exists..."
             $resourcegroupName = $resourceName+"resourcegroup"
             $resourcegroupExists = "false"
@@ -287,34 +289,34 @@ if($verifySetup -eq "y")
             else
             {
                 $resourcegroupExists = "false"
-                $storageaccountExists = "false"
+                #$storageaccountExists = "false"
             }
 
             write-host "Done checking if resourcegroup exists..."
             write-host
 
-            if($resourcegroupExists)
+    ## check if storageaccount exists
+            # if($resourcegroupExists)
+            # {
+            write-host "Checking if storageaccount exists..."
+            $storageaccountName = $resourceName+"storageaccount"
+            $storageaccountExists = "false"
+            $listOfStorageaccount = az storage account show -g $resourcegroupName -n $storageaccountName --query "[name]" --output tsv 2>$null
+
+            if($listOfStorageaccount -eq $storageaccountName)
             {
-                ## check if resourcegroup exists
-                write-host "Checking if storageaccount exists..."
-                $storageaccountName = $resourceName+"storageaccount"
+                $storageaccountExists = "true"
+            }
+            else
+            {
                 $storageaccountExists = "false"
-                $listOfStorageaccount = az storage account show -g $resourcegroupName -n $storageaccountName --query "[name]" --output tsv 2>$null
-
-                if($listOfStorageaccount -eq $storageaccountName)
-                {
-                    $storageaccountExists = "true"
-                }
-                else
-                {
-                    $storageaccountExists = "false"
-                }
-
-                write-host "Done checking if resourcegroup exists..."
-                write-host
             }
 
-            # check if repository exists
+            write-host "Done checking if storageaccount exists..."
+            write-host
+            # }
+
+    ## check if repository exists
             write-host "Checking if repository exists..."
             $repositoryName = "$resourceName"+"repository"
             write-host "reponame: "$repositoryName
@@ -333,7 +335,7 @@ if($verifySetup -eq "y")
             write-host "Done checking if repository exists..."
             write-host
 
-            # check if pipeline exists
+    ## check if pipeline exists
             write-host "Checking if pipeline exists..."
             $pipelineName = $resourceName+"pipeline"
             $pipelineExists = "false"
@@ -351,7 +353,7 @@ if($verifySetup -eq "y")
             write-host "Done checking if pipeline exists..."
             write-host
 
-            # create resources if resource names dont already exist, else retry
+    ## create resources if resource names dont already exist, else retry
             if($resourcegroupExists -eq "false" -and $repositoryExists -eq "false" -and $pipelineExists -eq "false" -and $storageaccountExists -eq "false")
             {
                 $resourcesDontExist = "true"
@@ -399,6 +401,21 @@ if($verifySetup -eq "y")
         read-host "continue?..."
 
 
+    ################################################## prepare cloud vars ######################################################
+        $apiappname = $resourceName+"apiapp"
+        $webappname = $resourceName+"webapp"
+        $apiurl = "https://"+$resourceName+"apiapp.azurewebsites.net/"
+        $appserviceplanname = $resourceName+"appserviceplan"
+
+        $nosqlconnectionstring = "mongodb+srv://sa:'P%40ssw0rd'@"+$resourceName+"cosmosmongodb.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
+        $cosmosmongodbname = $resourceName+"cosmosmongodb"
+        $cosmosdbaccount = $resourceName+"cosmosdbaccount"
+
+        $sqlconnectionstring = "Server=tcp:"+$resourceName+"mssqlserver.database.windows.net,1433;Initial Catalog="+$resourceName+"mssqldatabase;Persist Security Info=False;User ID="+$resourceName+";Password=P@ssw0rd;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+        $mssqldatabasename = $resourceName+"mssqldatabase"
+        $mssqlservername = $resourceName+"mssqlserver"
+        
+
     ################################################## run replace tokens pipeline-cloud-setup-repo script ##################################################
 
         # replace tempclientid with $clientid in main.tf
@@ -413,7 +430,7 @@ if($verifySetup -eq "y")
         # replace tempenterpriseapplicationname with $applicationName in readme.md
         #((Get-Content -path readme.md -Raw) -replace 'tempenterpriseapplicationname',$applicationName) | Set-Content -Path readme.md
 
-        read-host "clientid, clientsecret, tenantid replace... continue?"
+        #read-host "clientid, clientsecret, tenantid replace... continue?"
 
 
         # # ### Replace temp vars, uses projectname
@@ -468,11 +485,11 @@ if($verifySetup -eq "y")
         #((Get-Content -path azure-pipelines.yml -Raw) -replace 'tempstorageaccount',$storageaccountName) | Set-Content -Path azure-pipelines.yml
 
         # replace tempapiname with $apiappname
-        $apiappname = $resourceName+"Apiapp"
+        #$apiappname = $resourceName+"apiapp"
         #((Get-Content -path azure-pipelines.yml -Raw) -replace 'tempapiappname',$apiappname) | Set-Content -Path azure-pipelines.yml
 
         # replace tempwebname with $webappname
-        $webappname = $resourceName+"Webapp"
+        # $webappname = $resourceName+"webapp"
         #((Get-Content -path azure-pipelines.yml -Raw) -replace 'tempwebappname',$webappname) | Set-Content -Path azure-pipelines.yml
 
         cd ..
@@ -510,20 +527,20 @@ if($verifySetup -eq "y")
 
             ### replace apiurl and constrs, can be done in setcloudvars.ps1
             # get and add apiurl for webapp
-            $apiurl = "https://"+$resourceName+"apiapp.azurewebsites.net/"
-            $webappname = $resourceName+"webapp"
-            $appserviceplanname = $resourceName+"appserviceplan"
+            #$apiurl = "https://"+$resourceName+"apiapp.azurewebsites.net/"
+            #$webappname = $resourceName+"webapp"
+            #$appserviceplanname = $resourceName+"appserviceplan"
             #((Get-Content -path appservices.tf -Raw) -replace 'tempapiurl',$apiurl) | Set-Content -Path appservices.tf
 
             # get and add mongodb and mssqldb connectionstrings for apiapp
-            $nosqlconnectionstring = "mongodb+srv://sa:'P%40ssw0rd'@"+$resourceName+"cosmosmongodb.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
-            $nosqldatabasename = $resourceName+"cosmosmongodb"
-            $nosqlaccountname = $resourceName+"cosmosdbaccount"
+            #$nosqlconnectionstring = "mongodb+srv://sa:'P%40ssw0rd'@"+$resourceName+"cosmosmongodb.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
+            #$cosmosmongodbname = $resourceName+"cosmosmongodb"
+            #$cosmosdbaccount = $resourceName+"cosmosdbaccount"
 
-            $sqlconnectionstring = "Server=tcp:"+$resourceName+"mssqlserver.database.windows.net,1433;Initial Catalog="+$resourceName+"mssqldatabase;Persist Security Info=False;User ID="+$resourceName+";Password=P@ssw0rd;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
-            $sqldatabasename = $resourceName+"mssqldatabase"
-            $sqlservername = $resourceName+"mssqlserver"
-            $apiappname = $resourceName+"apiapp"
+            #$sqlconnectionstring = "Server=tcp:"+$resourceName+"mssqlserver.database.windows.net,1433;Initial Catalog="+$resourceName+"mssqldatabase;Persist Security Info=False;User ID="+$resourceName+";Password=P@ssw0rd;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+            #$mssqldatabasename = $resourceName+"mssqldatabase"
+            #$mssqlservername = $resourceName+"mssqlserver"
+            #$apiappname = $resourceName+"apiapp"
             #((Get-Content -path appservices.tf -Raw) -replace 'tempsqlconnectionstring',$sqlconnectionstring) | Set-Content -Path appservices.tf
             #((Get-Content -path appservices.tf -Raw) -replace 'tempnosqlconnectionstring',$nosqlconnectionstring) | Set-Content -Path appservices.tf
 
@@ -538,7 +555,7 @@ if($verifySetup -eq "y")
         # # # az account create --enrollment-account-name --offer-type {MS-AZR-0017P, MS-AZR-0148P, MS-AZR-USGOV-0015P, MS-AZR-USGOV-0017P, MS-AZR-USGOV-0148P}
 
 
-        ### replace old-project # (tempprojectname with $projectName & temporganizationname with $orgName) in old-project script in new folder # azuregit etc?, 
+    ### replace old-project # (tempprojectname with $projectName & temporganizationname with $orgName) in old-project script in new folder # azuregit etc?, 
         write-host "Replacing vars in old-project.ps1"
         cd "./scripts/"
 
@@ -578,6 +595,8 @@ if($verifySetup -eq "y")
         # ((Get-Content -path readme.txt -Raw) -replace 'tempsubscriptionname',$subscriptionName) | Set-Content -Path readme.txt
         # ((Get-Content -path readme.txt -Raw) -replace 'tempresourcegroupname',$resourcegroupName) | Set-Content -Path readme.txt
         # ((Get-Content -path readme.txt -Raw) -replace 'tempstorageaccountname',$storageaccountName) | Set-Content -Path readme.txt
+    
+    # ################################################## replace vars in readme.txt #################################################
 
         ((Get-Content -path readme.txt -Raw) -replace 'temporganizationname',$orgName) | Set-Content -Path readme.txt
         ((Get-Content -path readme.txt -Raw) -replace 'tempprojectname',$projectName) | Set-Content -Path readme.txt
@@ -762,7 +781,7 @@ if($verifySetup -eq "y")
         # CREATE LIBRARY VARS HERE
             #create library variable group
             $variableGroupName = $resourceName+"variablegroup"
-            az pipelines variable-group create --name $variableGroupName --variables "APIURL"=$resourceName+"Apiapp.azurewebsites.net"
+            az pipelines variable-group create --name $variableGroupName --variables "APIURL"=$apiurl
             $variableGroupId = az pipelines variable-group list --group-name $resourceName+"variablegroup" --org $fullOrgName --project $projectName --output json --query "[id]"
             write-host "variableGroupId: "$variableGroupId
             
@@ -802,13 +821,13 @@ if($verifySetup -eq "y")
                 az pipelines variable-group variable create --id $variableGroupId --name "appserviceplanname" --value $appserviceplanname
                 az pipelines variable-group variable create --id $variableGroupId --name "webappname" --value $webappname
                 az pipelines variable-group variable create --id $variableGroupId --name "apiappname" --value $apiappname
-                az pipelines variable-group variable create --id $variableGroupId --name "mssqlservername" --value $sqlservername
-                az pipelines variable-group variable create --id $variableGroupId --name "mssqldatabasename" --value $sqldatabasename
-                az pipelines variable-group variable create --id $variableGroupId --name "nosqlaccountname" --value $nosqlaccountname
-                az pipelines variable-group variable create --id $variableGroupId --name "nosqldatabasename" --value $nosqlname
+                az pipelines variable-group variable create --id $variableGroupId --name "mssqlservername" --value $mssqlservername
+                az pipelines variable-group variable create --id $variableGroupId --name "mssqldatabasename" --value $mssqldatabasename
+                az pipelines variable-group variable create --id $variableGroupId --name "cosmosdbaccount" --value $cosmosdbaccount
+                az pipelines variable-group variable create --id $variableGroupId --name "cosmosmongodbname" --value $cosmosmongodbname
 
                 #cloud env vars
-                az pipelines variable-group variable create --id $variableGroupId --name "mssqlconnectionstring" --value $sqlconnectionstring
+                az pipelines variable-group variable create --id $variableGroupId --name "sqlconnectionstring" --value $sqlconnectionstring
                 az pipelines variable-group variable create --id $variableGroupId --name "nosqlconnectionstring" --value $nosqlconnectionstring
 
     ################################################## create pipeline ##################################################
