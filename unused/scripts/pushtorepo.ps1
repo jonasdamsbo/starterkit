@@ -28,7 +28,7 @@ git commit -m "created branches"
 git push
 
 # add master branch lock
-az repos policy create --config '\.azure\branch-policy.json'
+az repos policy create --config '\azure\branch-policy.json'
 
 
 Read-Host "Press enter to continue..."

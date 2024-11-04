@@ -41,7 +41,7 @@ write-host "Replacing vars in azure-pipelines.yml"
 # # # ((Get-Content -path azurepipeline.yml -Raw) -replace 'tempapiname',$apiappname) | Set-Content -Path azurepipeline.yml
 # # # ((Get-Content -path azurepipeline.yml -Raw) -replace 'tempwebname',$webappname) | Set-Content -Path azurepipeline.yml
 # # # Get-Content -path azurepipeline.yml
-Set-Location "./.azure/"
+Set-Location "./azure/"
 
 # replace tempsubid with $fullSubId
 ((Get-Content -path azure-pipelines.yml -Raw) -replace 'tempsubscriptionid',$fullSubId) | Set-Content -Path azure-pipelines.yml
@@ -64,7 +64,7 @@ Read-Host "Press enter to continue..."
 
 ### replace cloud # replace temp vars in terraform files in project/.terraform folder with projectname, + subscription&organization, + principalname?, 
 write-host "Replacing vars in *.tf"
-Set-Location "./.terraform/"
+Set-Location "./terraform/"
 
 # replace temporganizationname with $fullOrgName in main.tf
 ((Get-Content -path main.tf -Raw) -replace 'temporganizationname',$fullOrgName) | Set-Content -Path main.tf
@@ -154,7 +154,7 @@ Set-Location ..
 
 ## Replacing branch-policy vars
 write-host "Replacing vars in branch-policy.json"
-Set-Location "./.azure/"
+Set-Location "./azure/"
 
 # replace tempprojectname with $projectName
 ((Get-Content -path branch-policy.json -Raw) -replace 'temprepositoryid',$repositoryId) | Set-Content -Path branch-policy.json
