@@ -73,8 +73,8 @@ resource "azurerm_cosmosdb_mongo_database" "exampleCosmosmongodb" {
 #   notes = "Prevents nosqldb data loss"
 # }
 
-# resource "azurerm_cosmosdb_mongo_user_definition" "exampleCosmosdbmongodbuserdefinition" {
-#   cosmos_mongo_database_id = azurerm_cosmosdb_mongo_database.exampleCosmosdbmongodb.id
-#   username                 = "tempresourcename"
-#   password                 = "tempnosqlpassword"
-# }
+resource "azurerm_cosmosdb_mongo_user_definition" "exampleCosmosdbmongodbuserdefinition" {
+  cosmos_mongo_database_id = azurerm_cosmosdb_mongo_database.exampleCosmosmongodb.id
+  username                 = "tempresourcename" # sensitive?
+  password                 = "tempnosqlpassword" # sensitive
+}

@@ -2,12 +2,22 @@ Link to web development guide: https://docs.google.com/document/d/1XfyCFWGpygB4G
 
 Link to Azure DevOps: https://dev.azure.com/
 
+Link to Azure Portal: https://portal.azure.com/
+
 Organization: temporganizationname
 
 Project: tempprojectname
 
-Link to Azure Portal: https://portal.azure.com/
+Repository: temprepositoryname
+
+Pipeline: temppipelinename
+
+Variablegroup: tempvariablegroupname
 
 Subscription: tempsubscriptionname
 
-Resources: tempresourcename
+Resourcegroup: tempresourcegroupname
+
+Application: tempapplicationname
+
+Storageaccount: tempstorageaccountname

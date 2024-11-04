@@ -266,17 +266,18 @@ if($verifySetup -eq "y")
 
     ################################################## run chooseresources script ##################################################
 
-    ## repeat loop if any resource with the desired name already exists
+        ## repeat loop if any resource with the desired name already exists
         $resourcegroupExists = "true"
         while($resourcegroupExists -eq "true" -or $repositoryExists -eq "true" -or $pipelineExists -eq "true" -or $storageaccountExists -eq "true")
         {
-    ## choose resource name
+
+        ## choose resource name
             write-host "What would you like to call your resources?"
             write-host "   - repository, pipeline, resourcegroup, webapp, api, databases, storageaccount"
             write-host "   - ex: if you enter 'myresources', the repository will be named myresourcesRepository"
             $resourceName = read-host
 
-    ## check if resourcegroup exists
+        ## check if resourcegroup exists
             write-host "Checking if resourcegroup exists..."
             $resourcegroupName = $resourceName+"resourcegroup"
             $resourcegroupExists = "false"
@@ -295,7 +296,7 @@ if($verifySetup -eq "y")
             write-host "Done checking if resourcegroup exists..."
             write-host
 
-    ## check if storageaccount exists
+        ## check if storageaccount exists
             # if($resourcegroupExists)
             # {
             write-host "Checking if storageaccount exists..."
@@ -316,7 +317,7 @@ if($verifySetup -eq "y")
             write-host
             # }
 
-    ## check if repository exists
+        ## check if repository exists
             write-host "Checking if repository exists..."
             $repositoryName = "$resourceName"+"repository"
             write-host "reponame: "$repositoryName
@@ -335,7 +336,7 @@ if($verifySetup -eq "y")
             write-host "Done checking if repository exists..."
             write-host
 
-    ## check if pipeline exists
+        ## check if pipeline exists
             write-host "Checking if pipeline exists..."
             $pipelineName = $resourceName+"pipeline"
             $pipelineExists = "false"
@@ -353,7 +354,7 @@ if($verifySetup -eq "y")
             write-host "Done checking if pipeline exists..."
             write-host
 
-    ## create resources if resource names dont already exist, else retry
+        ## create resources if resource names dont already exist, else retry
             if($resourcegroupExists -eq "false" -and $repositoryExists -eq "false" -and $pipelineExists -eq "false" -and $storageaccountExists -eq "false")
             {
                 $resourcesDontExist = "true"
@@ -364,7 +365,7 @@ if($verifySetup -eq "y")
             }
         }
 
-        read-host "Enter to proceed..."
+        read-host "Done checking preliminary resources, press enter to proceed..."
         
         # $scriptpath = $PWD.Path + '\scripts\chooseresources.ps1'
         # write-host $scriptpath
@@ -383,6 +384,7 @@ if($verifySetup -eq "y")
     # ########################################### register enterprise app and get tenantid, clientid and clientsecret #########################################
 
         write-host "Getting and replacing tenantid, clientid, clientsecret..."
+        
         $subscriptionId = $subId
 
         $applicationName = $resourceName+"enterpriseapplication"
@@ -398,22 +400,7 @@ if($verifySetup -eq "y")
         $tenantid = $appDetails.tenant
         write-host "tenantid: $tenantid"
 
-        read-host "continue?..."
-
-
-    ################################################## prepare cloud vars ######################################################
-        $apiappname = $resourceName+"apiapp"
-        $webappname = $resourceName+"webapp"
-        $apiurl = "https://"+$resourceName+"apiapp.azurewebsites.net/"
-        $appserviceplanname = $resourceName+"appserviceplan"
-
-        $nosqlconnectionstring = "mongodb+srv://sa:'P%40ssw0rd'@"+$resourceName+"cosmosmongodb.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
-        $cosmosmongodbname = $resourceName+"cosmosmongodb"
-        $cosmosdbaccount = $resourceName+"cosmosdbaccount"
-
-        $sqlconnectionstring = "Server=tcp:"+$resourceName+"mssqlserver.database.windows.net,1433;Initial Catalog="+$resourceName+"mssqldatabase;Persist Security Info=False;User ID="+$resourceName+";Password=P@ssw0rd;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
-        $mssqldatabasename = $resourceName+"mssqldatabase"
-        $mssqlservername = $resourceName+"mssqlserver"
+        read-host "Done getting and replacing tenantid, clientid, clientsecret... press enter to continue"
         
 
     ################################################## run replace tokens pipeline-cloud-setup-repo script ##################################################
@@ -464,7 +451,7 @@ if($verifySetup -eq "y")
         # # # Read-Host "Press enter to continue..."
 
         ### replace pipeline # replace temp vars in pipeline files with projectname -> fullsubid+webappname+apiappname
-        write-host "Replacing vars in azure-pipelines.yml"
+        #write-host "Replacing vars in azure-pipelines.yml"
         # # # $subscriptionId = az account list --query "[?isDefault].id" --output tsv
         # # # $subidFormatted = "("+$subscriptionId+")"
         # # # $subscriptionName = az account list --query "[?isDefault].name" --output tsv
@@ -476,7 +463,7 @@ if($verifySetup -eq "y")
         # # # ((Get-Content -path azurepipeline.yml -Raw) -replace 'tempapiname',$apiappname) | Set-Content -Path azurepipeline.yml
         # # # ((Get-Content -path azurepipeline.yml -Raw) -replace 'tempwebname',$webappname) | Set-Content -Path azurepipeline.yml
         # # # Get-Content -path azurepipeline.yml
-        cd "./.azure/"
+        #cd "./.azure/"
 
         # replace tempsubid with $fullSubId
         #((Get-Content -path azure-pipelines.yml -Raw) -replace 'tempsubscriptionid',$fullSubId) | Set-Content -Path azure-pipelines.yml
@@ -492,12 +479,12 @@ if($verifySetup -eq "y")
         # $webappname = $resourceName+"webapp"
         #((Get-Content -path azure-pipelines.yml -Raw) -replace 'tempwebappname',$webappname) | Set-Content -Path azure-pipelines.yml
 
-        cd ..
+        #cd ..
 
 
         ### replace cloud # replace temp vars in terraform files in project/.terraform folder with projectname, + subscription&organization, + principalname?, 
-        write-host "Replacing vars in *.tf"
-        cd "./.terraform/"
+        #write-host "Replacing vars in *.tf"
+        #cd "./.terraform/"
 
         # replace temporganizationname with $fullOrgName in main.tf
         #((Get-Content -path main.tf -Raw) -replace 'temporganizationname',$fullOrgName) | Set-Content -Path main.tf
@@ -535,7 +522,7 @@ if($verifySetup -eq "y")
             # get and add mongodb and mssqldb connectionstrings for apiapp
             #$nosqlconnectionstring = "mongodb+srv://sa:'P%40ssw0rd'@"+$resourceName+"cosmosmongodb.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
             #$cosmosmongodbname = $resourceName+"cosmosmongodb"
-            #$cosmosdbaccount = $resourceName+"cosmosdbaccount"
+            #$cosmosdbaccountname = $resourceName+"cosmosdbaccount"
 
             #$sqlconnectionstring = "Server=tcp:"+$resourceName+"mssqlserver.database.windows.net,1433;Initial Catalog="+$resourceName+"mssqldatabase;Persist Security Info=False;User ID="+$resourceName+";Password=P@ssw0rd;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
             #$mssqldatabasename = $resourceName+"mssqldatabase"
@@ -544,7 +531,7 @@ if($verifySetup -eq "y")
             #((Get-Content -path appservices.tf -Raw) -replace 'tempsqlconnectionstring',$sqlconnectionstring) | Set-Content -Path appservices.tf
             #((Get-Content -path appservices.tf -Raw) -replace 'tempnosqlconnectionstring',$nosqlconnectionstring) | Set-Content -Path appservices.tf
 
-        cd ..
+        #cd ..
 
         # # # Can you create subscription+billingaccount+billingprofile+invoicesection with terraform?
         # # # find billingaccount, billingprofile and invoicesection
@@ -554,24 +541,8 @@ if($verifySetup -eq "y")
         # # # replace billingaccount, billingprofile and invoicesection in main.tf
         # # # az account create --enrollment-account-name --offer-type {MS-AZR-0017P, MS-AZR-0148P, MS-AZR-USGOV-0015P, MS-AZR-USGOV-0017P, MS-AZR-USGOV-0148P}
 
-
+    
     ### replace old-project # (tempprojectname with $projectName & temporganizationname with $orgName) in old-project script in new folder # azuregit etc?, 
-        write-host "Replacing vars in old-project.ps1"
-        cd "./scripts/"
-
-        # replace tempprojectname with $projectName
-        ((Get-Content -path old-project.ps1 -Raw) -replace 'tempprojectname',$projectName) | Set-Content -Path old-project.ps1
-
-        # replace temporganizationname with $orgName
-        ((Get-Content -path old-project.ps1 -Raw) -replace 'temporganizationname',$orgName) | Set-Content -Path old-project.ps1
-        
-        # replace tempresourcename with $resourceName
-        ((Get-Content -path old-project.ps1 -Raw) -replace 'tempresourcename',$resourceName) | Set-Content -Path old-project.ps1
-
-        #replace resourcename in setcloudvars.ps
-        # ((Get-Content -path setcloudvars.ps1 -Raw) -replace 'tempresourcename',$resourceName) | Set-Content -Path setcloudvars.ps1
-
-        cd ..
 
         # # # replace tempazureorgit with $azureorgit
 
@@ -595,15 +566,6 @@ if($verifySetup -eq "y")
         # ((Get-Content -path readme.txt -Raw) -replace 'tempsubscriptionname',$subscriptionName) | Set-Content -Path readme.txt
         # ((Get-Content -path readme.txt -Raw) -replace 'tempresourcegroupname',$resourcegroupName) | Set-Content -Path readme.txt
         # ((Get-Content -path readme.txt -Raw) -replace 'tempstorageaccountname',$storageaccountName) | Set-Content -Path readme.txt
-    
-    # ################################################## replace vars in readme.txt #################################################
-
-        ((Get-Content -path readme.txt -Raw) -replace 'temporganizationname',$orgName) | Set-Content -Path readme.txt
-        ((Get-Content -path readme.txt -Raw) -replace 'tempprojectname',$projectName) | Set-Content -Path readme.txt
-        ((Get-Content -path readme.txt -Raw) -replace 'tempsubscriptionname',$subscriptionName) | Set-Content -Path readme.txt
-        ((Get-Content -path readme.txt -Raw) -replace 'tempresourcename',$resourceName) | Set-Content -Path readme.txt
-
-        read-host "Enter to proceed..."
         
         # $scriptpath = $PWD.Path + '\scripts\replacefiles.ps1'
         # write-host $scriptpath
@@ -616,7 +578,7 @@ if($verifySetup -eq "y")
         if($resourcesDontExist -eq "true")
         {
             # create resources
-            read-host "Creating resources..."
+            read-host "Creating preliminary resources..."
             write-host "path: "$PWD.Path
 
             # create repo - 
@@ -643,8 +605,10 @@ if($verifySetup -eq "y")
             write-host "Done creating storageaccount..."
 
             write-host "Started creating storageaccount container..."
-            az storage container create --name "terraform" --account-name $storageaccountName
-            az storage container create --name "dbbackup" --account-name $storageaccountName
+            $dbbackupcontainername = "dbbackup"
+            $terraformcontainername = "terraform"
+            az storage container create --name $terraformcontainername --account-name $storageaccountName
+            az storage container create --name $dbbackupcontainername --account-name $storageaccountName
             write-host $storageaccountId
             write-host "Done creating storageaccount container..."
 
@@ -655,9 +619,114 @@ if($verifySetup -eq "y")
             write-host "Done creating pipeline variable from storage key..."
         }
 
+        read-host "Done creating preliminary resources... press enter to continue"
+
+
+    ################################################## prepare cloud vars ######################################################
+
+    
+        $apiurl = "https://"+$resourceName+"apiapp.azurewebsites.net/"
+        # $apiappname = $resourceName+"apiapp"
+        # $webappname = $resourceName+"webapp"
+        # $appserviceplanname = $resourceName+"appserviceplan"
+
+        $nosqlpassword = "P%40ssw0rd"
+        # $nosqlconnectionstring = "mongodb+srv://sa:'"+$nosqlpassword+"'@"+$resourceName+"cosmosmongodb.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
+        # $cosmosmongodbname = $resourceName+"cosmosmongodb"
+        # $cosmosdbaccountname = $resourceName+"cosmosdbaccount"
+
+        $sqlpassword = "P@ssw0rd"
+        # $sqlconnectionstring = "Server=tcp:"+$resourceName+"mssqlserver.database.windows.net,1433;Initial Catalog="+$resourceName+"mssqldatabase;Persist Security Info=False;User ID="+$resourceName+";Password="+$sqlpassword+";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+        # $mssqldatabasename = $resourceName+"mssqldatabase"
+        # $mssqlservername = $resourceName+"mssqlserver"
+
+
+    # ############################################# replace vars in old-project.ps1 and setcloudvars.ps1 ############################################
+        
+        write-host "Replacing vars in old-project.ps1 and setcloudvars.ps1"
+                
+        cd "./scripts/"
+
+        ((Get-Content -path old-project.ps1 -Raw) -replace 'tempprojectname',$projectName) | Set-Content -Path old-project.ps1
+        ((Get-Content -path old-project.ps1 -Raw) -replace 'temporganizationname',$orgName) | Set-Content -Path old-project.ps1
+        ((Get-Content -path old-project.ps1 -Raw) -replace 'tempresourcename',$resourceName) | Set-Content -Path old-project.ps1
+
+        ((Get-Content -path setcloudvars.ps1 -Raw) -replace 'tempresourcename',$resourceName) | Set-Content -Path setcloudvars.ps1
+
+        cd ..
+
+        read-host "Done replacing vars in old-project.ps1 and setcloudvars.ps1, press enter to proceed..."
+
+
+    ################################################## replace vars in .tf files ##################################################
+
+        # replace x with $x in main.tf
+            ((Get-Content -path main.tf -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path main.tf
+            ((Get-Content -path main.tf -Raw) -replace 'tempterraformcontainername',$terraformcontainername) | Set-Content -Path main.tf
+            ((Get-Content -path main.tf -Raw) -replace 'temporganizationname',$orgName) | Set-Content -Path main.tf
+
+        # replace x with $x in appservices.tf
+            ((Get-Content -path appservices.tf -Raw) -replace 'tempresourcename',$tempresourcename) | Set-Content -Path appservices.tf
+            ((Get-Content -path appservices.tf -Raw) -replace 'tempapiurl',$apiurl) | Set-Content -Path appservices.tf
+            ((Get-Content -path appservices.tf -Raw) -replace 'tempdbbackupcontainername',$dbbackupcontainername) | Set-Content -Path appservices.tf
+            ((Get-Content -path appservices.tf -Raw) -replace 'tempterraformcontainername',$terraformcontainername) | Set-Content -Path appservices.tf
+
+        # replace x with $x in nosqldatabases.tf
+            ((Get-Content -path nosqldatabases.tf -Raw) -replace 'tempresourcename',$tempresourcename) | Set-Content -Path nosqldatabases.tf
+
+        # replace x with $x in sqldatabases.tf
+            ((Get-Content -path sqldatabases.tf -Raw) -replace 'tempresourcename',$tempresourcename) | Set-Content -Path sqldatabases.tf
+
+
+    # ################################################## replace vars in readme.txt #################################################
+
+        write-host "Replacing vars in readme.txt" # put alt i readme som ikke sættes i lib vars
+
+        ((Get-Content -path readme.txt -Raw) -replace 'temporganizationname',$orgName) | Set-Content -Path readme.txt
+        #((Get-Content -path readme.txt -Raw) -replace 'tempfullorganizationname',$fullOrgName) | Set-Content -Path readme.txt
+        ((Get-Content -path readme.txt -Raw) -replace 'tempsubscriptionname',$subscriptionName) | Set-Content -Path readme.txt
+        #((Get-Content -path readme.txt -Raw) -replace 'tempfullsubscriptionid',$fullSubId) | Set-Content -Path readme.txt
+        ((Get-Content -path readme.txt -Raw) -replace 'tempprojectname',$projectName) | Set-Content -Path readme.txt
+        #((Get-Content -path readme.txt -Raw) -replace 'tempprojectid',$projectId) | Set-Content -Path readme.txt
+        #((Get-Content -path readme.txt -Raw) -replace 'tempresourcename',$resourceName) | Set-Content -Path readme.txt
+        ((Get-Content -path readme.txt -Raw) -replace 'tempresourcegroupname',$resourcegroupName) | Set-Content -Path readme.txt
+        #((Get-Content -path readme.txt -Raw) -replace 'tempresourcegroupid',$resourcegroupId) | Set-Content -Path readme.txt
+        ((Get-Content -path readme.txt -Raw) -replace 'temprepositoryname',$repositoryName) | Set-Content -Path readme.txt
+        #((Get-Content -path readme.txt -Raw) -replace 'temprepositoryid',$repositoryId) | Set-Content -Path readme.txt
+        ((Get-Content -path readme.txt -Raw) -replace 'temppipelinename',$pipelineName) | Set-Content -Path readme.txt
+        #((Get-Content -path readme.txt -Raw) -replace 'temppipelineid',$pipelineId) | Set-Content -Path readme.txt
+        ((Get-Content -path readme.txt -Raw) -replace 'tempvariablegroupname',$variableGroupName) | Set-Content -Path readme.txt
+        #((Get-Content -path readme.txt -Raw) -replace 'tempvariablegroupid',$variableGroupId) | Set-Content -Path readme.txt
+        
+        ((Get-Content -path readme.txt -Raw) -replace 'tempapplicationname',$applicationName) | Set-Content -Path readme.txt
+
+        ((Get-Content -path readme.txt -Raw) -replace 'tempstorageaccountname',$storageaccountName) | Set-Content -Path readme.txt
+        #((Get-Content -path readme.txt -Raw) -replace 'tempstorageaccountid',$storageaccountId) | Set-Content -Path readme.txt
+        # ((Get-Content -path readme.txt -Raw) -replace 'tempterraformcontainername',$terraformcontainername) | Set-Content -Path readme.txt
+        # ((Get-Content -path readme.txt -Raw) -replace 'tempdbbackupcontainername',$dbbackupcontainername) | Set-Content -Path readme.txt
+        
+        # ((Get-Content -path readme.txt -Raw) -replace 'tempappserviceplanname',$appserviceplanname) | Set-Content -Path readme.txt
+        # ((Get-Content -path readme.txt -Raw) -replace 'tempwebappname',$webappname) | Set-Content -Path readme.txt
+        # ((Get-Content -path readme.txt -Raw) -replace 'tempapiappname',$apiappname) | Set-Content -Path readme.txt
+        # ((Get-Content -path readme.txt -Raw) -replace 'tempmssqlservername',$mssqlservername) | Set-Content -Path readme.txt
+        # ((Get-Content -path readme.txt -Raw) -replace 'tempmssqldatabasename',$mssqldatabasename) | Set-Content -Path readme.txt
+        # ((Get-Content -path readme.txt -Raw) -replace 'tempcosmosdbaccountname',$cosmosdbaccountname) | Set-Content -Path readme.txt
+        # ((Get-Content -path readme.txt -Raw) -replace 'tempcosmosmongodbname',$cosmosmongodbname) | Set-Content -Path readme.txt
+
+        # ((Get-Content -path readme.txt -Raw) -replace 'tempapiurl',$apiurl) | Set-Content -Path readme.txt
+        # ((Get-Content -path readme.txt -Raw) -replace 'tempsqlconnectionstring',$sqlconnectionstring) | Set-Content -Path readme.txt
+        # ((Get-Content -path readme.txt -Raw) -replace 'tempnosqlconnectionstring',$nosqlconnectionstring) | Set-Content -Path readme.txt
+
+
+
+        ## MANGLER ALT UDENTAGET IKKE-SENSITIVT I README
+
+        read-host "Done replacing vars in readme.txt, press enter to proceed..."
+
+
     # ################################################## replace tokens after creation #################################################
         
-        cd "./.terraform/"
+        #cd "./.terraform/"
         #tempazuredevopsprojectid
         #((Get-Content -path main.tf -Raw) -replace 'tempazuredevopsprojectid',$projectid) | Set-Content -Path main.tf
 
@@ -674,21 +743,21 @@ if($verifySetup -eq "y")
         #((Get-Content -path main.tf -Raw) -replace 'tempstorageaccountid',$storageaccountId) | Set-Content -Path main.tf
         #((Get-Content -path main.tf -Raw) -replace 'tempstoragekey',$storagekey) | Set-Content -Path main.tf
 
-	#vars for backupdbservice - done in refreshcloudvars instead
-	#((Get-Content -path appservice.tf -Raw) -replace 'tempresourcename',$resourcegroupName) | Set-Content -Path appservice.tf
-	#((Get-Content -path appservice.tf -Raw) -replace 'tempmyapisettingsstoragekey',$storagekey) | Set-Content -Path appservice.tf
-	#((Get-Content -path appservice.tf -Raw) -replace 'tempmyapisettingsstoragecontainer','dbbackup') | Set-Content -Path appservice.tf
+        #vars for backupdbservice - done in refreshcloudvars instead
+        #((Get-Content -path appservice.tf -Raw) -replace 'tempresourcename',$resourcegroupName) | Set-Content -Path appservice.tf
+        #((Get-Content -path appservice.tf -Raw) -replace 'tempmyapisettingsstoragekey',$storagekey) | Set-Content -Path appservice.tf
+        #((Get-Content -path appservice.tf -Raw) -replace 'tempmyapisettingsstoragecontainer','dbbackup') | Set-Content -Path appservice.tf
 
-        cd ..
+        #cd ..
 
         ## Replacing branch-policy vars
         #write-host "Replacing vars in branch-policy.json"
-        cd "./.azure/"
+        #cd "./.azure/"
 
         # replace tempprojectname with $projectName
         #((Get-Content -path branch-policy.json -Raw) -replace 'temprepositoryid',$repositoryId) | Set-Content -Path branch-policy.json
 
-        cd ..
+        #cd ..
 
     # ################################################## run createpipeline script ##################################################
 
@@ -721,121 +790,140 @@ if($verifySetup -eq "y")
         write-host " - Check 'Grant access permissions to all pipelines' under security"
         write-host
         read-host "Press enter when done..."
+        write-host 
 
         # push repofolder to repo
-        write-host 
         ### init git and push initial commit, create branches
-        write-host "Configuring and pushing to git repository"
+
+        write-host "Configuring and pushing to git repository..."
 
         # init git repo
-        git init
-        write-host "init done"
-        $remotename = "https://"+"$orgName"+"@dev.azure.com/"+"$orgName"+"/"+"$projectName"+"/_git/"+"$repositoryName"
-        write-host "remotename: "$remotename
-        git remote add $repositoryName $remotename
-        write-host "remote add done"
+            git init
+            write-host "init done"
+            $remotename = "https://"+"$orgName"+"@dev.azure.com/"+"$orgName"+"/"+"$projectName"+"/_git/"+"$repositoryName"
+            write-host "remotename: "$remotename
+            git remote add $repositoryName $remotename
+            write-host "remote add done"
 
         # push
-        git add .
-        git commit -m "initial commit"
-        git push --set-upstream $repositoryName master
-        git push  jgdmytestyRepository 
+            git add .
+            git commit -m "initial commit"
+            git push --set-upstream $repositoryName master
+            git push  jgdmytestyRepository 
+            # git add .
+            # git commit -m "created branches"
+            # git push $repositoryName
 
         # create test and production branches
-        git fetch
-        git pull
-        git checkout -b "test"
-        git checkout -b "pre-production"
-        git checkout -b "production"
-        git checkout "master"
-        git push "test"
-        git push "pre-production"
-        git push "production"
-        git branch -a
-
-        # push
-        # git add .
-        # git commit -m "created branches"
-        # git push $repositoryName
+            git fetch
+            git pull
+            git checkout -b "test"
+            git checkout -b "pre-production"
+            git checkout -b "production"
+            git checkout "master"
+            git push "test"
+            git push "pre-production"
+            git push "production"
+            git branch -a
 
         # add master branch lock
-        write-host
-        write-host $PWD.Path
-        write-host "Creating no push to master policy"
-        az repos policy approver-count create --allow-downvotes true --blocking true --branch master --creator-vote-counts false --enabled true --minimum-approver-count 1 --repository-id $repositoryId --org $fullOrgName --project $projectName --reset-on-source-push false
+            write-host
+            write-host $PWD.Path
+            write-host "Creating no push to master policy"
+            az repos policy approver-count create --allow-downvotes true --blocking true --branch master --creator-vote-counts false --enabled true --minimum-approver-count 1 --repository-id $repositoryId --org $fullOrgName --project $projectName --reset-on-source-push false
         
         #az repos policy create --config '.azure\branch-policy.json' --org $fullOrgName --project $projectName
         #az storage account or-policy create -g $resourcegroupName -n $storageaccountName --policy default
         #az repos policy create --config '.azure\branch-policy.json' --org $fullOrgName --project $projectName
-
-
-
-        Read-Host "Press enter to continue..."
         
         # $scriptpath = $PWD.Path + '\scripts\pushtorepo.ps1'
         # write-host $scriptpath
         # & $scriptpath run
         # read-host "Enter to proceed..."
 
+        Read-Host "Done configuring and pushing to git repository... press enter to continue"
+
     ################################################## create library variable group ##################################################
-        # CREATE LIBRARY VARS HERE
-            #create library variable group
-            $variableGroupName = $resourceName+"variablegroup"
-            az pipelines variable-group create --name $variableGroupName --variables "APIURL"=$apiurl
-            $variableGroupId = az pipelines variable-group list --group-name $resourceName+"variablegroup" --org $fullOrgName --project $projectName --output json --query "[id]"
-            write-host "variableGroupId: "$variableGroupId
+        write-host "Started creating library variablegroup..."
+
+        $variableGroupName = $resourceName+"variablegroup"
+        az pipelines variable-group create --name $variableGroupName --variables "subscriptionid"=$subId
+        $variableGroupId = az pipelines variable-group list --group-name $resourceName+"variablegroup" --org $fullOrgName --project $projectName --output json --query "[id]"
+        write-host "variableGroupId: "$variableGroupId
+
+        read-host "Done creating library variable group... press enter to continue"
+
+    
+    ################################################## new create sensitive library variable group variables ##################################################
+
+        write-host "Started creating library variablegroup variables..."
+
+        az pipelines variable-group variable create --id $variableGroupId --name "tenantid" --value $tenantid # sensitive?
+        az pipelines variable-group variable create --id $variableGroupId --name "clientid" --value $clientid # sensitive?
+        az pipelines variable-group variable create --id $variableGroupId --name "clientsecret" --value $clientsecret # sensitive
+        az pipelines variable-group variable create --id $variableGroupId --name "storagekey" --value $storagekey # sensitive
+        az pipelines variable-group variable create --id $variableGroupId --name "nosqlpassword" --value $nosqlpassword # sensitive
+        az pipelines variable-group variable create --id $variableGroupId --name "sqlpassword" --value $sqlpassword # sensitive
+
+        read-host "Done creating library variable group variables... press enter to continue"
             
-            #create library variable group variables
+    ################################################## create library variable group variables ##################################################
+        # kun values som absolut ikke må være i koden, oprettes som lib vars og replaces i replacetokens. Resten printes til readme.txt og direkte i .tf/ps1 filerne
+        #write-host "Started creating library variablegroup variables..."
 
-                #preliminary resources variables
-                az pipelines variable-group variable create --id $variableGroupId --name "organizationname" --value $orgName
-                az pipelines variable-group variable create --id $variableGroupId --name "fullorganizationname" --value $fullOrgName
-                az pipelines variable-group variable create --id $variableGroupId --name "subscriptionname" --value $subscriptionName
-                az pipelines variable-group variable create --id $variableGroupId --name "subscriptionid" --value $subId
-                az pipelines variable-group variable create --id $variableGroupId --name "fullsubscriptionid" --value $fullSubId
-                az pipelines variable-group variable create --id $variableGroupId --name "projectname" --value $projectName
-                az pipelines variable-group variable create --id $variableGroupId --name "projectid" --value $projectId
-                az pipelines variable-group variable create --id $variableGroupId --name "resourcename" --value $resourceName
-                az pipelines variable-group variable create --id $variableGroupId --name "resourcegroupname" --value $resourcegroupName
-                az pipelines variable-group variable create --id $variableGroupId --name "resourcegroupid" --value $resourcegroupId
-                az pipelines variable-group variable create --id $variableGroupId --name "repositoryname" --value $repositoryName
-                az pipelines variable-group variable create --id $variableGroupId --name "repositoryid" --value $repositoryId
-                az pipelines variable-group variable create --id $variableGroupId --name "pipelinename" --value $pipelineName
-                az pipelines variable-group variable create --id $variableGroupId --name "pipelineid" --value $pipelineId
+        # #preliminary resources variables
+        #     az pipelines variable-group variable create --id $variableGroupId --name "organizationname" --value $orgName
+        #     az pipelines variable-group variable create --id $variableGroupId --name "fullorganizationname" --value $fullOrgName
+        #     az pipelines variable-group variable create --id $variableGroupId --name "subscriptionname" --value $subscriptionName
+        #     az pipelines variable-group variable create --id $variableGroupId --name "APIURL" --value $apiurl #
+        #     az pipelines variable-group variable create --id $variableGroupId --name "fullsubscriptionid" --value $fullSubId # sensitive?
+        #     az pipelines variable-group variable create --id $variableGroupId --name "projectname" --value $projectName
+        #     az pipelines variable-group variable create --id $variableGroupId --name "projectid" --value $projectId # sensitive?
+        #     az pipelines variable-group variable create --id $variableGroupId --name "resourcename" --value $resourceName # needed???
+        #     az pipelines variable-group variable create --id $variableGroupId --name "resourcegroupname" --value $resourcegroupName
+        #     az pipelines variable-group variable create --id $variableGroupId --name "resourcegroupid" --value $resourcegroupId # sensitive?
+        #     az pipelines variable-group variable create --id $variableGroupId --name "repositoryname" --value $repositoryName
+        #     az pipelines variable-group variable create --id $variableGroupId --name "repositoryid" --value $repositoryId # sensitive?
+        #     az pipelines variable-group variable create --id $variableGroupId --name "pipelinename" --value $pipelineName
+        #     az pipelines variable-group variable create --id $variableGroupId --name "pipelineid" --value $pipelineId # sensitive?
 
-                az pipelines variable-group variable create --id $variableGroupId --name "variablegroupname" --value $variableGroupName
-                az pipelines variable-group variable create --id $variableGroupId --name "variablegroupid" --value $variableGroupId
-                
-                az pipelines variable-group variable create --id $variableGroupId --name "applicationname" --value $applicationName
-                az pipelines variable-group variable create --id $variableGroupId --name "tenantid" --value $tenantid
-                az pipelines variable-group variable create --id $variableGroupId --name "clientid" --value $clientid
-                az pipelines variable-group variable create --id $variableGroupId --name "clientsecret" --value $clientsecret
+        # #etc
+        #     az pipelines variable-group variable create --id $variableGroupId --name "variablegroupname" --value $variableGroupName
+        #     az pipelines variable-group variable create --id $variableGroupId --name "variablegroupid" --value $variableGroupId # sensitive?
+            
+        #     az pipelines variable-group variable create --id $variableGroupId --name "applicationname" --value $applicationName
+        #     az pipelines variable-group variable create --id $variableGroupId --name "tenantid" --value $tenantid # sensitive?
+        #     az pipelines variable-group variable create --id $variableGroupId --name "clientid" --value $clientid # sensitive?
+        #     az pipelines variable-group variable create --id $variableGroupId --name "clientsecret" --value $clientsecret # sensitive
 
-                az pipelines variable-group variable create --id $variableGroupId --name "storageaccountname" --value $storageaccountName
-                az pipelines variable-group variable create --id $variableGroupId --name "storageaccountid" --value $storageaccountId
-                az pipelines variable-group variable create --id $variableGroupId --name "storagekey" --value $storagekey
-                az pipelines variable-group variable create --id $variableGroupId --name "terraformcontainername" --value "terraform"
-                az pipelines variable-group variable create --id $variableGroupId --name "dbbackupcontainername" --value "dbbackup"
-                
-                #terraform resources variables
-                az pipelines variable-group variable create --id $variableGroupId --name "appserviceplanname" --value $appserviceplanname
-                az pipelines variable-group variable create --id $variableGroupId --name "webappname" --value $webappname
-                az pipelines variable-group variable create --id $variableGroupId --name "apiappname" --value $apiappname
-                az pipelines variable-group variable create --id $variableGroupId --name "mssqlservername" --value $mssqlservername
-                az pipelines variable-group variable create --id $variableGroupId --name "mssqldatabasename" --value $mssqldatabasename
-                az pipelines variable-group variable create --id $variableGroupId --name "cosmosdbaccount" --value $cosmosdbaccount
-                az pipelines variable-group variable create --id $variableGroupId --name "cosmosmongodbname" --value $cosmosmongodbname
+        #     az pipelines variable-group variable create --id $variableGroupId --name "storageaccountname" --value $storageaccountName
+        #     az pipelines variable-group variable create --id $variableGroupId --name "storageaccountid" --value $storageaccountId # sensitive?
+        #     az pipelines variable-group variable create --id $variableGroupId --name "storagekey" --value $storagekey # sensitive
+        #     az pipelines variable-group variable create --id $variableGroupId --name "terraformcontainername" --value $terraformcontainername
+        #     az pipelines variable-group variable create --id $variableGroupId --name "dbbackupcontainername" --value $dbbackupcontainername
+        
+        # #terraform resources variables
+        #     az pipelines variable-group variable create --id $variableGroupId --name "appserviceplanname" --value $appserviceplanname
+        #     az pipelines variable-group variable create --id $variableGroupId --name "webappname" --value $webappname
+        #     az pipelines variable-group variable create --id $variableGroupId --name "apiappname" --value $apiappname
+        #     az pipelines variable-group variable create --id $variableGroupId --name "mssqlservername" --value $mssqlservername
+        #     az pipelines variable-group variable create --id $variableGroupId --name "mssqldatabasename" --value $mssqldatabasename
+        #     az pipelines variable-group variable create --id $variableGroupId --name "cosmosdbaccountname" --value $cosmosdbaccountname
+        #     az pipelines variable-group variable create --id $variableGroupId --name "cosmosmongodbname" --value $cosmosmongodbname
 
-                # hmm
-                az pipelines variable-group variable create --id $variableGroupId --name "nosqlpassword" --value "P%40ssw0rd"
-                az pipelines variable-group variable create --id $variableGroupId --name "sqlpassword" --value "P@ssw0rd"
+        # # hmm
+        #     az pipelines variable-group variable create --id $variableGroupId --name "nosqlpassword" --value $nosqlpassword #"P%40ssw0rd" # sensitive
+        #     az pipelines variable-group variable create --id $variableGroupId --name "sqlpassword" --value $sqlpassword #"P@ssw0rd" # sensitive
 
-                #cloud env vars
-                az pipelines variable-group variable create --id $variableGroupId --name "sqlconnectionstring" --value $sqlconnectionstring
-                az pipelines variable-group variable create --id $variableGroupId --name "nosqlconnectionstring" --value $nosqlconnectionstring
+        # #cloud env vars
+        #     az pipelines variable-group variable create --id $variableGroupId --name "sqlconnectionstring" --value $sqlconnectionstring
+        #     az pipelines variable-group variable create --id $variableGroupId --name "nosqlconnectionstring" --value $nosqlconnectionstring
+
+        #read-host "Done creating library variable group variables... press enter to continue"
 
     ################################################## create pipeline ##################################################
         # CREATE PIPELINE HERE
+        write-host "Started creating pipeline..."
 
             # add variablegroup name to pipeline.yml -> ONLY VARIABLE THIS SCRIPT REPLACES -> NO need when terraforming in release? so no variable is replaced in this script
             #((Get-Content -path azure-pipelines.yml -Raw) -replace 'tempvariablegroupname',$variableGroupName) | Set-Content -Path azure-pipelines.yml
@@ -843,23 +931,25 @@ if($verifySetup -eq "y")
             # create pipeline
                 #$pipelineDetails = az pipelines create --name $pipelinename --yml-path '\.azure\azure-pipelines.yml' --org $fullOrgName --repository-type "tfsgit" --repository $repositoryName
                 #$pipelineId = az pipelines create --name $pipelinename --yml-path '\.azure\azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master" --output json --query "[id]"
-                write-host "Started creating pipeline..."
-                $pipelineDeployName = "Deploy "+$resourceName
-                $pipelineDestroyName = "Deploy "+$resourceName
-                az pipelines create --name $pipelineDeployName --yml-path '\.azure\azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master"
-                az pipelines create --name $pipelineDestroyName --yml-path '\.azure\azure-pipelines-destroy.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master"
-                #$pipelineDetails = az pipelines create --name $pipelinename --yml-path '\.azure\azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master" --output tsv 2>$null
+                #write-host "Started creating pipeline..."
+
+            $pipelineDeployName = "Deploy "+$resourceName
+            $pipelineDestroyName = "Deploy "+$resourceName
+            az pipelines create --name $pipelineDeployName --yml-path '\.azure\azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master"
+            az pipelines create --name $pipelineDestroyName --yml-path '\.azure\azure-pipelines-destroy.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master"
+                
+            #$pipelineDetails = az pipelines create --name $pipelinename --yml-path '\.azure\azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master" --output tsv 2>$null
                 #write-host $pipelineDetails
 
-                $pipelineId = az pipelines show --name $pipelinename --org $fullOrgName --project $projectName --output json --query "[id]"
-                $pipelineId = $pipelineId.Replace("[","")
-                $pipelineId = $pipelineId.Replace("]","")
-                $pipelineId = $pipelineId.Replace(" ","")
-                write-host "PipelineId: "$pipelineId
+            $pipelineId = az pipelines show --name $pipelinename --org $fullOrgName --project $projectName --output json --query "[id]"
+            $pipelineId = $pipelineId.Replace("[","")
+            $pipelineId = $pipelineId.Replace("]","")
+            $pipelineId = $pipelineId.Replace(" ","")
+            write-host "PipelineId: "$pipelineId
 
-                write-host "Done creating pipeline..."
+                #write-host "Done creating pipeline..."
                 
-        Read-Host "Press enter to continue..."
+        Read-Host "Done creating pipeline... press enter to continue"
 
     ################################################## prompt set up release in azure devops ##################################################
         write-host 

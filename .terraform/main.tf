@@ -10,32 +10,31 @@ terraform {
     }
   }
   backend "azurerm" {
-      resource_group_name  = "tempresourcenameresourcegroup" #data.azurerm_resource_group.exampleResourcegroup.name
+      resource_group_name  = data.azurerm_resource_group.exampleResourcegroup.name #"tempresourcenameresourcegroup" #data.azurerm_resource_group.exampleResourcegroup.name
       storage_account_name = "tempresourcenamestorageaccount" #data.azurerm_storage_account.exampleStorageaccount.name
-      container_name       = "tempterraformcontainername"
+      container_name       = "tempterraformcontainername" #"terraform"
       key                  = "terraform.tfstate"
-      access_key           = "tempstoragekey" # use library secret/var?
+      access_key           = "tempstoragekey" # use library secret/var? # sensitive
 
       #features{}
   }
 }
 
 provider "azurerm" {
-  subscription_id = "tempsubscriptionid"
+  subscription_id = "tempsubscriptionid" # sensitive
   features {}
-  client_id       = "tempclientid" #"6cb8d31e-87f0-443c-abc6-66a8ae0a9763"
-  client_secret   = "tempclientsecret" #"2b38Q~7FdKjSYscZMg-ib3aAABJKga~YqUAN_cYw"
-  tenant_id       = "temptenantid" #"ec481362-ae50-4bfb-8524-b7c76d7b4cd8"
+  client_id       = "tempclientid" #"6cb8d31e-87f0-443c-abc6-66a8ae0a9763" # sensitive
+  client_secret   = "tempclientsecret" #"2b38Q~7FdKjSYscZMg-ib3aAABJKga~YqUAN_cYw" # sensitive
+  tenant_id       = "temptenantid" #"ec481362-ae50-4bfb-8524-b7c76d7b4cd8" # sensitive
 }
 
 provider "azuredevops" {
   org_service_url = "https://dev.azure.com/temporganizationname/"
 }
 
-#data "azurerm_resource_group" "exampleResourcegroup" {
-#  #id = "tempresourcegroupid"
-#  name = "tempresourcenameresourcegroup"
-#}
+data "azurerm_resource_group" "exampleResourcegroup" {
+  name = "tempresourcenameresourcegroup"
+}
 
 #data "azurerm_storage_account" "exampleStorageaccount" {
 #  #id                 = "tempstorageaccountid"
