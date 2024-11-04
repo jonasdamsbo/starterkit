@@ -54,9 +54,9 @@ steps:
     command: 'init'
     workingDirectory: '$(build.artifactstagingdirectory)/terraform'
     backendServiceArm: 'Azure Resource Manager'
-    backendAzureRmResourceGroupName: '$(resourcegroupname)' #'tempresourcenameresourcegroup'
-    backendAzureRmStorageAccountName: '$(storageaccountname)' #'tempstorageaccountname'
-    backendAzureRmContainerName: '$(terraformcontainername)' #'tempterraformcontainername'
+    backendAzureRmResourceGroupName: 'tempresourcenameresourcegroup'
+    backendAzureRmStorageAccountName: 'tempstorageaccountname'
+    backendAzureRmContainerName: 'tempterraformcontainername'
     backendAzureRmKey: 'terraform.tfstate'
 
 - task: TerraformTaskV4@4

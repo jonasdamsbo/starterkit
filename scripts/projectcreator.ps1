@@ -658,6 +658,13 @@ if($verifySetup -eq "y")
         read-host "Done replacing vars in old-project.ps1 and setcloudvars.ps1, press enter to proceed..."
 
 
+    ################################################## replace vars in .yml files ###############################################
+
+        ((Get-Content -path azure-pipelines-destroy.yml -Raw) -replace 'tempresourcename',$resourceName) | Set-Content -Path azure-pipelines-destroy.yml
+        ((Get-Content -path azure-pipelines-destroy.yml -Raw) -replace 'tempstorageaccountname',$storageaccountName) | Set-Content -Path azure-pipelines-destroy.yml
+        ((Get-Content -path azure-pipelines-destroy.yml -Raw) -replace 'tempterraformcontainername',$terraformcontainername) | Set-Content -Path azure-pipelines-destroy.yml
+
+
     ################################################## replace vars in .tf files ##################################################
 
         # replace x with $x in main.tf
@@ -669,7 +676,6 @@ if($verifySetup -eq "y")
             ((Get-Content -path appservices.tf -Raw) -replace 'tempresourcename',$tempresourcename) | Set-Content -Path appservices.tf
             #((Get-Content -path appservices.tf -Raw) -replace 'tempapiurl',$apiurl) | Set-Content -Path appservices.tf
             ((Get-Content -path appservices.tf -Raw) -replace 'tempdbbackupcontainername',$dbbackupcontainername) | Set-Content -Path appservices.tf
-            ((Get-Content -path appservices.tf -Raw) -replace 'tempterraformcontainername',$terraformcontainername) | Set-Content -Path appservices.tf
 
         # replace x with $x in nosqldatabases.tf
             ((Get-Content -path nosqldatabases.tf -Raw) -replace 'tempresourcename',$tempresourcename) | Set-Content -Path nosqldatabases.tf
