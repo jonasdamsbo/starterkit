@@ -23,13 +23,6 @@ resource "azurerm_mssql_server" "exampleMssqlserver" {
 #   notes = "Prevents mssqldb data loss"
 # }
 
-# resource "azurerm_mssql_firewall_rule" "exampleMssqlfirewallruleApi" {
-#   name             = "tempresourcenamemssqlfirewallruleApi"
-#   server_id        = azurerm_mssql_server.exampleMssqlserver.id
-#   start_ip_address = "tempapiappip"
-#   end_ip_address   = "tempapiappip"
-# }
-
 # resource "azurerm_mssql_firewall_rule" "exampleMssqlfirewallruleLocal" {
 #   name             = "tempresourcenamemssqlfirewallruleLocal"
 #   server_id        = azurerm_mssql_server.exampleMssqlserver.id
@@ -59,6 +52,15 @@ resource "azurerm_mssql_database" "exampleMssqldatabase" {
   #   prevent_destroy = true
   # }
 }
+
+resource "azurerm_mssql_firewall_rule" "exampleMssqlfirewallruleApi" {
+  name             = "tempresourcenamemssqlfirewallruleApi"
+  server_id        = azurerm_mssql_server.exampleMssqlserver.id
+  start_ip_address = azurerm_windows_web_app.exampleApiapp.outbound_ip_addresses #"tempapiappip"
+  end_ip_address   = azurerm_windows_web_app.exampleApiapp.outbound_ip_addresses #"tempapiappip"
+  
+}
+
 # resource "azurerm_management_lock" "exampleMssqllock" {
 #   name = "tempresourcenamemssqllock"
 #   scope = azurerm_mssql_database.exampleMssqldatabase.id
