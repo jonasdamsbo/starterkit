@@ -833,22 +833,22 @@ if($verifySetup -eq "y")
             git add .
             git commit -m "initial commit"
             git push --set-upstream $repositoryName master
-            git push  jgdmytestyRepository 
+            #git push  jgdmytestyRepository 
             # git add .
             # git commit -m "created branches"
-            # git push $repositoryName
+            git push $repositoryName
 
         # create test and production branches
-            git fetch
-            git pull
-            git checkout -b "test"
-            git checkout -b "pre-production"
-            git checkout -b "production"
-            git checkout "master"
-            git push "test"
-            git push "pre-production"
-            git push "production"
-            git branch -a
+            # git fetch
+            # git pull
+            # git checkout -b "test"
+            # git checkout -b "pre-production"
+            # git checkout -b "production"
+            # git checkout "master"
+            # git push "test"
+            # git push "pre-production"
+            # git push "production"
+            # git branch -a
 
         # add master branch lock
             write-host
