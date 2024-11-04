@@ -870,7 +870,7 @@ if($verifySetup -eq "y")
     ################################################## create library variable group ##################################################
         write-host "Started creating library variablegroup..."
 
-        #az pipelines variable-group create --name $variableGroupName --variables "subscriptionid"=$subId
+        #az pipelines variable-group create --name $variableGroupName --organization $fullOrgName --project $projectName --variables "subscriptionid"=$subId
         az pipelines variable-group create --name $variableGroupName --organization $fullOrgName --project $projectName --variables "subscriptionid"=$subId "tenantid"=$tenantid "clientid"=$clientid "clientsecret"=$clientsecret "storagekey"=$storagekey "nosqlpassword"=$nosqlpassword "sqlpassword"=$sqlpassword
 
         $variableGroupId = az pipelines variable-group list --group-name $resourceName+"variablegroup" --org $fullOrgName --project $projectName --output json --query "[id]"
@@ -881,16 +881,16 @@ if($verifySetup -eq "y")
     
     ################################################## new create sensitive library variable group variables ##################################################
 
-        #write-host "Started creating library variablegroup variables..."
+        # write-host "Started creating library variablegroup variables..."
 
-        #az pipelines variable-group variable create --id $variableGroupId --name "tenantid" --value $tenantid # sensitive?
-        #az pipelines variable-group variable create --id $variableGroupId --name "clientid" --value $clientid # sensitive?
-        #az pipelines variable-group variable create --id $variableGroupId --name "clientsecret" --value $clientsecret # sensitive
-        #az pipelines variable-group variable create --id $variableGroupId --name "storagekey" --value $storagekey # sensitive
-        #az pipelines variable-group variable create --id $variableGroupId --name "nosqlpassword" --value $nosqlpassword # sensitive
-        #az pipelines variable-group variable create --id $variableGroupId --name "sqlpassword" --value $sqlpassword # sensitive
+        # az pipelines variable-group variable create --id $variableGroupId --name "tenantid" --value $tenantid # sensitive?
+        # az pipelines variable-group variable create --id $variableGroupId --name "clientid" --value $clientid # sensitive?
+        # az pipelines variable-group variable create --id $variableGroupId --name "clientsecret" --value $clientsecret # sensitive
+        # az pipelines variable-group variable create --id $variableGroupId --name "storagekey" --value $storagekey # sensitive
+        # az pipelines variable-group variable create --id $variableGroupId --name "nosqlpassword" --value $nosqlpassword # sensitive
+        # az pipelines variable-group variable create --id $variableGroupId --name "sqlpassword" --value $sqlpassword # sensitive
 
-        #read-host "Done creating library variable group variables... press enter to continue"
+        # read-host "Done creating library variable group variables... press enter to continue"
             
     ################################################## create library variable group variables ##################################################
         # kun values som absolut ikke må være i koden, oprettes som lib vars og replaces i replacetokens. Resten printes til readme.txt og direkte i .tf/ps1 filerne
@@ -959,18 +959,20 @@ if($verifySetup -eq "y")
                 #write-host "Started creating pipeline..."
 
             $pipelineDeployName = "Deploy "+$resourceName
-            $pipelineDestroyName = "Deploy "+$resourceName
+            $pipelineDestroyName = "Destroy "+$resourceName
             az pipelines create --name $pipelineDeployName --yml-path '\azure\azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master"
             az pipelines create --name $pipelineDestroyName --yml-path '\azure\azure-pipelines-destroy.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master"
                 
             #$pipelineDetails = az pipelines create --name $pipelinename --yml-path '\.azure\azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master" --output tsv 2>$null
                 #write-host $pipelineDetails
 
-            $pipelineId = az pipelines show --name $pipelinename --org $fullOrgName --project $projectName --output json --query "[id]"
+            $pipelineId = az pipelines show --name $pipelineDeployName --org $fullOrgName --project $projectName --output json --query "[id]"
             $pipelineId = $pipelineId.Replace("[","")
             $pipelineId = $pipelineId.Replace("]","")
             $pipelineId = $pipelineId.Replace(" ","")
             write-host "PipelineId: "$pipelineId
+            $pipelines = az pipelines show --org $fullOrgName --project $projectName --output json
+            write-host "Pipelines: "$pipelines
 
                 #write-host "Done creating pipeline..."
                 
