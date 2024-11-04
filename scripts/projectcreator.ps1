@@ -388,7 +388,9 @@ if($verifySetup -eq "y")
         $subscriptionId = $subId
 
         $applicationName = $resourceName+"enterpriseapplication"
-        $appDetails = az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/$subscriptionId" --name $applicationName
+        $appDetailsJson = az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/$subscriptionId" --name $applicationName
+        write-host "appdetailsjson: $appDetailsJson"
+        $appDetails = $appDetailsJson | ConvertFrom-Json
         write-host "appdetails: $appDetails"
 
         $clientid = $appDetails.appId
@@ -578,7 +580,7 @@ if($verifySetup -eq "y")
         if($resourcesDontExist -eq "true")
         {
             # create resources
-            read-host "Creating preliminary resources..."
+            write-host "Creating preliminary resources..."
             write-host "path: "$PWD.Path
 
             # create repo - 
@@ -625,7 +627,7 @@ if($verifySetup -eq "y")
     ################################################## prepare cloud vars ######################################################
 
     
-        $apiurl = "https://"+$resourceName+"apiapp.azurewebsites.net/"
+        #$apiurl = "https://"+$resourceName+"apiapp.azurewebsites.net/"
         # $apiappname = $resourceName+"apiapp"
         # $webappname = $resourceName+"webapp"
         # $appserviceplanname = $resourceName+"appserviceplan"
