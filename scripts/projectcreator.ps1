@@ -667,7 +667,7 @@ if($verifySetup -eq "y")
 
         # replace x with $x in appservices.tf
             ((Get-Content -path appservices.tf -Raw) -replace 'tempresourcename',$tempresourcename) | Set-Content -Path appservices.tf
-            ((Get-Content -path appservices.tf -Raw) -replace 'tempapiurl',$apiurl) | Set-Content -Path appservices.tf
+            #((Get-Content -path appservices.tf -Raw) -replace 'tempapiurl',$apiurl) | Set-Content -Path appservices.tf
             ((Get-Content -path appservices.tf -Raw) -replace 'tempdbbackupcontainername',$dbbackupcontainername) | Set-Content -Path appservices.tf
             ((Get-Content -path appservices.tf -Raw) -replace 'tempterraformcontainername',$terraformcontainername) | Set-Content -Path appservices.tf
 
