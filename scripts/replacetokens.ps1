@@ -251,9 +251,9 @@ write-host "done replacing"
     # cd scripts
     # write-host "path: "$myrootpath
 
-    write-host "printing content of setcloudvars.ps1"
-    write-host (Get-Content -path $setcloudvarsps1path -Raw)
-    write-host "done printing content of setcloudvars.ps1"
+    # write-host "printing content of setcloudvars.ps1"
+    # write-host (Get-Content -path $setcloudvarsps1path -Raw)
+    # write-host "done printing content of setcloudvars.ps1"
 
     # cd ..
     # write-host "path: "$myrootpath
