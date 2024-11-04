@@ -1,7 +1,7 @@
 Write-Host "starting old"
 $projectName = "tempprojectname"
 $orgName = "temporganizationname"
-$orgName = "tempresourcename"
+$resourceName = "tempresourcename"
 #$azureorgit = "tempazureorgit"
 $gitfolder = "$env:userprofile/Documents/GitHub/"
 $repofolder = $gitfolder+$orgName #+"repo"
