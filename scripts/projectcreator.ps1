@@ -387,7 +387,7 @@ if($verifySetup -eq "y")
         
         $subscriptionId = $subId
 
-        $applicationName = $resourceName+"enterpriseapplication"
+        $applicationName = $resourceName+"application"
         $appDetailsJson = az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/$subscriptionId" --name $applicationName
         write-host "appdetailsjson: $appDetailsJson"
         $appDetails = $appDetailsJson | ConvertFrom-Json
@@ -688,15 +688,15 @@ if($verifySetup -eq "y")
             ((Get-Content -path main.tf -Raw) -replace 'temporganizationname',$orgName) | Set-Content -Path main.tf
 
         # replace x with $x in appservices.tf
-            ((Get-Content -path appservices.tf -Raw) -replace 'tempresourcename',$tempresourcename) | Set-Content -Path appservices.tf
+            ((Get-Content -path appservices.tf -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path appservices.tf
             #((Get-Content -path appservices.tf -Raw) -replace 'tempapiurl',$apiurl) | Set-Content -Path appservices.tf
             ((Get-Content -path appservices.tf -Raw) -replace 'tempdbbackupcontainername',$dbbackupcontainername) | Set-Content -Path appservices.tf
 
         # replace x with $x in nosqldatabases.tf
-            ((Get-Content -path nosqldatabases.tf -Raw) -replace 'tempresourcename',$tempresourcename) | Set-Content -Path nosqldatabases.tf
+            ((Get-Content -path nosqldatabases.tf -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path nosqldatabases.tf
 
         # replace x with $x in sqldatabases.tf
-            ((Get-Content -path sqldatabases.tf -Raw) -replace 'tempresourcename',$tempresourcename) | Set-Content -Path sqldatabases.tf
+            ((Get-Content -path sqldatabases.tf -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path sqldatabases.tf
 
         Set-Location ..
 
@@ -871,7 +871,7 @@ if($verifySetup -eq "y")
         write-host "Started creating library variablegroup..."
 
         #az pipelines variable-group create --name $variableGroupName --variables "subscriptionid"=$subId
-        az pipelines variable-group create --name $variableGroupName --variables "subscriptionid"=$subId "tenantid"=$tenantid "clientid"=$clientid "clientsecret"=$clientsecret "storagekey"=$storagekey "nosqlpassword"=$nosqlpassword "sqlpassword"=$sqlpassword
+        az pipelines variable-group create --name $variableGroupName --organization $fullOrgName --project $projectName --variables "subscriptionid"=$subId "tenantid"=$tenantid "clientid"=$clientid "clientsecret"=$clientsecret "storagekey"=$storagekey "nosqlpassword"=$nosqlpassword "sqlpassword"=$sqlpassword
 
         $variableGroupId = az pipelines variable-group list --group-name $resourceName+"variablegroup" --org $fullOrgName --project $projectName --output json --query "[id]"
         write-host "variableGroupId: "$variableGroupId
