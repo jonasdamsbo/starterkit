@@ -41,7 +41,7 @@ write-host "Replacing vars in azure-pipelines.yml"
 # # # ((Get-Content -path azurepipeline.yml -Raw) -replace 'tempapiname',$apiappname) | Set-Content -Path azurepipeline.yml
 # # # ((Get-Content -path azurepipeline.yml -Raw) -replace 'tempwebname',$webappname) | Set-Content -Path azurepipeline.yml
 # # # Get-Content -path azurepipeline.yml
-cd "./.azure/"
+Set-Location "./.azure/"
 
 # replace tempsubid with $fullSubId
 ((Get-Content -path azure-pipelines.yml -Raw) -replace 'tempsubscriptionid',$fullSubId) | Set-Content -Path azure-pipelines.yml
@@ -57,14 +57,14 @@ $apiappname = $resourceName+"Apiapp"
 $webappname = $resourceName+"Webapp"
 ((Get-Content -path azure-pipelines.yml -Raw) -replace 'tempwebappname',$webappname) | Set-Content -Path azure-pipelines.yml
 
-cd ..
+Set-Location ..
 
 Read-Host "Press enter to continue..."
 
 
 ### replace cloud # replace temp vars in terraform files in project/.terraform folder with projectname, + subscription&organization, + principalname?, 
 write-host "Replacing vars in *.tf"
-cd "./.terraform/"
+Set-Location "./.terraform/"
 
 # replace temporganizationname with $fullOrgName in main.tf
 ((Get-Content -path main.tf -Raw) -replace 'temporganizationname',$fullOrgName) | Set-Content -Path main.tf
@@ -123,7 +123,7 @@ cd "./.terraform/"
     ((Get-Content -path appservices.tf -Raw) -replace 'tempsqlconnectionstring',$sqlconnectionstring) | Set-Content -Path appservices.tf #
     ((Get-Content -path appservices.tf -Raw) -replace 'tempnosqlconnectionstring',$nosqlconnectionstring) | Set-Content -Path appservices.tf
 
-cd ..
+    Set-Location ..
 
 # # # Can you create subscription+billingaccount+billingprofile+invoicesection with terraform?
 # # # find billingaccount, billingprofile and invoicesection
@@ -138,7 +138,7 @@ Read-Host "Press enter to continue..."
 
 ### replace old-project # (tempprojectname with $projectName & temporganizationname with $orgName) in old-project script in new folder # azuregit etc?, 
 write-host "Replacing vars in old-project.ps1"
-cd "./scripts/"
+Set-Location "./scripts/"
 
 # replace tempprojectname with $projectName
 ((Get-Content -path old-project.ps1 -Raw) -replace 'tempprojectname',$projectName) | Set-Content -Path old-project.ps1
@@ -149,17 +149,17 @@ cd "./scripts/"
 #replace resourcename in setcloudvars.ps
 ((Get-Content -path setcloudvars.ps1 -Raw) -replace 'tempresourcename',$resourceName) | Set-Content -Path setcloudvars.ps1
 
-cd ..
+Set-Location ..
 
 
 ## Replacing branch-policy vars
 write-host "Replacing vars in branch-policy.json"
-cd "./.azure/"
+Set-Location "./.azure/"
 
 # replace tempprojectname with $projectName
 ((Get-Content -path branch-policy.json -Raw) -replace 'temprepositoryid',$repositoryId) | Set-Content -Path branch-policy.json
 
-cd ..
+Set-Location ..
 
 # # # replace tempazureorgit with $azureorgit
 

@@ -645,7 +645,7 @@ if($verifySetup -eq "y")
         
         write-host "Replacing vars in old-project.ps1 and setcloudvars.ps1"
                 
-        cd "./scripts/"
+        Set-Location "./scripts/"
 
         ((Get-Content -path old-project.ps1 -Raw) -replace 'tempprojectname',$projectName) | Set-Content -Path old-project.ps1
         ((Get-Content -path old-project.ps1 -Raw) -replace 'temporganizationname',$orgName) | Set-Content -Path old-project.ps1
@@ -653,7 +653,7 @@ if($verifySetup -eq "y")
 
         ((Get-Content -path setcloudvars.ps1 -Raw) -replace 'tempresourcename',$resourceName) | Set-Content -Path setcloudvars.ps1
 
-        cd ..
+        Set-Location ..
 
         read-host "Done replacing vars in old-project.ps1 and setcloudvars.ps1, press enter to proceed..."
 

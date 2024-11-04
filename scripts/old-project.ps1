@@ -41,12 +41,12 @@ ELSE
     # write-host "Cloned"
     
     # cd existing project
-    cd $repofolder
-    cd $projectName
+    Set-Location $repofolder
+    Set-Location $projectName
 }
 
 ## if found,
-cd $PWD.Path
+Set-Location $PWD.Path
 
 while($installTools -ne "x")
 {
