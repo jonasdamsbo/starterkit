@@ -662,12 +662,23 @@ if($verifySetup -eq "y")
 
     ################################################## replace vars in .yml files ###############################################
 
+        write-host "Replacing vars in azure-pipelines-destroy.yml"
+
+        Set-Location "./azure/"
+
         ((Get-Content -path azure-pipelines-destroy.yml -Raw) -replace 'tempresourcename',$resourceName) | Set-Content -Path azure-pipelines-destroy.yml
         ((Get-Content -path azure-pipelines-destroy.yml -Raw) -replace 'tempstorageaccountname',$storageaccountName) | Set-Content -Path azure-pipelines-destroy.yml
         ((Get-Content -path azure-pipelines-destroy.yml -Raw) -replace 'tempterraformcontainername',$terraformcontainername) | Set-Content -Path azure-pipelines-destroy.yml
 
+        Set-Location ..
+
+        read-host "Done replacing vars in azure-pipelines-destroy.yml, press enter to proceed..."
 
     ################################################## replace vars in .tf files ##################################################
+
+        write-host "Replacing vars in .tf files"
+
+        Set-Location "./terraform/"
 
         # replace x with $x in main.tf
             ((Get-Content -path main.tf -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path main.tf
@@ -685,30 +696,33 @@ if($verifySetup -eq "y")
         # replace x with $x in sqldatabases.tf
             ((Get-Content -path sqldatabases.tf -Raw) -replace 'tempresourcename',$tempresourcename) | Set-Content -Path sqldatabases.tf
 
+        Set-Location ..
 
-    # ################################################## replace vars in readme.txt #################################################
+        read-host "Done replacing vars in .tf files, press enter to proceed..."
+
+    # ################################################## replace vars in README.md #################################################
 
         write-host "Replacing vars in readme.txt" # put alt i readme som ikke sættes i lib vars
 
-        ((Get-Content -path readme.txt -Raw) -replace 'temporganizationname',$orgName) | Set-Content -Path readme.txt
+        ((Get-Content -path README.md -Raw) -replace 'temporganizationname',$orgName) | Set-Content -Path README.md
         #((Get-Content -path readme.txt -Raw) -replace 'tempfullorganizationname',$fullOrgName) | Set-Content -Path readme.txt
-        ((Get-Content -path readme.txt -Raw) -replace 'tempsubscriptionname',$subscriptionName) | Set-Content -Path readme.txt
+        ((Get-Content -path README.md -Raw) -replace 'tempsubscriptionname',$subscriptionName) | Set-Content -Path README.md
         #((Get-Content -path readme.txt -Raw) -replace 'tempfullsubscriptionid',$fullSubId) | Set-Content -Path readme.txt
-        ((Get-Content -path readme.txt -Raw) -replace 'tempprojectname',$projectName) | Set-Content -Path readme.txt
+        ((Get-Content -path README.md -Raw) -replace 'tempprojectname',$projectName) | Set-Content -Path README.md
         #((Get-Content -path readme.txt -Raw) -replace 'tempprojectid',$projectId) | Set-Content -Path readme.txt
         #((Get-Content -path readme.txt -Raw) -replace 'tempresourcename',$resourceName) | Set-Content -Path readme.txt
-        ((Get-Content -path readme.txt -Raw) -replace 'tempresourcegroupname',$resourcegroupName) | Set-Content -Path readme.txt
+        ((Get-Content -path README.md -Raw) -replace 'tempresourcegroupname',$resourcegroupName) | Set-Content -Path README.md
         #((Get-Content -path readme.txt -Raw) -replace 'tempresourcegroupid',$resourcegroupId) | Set-Content -Path readme.txt
-        ((Get-Content -path readme.txt -Raw) -replace 'temprepositoryname',$repositoryName) | Set-Content -Path readme.txt
+        ((Get-Content -path README.md -Raw) -replace 'temprepositoryname',$repositoryName) | Set-Content -Path README.md
         #((Get-Content -path readme.txt -Raw) -replace 'temprepositoryid',$repositoryId) | Set-Content -Path readme.txt
-        ((Get-Content -path readme.txt -Raw) -replace 'temppipelinename',$pipelineName) | Set-Content -Path readme.txt
+        ((Get-Content -path README.md -Raw) -replace 'temppipelinename',$pipelineName) | Set-Content -Path README.md
         #((Get-Content -path readme.txt -Raw) -replace 'temppipelineid',$pipelineId) | Set-Content -Path readme.txt
-        ((Get-Content -path readme.txt -Raw) -replace 'tempvariablegroupname',$variableGroupName) | Set-Content -Path readme.txt
+        ((Get-Content -path README.md -Raw) -replace 'tempvariablegroupname',$variableGroupName) | Set-Content -Path README.md
         #((Get-Content -path readme.txt -Raw) -replace 'tempvariablegroupid',$variableGroupId) | Set-Content -Path readme.txt
         
-        ((Get-Content -path readme.txt -Raw) -replace 'tempapplicationname',$applicationName) | Set-Content -Path readme.txt
+        ((Get-Content -path README.md -Raw) -replace 'tempapplicationname',$applicationName) | Set-Content -Path README.md
 
-        ((Get-Content -path readme.txt -Raw) -replace 'tempstorageaccountname',$storageaccountName) | Set-Content -Path readme.txt
+        ((Get-Content -path README.md -Raw) -replace 'tempstorageaccountname',$storageaccountName) | Set-Content -Path README.md
         #((Get-Content -path readme.txt -Raw) -replace 'tempstorageaccountid',$storageaccountId) | Set-Content -Path readme.txt
         # ((Get-Content -path readme.txt -Raw) -replace 'tempterraformcontainername',$terraformcontainername) | Set-Content -Path readme.txt
         # ((Get-Content -path readme.txt -Raw) -replace 'tempdbbackupcontainername',$dbbackupcontainername) | Set-Content -Path readme.txt
