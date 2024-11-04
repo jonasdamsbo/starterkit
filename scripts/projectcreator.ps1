@@ -935,8 +935,8 @@ if($verifySetup -eq "y")
 
             $pipelineDeployName = "Deploy "+$resourceName
             $pipelineDestroyName = "Deploy "+$resourceName
-            az pipelines create --name $pipelineDeployName --yml-path '\.azure\azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master"
-            az pipelines create --name $pipelineDestroyName --yml-path '\.azure\azure-pipelines-destroy.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master"
+            az pipelines create --name $pipelineDeployName --yml-path '\azure\azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master"
+            az pipelines create --name $pipelineDestroyName --yml-path '\azure\azure-pipelines-destroy.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master"
                 
             #$pipelineDetails = az pipelines create --name $pipelinename --yml-path '\.azure\azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master" --output tsv 2>$null
                 #write-host $pipelineDetails

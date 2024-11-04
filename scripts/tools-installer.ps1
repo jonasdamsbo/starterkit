@@ -272,9 +272,9 @@ do {
             if($answer -match "L" -or $answer -match "Y")
             {
                 #prompt enter docker path? first check if "cd .." + "Test-Path -Path 'pathToFolderThatContains.docker'"
-                Write-host "Checking for .docker folder"
+                Write-host "Checking for docker folder"
                 $dockerFolderExists = "false"
-                $dockerPath = "./.docker/"
+                $dockerPath = "./docker/"
                 cd ..
                 while($dockerFolderExists -eq "false")
                 {
@@ -286,7 +286,7 @@ do {
                     else
                     {
                         $dockerFolderExists = "false"
-                        $dockerPath = read-host "Can't find .docker folder. Please specify absolute path to the folder that contains the .docker folder"
+                        $dockerPath = read-host "Can't find docker folder. Please specify absolute path to the folder that contains the docker folder"
                     }
                 }
 
@@ -296,7 +296,7 @@ do {
                 #cd $env:userprofile/Documents/GitHub/mywebrepo/.docker/
                 #& $env:userprofile/Documents/GitHub/mywebrepo/.docker/docker-setup run
                 #cd ..
-                cd './.docker/'
+                cd './docker/'
                 & './docker-setup' run
 
                         #*/Documents/GitHub/mywebrepo/mydocker/docker-setup run
