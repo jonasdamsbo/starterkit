@@ -387,7 +387,7 @@ if($verifySetup -eq "y")
         
         $subscriptionId = $subId
 
-        $applicationName = $resourceName+"application"
+        $applicationName = $resourceName+"appregistration"
         $appDetailsJson = az ad sp create-for-rbac --role="Contributor" --scopes="/subscriptions/$subscriptionId" --name $applicationName
         write-host "appdetailsjson: $appDetailsJson"
         $appDetails = $appDetailsJson | ConvertFrom-Json
@@ -988,14 +988,14 @@ if($verifySetup -eq "y")
 
     ################################################## prompt set up release in azure devops ##################################################
         write-host 
-        write-host "Finally, you need to setup your release in Azure DevOps (See the development guide for help):"
+        write-host "Finally, you need to setup your release in Azure DevOps (See the development guide for help, link in readme.md):"
         write-host " - Go to your Azure DevOps project"
         write-host " - Pipelines > Releases > +New v > New release pipeline"
-        write-host " - Template > Select empty job > setup 4 stages:"
+        write-host " - Template > Select empty job > setup 3 stages:"
         write-host " - - Stage 1: Setup a replace tokens Azure CLI ps1 script task stage"
         write-host " - - Stage 2: Setup a Terraform install/init/plan/validate/apply stage"
-        write-host " - - Stage 3: Setup a set cloud vars Azure CLI ps1 script task stage"
-        write-host " - - Stage 4: Setup two parallel deploy stages for webapp and apiapp"
+        #write-host " - - Stage 3: Setup a set cloud vars Azure CLI ps1 script task stage"
+        write-host " - - Stage 3: Setup two parallel deploy stages for webapp and apiapp"
         write-host 
         read-host "Press enter when done..."
         write-host 
