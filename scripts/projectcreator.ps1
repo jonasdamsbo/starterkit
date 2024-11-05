@@ -599,7 +599,7 @@ if($verifySetup -eq "y")
             $oldRepoId = $oldRepoId.Replace("]","")
             $oldRepoId = $oldRepoId.Replace(" ","")
             write-host "Oldrepo id: "+$oldRepoId
-            az repos delete --id $oldRepoId --org $fullOrgName --project $projectName
+            az repos delete --id $oldRepoId --org $fullOrgName --project $projectName --yes True
             write-host "Done deleting old repository..."
 
             # create resourcegroup
@@ -891,7 +891,8 @@ if($verifySetup -eq "y")
         write-host "Started creating library variablegroup..."
 
         #az pipelines variable-group create --name $variableGroupName --organization $fullOrgName --project $projectName --variables "subscriptionid"=$subId
-        az pipelines variable-group create --name $variableGroupName --organization $fullOrgName --project $projectName --variables "subscriptionid"=$subId "tenantid"=$tenantid "clientid"=$clientid "clientsecret"=$clientsecret "storagekey"=$storagekey "nosqlpassword"=$nosqlpassword "sqlpassword"=$sqlpassword
+        az pipelines variable-group create --name $variableGroupName --organization $fullOrgName --project $projectName --authorize true --variables "subscriptionid=$subId"
+        #"tenantid"=$tenantid "clientid"=$clientid "clientsecret"=$clientsecret "storagekey"=$storagekey "nosqlpassword"=$nosqlpassword "sqlpassword"=$sqlpassword
 
         $variableGroupId = az pipelines variable-group list --group-name $resourceName+"variablegroup" --org $fullOrgName --project $projectName --output json --query "[id]"
         write-host "variableGroupId: "$variableGroupId
@@ -901,16 +902,16 @@ if($verifySetup -eq "y")
     
     ################################################## new create sensitive library variable group variables ##################################################
 
-        # write-host "Started creating library variablegroup variables..."
+        write-host "Started creating library variablegroup variables..."
 
-        # az pipelines variable-group variable create --id $variableGroupId --name "tenantid" --value $tenantid # sensitive?
-        # az pipelines variable-group variable create --id $variableGroupId --name "clientid" --value $clientid # sensitive?
-        # az pipelines variable-group variable create --id $variableGroupId --name "clientsecret" --value $clientsecret # sensitive
-        # az pipelines variable-group variable create --id $variableGroupId --name "storagekey" --value $storagekey # sensitive
-        # az pipelines variable-group variable create --id $variableGroupId --name "nosqlpassword" --value $nosqlpassword # sensitive
-        # az pipelines variable-group variable create --id $variableGroupId --name "sqlpassword" --value $sqlpassword # sensitive
+        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "tenantid" --value $tenantid # sensitive?
+        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "clientid" --value $clientid # sensitive?
+        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "clientsecret" --value $clientsecret # sensitive
+        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "storagekey" --value $storagekey # sensitive
+        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "nosqlpassword" --value $nosqlpassword # sensitive
+        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "sqlpassword" --value $sqlpassword # sensitive
 
-        # read-host "Done creating library variable group variables... press enter to continue"
+        read-host "Done creating library variable group variables... press enter to continue"
             
     ################################################## create library variable group variables ##################################################
         # kun values som absolut ikke må være i koden, oprettes som lib vars og replaces i replacetokens. Resten printes til readme.txt og direkte i .tf/ps1 filerne
