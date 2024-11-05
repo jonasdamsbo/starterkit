@@ -653,9 +653,9 @@ if($verifySetup -eq "y")
         $variableGroupName = $resourceName+"variablegroup"
 
 
-    # ############################################# replace vars in old-project.ps1 and setcloudvars.ps1 ############################################
+    # ############################################# replace vars in old-project.ps1 ############################################
         
-        write-host "Replacing vars in old-project.ps1 and setcloudvars.ps1"
+        write-host "Replacing vars in old-project.ps1"
                 
         Set-Location "./scripts/"
 
@@ -663,11 +663,22 @@ if($verifySetup -eq "y")
         ((Get-Content -path old-project.ps1 -Raw) -replace 'temporganizationname',$orgName) | Set-Content -Path old-project.ps1
         ((Get-Content -path old-project.ps1 -Raw) -replace 'tempresourcename',$resourceName) | Set-Content -Path old-project.ps1
 
-        ((Get-Content -path setcloudvars.ps1 -Raw) -replace 'tempresourcename',$resourceName) | Set-Content -Path setcloudvars.ps1
-
         Set-Location ..
 
-        read-host "Done replacing vars in old-project.ps1 and setcloudvars.ps1, press enter to proceed..."
+        read-host "Done replacing vars in old-project.ps1, press enter to proceed..."
+
+    
+    # ############################################# replace vars in setcloudvars.ps1 ############################################
+        
+        #write-host "Replacing vars in setcloudvars.ps1"
+                    
+        #Set-Location "./scripts/"
+
+        #((Get-Content -path setcloudvars.ps1 -Raw) -replace 'tempresourcename',$resourceName) | Set-Content -Path setcloudvars.ps1
+
+        #Set-Location ..
+
+        #read-host "Done replacing vars in setcloudvars.ps1, press enter to proceed..."
 
 
     ################################################## replace vars in .yml files ###############################################
@@ -697,8 +708,8 @@ if($verifySetup -eq "y")
 
         # replace x with $x in appservices.tf
             ((Get-Content -path appservices.tf -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path appservices.tf
-            #((Get-Content -path appservices.tf -Raw) -replace 'tempapiurl',$apiurl) | Set-Content -Path appservices.tf
             ((Get-Content -path appservices.tf -Raw) -replace 'tempdbbackupcontainername',$dbbackupcontainername) | Set-Content -Path appservices.tf
+            #((Get-Content -path appservices.tf -Raw) -replace 'tempapiurl',$apiurl) | Set-Content -Path appservices.tf
 
         # replace x with $x in nosqldatabases.tf
             ((Get-Content -path nosqldatabases.tf -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path nosqldatabases.tf
