@@ -598,6 +598,7 @@ if($verifySetup -eq "y")
             $oldRepoId = $oldRepoId.Replace("[","")
             $oldRepoId = $oldRepoId.Replace("]","")
             $oldRepoId = $oldRepoId.Replace(" ","")
+            write-host "Oldrepo id: "+$oldRepoId
             az repos delete --id $oldRepoId --org $fullOrgName --project $projectName
             write-host "Done deleting old repository..."
 
