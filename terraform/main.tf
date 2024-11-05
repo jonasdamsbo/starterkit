@@ -10,7 +10,7 @@ terraform {
     }
   }
   backend "azurerm" {
-      resource_group_name  = data.azurerm_resource_group.exampleResourcegroup.name #"tempresourcenameresourcegroup" #data.azurerm_resource_group.exampleResourcegroup.name
+      resource_group_name  = "tempresourcenameresourcegroup" #data.azurerm_resource_group.exampleResourcegroup.name
       storage_account_name = "tempresourcenamestorageaccount" #data.azurerm_storage_account.exampleStorageaccount.name
       container_name       = "tempterraformcontainername" #"terraform"
       key                  = "terraform.tfstate"

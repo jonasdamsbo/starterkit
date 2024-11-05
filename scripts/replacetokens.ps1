@@ -34,14 +34,14 @@ Write-Host "TOKENS ARE BEING REPLACED"
     # $nosqlpassword = "$env:NOSQLPASSWORD"
     # $sqlpassword = "$env:SQLPASSWORD"
 
-    $storagekey = "$env:STORAGEKEY"
-    $subscriptionid = "$env:SUBSCRIPTIONID"
-    $tenantid = "$env:TENANTID"
-    $clientsecret = "$env:CLIENTSECRET"
-    $clientid = "$env:CLIENTID"
+    $storagekey = ${env:STORAGEKEY} #"$env:STORAGEKEY"
+    $subscriptionid = ${env:SUBSCRIPTIONID} #"$env:SUBSCRIPTIONID"
+    $tenantid = ${env:TENANTID} #"$env:TENANTID"
+    $clientsecret = ${env:CLIENTSECRET} #"$env:CLIENTSECRET"
+    $clientid = ${env:CLIENTID} #"$env:CLIENTID"
 
-    $nosqlpassword = "$env:NOSQLPASSWORD"
-    $sqlpassword = "$env:SQLPASSWORD"
+    $nosqlpassword = ${env:NOSQLPASSWORD} #"$env:NOSQLPASSWORD"
+    $sqlpassword = ${env:SQLPASSWORD} #"$env:SQLPASSWORD"
 
     
 # check lib vars
@@ -181,6 +181,7 @@ write-host "started replacing"
     ((Get-Content -path $maintfpath -Raw) -replace 'tempstoragekey',$storagekey) | Set-Content -Path $maintfpath # sensitive
     ((Get-Content -path $nosqldatabasestfpath -Raw) -replace 'tempnosqlpassword',$nosqlpassword) | Set-Content -Path $nosqldatabasestfpath # sensitive
     ((Get-Content -path $sqldatabasestfpath -Raw) -replace 'tempsqlpassword',$sqlpassword) | Set-Content -Path $sqldatabasestfpath # sensitive
+    ((Get-Content -path $appservicestfpath -Raw) -replace 'tempstoragekey',$storagekey) | Set-Content -Path $appservicestfpath # sensitive
     ((Get-Content -path $appservicestfpath -Raw) -replace 'tempnosqlpassword',$nosqlpassword) | Set-Content -Path $appservicestfpath # sensitive
     ((Get-Content -path $appservicestfpath -Raw) -replace 'tempsqlpassword',$sqlpassword) | Set-Content -Path $appservicestfpath # sensitive
 

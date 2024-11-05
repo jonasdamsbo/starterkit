@@ -53,13 +53,13 @@ resource "azurerm_mssql_database" "exampleMssqldatabase" {
   # }
 }
 
-resource "azurerm_mssql_firewall_rule" "exampleMssqlfirewallruleApi" {
-  name             = "tempresourcenamemssqlfirewallruleApi"
-  server_id        = azurerm_mssql_server.exampleMssqlserver.id
-  start_ip_address = azurerm_windows_web_app.exampleApiapp.outbound_ip_addresses #"tempapiappip"
-  end_ip_address   = azurerm_windows_web_app.exampleApiapp.outbound_ip_addresses #"tempapiappip"
+# resource "azurerm_mssql_firewall_rule" "exampleMssqlfirewallruleApi" {
+#   name             = "tempresourcenamemssqlfirewallruleApi"
+#   server_id        = azurerm_mssql_server.exampleMssqlserver.id
+#   start_ip_address = azurerm_windows_web_app.exampleApiapp.outbound_ip_addresses #"tempapiappip"
+#   end_ip_address   = azurerm_windows_web_app.exampleApiapp.outbound_ip_addresses #"tempapiappip"
   
-}
+# }
 
 # resource "azurerm_management_lock" "exampleMssqllock" {
 #   name = "tempresourcenamemssqllock"

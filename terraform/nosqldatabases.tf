@@ -10,7 +10,7 @@ resource "azurerm_cosmosdb_account" "exampleCosmosdbaccount" {
   automatic_failover_enabled = true
 
   #ip_range_filter = ["templocalip","tempapiappip"]
-  ip_range_filter = azurerm_windows_web_app.exampleApiapp.outbound_ip_address_list
+  #ip_range_filter = azurerm_windows_web_app.exampleApiapp.outbound_ip_address_list
 
   capabilities {
     name = "EnableAggregationPipeline"

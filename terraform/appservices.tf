@@ -22,7 +22,7 @@ resource "azurerm_windows_web_app" "exampleWebapp" {
 
   app_settings = {
     #"MyAppSettings:APIURL" = "tempapiurl"
-    "MyAppSettings:APIURL" = azurerm_windows_web_app.exampleApiapp.default_hostname
+    "MyAppSettings:APIURL" = "https://tempresourcenameapiapp.azurewebsites.net/" #azurerm_windows_web_app.exampleApiapp.default_hostname
     "ASPNETCORE_ENVIRONMENT" = "Production"
   }
 }
@@ -39,11 +39,11 @@ resource "azurerm_windows_web_app" "exampleApiapp" {
     ip_restriction_default_action = "Deny"
     always_on = "false"
     
-    ip_restriction {
-      ip_address = azurerm_windows_web_app.exampleWebapp.outbound_ip_addresses #"tempwebappip"
-      action = "Allow"
-      priority = 1
-    }
+    # ip_restriction {
+    #   ip_address = azurerm_windows_web_app.exampleWebapp.outbound_ip_addresses #"tempwebappip"
+    #   action = "Allow"
+    #   priority = 1
+    # }
 
     # ip_restriction {
     #   ip_address = "templocalip"
