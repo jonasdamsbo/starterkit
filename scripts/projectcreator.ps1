@@ -892,9 +892,9 @@ if($verifySetup -eq "y")
 
         #az pipelines variable-group create --name $variableGroupName --organization $fullOrgName --project $projectName --variables "subscriptionid"=$subId
         $variableGroupId = az pipelines variable-group create --name $variableGroupName --organization $fullOrgName --project $projectName --authorize --variables "subscriptionid=$subId" --output json --query "[id]"
-        $variableGroupId = $repositoryId.Replace("[","")
-        $variableGroupId = $repositoryId.Replace("]","")
-        $variableGroupId = $repositoryId.Replace(" ","")
+        $variableGroupId = $variableGroupId.Replace("[","")
+        $variableGroupId = $variableGroupId.Replace("]","")
+        $variableGroupId = $variableGroupId.Replace(" ","")
         #"tenantid"=$tenantid "clientid"=$clientid "clientsecret"=$clientsecret "storagekey"=$storagekey "nosqlpassword"=$nosqlpassword "sqlpassword"=$sqlpassword
 
         #$variableGroupId = az pipelines variable-group list --group-name $resourceName+"variablegroup" --org $fullOrgName --project $projectName --output json --query "[id]"
@@ -995,7 +995,7 @@ if($verifySetup -eq "y")
             $pipelineId = $pipelineId.Replace("]","")
             $pipelineId = $pipelineId.Replace(" ","")
             write-host "PipelineId: "$pipelineId
-            $pipelines = az pipelines show --org $fullOrgName --project $projectName --output json
+            $pipelines = az pipelines list --org $fullOrgName --project $projectName --output json
             write-host "Pipelines: "$pipelines
 
                 #write-host "Done creating pipeline..."
