@@ -670,15 +670,15 @@ if($verifySetup -eq "y")
     
     # ############################################# replace vars in setcloudvars.ps1 ############################################
         
-        #write-host "Replacing vars in setcloudvars.ps1"
+        write-host "Replacing vars in setcloudvars.ps1"
                     
-        #Set-Location "./scripts/"
+        Set-Location "./scripts/"
 
-        #((Get-Content -path setcloudvars.ps1 -Raw) -replace 'tempresourcename',$resourceName) | Set-Content -Path setcloudvars.ps1
+        ((Get-Content -path setcloudvars.ps1 -Raw) -replace 'tempresourcename',$resourceName) | Set-Content -Path setcloudvars.ps1
 
-        #Set-Location ..
+        Set-Location ..
 
-        #read-host "Done replacing vars in setcloudvars.ps1, press enter to proceed..."
+        read-host "Done replacing vars in setcloudvars.ps1, press enter to proceed..."
 
 
     ################################################## replace vars in .yml files ###############################################
