@@ -599,7 +599,7 @@ if($verifySetup -eq "y")
             $oldRepoId = $oldRepoId.Replace("]","")
             $oldRepoId = $oldRepoId.Replace(" ","")
             write-host "Oldrepo id: "+$oldRepoId
-            az repos delete --id $oldRepoId --org $fullOrgName --project $projectName --yes true
+            az repos delete --id $oldRepoId --org $fullOrgName --project $projectName --yes "true"
             write-host "Done deleting old repository..."
 
             # create resourcegroup
@@ -891,10 +891,13 @@ if($verifySetup -eq "y")
         write-host "Started creating library variablegroup..."
 
         #az pipelines variable-group create --name $variableGroupName --organization $fullOrgName --project $projectName --variables "subscriptionid"=$subId
-        az pipelines variable-group create --name $variableGroupName --organization $fullOrgName --project $projectName --authorize true --variables "subscriptionid=$subId"
+        $variableGroupId = az pipelines variable-group create --name $variableGroupName --organization $fullOrgName --project $projectName --authorize true --variables "subscriptionid=$subId" --output json --query "[id]"
+        $variableGroupId = $repositoryId.Replace("[","")
+        $variableGroupId = $repositoryId.Replace("]","")
+        $variableGroupId = $repositoryId.Replace(" ","")
         #"tenantid"=$tenantid "clientid"=$clientid "clientsecret"=$clientsecret "storagekey"=$storagekey "nosqlpassword"=$nosqlpassword "sqlpassword"=$sqlpassword
 
-        $variableGroupId = az pipelines variable-group list --group-name $resourceName+"variablegroup" --org $fullOrgName --project $projectName --output json --query "[id]"
+        #$variableGroupId = az pipelines variable-group list --group-name $resourceName+"variablegroup" --org $fullOrgName --project $projectName --output json --query "[id]"
         write-host "variableGroupId: "$variableGroupId
 
         read-host "Done creating library variable group... press enter to continue"
