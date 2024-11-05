@@ -18,6 +18,6 @@ Subscription: tempsubscriptionname
 
 Resourcegroup: tempresourcegroupname
 
-Application: tempapplicationname
+Appregistration: tempapplicationname
 
 Storageaccount: tempstorageaccountname
