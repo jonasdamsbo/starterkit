@@ -1012,6 +1012,7 @@ if($verifySetup -eq "y")
         write-host " - - Stage 2: Setup a Terraform install/init/plan/validate/apply stage"
         #write-host " - - Stage 3: Setup a set cloud vars Azure CLI ps1 script task stage"
         write-host " - - Stage 3: Setup two parallel deploy stages for webapp and apiapp"
+        write-host " - - Go to Variables > Variable groups > Link variable group"
         write-host 
         read-host "Press enter when done..."
         write-host 
