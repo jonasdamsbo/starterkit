@@ -594,7 +594,7 @@ if($verifySetup -eq "y")
             write-host "Done creating repository..."
 
             write-host "Deleting old repository..."
-            $oldRepoId = az repos show --name $projectName --org $fullOrgName --project $projectName --output json --query "[id]"
+            $oldRepoId = az repos show --repository $projectName --org $fullOrgName --project $projectName --output json --query "[id]"
             $oldRepoId = $oldRepoId.Replace("[","")
             $oldRepoId = $oldRepoId.Replace("]","")
             $oldRepoId = $oldRepoId.Replace(" ","")
