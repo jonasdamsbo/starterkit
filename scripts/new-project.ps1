@@ -1,5 +1,5 @@
 $gitfolder = "$env:userprofile/Documents/GitHub/"
-$starterKitName = "/mywebrepo"
+$starterKitName = "/starterkit"
 $orgName = "jonasdamsbo"
 $orgFolder = $gitfolder+$orgName #$gitfolder+"starter-kit-org"
 $projFolder = $orgFolder+$starterKitName #$orgFolder+"/starter-kit"
@@ -63,7 +63,7 @@ ELSE
         #New-Item -Path "$gitfolder" -Name "starter-kit-org" -ItemType "directory"
         write-host "Trying to clone starter kit"
         write-host $orgFolder
-        git clone $gitClonePath $projFolder #git clone https://github.com/jonasdamsbo/mywebrepo.git $projFolder
+        git clone $gitClonePath $projFolder #git clone https://github.com/jonasdamsbo/starterkit.git $projFolder
         write-host "Cloned"
 
         # cd folder
