@@ -4,6 +4,8 @@ Link to Azure DevOps: https://dev.azure.com/
 
 Link to Azure Portal: https://portal.azure.com/
 
+Link to Website: tempwebappurl
+
 Organization: temporganizationname
 
 Project: tempprojectname
@@ -19,5 +21,3 @@ Subscription: tempsubscriptionname
 Resourcegroup: tempresourcegroupname
 
 Appregistration: tempapplicationname
-
-Storageaccount: tempstorageaccountname

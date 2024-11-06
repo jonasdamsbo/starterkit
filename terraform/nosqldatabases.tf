@@ -74,13 +74,13 @@ resource "azurerm_cosmosdb_mongo_database" "exampleCosmosmongodb" {
 #   notes = "Prevents nosqldb data loss"
 # }
 
-resource "azurerm_cosmosdb_mongo_user_definition" "exampleCosmosdbmongodbuserdefinition" {
-  cosmos_mongo_database_id = azurerm_cosmosdb_mongo_database.exampleCosmosmongodb.id
-  username                 = "tempresourcename" # sensitive?
-  password                 = "tempnosqlpassword" # sensitive
+# resource "azurerm_cosmosdb_mongo_user_definition" "exampleCosmosdbmongodbuserdefinition" {
+#   cosmos_mongo_database_id = azurerm_cosmosdb_mongo_database.exampleCosmosmongodb.id
+#   username                 = "tempresourcename" # sensitive?
+#   password                 = "tempnosqlpassword" # sensitive
 
-  inherited_role_names = [
-    "readWrite",   # Role that allows read and write to the database
-    "dbAdmin"      # Role that allows administrative operations on the database
-  ]
-}
+#   inherited_role_names = [
+#     "readWrite",   # Role that allows read and write to the database
+#     "dbAdmin"      # Role that allows administrative operations on the database
+#   ]
+# }

@@ -37,7 +37,7 @@ steps:
 - task: AzureCLI@2
   displayName: replace tokens
   inputs:
-    azureSubscription: '$env:'
+    azureSubscription: 'Azure Resource Manager'
     scriptType: 'ps'
     scriptLocation: 'scriptPath'
     scriptPath: '$(build.artifactstagingdirectory)/scripts/replacetokens.ps1'

@@ -636,7 +636,8 @@ if($verifySetup -eq "y")
 
     ################################################## prepare cloud vars ######################################################
 
-    
+        $weburl = "https://"+$resourceName+"webapp.azurewebsites.net/"
+
         #$apiurl = "https://"+$resourceName+"apiapp.azurewebsites.net/"
         # $apiappname = $resourceName+"apiapp"
         # $webappname = $resourceName+"webapp"
@@ -745,7 +746,10 @@ if($verifySetup -eq "y")
         
         ((Get-Content -path README.md -Raw) -replace 'tempapplicationname',$applicationName) | Set-Content -Path README.md
 
-        ((Get-Content -path README.md -Raw) -replace 'tempstorageaccountname',$storageaccountName) | Set-Content -Path README.md
+        #((Get-Content -path README.md -Raw) -replace 'tempstorageaccountname',$storageaccountName) | Set-Content -Path README.md
+
+        ((Get-Content -path README.md -Raw) -replace 'tempwebappurl',$weburl) | Set-Content -Path README.md
+
         #((Get-Content -path readme.txt -Raw) -replace 'tempstorageaccountid',$storageaccountId) | Set-Content -Path readme.txt
         # ((Get-Content -path readme.txt -Raw) -replace 'tempterraformcontainername',$terraformcontainername) | Set-Content -Path readme.txt
         # ((Get-Content -path readme.txt -Raw) -replace 'tempdbbackupcontainername',$dbbackupcontainername) | Set-Content -Path readme.txt
