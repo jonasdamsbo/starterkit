@@ -106,16 +106,22 @@ write-host "SETTING CLOUD VARS"
 #$wa = "tempwebappname"
 
 ### get webappip
-    $webappip = az webapp config hostname get-external-ip --resource-group $resourcegroupname --webapp-name $webappname --query "[ip]"
-    $webappip = $webappip.Trim("[","]")
-    $webappip = $webappip.Replace("[","")
-    $webappip = $webappip.Replace("]","")
-    $webappip = $webappip.Replace(" ","")
-    $webappip = $webappip+"/32"
-    $webappip = $webappip.Replace(" ","")
-    $webappipquotes = '"'+$webappip+'"'
-    $webappipquotes = $webappipquotes.Replace(" ","")
-    $webappipnobackslash = $webappip.Replace("/32","")
+    # $webappip = az webapp config hostname get-external-ip --resource-group $resourcegroupname --webapp-name $webappname --query "[ip]"
+    # $webappip = $webappip.Trim("[","]")
+    # $webappip = $webappip.Replace("[","")
+    # $webappip = $webappip.Replace("]","")
+    # $webappip = $webappip.Replace(" ","")
+    # $webappip = $webappip+"/32"
+    # $webappip = $webappip.Replace(" ","")
+    # $webappipquotes = '"'+$webappip+'"'
+    # $webappipquotes = $webappipquotes.Replace(" ","")
+    # $webappipnobackslash = $webappip.Replace("/32","")
+
+    $webappip = az webapp show --resource-group $resourcegroupname --name $webappname
+    $webappip = $webappip | ConvertFrom-Json
+    $webappip = $webappip.outboundIpAddresses
+    $webappips = $webappip.Split(',')
+    $webappip = $webappips[0]
 
 
 # az resource show --query "[]."
@@ -127,14 +133,20 @@ write-host "SETTING CLOUD VARS"
 #$wa = "tempapiappname"
 
 ### get apiapp ip
-    $apiappip = az webapp config hostname get-external-ip --resource-group $resourcegroupname --webapp-name $apiappname --query "[ip]"
-    $apiappip = $apiappip.Trim("[","]")
-    $apiappip = $apiappip.Replace("[","")
-    $apiappip = $apiappip.Replace("]","")
-    $apiappip = $apiappip.Replace(" ","")
-    $apiappip = $apiappip+"/32"
-    $apiappip = $apiappip.Replace(" ","")
-    $apiappipnobackslash = $apiappip.Replace("/32","")
+    # $apiappip = az webapp config hostname get-external-ip --resource-group $resourcegroupname --webapp-name $apiappname --query "[ip]"
+    # $apiappip = $apiappip.Trim("[","]")
+    # $apiappip = $apiappip.Replace("[","")
+    # $apiappip = $apiappip.Replace("]","")
+    # $apiappip = $apiappip.Replace(" ","")
+    # $apiappip = $apiappip+"/32"
+    # $apiappip = $apiappip.Replace(" ","")
+    # $apiappipnobackslash = $apiappip.Replace("/32","")
+
+    $apiappip = az webapp show --resource-group $resourcegroupname --name $apiappname
+    $apiappip = $apiappip | ConvertFrom-Json
+    $apiappips = $apiappip.outboundIpAddresses
+    $apiappipssplit = $apiappips.Split(',')
+    $apiappip = $apiappipssplit[0]
 
 
 ### add backupdbservice environmentvars
@@ -175,47 +187,103 @@ write-host "SETTING CLOUD VARS"
 ### add webapp ip to api
     #write-host "################################ Adding webappip to api ################################"
     #$apiappname = $resourceName+"apiapp"
-    az webapp config access-restriction add --resource-group $resourcegroupname --name $apiappname --rule-name "webappip" --action Allow --ip-address $webappipnobackslash --priority 1
+    write-host "### Update apiapp"
+    $xindex = 1
+    foreach ($item in $webappips)
+    {
+        $rulename = "webappip"+$xindex
+        az webapp config access-restriction add --resource-group $resourcegroupname --name $apiappname --rule-name $rulename --action Allow --ip-address $item --priority 1
+        $xindex = $xindex + 1
+    }
 
+### TEMP overwrite nosqlpassword
+    write-host "### get nosqlkey"
+    #$nosqlkey = az cosmosdb keys list --resource-group $resourcegroupname --name $cosmosdbaccountname --query "[primaryMasterKey]" --output tsv
+
+
+
+    # $nosqlkey = az cosmosdb keys list --resource-group jgde2exresourcegroup --name jgde2excosmosdbaccount --type connection-strings --query "[connectionStrings[0].connectionString]"
+    # $nosqlkey = $nosqlkey.Replace("[","")
+    # $nosqlkey = $nosqlkey.Replace("]","")
+    # $nosqlkey = $nosqlkey.Replace(" ","")
+
+    $nosqlkey = az cosmosdb keys list --resource-group $resourcegroupname --name $cosmosdbaccountname --type connection-strings --query "[connectionStrings[0].connectionString]" --output tsv
+
+    $nosqlkey = $nosqlkey.Split('&')
+
+    write-host $nosqlkey[0]
+    $nosqlkey = $nosqlkey[0]
+    $set123 = "NosqlDatabase:ConnectionString=$nosqlkey"
+    write-host $set123
+
+    write-host "### overwrite nosqlkey"
+    az webapp config appsettings set -g $resourcegroupname -n $apiappname --settings $set123
+    write-host "### nosqlkey overwritten"
 
 ### add apiapp ip to sqldb
     #write-host "################################ Adding apiappip to mssqldb ################################"
     # $sqlservername = $resourceName+"mssqlserver"
-    az sql server firewall-rule create --resource-group $resourcegroupname -s $sqlservername --name "apiappip" --start-ip-address $apiappipnobackslash --end-ip-address $apiappipnobackslash
-
+    write-host "### Update sqldb"
+    $xindex = 1
+    foreach ($item in $apiappipssplit)
+    {
+        $rulename = "apiappip"+$xindex
+        az sql server firewall-rule create --resource-group $resourcegroupname -s $sqlservername --name $rulename --start-ip-address $item --end-ip-address $item
+        $xindex = $xindex + 1
+    }
 
 ### add apiapp ip to nosql
     #write-host "################################ Adding apiappip to nosqldb ################################"
     # $cosmosdbaccountname = $resourceName+"cosmosdbaccount"
-    write-host "### Show cosmosdb" # questionable ip update
-    $iprange = az cosmosdb show --name $cosmosdbaccountname --resource-group $resourcegroupname --query "ipRules" --output tsv
-    # # $iprange = $iprange.Replace("]", "")
-    # # $iprange = $iprange.Replace("}","")
-    # # $iprange = $iprange.Replace("{","")
-    if($iprange.Length -lt 1)
-    {
-        $iprange = '["'+$apiappip+'"]'
-        $iprange = $iprange.Replace(" ","")
-    }
-    else
-    {
-        $iprange = $iprange.Trim("[","]")
-        $iprange = $iprange.Replace("[","")
-        $iprange = $iprange.Replace("]","")
-        $iprange = $iprange.Replace(" ","")
-        $iprange = '['+$iprange+','+$apiappip+']'
-        $iprange = $iprange.Replace(" ","")
-    }
-    $iprangenobraces = $iprange.Trim('[',']')
-    #$iprangenoquotes = $iprange.Replace('"','')
-    $iprangenoquotesandbraces = $iprangenobraces.Replace('"','')
-    #$iprangenoquotesbracesbackslash = $iprangenoquotesandbraces.Replace('/32','')
-    #$iprangequotes = '"'+$iprangenoquotesandbraces+'"'
-    #$iprangequotes = $iprangequotes.Replace(" ","")
-    write-host "Iprange: "$iprangequotes
-    write-host "### Update cosmosdb"
-    az cosmosdb update --name $cosmosdbaccountname --resource-group $resourcegroupname --ip-range-filter $iprangenoquotesandbraces #$apiappip
+    # write-host "### Show cosmosdb" # questionable ip update
+    # $iprange = az cosmosdb show --name $cosmosdbaccountname --resource-group $resourcegroupname --query "ipRules" --output tsv
+    # # # $iprange = $iprange.Replace("]", "")
+    # # # $iprange = $iprange.Replace("}","")
+    # # # $iprange = $iprange.Replace("{","")
+    # if($iprange.Length -lt 1)
+    # {
+    #     $iprange = '["'+$apiappip+'"]'
+    #     $iprange = $iprange.Replace(" ","")
+    # }
+    # else
+    # {
+    #     $iprange = $iprange.Trim("[","]")
+    #     $iprange = $iprange.Replace("[","")
+    #     $iprange = $iprange.Replace("]","")
+    #     $iprange = $iprange.Replace(" ","")
+    #     $iprange = '['+$iprange+','+$apiappip+']'
+    #     $iprange = $iprange.Replace(" ","")
+    # }
+    # $iprangenobraces = $iprange.Trim('[',']')
+    # #$iprangenoquotes = $iprange.Replace('"','')
+    # $iprangenoquotesandbraces = $iprangenobraces.Replace('"','')
+    # #$iprangenoquotesbracesbackslash = $iprangenoquotesandbraces.Replace('/32','')
+    # #$iprangequotes = '"'+$iprangenoquotesandbraces+'"'
+    # #$iprangequotes = $iprangequotes.Replace(" ","")
+    # write-host "Iprange: "$iprangequotes
+    write-host "### Updating cosmosdb"
+    #az cosmosdb update --name $cosmosdbaccountname --resource-group $resourcegroupname --ip-range-filter $iprangenoquotesandbraces #$apiappip
 
+    # $myips = ""
+    # $myindex = 0
+    # foreach ($item in $apiappips)
+    # {
+    #     if($myindex -ne 0)
+    #     {
+    #         $myips = $myips+","+$item
+    #     }
+    #     if($myindex -eq 0)
+    #     {
+    #         $myips = $item
+    #     }
+    #     $myindex = $myindex + 1;
+    # }
+
+    write-host $apiappips
+
+    az cosmosdb update --name $cosmosdbaccountname --resource-group $resourcegroupname --ip-range-filter $apiappips #$apiappip
+
+    write-host "### Done updating cosmosdb"
 
 
 # # add apiurl to webapp

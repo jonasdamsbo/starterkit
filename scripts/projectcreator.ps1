@@ -626,6 +626,7 @@ if($verifySetup -eq "y")
             # get storageaccountkey
             write-host "Started getting storage key..."
             $storagekey = az storage account keys list -g $resourcegroupName -n $storageaccountName --query "[0].value"
+            $storageconnectionstring = az storage account show-connection-string --resource-group $resourcegroupName --name $storageaccountName --output tsv
             #az pipelines variable create --name "Storagekey" --value $storagekey --org $fullOrgName --project $projectName --pipeline-id $pipelineId
             write-host "Done creating pipeline variable from storage key..."
         }
@@ -827,7 +828,7 @@ if($verifySetup -eq "y")
         write-host " - Pipelines > Service Connections"
         write-host " - New service connection"
         write-host " - Azure Resource Manager"
-        write-host " - Service Principal (automatic)"
+        write-host " - App registration (automatic)"
         write-host " - Select subscription"
         write-host " - Leave resource group blank"
         write-host " - Write 'Azure Resource Manager' in service connection name"
@@ -911,6 +912,7 @@ if($verifySetup -eq "y")
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "clientid" --value $clientid # sensitive?
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "clientsecret" --value $clientsecret # sensitive
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "storagekey" --value $storagekey # sensitive
+        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "storageconnectionstring" --value $storageconnectionstring # sensitive
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "nosqlpassword" --value $nosqlpassword # sensitive
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "sqlpassword" --value $sqlpassword # sensitive
 

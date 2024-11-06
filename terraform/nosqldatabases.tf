@@ -78,4 +78,9 @@ resource "azurerm_cosmosdb_mongo_user_definition" "exampleCosmosdbmongodbuserdef
   cosmos_mongo_database_id = azurerm_cosmosdb_mongo_database.exampleCosmosmongodb.id
   username                 = "tempresourcename" # sensitive?
   password                 = "tempnosqlpassword" # sensitive
+
+  inherited_role_names = [
+    "readWrite",   # Role that allows read and write to the database
+    "dbAdmin"      # Role that allows administrative operations on the database
+  ]
 }
