@@ -346,7 +346,8 @@ if($verifySetup -eq "y")
     ################################################## prepare cloud vars ######################################################
 
         $weburl = "https://"+$resourceName+"webapp.azurewebsites.net/"
-        $sqlpassword = "P@ssw0rd"
+        $sqlpassword = -join ((48..57) + (65..90) + (97..122) | Get-Random -Count 15 | % {[char]$_})
+
         $variableGroupName = $resourceName+"variablegroup"
 
 
@@ -520,7 +521,9 @@ if($verifySetup -eq "y")
         write-host " - - - Task 7: Setup a Set cloud ips Azure CLI ps1 script task"
         write-host " - - Stage 2: setup 2 tasks"
         write-host " - - - Step 1: Setup a Deploy webapp Azure App Service deploy task"
+        write-host " - - - - write "+$resourceName+"webapp in app service name"
         write-host " - - - Step 2: Setup a Deploy apiapp Azure App Service deploy task"
+        write-host " - - - - write "+$resourceName+"apiapp in app service name"
         write-host " - Go to Variables > Variable groups > Link variable group"
         write-host 
         read-host "Press enter when done..."
