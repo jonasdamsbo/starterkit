@@ -36,9 +36,6 @@ namespace myblazor.Components.Pages
 		// methods
 		protected override async Task OnInitializedAsync()
 		{
-			/*await Task.Delay(500);
-			projects = await PortfolioService.GetAllProjectsAsync();*/
-
 			// use this to use inmemory examples until syncing with db examples 1/2
 			examples = EnvironmentVariableService.Examples;
 
@@ -48,8 +45,6 @@ namespace myblazor.Components.Pages
 			response = await httpClient.GetAsync(APIURL + "api/ExampleModel");
 			try
 			{
-				//examples = JsonConvert.DeserializeObject<List<ExampleDTO>>(await response.Content.ReadAsStringAsync()) ?? new List<ExampleDTO>();
-
 				// use this instead to use inmemory examples until syncing with db examples 2/2
 				var newExamples = JsonConvert.DeserializeObject<List<ExampleDTO>>(await response.Content.ReadAsStringAsync()) ?? new List<ExampleDTO>();
 				var isEqual = true;
@@ -81,13 +76,6 @@ namespace myblazor.Components.Pages
 				throw;
 			}
 			httpClient.Dispose();
-
-			//minimal api
-			/*var APIURL = EnvironmentVariableService.GetApiUrl();
-			HttpClient httpClient = new HttpClient();
-			response = await httpClient.GetAsync(APIURL + "PortfolioProjects");
-			projects = JsonConvert.DeserializeObject<List<PortfolioProjectDTO>>(await response.Content.ReadAsStringAsync()) ?? new List<PortfolioProjectDTO>();
-			httpClient.Dispose();*/
 		}
 
 		void EditExample(string id)
@@ -97,21 +85,15 @@ namespace myblazor.Components.Pages
 
 		async Task DeleteExample(string id)
 		{
-			/*await PortfolioService.DeleteProjectAsync(id);
-			projects = await PortfolioService.GetAllProjectsAsync(); */
 
 			var APIURL = EnvironmentVariableService.GetEnvironmentVariable("MyAppSettings:APIURL");
 			HttpClient httpClient = new HttpClient();
 			await httpClient.DeleteAsync(APIURL + "api/ExampleModel/" + id);
-			//response = await httpClient.DeleteAsync(APIURL + "api/PortfolioProjects/" + id);
-			//projects = JsonConvert.DeserializeObject<List<PortfolioProjectDTO>>(await response.Content.ReadAsStringAsync()) ?? new List<PortfolioProjectDTO>();
-			//httpClient.Dispose();
 
 			// workaround because deleting does not update projects, so it loads forever
 			response = await httpClient.GetAsync(APIURL + "api/ExampleModel");
 			examples = JsonConvert.DeserializeObject<List<ExampleDTO>>(await response.Content.ReadAsStringAsync()) ?? new List<ExampleDTO>();
 			EnvironmentVariableService.Examples = examples;
-			//NavigationManager.NavigateTo("/portfolio");
 			httpClient.Dispose();
 		}
 

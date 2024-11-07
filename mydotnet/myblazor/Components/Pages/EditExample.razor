@@ -18,10 +18,6 @@
 			<label for="description">Description</label>
 			<InputText id="description" @bind-Value="CurrentProjectDTO.Description" class="form-control" />
 		</div>
-		@*<div>
-			<label for="weburl">WebUrl</label>
-			<InputText id="weburl" @bind-Value="CurrentProject.WebUrl" class="form-control" />
-		</div>*@
 		<button type="submit" class="btn btn-primary">Save</button>
 	</EditForm>
 }
@@ -39,10 +35,6 @@ else
 			<label for="description">Description</label>
 			<InputText id="description" @bind-Value="CurrentProjectDTO.Description" class="form-control" />
 		</div>
-		@*<div>
-			<label for="weburl">WebUrl</label>
-			<InputText id="weburl" @bind-Value="CurrentProject.WebUrl" class="form-control" />
-		</div>*@
 		<button type="submit" class="btn btn-primary">Save</button>
 	</EditForm>
 }
@@ -60,8 +52,6 @@ else
 	{
 		if(Id is not null)
 		{
-			/*var project = await PortfolioService.GetProjectByIdAsync((int)Id);*/
-
 			var APIURL = EnvironmentVariableService.GetEnvironmentVariable("MyAppSettings:APIURL");
 			HttpClient httpClient = new HttpClient();
 			response = await httpClient.GetAsync(APIURL + "api/ExampleModel/" + Id);
@@ -79,10 +69,6 @@ else
 	{
 		if(Id is not null)
 		{
-			// Update 
-			/*await PortfolioService.UpdateProjectAsync(CurrentProject, (int)Id);
-			NavigationManager.NavigateTo("/portfolio");*/
-
 			var APIURL = EnvironmentVariableService.GetEnvironmentVariable("MyAppSettings:APIURL");
 
 			HttpClient httpClient = new HttpClient();
@@ -96,10 +82,6 @@ else
 		}
 		else
 		{
-			// Add
-			/*await PortfolioService.AddProjectAsync(CurrentProject);
-			NavigationManager.NavigateTo("/portfolio");*/
-
 			var APIURL = EnvironmentVariableService.GetEnvironmentVariable("MyAppSettings:APIURL");
 
 			HttpClient httpClient = new HttpClient();
