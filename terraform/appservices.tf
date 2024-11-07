@@ -14,14 +14,12 @@ resource "azurerm_windows_web_app" "exampleWebapp" {
   public_network_access_enabled = true
 
   site_config {
-    #dotnet_framework_version = "v4.0"
-    #scm_type                 = "LocalGit"
     ip_restriction_default_action = "Allow"
     always_on = "false"
   }
 
   app_settings = {
-    "MyAppSettings:APIURL" = "https://tempresourcenameapiapp.azurewebsites.net/" #azurerm_windows_web_app.exampleApiapp.default_hostname #"tempapiurl"
+    "MyAppSettings:APIURL" = "https://tempresourcenameapiapp.azurewebsites.net/"
     "ASPNETCORE_ENVIRONMENT" = "Production"
   }
 }
@@ -34,18 +32,14 @@ resource "azurerm_windows_web_app" "exampleApiapp" {
   public_network_access_enabled = true
 
   site_config {
-    #scm_type                 = "LocalGit"
     ip_restriction_default_action = "Deny"
     always_on = "false"
   }
 
   app_settings = {
-    "NosqlDatabase:ConnectionString" = "mongodb+srv://tempresourcename:'tempnosqlpassword'@tempresourcenamecosmosdbaccount.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000"
-    "NosqlDatabase:DatabaseName" = azurerm_cosmosdb_mongo_database.exampleCosmosmongodb.name #"tempresourcenamecosmosmongodb"
-
-    "MyApiSettings:DatabaseName" = azurerm_mssql_database.exampleMssqldatabase.name #"tempresourcenamemssqldatabase"
+    "MyApiSettings:DatabaseName" = azurerm_mssql_database.exampleMssqldatabase.name
     "MyApiSettings:AzureStorageConnectionString" = "tempstorageconnectionstring"
-    "MyApiSettings:StorageContainerName" = "tempdbbackupcontainername" #"dbbackup"
+    "MyApiSettings:StorageContainerName" = "tempdbbackupcontainername"
 
     "ASPNETCORE_ENVIRONMENT" = "Production"
   }

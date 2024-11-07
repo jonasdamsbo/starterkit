@@ -50,9 +50,9 @@ namespace myapi.Migrations
                 columns: new[] { "Id", "Description", "Title", "WebUrl" },
                 values: new object[,]
                 {
-                    { "66fa36617d14c57921515156", "Alot of fun", "First project", "google.dk" },
-                    { "66fa36617d14c57921515157", "Alot of fun", "Second project", "google.dk" },
-                    { "66fa36617d14c57921515158", "Alot of fun", "Third project", "google.dk" }
+                    { "672c3df356274e2164c88fa4", "Alot of fun", "First project", "google.dk" },
+                    { "672c3df356274e2164c88fa5", "Alot of fun", "Second project", "google.dk" },
+                    { "672c3df356274e2164c88fa6", "Alot of fun", "Third project", "google.dk" }
                 });
 
             migrationBuilder.InsertData(
@@ -60,9 +60,9 @@ namespace myapi.Migrations
                 columns: new[] { "Id", "ExampleModelId", "Title" },
                 values: new object[,]
                 {
-                    { "66fa36617d14c57921515159", "66fa36617d14c57921515156", "First navprop" },
-                    { "66fa36617d14c5792151515a", "66fa36617d14c57921515156", "Second navprop" },
-                    { "66fa36617d14c5792151515b", "66fa36617d14c57921515157", "Third navprop" }
+                    { "672c3df356274e2164c88fa7", "672c3df356274e2164c88fa4", "First navprop" },
+                    { "672c3df356274e2164c88fa8", "672c3df356274e2164c88fa4", "Second navprop" },
+                    { "672c3df356274e2164c88fa9", "672c3df356274e2164c88fa5", "Third navprop" }
                 });
 
             migrationBuilder.CreateIndex(

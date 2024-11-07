@@ -7,8 +7,8 @@
 
 <h1>Hello, frontend!</h1>
 
-<p>current environment: @env</p>
-<p>current apiurl: @url</p>
+@*<p>current environment: @env</p>
+<p>current apiurl: @url</p>*@
 @*<p>current connectionstring: @conn</p>*@
 @*<p>current project: @proj</p>*@
 
@@ -80,8 +80,8 @@
 	// 	}
 	// }
 
-	public string env = "empty";
-	public string url = "empty";
+	@* public string env = "empty";
+	public string url = "empty"; *@
 	// public string conn = "empty";
 	// public string proj = "empty";
 
@@ -89,9 +89,9 @@
 	{
 		if (!firstRender) return;
 
-		await Task.Delay(500);
+		@* await Task.Delay(500);
 		env = someClass.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-		url = someClass.GetEnvironmentVariable("MyAppSettings:APIURL");
+		url = someClass.GetEnvironmentVariable("MyAppSettings:APIURL"); *@
 		// conn = someClass.GetConnectionString("DefaultConnection");
 		// proj = someClass.GetEnvironmentVariable("Project");
 

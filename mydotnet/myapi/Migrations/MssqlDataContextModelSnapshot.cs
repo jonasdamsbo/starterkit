@@ -43,21 +43,21 @@ namespace myapi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "66fa36617d14c57921515156",
+                            Id = "672c3df356274e2164c88fa4",
                             Description = "Alot of fun",
                             Title = "First project",
                             WebUrl = "google.dk"
                         },
                         new
                         {
-                            Id = "66fa36617d14c57921515157",
+                            Id = "672c3df356274e2164c88fa5",
                             Description = "Alot of fun",
                             Title = "Second project",
                             WebUrl = "google.dk"
                         },
                         new
                         {
-                            Id = "66fa36617d14c57921515158",
+                            Id = "672c3df356274e2164c88fa6",
                             Description = "Alot of fun",
                             Title = "Third project",
                             WebUrl = "google.dk"
@@ -86,20 +86,20 @@ namespace myapi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "66fa36617d14c57921515159",
-                            ExampleModelId = "66fa36617d14c57921515156",
+                            Id = "672c3df356274e2164c88fa7",
+                            ExampleModelId = "672c3df356274e2164c88fa4",
                             Title = "First navprop"
                         },
                         new
                         {
-                            Id = "66fa36617d14c5792151515a",
-                            ExampleModelId = "66fa36617d14c57921515156",
+                            Id = "672c3df356274e2164c88fa8",
+                            ExampleModelId = "672c3df356274e2164c88fa4",
                             Title = "Second navprop"
                         },
                         new
                         {
-                            Id = "66fa36617d14c5792151515b",
-                            ExampleModelId = "66fa36617d14c57921515157",
+                            Id = "672c3df356274e2164c88fa9",
+                            ExampleModelId = "672c3df356274e2164c88fa5",
                             Title = "Third navprop"
                         });
                 });

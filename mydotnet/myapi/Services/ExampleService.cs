@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+using MongoDB.Bson;
 using myapi.Data;
-using myapi.Repositories;
 using myshared.DTOs;
 using myshared.Models;
 
@@ -9,31 +8,32 @@ namespace myapi.Services
 {
 	public class ExampleService
 	{
-		private ExampleModelRepository _exampleModelRepository;
-		private ExampleNavigationPropertyRepository _exampleNavigationPropertyRepository;
-        //private bool sql = true;
-        //private DbSet<ExampleModel> _exampleModelRepository2;
+		private MssqlDataContext _dbcontext;
+        private DbSet<ExampleModel> _exampleModelRepository;
+		private ILogger<ExampleService> _log;
 
         public ExampleService(
-			ExampleModelRepository exampleModelRepository, 
-			ExampleNavigationPropertyRepository exampleNavigationPropertyRepository/*,
-			MssqlDataContext mssqlContext*/
+			ILogger<ExampleService> log,
+			MssqlDataContext dbcontext
 		)
 		{
-			_exampleModelRepository = exampleModelRepository;
-			_exampleNavigationPropertyRepository = exampleNavigationPropertyRepository;
-			//_exampleModelRepository2 = mssqlContext.ExampleModels;
-
-
+			_dbcontext = dbcontext;
+			_exampleModelRepository = dbcontext.ExampleModels;
+			_log = log;
         }
 
 		public async Task<List<ExampleDTO>> GetAllAsync()
 		{
-			var exampleModels = await _exampleModelRepository.GetAllAsync(); 
-			if(exampleModels.First().ExampleNavigationProperty.IsNullOrEmpty()) exampleModels.ForEach(x => x.ExampleNavigationProperty = _exampleNavigationPropertyRepository.GetAllRelatedToIdAsync(x.Id).GetAwaiter().GetResult()); // required for mssql
-			//if (sql) exampleModels.ForEach(async x => x.ExampleNavigationProperty = await _exampleNavigationPropertyRepository.GetAllRelatedToIdAsync(x.Id)); // required for mssql
-			
-			//var exampleModels = await _exampleModelRepository2.Include(x => x.ExampleNavigationProperty).ToListAsync();
+			var exampleModels = new List<ExampleModel>();
+
+            try
+            {
+                exampleModels = await _exampleModelRepository.ToListAsync();
+            }
+			catch (Exception ex)
+			{
+                _log.LogError("### EXCEPTION WAS CAUGHT IN EXAMPLESERVICE GETALLASYNC WITH MESSAGE: " + ex + " ###");
+            }
 
 
             if (exampleModels == new List<ExampleModel>()) return new List<ExampleDTO>();
@@ -45,10 +45,8 @@ namespace myapi.Services
 
 		public async Task<ExampleDTO?> GetByIdAsync(string id)
 		{
-			var exampleModel = await _exampleModelRepository.GetByIdAsync(id);
-			if (exampleModel.ExampleNavigationProperty.IsNullOrEmpty()) exampleModel.ExampleNavigationProperty = await _exampleNavigationPropertyRepository.GetAllRelatedToIdAsync(exampleModel.Id); // required for mssql
-			//if (sql) exampleModel.ExampleNavigationProperty = await _exampleNavigationPropertyRepository.GetAllRelatedToIdAsync(exampleModel.Id); // required for mssql
-
+			var exampleModel = await _exampleModelRepository.Include(x => x.ExampleNavigationProperty).Where(x => x.Id == id).FirstOrDefaultAsync();
+			
 			if (exampleModel == new ExampleModel()) return new ExampleDTO();
 			if (exampleModel is null) return null;
 
@@ -59,7 +57,14 @@ namespace myapi.Services
 		{
 			var exampleModel = new ExampleModel(exampleDTO);
 
-			exampleModel = await _exampleModelRepository.AddAsync(exampleModel);
+			if (exampleModel != null)
+			{
+				exampleModel.Id = ObjectId.GenerateNewId().ToString();
+				await _exampleModelRepository.AddAsync(exampleModel);
+				await _dbcontext.SaveChangesAsync();
+
+				exampleModel = await _exampleModelRepository.Where(x => x.Id == exampleModel.Id).FirstOrDefaultAsync();
+			}
 
 			if (exampleModel == new ExampleModel()) return new ExampleDTO();
 			if (exampleModel is null) return null;
@@ -69,21 +74,33 @@ namespace myapi.Services
 
 		public async Task<ExampleDTO?> UpdateAsync(string id, ExampleDTO updatedExampleDTO)
 		{
-			var updatedExampleModel = new ExampleModel(updatedExampleDTO);
-			updatedExampleModel = await _exampleModelRepository.UpdateAsync(id, updatedExampleModel);
+			var exampleModel = await _exampleModelRepository.Where(x => x.Id == id).FirstOrDefaultAsync();
+			if (exampleModel != null)
+			{
+				exampleModel.Title = updatedExampleDTO.Title;
+				exampleModel.Description = updatedExampleDTO.Description;
 
-			if (updatedExampleModel == new ExampleModel()) return new ExampleDTO();
-			if (updatedExampleModel is null) return null;
+				await _dbcontext.SaveChangesAsync();
 
-			return new ExampleDTO(updatedExampleModel);
+				exampleModel = await _exampleModelRepository.Where(x => x.Id == id).FirstOrDefaultAsync();
+			}
+
+			if (exampleModel == new ExampleModel()) return new ExampleDTO();
+			if (exampleModel is null) return null;
+
+			return new ExampleDTO(exampleModel);
 		}
 
 		public async Task<ExampleDTO?> DeleteAsync(string id)
 		{
-			var exampleModel = await _exampleModelRepository.DeleteAsync(id);
+			var exampleModel = await _exampleModelRepository.Where(x => x.Id == id).FirstOrDefaultAsync();
+			if (exampleModel != null)
+			{
+				_exampleModelRepository.Remove(exampleModel);
+				await _dbcontext.SaveChangesAsync();
+			}
 
-			if (exampleModel == new ExampleModel()) return new ExampleDTO();
-			if (exampleModel is null) return null;
+			if (exampleModel is null) return new ExampleDTO();
 
 			return new ExampleDTO(exampleModel);
 		}

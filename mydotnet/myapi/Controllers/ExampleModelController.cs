@@ -32,7 +32,7 @@ namespace myapi.Controllers // controllers
 
 		}
 
-		// GET: api/ExampleModel
+		// GET: api/ExampleNavigationProperty
 		[HttpGet("ExampleNavigationProperty")]
 		public async Task<ActionResult<IEnumerable<ExampleDTO>>> GetAllNavPropsAsync()
 		{

@@ -1,4 +1,5 @@
 ﻿using myshared.Models;
+using System.Text.Json.Serialization;
 
 namespace myshared.DTOs
 {
@@ -8,10 +9,8 @@ namespace myshared.DTOs
 		public string? Title { get; set; }
 		public string? Description { get; set; }
 
-		//public List<ExampleNavigationProperty> ExampleNavigationProperty { get; set; }
-
 		public ExampleDTO() { }
 		public ExampleDTO(ExampleModel example) =>
-		(Id, Title, Description/*, ExampleNavigationProperty*/) = (example.Id, example.Title, example.Description/*, example.ExampleNavigationProperty*/);
+		(Id, Title, Description) = (example.Id, example.Title, example.Description);
 	}
 }

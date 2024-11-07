@@ -1,37 +1,59 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using myapi.Repositories;
-using myshared.DTOs;
+﻿using Microsoft.EntityFrameworkCore;
 using myshared.Models;
+using myapi.Data;
+using MongoDB.Bson;
 
 namespace myapi.Services
 {
 	public class ExampleNavPropService
 	{
-		private ExampleModelRepository _exampleModelRepository;
-		private ExampleNavigationPropertyRepository _exampleNavigationPropertyRepository;
+		private MssqlDataContext _dbcontext;
+        private DbSet<ExampleNavigationProperty> _exampleNavigationPropertyRepository;
+		private ILogger<ExampleNavPropService> _log;
 
 		public ExampleNavPropService(
-			ExampleModelRepository exampleModelRepository, 
-			ExampleNavigationPropertyRepository exampleNavigationPropertyRepository
+			ILogger<ExampleNavPropService> log,
+			MssqlDataContext dbcontext
 		)
 		{
-			_exampleModelRepository = exampleModelRepository;
-			_exampleNavigationPropertyRepository = exampleNavigationPropertyRepository;
+			_dbcontext = dbcontext;
+			_exampleNavigationPropertyRepository = dbcontext.ExampleNavigationProperties;
+			_log = log;
 		}
 
 		public async Task<List<ExampleNavigationProperty>> GetAllAsync()
 		{
-			var exampleModels = await _exampleNavigationPropertyRepository.GetAllAsync();
+            var exampleNavigationProperties = new List<ExampleNavigationProperty>();
 
-			if (exampleModels == new List<ExampleNavigationProperty>()) return new List<ExampleNavigationProperty>();
-			if (exampleModels is null) return null;
+            try
+            {
+                exampleNavigationProperties = await _exampleNavigationPropertyRepository.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                _log.LogError("### EXCEPTION WAS CAUGHT IN EXAMPLENAVPROPSERVICE GETALLASYNC WITH MESSAGE: " + ex + " ###");
+            }
 
-			return exampleModels;
+
+            if (exampleNavigationProperties == new List<ExampleNavigationProperty>()) return new List<ExampleNavigationProperty>();
+			if (exampleNavigationProperties is null) return null;
+			
+			return exampleNavigationProperties;
 		}
 
 		public async Task<ExampleNavigationProperty?> GetByIdAsync(string id)
 		{
-			var exampleNavigationProperty = await _exampleNavigationPropertyRepository.GetByIdAsync(id);
+			var exampleNavigationProperty = await _exampleNavigationPropertyRepository.Include(x => x.ExampleModel).Where(x => x.Id == id).FirstOrDefaultAsync();
+
+			if (exampleNavigationProperty == new ExampleNavigationProperty()) return new ExampleNavigationProperty();
+			if (exampleNavigationProperty is null) return null;
+
+			return exampleNavigationProperty;
+		}
+
+		public async Task<ExampleNavigationProperty?> GetAllRelatedToExampleModelIdAsync(string exampleModelId)
+		{
+			var exampleNavigationProperty = await _exampleNavigationPropertyRepository.Include(x => x.ExampleModel).Where(x => x.ExampleModel.Id == exampleModelId).FirstOrDefaultAsync();
 
 			if (exampleNavigationProperty == new ExampleNavigationProperty()) return new ExampleNavigationProperty();
 			if (exampleNavigationProperty is null) return null;
@@ -41,30 +63,49 @@ namespace myapi.Services
 
 		public async Task<ExampleNavigationProperty> AddAsync(ExampleNavigationProperty exampleNavProp)
 		{
-			var exampleNavPropResult = await _exampleNavigationPropertyRepository.AddAsync(exampleNavProp);
+			if (exampleNavProp != null)
+			{
+				exampleNavProp.Id = ObjectId.GenerateNewId().ToString();
+				await _exampleNavigationPropertyRepository.AddAsync(exampleNavProp);
+				await _dbcontext.SaveChangesAsync();
 
-			if (exampleNavPropResult == new ExampleNavigationProperty()) return new ExampleNavigationProperty();
-			if (exampleNavPropResult is null) return null;
+				exampleNavProp = await _exampleNavigationPropertyRepository.Where(x => x.Id == exampleNavProp.Id).FirstOrDefaultAsync();
+			}
 
-			return exampleNavPropResult;
+			if (exampleNavProp == new ExampleNavigationProperty()) return new ExampleNavigationProperty();
+			if (exampleNavProp is null) return null;
+
+			return exampleNavProp;
 		}
 
 		public async Task<ExampleNavigationProperty?> UpdateAsync(string id, ExampleNavigationProperty updatedNavProp)
 		{
-			await _exampleNavigationPropertyRepository.UpdateAsync(id, updatedNavProp);
+			var exampleNavProp = await _exampleNavigationPropertyRepository.Where(x => x.Id == id).FirstOrDefaultAsync();
+			if (exampleNavProp != null)
+			{
+				exampleNavProp.Title = updatedNavProp.Title;
 
-			if (updatedNavProp == new ExampleNavigationProperty()) return new ExampleNavigationProperty();
-			if (updatedNavProp is null) return null;
+				await _dbcontext.SaveChangesAsync();
 
-			return updatedNavProp;
+				exampleNavProp = await _exampleNavigationPropertyRepository.Where(x => x.Id == id).FirstOrDefaultAsync();
+			}
+
+			if (exampleNavProp == new ExampleNavigationProperty()) return new ExampleNavigationProperty();
+			if (exampleNavProp is null) return null;
+
+			return exampleNavProp;
 		}
 
 		public async Task<ExampleNavigationProperty?> DeleteAsync(string id)
 		{
-			var exampleNavProp = await _exampleNavigationPropertyRepository.DeleteAsync(id);
+			var exampleNavProp = await _exampleNavigationPropertyRepository.Where(x => x.Id == id).FirstOrDefaultAsync();
+			if (exampleNavProp != null)
+			{
+				_exampleNavigationPropertyRepository.Remove(exampleNavProp);
+				await _dbcontext.SaveChangesAsync();
+			}
 
-			if (exampleNavProp == new ExampleNavigationProperty()) return new ExampleNavigationProperty();
-			if (exampleNavProp is null) return null;
+			if (exampleNavProp is null) return new ExampleNavigationProperty();
 
 			return exampleNavProp;
 		}

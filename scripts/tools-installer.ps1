@@ -4,7 +4,6 @@ $urls =
     "https://code.visualstudio.com/sha/download?build=stable&os=win32-x64-user",
     "https://dl.pstmn.io/download/latest/win64",
     "https://central.github.com/deployments/desktop/desktop/latest/win32",
-    "https://downloads.mongodb.com/compass/mongodb-compass-1.43.4-win32-x64.exe",
     "https://aka.ms/ssmsfullsetup",
     "https://go.microsoft.com/fwlink/?linkid=2274898",
     "https://drive.usercontent.google.com/download?id=1cx_jhuthZJVpZevvtPwLYdUQYvBUSZVR&export=download&authuser=0&confirm=t&uuid=19d4b1a8-766a-43ec-af8d-d359dabe4f77&at=APZUnTXnXmYGBSHefMsJ5qydo108%3A1719878149675",
@@ -16,14 +15,13 @@ $files =
     "VSCode.exe",
     "Postman.exe",
     "GithubDesktop.exe",
-    "MongoDBCompass.exe",
     "SQLServerManagementStudio.exe",
     "AzureDataStudio.exe",
     "Trello.exe",
     "Discord.exe",
     "GoogleDrive.exe",
     "DockerDesktop.exe"
-$choices = "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "X", "Y"
+$choices = "A", "B", "C", "D", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "X", "Y"
 
 #choose what to install or all or exit
 do {
@@ -40,7 +38,6 @@ do {
         write-host "  B - Install VSCode"
         write-host "  C - Install Postman"
         write-host "  D - Install GithubDesktop"
-        write-host "  E - Install MongoDBCompass"
         write-host "  F - Install SQLServerManagementStudio"
         write-host "  G - Install AzureDataStudio"
         write-host "  H - Install Trello"
@@ -193,9 +190,7 @@ do {
                     {
                         #set variables    
                         $FileUri = $urls[$i]
-                        #Write-Host "this $FileUri url"
                         $Destination = $folder+$files[$i]
-                        #Write-Host "this $Destination dest"
 
                         # set name
                         $name = $files[$i].Split(".")[0]
@@ -292,26 +287,9 @@ do {
 
                 Write-Host "Installing local database (MSSQL + MongoDB) docker-container:" -ForegroundColor Cyan
                 Write-Host "Installing docker container" -ForegroundColor Blue
-                #./mydocker/docker-setup run
-                #cd $env:userprofile/Documents/GitHub/mywebrepo/.docker/
-                #& $env:userprofile/Documents/GitHub/mywebrepo/.docker/docker-setup run
-                #cd ..
+
                 cd './docker/'
                 & './docker-setup' run
-
-                        #*/Documents/GitHub/mywebrepo/mydocker/docker-setup run
-                #cd "$env:userprofile\Documents\GitHub\mywebrepo\mydocker\"
-                #docker-setup run
-                #$mypath = $env:userprofile+"/Documents/GitHub/mywebrepo/mydocker"
-                #Write-Host "$mypath"
-                #cd $mypath
-                #docker-setup run
-                #$mypath/docker-setup run
-                #$env:userprofile+"/Documents/GitHub/mywebrepo/mydocker/docker-setup" run
-                #Write-Host "$env:userprofile"
-                #Write-Host "$env:userprofile\Documents\GitHub\mywebrepo\mydocker\"
-                #$mypath = "$env:userprofile/Documents/GitHub/mywebrepo/mydocker/docker-setup"
-                #$mypath run
                 
                 Write-Host "Docker container installed" -ForegroundColor Green
                 Write-Host ""
