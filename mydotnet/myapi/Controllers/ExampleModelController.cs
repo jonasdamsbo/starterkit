@@ -10,20 +10,20 @@ namespace myapi.Controllers // controllers
     [ApiController]
     public class ExampleModelController : ControllerBase
     {
-        private readonly ExampleService _exampleService;
-		private readonly ExampleNavPropService _exampleNavPropService;
+        private readonly ExampleModelService _exampleModelService;
+		private readonly ExampleNavigationPropertyService _exampleNavigationPropertyService;
 
-		public ExampleModelController(ExampleService exampleService, ExampleNavPropService exampleNavPropService)
+		public ExampleModelController(ExampleModelService exampleService, ExampleNavigationPropertyService exampleNavPropService)
         {
-            _exampleService = exampleService;
-			_exampleNavPropService = exampleNavPropService;
+            _exampleModelService = exampleService;
+			_exampleNavigationPropertyService = exampleNavPropService;
 		}
 
         // GET: api/ExampleModel
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ExampleDTO>>> GetAllAsync()
         {
-            var examples = await _exampleService.GetAllAsync();
+            var examples = await _exampleModelService.GetAllAsync();
 
 			if (examples == new List<ExampleDTO>()) return NotFound();
 			if (examples is null) return BadRequest();
@@ -36,7 +36,7 @@ namespace myapi.Controllers // controllers
 		[HttpGet("ExampleNavigationProperty")]
 		public async Task<ActionResult<IEnumerable<ExampleDTO>>> GetAllNavPropsAsync()
 		{
-			var examples = await _exampleNavPropService.GetAllAsync();
+			var examples = await _exampleNavigationPropertyService.GetAllAsync();
 
 			if (examples == new List<ExampleNavigationProperty>()) return NotFound();
 			if (examples is null) return BadRequest();
@@ -49,7 +49,7 @@ namespace myapi.Controllers // controllers
 		[HttpGet("{id}")]
         public async Task<ActionResult<ExampleDTO>> GetByIdAsync(string id)
         {
-            var example = await _exampleService.GetByIdAsync(id);
+            var example = await _exampleModelService.GetByIdAsync(id);
 
 			if (example == new ExampleDTO()) return NotFound();
 			if (example is null) return BadRequest();
@@ -62,7 +62,7 @@ namespace myapi.Controllers // controllers
 		[HttpPost]
 		public async Task<ActionResult<ExampleDTO>> AddAsync(ExampleDTO exampleDTO)
 		{
-			var example = await _exampleService.AddAsync(exampleDTO);
+			var example = await _exampleModelService.AddAsync(exampleDTO);
 
 			if (example == new ExampleDTO()) return NotFound();
 			if (example is null) return BadRequest();
@@ -75,7 +75,7 @@ namespace myapi.Controllers // controllers
 		[HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync(string id, ExampleDTO exampleDTO)
         {
-            var example = await _exampleService.UpdateAsync(id, exampleDTO);
+            var example = await _exampleModelService.UpdateAsync(id, exampleDTO);
 
 			if (example == new ExampleDTO()) return NotFound();
 			if (example is null) return BadRequest();
@@ -87,7 +87,7 @@ namespace myapi.Controllers // controllers
 		[HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(string id)
         {
-            var example = await _exampleService.DeleteAsync(id);
+            var example = await _exampleModelService.DeleteAsync(id);
 
 			if (example == new ExampleDTO()) return NotFound();
 			if (example is null) return BadRequest();

@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using myapi.Data;
+using myapi.Repositories;
 using myapi.Services;
 using myshared.Services;
 
@@ -27,8 +28,12 @@ builder.Services.AddDbContext<MssqlDataContext>(options =>
 // add services
 builder.Services.AddScoped<BackupDBService>();
 builder.Services.AddScoped<EnvironmentVariableService>();
-builder.Services.AddScoped<ExampleService>();
-builder.Services.AddScoped<ExampleNavPropService>();
+builder.Services.AddScoped<ExampleModelService>();
+builder.Services.AddScoped<ExampleNavigationPropertyService>();
+
+// add repositories
+builder.Services.AddScoped<ExampleModelRepository>();
+builder.Services.AddScoped<ExampleNavigationPropertyRepository>();
 
 // to run/deploy 2 projects in a single app
 builder.Services.Configure<IISOptions>(options =>

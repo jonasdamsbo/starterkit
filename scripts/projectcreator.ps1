@@ -346,7 +346,7 @@ if($verifySetup -eq "y")
     ################################################## prepare cloud vars ######################################################
 
         $weburl = "https://"+$resourceName+"webapp.azurewebsites.net/"
-        $sqlpassword = -join ((48..57) + (65..90) + (97..122) | Get-Random -Count 15 | % {[char]$_})
+        $sqlpassword = -join (((48..57) | Get-Random | % {[char]$_})+((65..90) | Get-Random | % {[char]$_})+((97..122) | Get-Random | % {[char]$_})+(-join ((48..57) + (65..90) + (97..122) | Get-Random -Count 10 | % {[char]$_})))
 
         $variableGroupName = $resourceName+"variablegroup"
 
