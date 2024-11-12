@@ -4,7 +4,6 @@ Write-Host "TOKENS ARE BEING REPLACED"
 # get lib vars
 
     $storagekey = ${env:STORAGEKEY}
-    $storageconnectionstring = ${env:STORAGECONNECTIONSTRING}
     $subscriptionid = ${env:SUBSCRIPTIONID}
     $tenantid = ${env:TENANTID}
     $clientsecret = ${env:CLIENTSECRET}
@@ -18,7 +17,6 @@ Write-Host "TOKENS ARE BEING REPLACED"
     write-host "printing env vars from lib vars"
 
     write-host $storagekey
-    write-host $storageconnectionstring
     write-host $subscriptionid
     write-host $tenantid
     write-host $clientsecret
@@ -61,8 +59,6 @@ write-host "started replacing"
     ((Get-Content -path $maintfpath -Raw) -replace 'tempsubscriptionid',$subscriptionid) | Set-Content -Path $maintfpath
     ((Get-Content -path $maintfpath -Raw) -replace 'tempstoragekey',$storagekey) | Set-Content -Path $maintfpath
     ((Get-Content -path $sqldatabasestfpath -Raw) -replace 'tempsqlpassword',$sqlpassword) | Set-Content -Path $sqldatabasestfpath
-    ((Get-Content -path $appservicestfpath -Raw) -replace 'tempstoragekey',$storagekey) | Set-Content -Path $appservicestfpath
-    ((Get-Content -path $appservicestfpath -Raw) -replace 'tempstorageconnectionstring',$storageconnectionstring) | Set-Content -Path $appservicestfpath
     ((Get-Content -path $appservicestfpath -Raw) -replace 'tempsqlpassword',$sqlpassword) | Set-Content -Path $appservicestfpath
 
     

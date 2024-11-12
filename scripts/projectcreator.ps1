@@ -328,10 +328,8 @@ if($verifySetup -eq "y")
             write-host "Done creating storageaccount..."
 
             write-host "Started creating storageaccount container..."
-            $dbbackupcontainername = "dbbackup"
             $terraformcontainername = "terraform"
             az storage container create --name $terraformcontainername --account-name $storageaccountName
-            az storage container create --name $dbbackupcontainername --account-name $storageaccountName
             write-host $storageaccountId
             write-host "Done creating storageaccount container..."
 
@@ -394,8 +392,6 @@ if($verifySetup -eq "y")
 
         # replace x with $x in appservices.tf
             ((Get-Content -path appservices.tf -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path appservices.tf
-            ((Get-Content -path appservices.tf -Raw) -replace 'tempdbbackupcontainername',$dbbackupcontainername) | Set-Content -Path appservices.tf
-            #((Get-Content -path appservices.tf -Raw) -replace 'tempapiurl',$apiurl) | Set-Content -Path appservices.tf
 
         # replace x with $x in sqldatabases.tf
             ((Get-Content -path sqldatabases.tf -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path sqldatabases.tf

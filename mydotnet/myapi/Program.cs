@@ -26,7 +26,6 @@ builder.Services.AddDbContext<MssqlDataContext>(options =>
 	//.EnableSensitiveDataLogging(true));
 
 // add services
-builder.Services.AddScoped<BackupDBService>();
 builder.Services.AddScoped<EnvironmentVariableService>();
 builder.Services.AddScoped<ExampleModelService>();
 builder.Services.AddScoped<ExampleNavigationPropertyService>();
@@ -48,10 +47,6 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
 	var services = scope.ServiceProvider;
-
-	// backup db if on production env
-	var backupDbService = services.GetRequiredService<BackupDBService>();
-    backupDbService.InitBackup();
 
 	// using your manually created migrations, automatically runs update-database 
 	var context = services.GetRequiredService<MssqlDataContext>();
