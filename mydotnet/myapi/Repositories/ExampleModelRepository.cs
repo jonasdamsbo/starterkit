@@ -57,7 +57,7 @@ namespace myapi.Repositories
             try
             {
                 //if((await GetByIdAsync(newModel.Id)) != null) return null;
-                newModel.Id = ObjectId.GenerateNewId().ToString();
+                //newModel.Id = ObjectId.GenerateNewId().ToString();
 
                 _context.Add(newModel);
                 await _context.SaveChangesAsync();

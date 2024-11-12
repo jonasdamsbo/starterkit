@@ -1,4 +1,5 @@
-﻿using myshared.DTOs;
+﻿using MongoDB.Bson;
+using myshared.DTOs;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -16,9 +17,11 @@ namespace myshared.Models
         public string? WebUrl { get; set; }
 
 		[JsonIgnore]
-		public virtual List<ExampleNavigationProperty> ExampleNavigationProperty { get; set; }
+		public virtual List<ExampleNavigationProperty>? ExampleNavigationProperty { get; set; }
 
-		public ExampleModel() { }
+		public ExampleModel() {
+			Id = ObjectId.GenerateNewId().ToString();
+		 }
 		public ExampleModel(ExampleDTO exampleDTO) =>
 		(Id, Title, Description) = (exampleDTO.Id, exampleDTO.Title, exampleDTO.Description);
 	}
