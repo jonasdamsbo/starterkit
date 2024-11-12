@@ -7,6 +7,8 @@ write-host " https://www.microsoft.com/" -ForegroundColor Cyan
 write-host "   - Access to Azure DevOps at:" -NoNewline -ForegroundColor Green
 write-host " https://dev.azure.com/" -ForegroundColor Cyan
 write-host "   - An Organization in Azure DevOps or create a new one" -ForegroundColor Green
+write-host "   - Permission for your organization to use parallelism at:" -NoNewline -ForegroundColor Green
+write-host " https://aka.ms/azpipelines-parallelism-request" -ForegroundColor Cyan
 write-host "   - Access to Azure Cloud at:" -NoNewline -ForegroundColor Green
 write-host " https://portal.azure.com/" -ForegroundColor Cyan
 write-host "   - A Subscription in Azure Portal or create a new one, which subsequently creates associated resources:"-ForegroundColor Green
