@@ -21,7 +21,7 @@ namespace myapi.Services
 			_log = log;
         }
 
-		public async Task<List<ExampleDTO>> GetAllAsync()
+		public async Task<List<ExampleDTO>?> GetAllAsync()
 		{
 			var exampleModels = await _exampleModelRepository.GetAllAsync();
 
@@ -42,7 +42,7 @@ namespace myapi.Services
 			return new ExampleDTO(exampleModel);
 		}
 
-		public async Task<ExampleDTO> AddAsync(ExampleDTO exampleDTO)
+		public async Task<ExampleDTO?> AddAsync(ExampleDTO exampleDTO)
 		{
 			var exampleModel = new ExampleModel(exampleDTO);
 

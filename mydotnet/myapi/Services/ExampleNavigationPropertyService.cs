@@ -20,7 +20,7 @@ namespace myapi.Services
 			_log = log;
 		}
 
-		public async Task<List<ExampleNavigationProperty>> GetAllAsync()
+		public async Task<List<ExampleNavigationProperty>?> GetAllAsync()
 		{
             var exampleNavigationProperties = await _exampleNavigationPropertyRepository.GetAllAsync();
 
@@ -40,7 +40,7 @@ namespace myapi.Services
 			return exampleNavigationProperty;
 		}
 
-		public async Task<List<ExampleNavigationProperty?>> GetAllRelatedToExampleModelIdAsync(string exampleModelId)
+		public async Task<List<ExampleNavigationProperty>?> GetAllRelatedToExampleModelIdAsync(string exampleModelId)
 		{
 			var exampleNavigationProperties = await _exampleNavigationPropertyRepository.GetAllRelatedToIdAsync(exampleModelId);
 
@@ -50,7 +50,7 @@ namespace myapi.Services
 			return exampleNavigationProperties;
 		}
 
-		public async Task<ExampleNavigationProperty> AddAsync(ExampleNavigationProperty exampleNavProp)
+		public async Task<ExampleNavigationProperty?> AddAsync(ExampleNavigationProperty exampleNavProp)
 		{
 			exampleNavProp.Id = ObjectId.GenerateNewId().ToString();
 			var newExampleNavProp = await _exampleNavigationPropertyRepository.AddAsync(exampleNavProp);
@@ -65,8 +65,8 @@ namespace myapi.Services
 		{
 			var updatedModel = await _exampleNavigationPropertyRepository.UpdateAsync(id, updatedNavProp);
 
-			if (updatedModel.Id.IsNullOrEmpty()) return new ExampleNavigationProperty();
 			if (updatedModel is null) return null;
+			if (updatedModel.Id.IsNullOrEmpty()) return new ExampleNavigationProperty();
 
 			return updatedModel;
 		}
