@@ -25,8 +25,8 @@ namespace myapi.Controllers // controllers
         {
             var examples = await _exampleModelService.GetAllAsync();
 
-			if (examples == new List<ExampleDTO>()) return NotFound();
 			if (examples is null) return BadRequest();
+			if (examples.Count() < 1) return NotFound();
 
 			return Ok(examples);
 
@@ -38,8 +38,8 @@ namespace myapi.Controllers // controllers
 		{
 			var examples = await _exampleNavigationPropertyService.GetAllAsync();
 
-			if (examples == new List<ExampleNavigationProperty>()) return NotFound();
 			if (examples is null) return BadRequest();
+			if (examples.Count() < 1) return NotFound();
 
 			return Ok(examples);
 
@@ -51,8 +51,8 @@ namespace myapi.Controllers // controllers
         {
             var example = await _exampleModelService.GetByIdAsync(id);
 
-			if (example == new ExampleDTO()) return NotFound();
 			if (example is null) return BadRequest();
+			if (example.Title.IsNullOrEmpty()) return NotFound();
 
 			return Ok(example);
         }
@@ -64,8 +64,8 @@ namespace myapi.Controllers // controllers
 		{
 			var example = await _exampleModelService.AddAsync(exampleDTO);
 
-			if (example == new ExampleDTO()) return NotFound();
 			if (example is null) return BadRequest();
+			if (example.Title.IsNullOrEmpty()) return NotFound();
 
 			return CreatedAtAction("GetExampleModel", new { id = exampleDTO.Id }, exampleDTO);
 		}
@@ -77,8 +77,8 @@ namespace myapi.Controllers // controllers
         {
             var example = await _exampleModelService.UpdateAsync(id, exampleDTO);
 
-			if (example == new ExampleDTO()) return NotFound();
 			if (example is null) return BadRequest();
+			if (example.Title.IsNullOrEmpty()) return NotFound();
 
 			return NoContent();
         }
@@ -89,8 +89,8 @@ namespace myapi.Controllers // controllers
         {
             var example = await _exampleModelService.DeleteAsync(id);
 
-			if (example == new ExampleDTO()) return NotFound();
 			if (example is null) return BadRequest();
+			if (example.Title.IsNullOrEmpty()) return NotFound();
 
 			return NoContent();
         }
