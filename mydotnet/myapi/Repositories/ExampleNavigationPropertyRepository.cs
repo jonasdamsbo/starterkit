@@ -19,7 +19,7 @@ namespace myapi.Repositories
             _log = log;
         }
 
-        public async Task<List<ExampleNavigationProperty>> GetAllAsync()
+        public async Task<List<ExampleNavigationProperty>?> GetAllAsync()
         {
             try
             {
@@ -39,7 +39,7 @@ namespace myapi.Repositories
         }
 
         // should be in all repositories whos model uses a foreign key
-        public async Task<List<ExampleNavigationProperty>> GetAllRelatedToIdAsync(string exampleModelId)
+        public async Task<List<ExampleNavigationProperty>?> GetAllRelatedToIdAsync(string exampleModelId)
         {
             try
             {
@@ -59,7 +59,7 @@ namespace myapi.Repositories
             }
         }
 
-        public async Task<ExampleNavigationProperty> GetByIdAsync(string id)
+        public async Task<ExampleNavigationProperty?> GetByIdAsync(string id)
         {
             try
             {
@@ -79,7 +79,7 @@ namespace myapi.Repositories
             }
         }
 
-        public async Task<ExampleNavigationProperty> AddAsync(ExampleNavigationProperty newModel)
+        public async Task<ExampleNavigationProperty?> AddAsync(ExampleNavigationProperty newModel)
         {
             try
             {
@@ -102,7 +102,7 @@ namespace myapi.Repositories
             }
         }
 
-        public async Task<ExampleNavigationProperty> UpdateAsync(string id, ExampleNavigationProperty updatedModel)
+        public async Task<ExampleNavigationProperty?> UpdateAsync(string id, ExampleNavigationProperty updatedModel)
         {
             try
             {
@@ -124,7 +124,7 @@ namespace myapi.Repositories
             }
         }
 
-        public async Task<ExampleNavigationProperty> DeleteAsync(string id)
+        public async Task<ExampleNavigationProperty?> DeleteAsync(string id)
         {
             try
             {

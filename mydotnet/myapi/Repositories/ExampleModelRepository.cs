@@ -18,7 +18,7 @@ namespace myapi.Repositories
             _log = log;
         }
 
-        public async Task<List<ExampleModel>> GetAllAsync()
+        public async Task<List<ExampleModel>?> GetAllAsync()
         {
             try
             {
@@ -35,7 +35,7 @@ namespace myapi.Repositories
             }
         }
 
-        public async Task<ExampleModel> GetByIdAsync(string id)
+        public async Task<ExampleModel?> GetByIdAsync(string id)
         {
             try
             {
@@ -52,7 +52,7 @@ namespace myapi.Repositories
             }
         }
 
-        public async Task<ExampleModel> AddAsync(ExampleModel newModel)
+        public async Task<ExampleModel?> AddAsync(ExampleModel newModel)
         {
             try
             {
@@ -75,7 +75,7 @@ namespace myapi.Repositories
             }
         }
 
-        public async Task<ExampleModel> UpdateAsync(string id, ExampleModel updatedModel)
+        public async Task<ExampleModel?> UpdateAsync(string id, ExampleModel updatedModel)
         {
             try
             {
@@ -98,7 +98,7 @@ namespace myapi.Repositories
             }
         }
 
-        public async Task<ExampleModel> DeleteAsync(string id)
+        public async Task<ExampleModel?> DeleteAsync(string id)
         {
             try
             {
