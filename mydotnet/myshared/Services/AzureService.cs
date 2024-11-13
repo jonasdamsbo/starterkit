@@ -28,6 +28,7 @@ namespace myshared.Services
         string clientSecret = "J2q8Q~JCA2psO-e0oY1O6YXfgYKzwSrhOFsCpafb";
 
         // normals vars
+        public EnvironmentVariableService _envVarService;
         private List<string> resourceNames = new List<string>();
         private List<string> resourceTypes = new List<string>();
         public List<Resourcex> resources = new List<Resourcex>();
@@ -48,15 +49,32 @@ namespace myshared.Services
         }
 
         public AzureService() {
-            Init();
+            var env = _envVarService.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            if(env == "Production")
+            {
+                Init();
+            }
         }
 
         public void Init()
         {
+            InitVars();
+
             InitDevops();
             InitCloud();
 
             GetResources();
+        }
+
+        private void InitVars(){
+            organizationName = _envVarService.GetEnvironmentVariable("AzureServiceSettings:ORGANIZATIONNAME");
+            orgUrl = _envVarService.GetEnvironmentVariable("AzureServiceSettings:FULLORGANIZATIONNAME");
+            patToken = _envVarService.GetEnvironmentVariable("AzureServiceSettings:PAT");
+            subscriptionName = _envVarService.GetEnvironmentVariable("AzureServiceSettings:SUBSCRIPTIONNAME");
+            subscriptionId = _envVarService.GetEnvironmentVariable("AzureServiceSettings:SUBSCRIPTIONID");
+            tenantId = _envVarService.GetEnvironmentVariable("AzureServiceSettings:TENANTID");
+            clientId = _envVarService.GetEnvironmentVariable("AzureServiceSettings:CLIENTID");
+            clientSecret = _envVarService.GetEnvironmentVariable("AzureServiceSettings:CLIENTSECRET");
         }
 
         private void GetResources()

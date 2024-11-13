@@ -11,6 +11,12 @@ Write-Host "TOKENS ARE BEING REPLACED"
 
     $sqlpassword = ${env:SQLPASSWORD}
 
+    # for azureservice
+    $pat = ${env:PAT}
+    $subscriptionname = ${env:SUBSCRIPTIONNAME}
+    $organizationname = ${env:ORGANIZATIONNAME}
+    $fullorganizationname = ${env:FULLORGANIZATIONNAME}
+
     
 # check lib vars
 
@@ -60,6 +66,16 @@ write-host "started replacing"
     ((Get-Content -path $maintfpath -Raw) -replace 'tempstoragekey',$storagekey) | Set-Content -Path $maintfpath
     ((Get-Content -path $sqldatabasestfpath -Raw) -replace 'tempsqlpassword',$sqlpassword) | Set-Content -Path $sqldatabasestfpath
     ((Get-Content -path $appservicestfpath -Raw) -replace 'tempsqlpassword',$sqlpassword) | Set-Content -Path $appservicestfpath
+
+    # for azureservice
+    ((Get-Content -path $appservicestfpath -Raw) -replace 'temppat',$pat) | Set-Content -Path $appservicestfpath
+    ((Get-Content -path $appservicestfpath -Raw) -replace 'temporganizationname',$organizationname) | Set-Content -Path $appservicestfpath
+    ((Get-Content -path $appservicestfpath -Raw) -replace 'tempfullorganizationname',$fullorganizationname) | Set-Content -Path $appservicestfpath
+    ((Get-Content -path $appservicestfpath -Raw) -replace 'tempsubscriptionname',$subscriptionname) | Set-Content -Path $appservicestfpath
+    ((Get-Content -path $appservicestfpath -Raw) -replace 'tempsubscriptionid',$subscriptionid) | Set-Content -Path $appservicestfpath
+    ((Get-Content -path $appservicestfpath -Raw) -replace 'tempclientid',$clientid) | Set-Content -Path $appservicestfpath
+    ((Get-Content -path $appservicestfpath -Raw) -replace 'tempclientsecret',$clientsecret) | Set-Content -Path $appservicestfpath
+    ((Get-Content -path $appservicestfpath -Raw) -replace 'temptenantid',$tenantid) | Set-Content -Path $appservicestfpath
 
     
 write-host "done replacing"

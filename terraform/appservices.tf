@@ -38,6 +38,14 @@ resource "azurerm_windows_web_app" "exampleApiapp" {
 
   app_settings = {
     "ASPNETCORE_ENVIRONMENT" = "Production"
+    "AzureServiceSettings:PAT" = "temppat"
+    "AzureServiceSettings:ORGANIZATIONNAME" = "temporganizationname"
+    "AzureServiceSettings:FULLORGANIZATIONNAME" = "tempfullorganizationname"
+    "AzureServiceSettings:SUBSCRIPTIONNAME" = "tempsubscriptionname"
+    "AzureServiceSettings:SUBSCRIPTIONID" = "tempsubscriptionid"
+    "AzureServiceSettings:CLIENTID" = "tempclientid"
+    "AzureServiceSettings:CLIENTSECRET" = "tempclientsecret"
+    "AzureServiceSettings:TENANTID" = "temptenantid"
   }
 
   connection_string {

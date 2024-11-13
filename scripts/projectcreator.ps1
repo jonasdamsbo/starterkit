@@ -486,6 +486,11 @@ if($verifySetup -eq "y")
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "storageconnectionstring" --value $storageconnectionstring # sensitive
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "sqlpassword" --value $sqlpassword # sensitive
 
+        #for azureservice
+        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "subscriptionname" --value $subName
+        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "organizationname" --value $orgName
+        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "fullorganizationname" --value $fullOrgName
+
         read-host "Done creating library variable group variables... press enter to continue"
             
 
@@ -523,6 +528,10 @@ if($verifySetup -eq "y")
         write-host " - - - Step 2: Setup a Deploy apiapp Azure App Service deploy task"
         write-host " - - - - write "+$resourceName+"apiapp in app service name"
         write-host " - Go to Variables > Variable groups > Link variable group"
+        write-host 
+        write-host "For AzureService:"
+        write-host " - Go to User settings > Personal access tokens > New token > Name it PAT and customize settings or choose full access > Create > Copy the PAT"
+        write-host " - Go to Pipelines > Library > Variable groups > Pick your new variable group > Create new variable called PAT with value of your PAT"
         write-host 
         read-host "Press enter when done..."
         write-host 
