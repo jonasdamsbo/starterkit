@@ -19,7 +19,7 @@ namespace myshared.Services
         //temp devops
         string organizationName = "jonasdamsbo";
         string orgUrl = "https://dev.azure.com/jonasdamsbo";
-        string patToken = "CXJ3OyaKTFmcbMjSjHannRvjNepidqZGyN4endV9ldZqeruEWuCHJQQJ99AKACAAAAAjpjMvAAASAZDOhOVN";
+        string patToken = "CXJ3OyaKTFmcbMjSjHannRvjNepidqZGyN4endV9ldZqeruEWuCHJQQJ99AKACAAAAAjpjMvAAASAZDOhOVN"; // <-- cant get with ps1, add manually to EnvVar
         //temp cloud
         string subscriptionName = "jgdtestsubscription";
         string subscriptionId = "8e4e96ed-7549-4b0c-9bd9-edbeed4c2f77";
