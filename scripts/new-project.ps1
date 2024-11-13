@@ -25,7 +25,7 @@ ELSE
     {
         write-host "Trying to clone starter kit"
         write-host $orgFolder
-        git clone $gitClonePath $projFolder
+        git clone $gitClonePath $projFolder --branch "v0.2"
         write-host "Cloned"
         Set-Location $projFolder
 
