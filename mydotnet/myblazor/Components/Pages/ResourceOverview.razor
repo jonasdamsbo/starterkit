@@ -1,0 +1,41 @@
+﻿@page "/resources"
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@using static myshared.Services.AzureService @*should be myshared.model.Resourcex, remove myapiProjectDep*@
+
+<PageTitle>Resources</PageTitle>
+<h3>Resource Overview </h3>
+
+@if (listOfResources.Count == 0)
+{
+	<p><em>Loading resource list...</em></p>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Type</th>
+				<th>Name</th>
+				<th></th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var resource in listOfResources)
+			{
+				<tr>
+					<td>@resource.Type</td>
+					<td>@resource.Name</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+
+<style>
+</style>
+
+@code
+{
+	
+}

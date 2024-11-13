@@ -26,6 +26,7 @@ builder.Services.AddDbContext<MssqlDataContext>(options =>
 	//.EnableSensitiveDataLogging(true));
 
 // add services
+builder.Services.AddScoped<AzureService>();
 builder.Services.AddScoped<EnvironmentVariableService>();
 builder.Services.AddScoped<ExampleModelService>();
 builder.Services.AddScoped<ExampleNavigationPropertyService>();
@@ -47,9 +48,13 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
 	var services = scope.ServiceProvider;
+	
+	// test azure cli/devops
+	var azure = services.GetRequiredService<AzureService>();
+    //var x = azure.GetResourcesList();
 
-	// using your manually created migrations, automatically runs update-database 
-	var context = services.GetRequiredService<MssqlDataContext>();
+    // using your manually created migrations, automatically runs update-database 
+    var context = services.GetRequiredService<MssqlDataContext>();
     context.Database.Migrate();
 }
 

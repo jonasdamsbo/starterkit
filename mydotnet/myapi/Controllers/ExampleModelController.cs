@@ -3,6 +3,8 @@ using Microsoft.IdentityModel.Tokens;
 using myapi.Services;
 using myshared.DTOs;
 using myshared.Models;
+using myshared.Services;
+using static myshared.Services.AzureService;
 
 namespace myapi.Controllers // controllers
 {
@@ -12,11 +14,15 @@ namespace myapi.Controllers // controllers
     {
         private readonly ExampleModelService _exampleModelService;
 		private readonly ExampleNavigationPropertyService _exampleNavigationPropertyService;
+		private readonly AzureService _azureService;
 
-		public ExampleModelController(ExampleModelService exampleService, ExampleNavigationPropertyService exampleNavPropService)
+		public ExampleModelController(ExampleModelService exampleService, 
+			ExampleNavigationPropertyService exampleNavPropService,
+			AzureService azureService)
         {
             _exampleModelService = exampleService;
 			_exampleNavigationPropertyService = exampleNavPropService;
+			_azureService = azureService;
 		}
 
         // GET: api/ExampleModel
@@ -43,6 +49,18 @@ namespace myapi.Controllers // controllers
 
 			return Ok(examples);
 
+		}
+
+		// GET: api/ExampleNavigationProperty
+		[HttpGet("GetResources")]
+		public ActionResult<List<Resourcex>> GetAllResources()
+		{
+			var resources = _azureService.GetResourcesList();
+
+			if (resources is null) return BadRequest();
+			if (resources.Count() < 1) return NotFound();
+
+			return Ok(resources);
 		}
 
 		// GET: api/ExampleModel/5
