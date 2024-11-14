@@ -16,7 +16,7 @@ Write-Host "TOKENS ARE BEING REPLACED"
     $subscriptionname = ${env:SUBSCRIPTIONNAME}
     $organizationname = ${env:ORGANIZATIONNAME}
     $fullorganizationname = ${env:FULLORGANIZATIONNAME}
-    $projectname = ${env:SUBSCRIPTIONNAME}
+    $projectname = ${env:PROJECTNAME}
     $resourcename = ${env:ORGANIZATIONNAME}
 
     
