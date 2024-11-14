@@ -358,7 +358,7 @@ if($verifySetup -eq "y")
         
         write-host "Replacing vars in old-project.ps1"
                 
-        #Set-Location "./scripts/"
+        Set-Location "./scripts/"
 
         ((Get-Content -path old-project.ps1 -Raw) -replace 'tempprojectname',$projectName) | Set-Content -Path old-project.ps1
         ((Get-Content -path old-project.ps1 -Raw) -replace 'temporganizationname',$orgName) | Set-Content -Path old-project.ps1
