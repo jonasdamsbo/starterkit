@@ -6,16 +6,18 @@ write-host " - A Microsoft Account or create a new one at:" -NoNewline -Foregrou
 write-host " https://www.microsoft.com/" -ForegroundColor Cyan
 write-host "   - Access to Azure DevOps at:" -NoNewline -ForegroundColor Green
 write-host " https://dev.azure.com/" -ForegroundColor Cyan
-write-host "   - An Organization in Azure DevOps or create a new one" -ForegroundColor Green
-write-host "   - Permission for your organization to use parallelism at:" -NoNewline -ForegroundColor Green
+write-host "     - An Organization in Azure DevOps or create a new one" -ForegroundColor Green
+write-host "     - Permission for your organization to use parallelism at:" -NoNewline -ForegroundColor Green
 write-host " https://aka.ms/azpipelines-parallelism-request" -ForegroundColor Cyan
+write-host "     - Go to User settings > Personal access tokens > New token"
+write-host "       - Name it PAT and customize settings or choose full access > Create > Copy the PAT"
 write-host "   - Access to Azure Cloud at:" -NoNewline -ForegroundColor Green
 write-host " https://portal.azure.com/" -ForegroundColor Cyan
-write-host "   - A Subscription in Azure Portal or create a new one, which subsequently creates associated resources:"-ForegroundColor Green
-write-host "     - A Billing account"-ForegroundColor Green
-write-host "     - A Billing profile"-ForegroundColor Green
-write-host "     - An Invoice section"-ForegroundColor Green
-write-host "   - Go to your Subscription > Resource providers > Search for Microsoft.Storage > Select and register"
+write-host "     - A Subscription in Azure Portal or create a new one, which subsequently creates associated resources:"-ForegroundColor Green
+write-host "       - A Billing account"-ForegroundColor Green
+write-host "       - A Billing profile"-ForegroundColor Green
+write-host "       - An Invoice section"-ForegroundColor Green
+write-host "     - Go to your Subscription > Resource providers > Search for Microsoft.Storage > Select and register"
 write-host ""
 
 while($verifySetup -ne "y" -and $verifySetup -ne "n")
@@ -493,6 +495,7 @@ if($verifySetup -eq "y")
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "subscriptionname" --value $subName
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "organizationname" --value $orgName
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "fullorganizationname" --value $fullOrgName
+	az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "PAT" --value $pat
 
         read-host "Done creating library variable group variables... press enter to continue"
             
@@ -532,9 +535,9 @@ if($verifySetup -eq "y")
         write-host " - - - - write "+$resourceName+"apiapp in app service name"
         write-host " - Go to Variables > Variable groups > Link variable group"
         write-host 
-        write-host "For AzureService:"
-        write-host " - Go to User settings > Personal access tokens > New token > Name it PAT and customize settings or choose full access > Create > Copy the PAT"
-        write-host " - Go to Pipelines > Library > Variable groups > Pick your new variable group > Create new variable called PAT with value of your PAT"
+        #write-host "For AzureService:"
+        #write-host " - Go to User settings > Personal access tokens > New token > Name it PAT and customize settings or choose full access > Create > Copy the PAT"
+        #write-host " - Go to Pipelines > Library > Variable groups > Pick your new variable group > Create new variable called PAT with value of your PAT"
         write-host 
         read-host "Press enter when done..."
         write-host 
