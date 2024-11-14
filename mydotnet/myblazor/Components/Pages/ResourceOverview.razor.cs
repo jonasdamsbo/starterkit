@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components;
 using myshared.DTOs;
+using myshared.Models;
 using myshared.Services;
 using Newtonsoft.Json;
 using System.Net.NetworkInformation;
-using static myshared.Services.AzureService;
+using static myshared.Models.AzureResource;
 
 namespace myblazor.Components.Pages
 {
@@ -16,7 +17,7 @@ namespace myblazor.Components.Pages
 
 		HttpClient httpClient = new HttpClient();
 
-		public List<Resourcex> listOfResources = new();
+		public List<AzureResource> listOfResources = new();
 
 		//private HttpResponseMessage response = new();
 
@@ -28,7 +29,7 @@ namespace myblazor.Components.Pages
 			try
 			{
 				var response = await httpClient.GetAsync(APIURL + "api/ExampleModel/GetResources");
-				listOfResources = JsonConvert.DeserializeObject<List<Resourcex>>(await response.Content.ReadAsStringAsync()) ?? new List<Resourcex>();
+				listOfResources = JsonConvert.DeserializeObject<List<AzureResource>>(await response.Content.ReadAsStringAsync()) ?? new List<AzureResource>();
 			}
 			catch (Exception ex)
 			{

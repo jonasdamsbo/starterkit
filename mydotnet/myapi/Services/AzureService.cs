@@ -11,7 +11,12 @@ using System.Text;
 
 using Newtonsoft.Json;
 
-namespace myshared.Services
+using myshared.Models;
+using myshared.Services;
+using Microsoft.VisualStudio.Services.Commerce;
+using SubscriptionResource = Azure.ResourceManager.Resources.SubscriptionResource;
+
+namespace myapi.Services
 {
     public class AzureService
     {
@@ -31,7 +36,7 @@ namespace myshared.Services
         public EnvironmentVariableService _envVarService;
         private List<string> resourceNames = new List<string>();
         private List<string> resourceTypes = new List<string>();
-        public List<Resourcex> resources = new List<Resourcex>();
+        public List<AzureResource> resources = new List<AzureResource>();
 
         private VssConnection azureDevopsOrganization;
 
@@ -42,28 +47,24 @@ namespace myshared.Services
 
         private IPagedList<TeamProjectReference> projectsReference;
 
-        public class Resourcex()
-        {
-            public string Name { get; set; }
-            public string Type { get; set; }
-        }
-
         public AzureService() {
-            var env = _envVarService.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            if(env == "Production")
-            {
+            //var env = _envVarService.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            //if(env == "Production")
+            //{
                 Init();
-            }
+            //}
         }
 
         public void Init()
         {
-            InitVars();
+            //InitVars();
 
             InitDevops();
             InitCloud();
 
             GetResources();
+
+            SortResources();
         }
 
         private void InitVars(){
@@ -77,6 +78,45 @@ namespace myshared.Services
             clientSecret = _envVarService.GetEnvironmentVariable("AzureServiceSettings:CLIENTSECRET");
         }
 
+        private void SortResources()
+        {
+            resources.Sort(delegate (AzureResource c1, AzureResource c2) { return c1.Type.CompareTo(c2.Type); });
+
+            // find subscription and replace
+			var subIndex = resources.FindIndex(a => a.Type.Contains("Azure Cloud Subscription"));
+			AzureResource sub = resources[subIndex];
+			resources.Remove(sub);
+			resources.Insert(0, sub);
+
+			// find rg and replace
+			var rgIndex = resources.FindIndex(a => a.Type.Contains("Azure Cloud Resource Group"));
+			AzureResource rg = resources[rgIndex];
+			resources.Remove(rg);
+			resources.Insert(1, rg);
+
+			// find org
+			var orgIndex = resources.FindIndex(a => a.Type.Contains("Azure DevOps Organization"));
+			AzureResource org = resources[orgIndex];
+			resources.Remove(org);
+
+			// find first devops resource index
+			var devopsIndex = resources.FindIndex(a => a.Type.Contains("Azure DevOps"));
+
+			//insert org into devops index
+			resources.Insert(devopsIndex, org);
+
+			// find proj
+			var projIndex = resources.FindIndex(a => a.Type.Contains("Azure DevOps Project"));
+			AzureResource proj = resources[projIndex];
+			resources.Remove(proj);
+
+			// find first devops resource index
+			var orgIndex2 = resources.FindIndex(a => a.Type.Contains("Azure DevOps Organization"));
+
+			//insert proj into devops index
+			resources.Insert(orgIndex2+1, proj);
+		}
+
         private void GetResources()
         {
             GetProjects();
@@ -86,14 +126,19 @@ namespace myshared.Services
             PrintAllResources();
         }
 
-        public List<Resourcex> GetResourcesList()
+        public List<AzureResource> GetResourcesList()
         {
             return resources;
         }
 
         private void InitCloud()
         {
-            var resourceIdentifier = new Azure.Core.ResourceIdentifier($"/subscriptions/{subscriptionId}");
+			var res = new AzureResource();
+			res.Name = subscriptionName;
+			res.Type = "Azure Cloud Subscription";
+			resources.Add(res);
+
+			var resourceIdentifier = new Azure.Core.ResourceIdentifier($"/subscriptions/{subscriptionId}");
 
             // Step 1: Authenticate using DefaultAzureCredential (supports multiple auth types like Azure CLI, Managed Identity, etc.)
             var credential = new ClientSecretCredential(tenantId, clientId, clientSecret);
@@ -116,8 +161,13 @@ namespace myshared.Services
 
         private void InitDevops()
         {
-            // Authenticate using the Personal Access Token (PAT)
-            VssBasicCredential credentials = new VssBasicCredential(string.Empty, patToken);
+			var res = new AzureResource();
+			res.Name = organizationName;
+			res.Type = "Azure DevOps Organization";
+			resources.Add(res);
+
+			// Authenticate using the Personal Access Token (PAT)
+			VssBasicCredential credentials = new VssBasicCredential(string.Empty, patToken);
             VssConnection connection = new VssConnection(new Uri(orgUrl), credentials);
 
             // initialize azure devops connection
@@ -139,8 +189,12 @@ namespace myshared.Services
                 //Console.WriteLine("Projects in the organization:");
                 foreach (var project in projects)
                 {
-                    //Console.WriteLine($"- {project.Name}");
-                }
+					//Console.WriteLine($"- {project.Name}");
+					var res = new AzureResource();
+					res.Name = project.Name;
+					res.Type = "Azure DevOps Project";
+					resources.Add(res);
+				}
                 projectsReference = projects;
             }
             catch (Exception ex)
@@ -164,7 +218,13 @@ namespace myshared.Services
                 {
                     //Console.WriteLine($"- {resourcegroup.Data.Name}");
                     resourcegroupsData.Add(resourcegroup.Data);
-                }
+
+					var res = new AzureResource();
+					res.Name = resourcegroup.Data.Name;
+					res.Type = "Azure Cloud Resource Group";
+					//res.Type = resourcegroup.Data.ResourceType;
+					resources.Add(res);
+				}
                 resourceGroupsData = resourcegroupsData;
                 resourceGroupsResource = resourcegroups;
             }
@@ -193,21 +253,21 @@ namespace myshared.Services
                     //Console.WriteLine($"- {resource.Data.Name}");
 
                     //resourceTypes.Add(resource.Data.ResourceType);
-                    if (resource.Data.ResourceType == "Microsoft.Sql/servers/databases") resourcetype = "SQLDatabase";
-                    if (resource.Data.ResourceType == "Microsoft.Sql/servers") resourcetype = "SQLServer";
-                    if (resource.Data.ResourceType == "Microsoft.Web/sites") resourcetype = "AppService";
-                    if (resource.Data.ResourceType == "Microsoft.DocumentDB/mongoClusters") resourcetype = "CosmosMongoDB";
-                    if (resource.Data.ResourceType == "Microsoft.Web/serverFarms") resourcetype = "AppServicePlan";
-                    if (resource.Data.ResourceType == "Microsoft.Storage/storageAccounts") resourcetype = "StorageAccount";
-                    if (resource.Data.ResourceType == "microsoft.insights/components") resourcetype = "AppInsights";
-                    if (resource.Data.ResourceType == "microsoft.insights/actiongroups") resourcetype = "AppInsightsSmartDetection";
-                    if (resource.Data.ResourceType == "Microsoft.Web/connections") resourcetype = "TaskConnection";
-                    if (resource.Data.ResourceType == "Microsoft.Logic/workflows") resourcetype = "StorageAccountTask";
+                    if (resource.Data.ResourceType == "Microsoft.Sql/servers/databases") resourcetype = "Azure Cloud SQL Database";
+                    if (resource.Data.ResourceType == "Microsoft.Sql/servers") resourcetype = "Azure Cloud SQL Server";
+                    if (resource.Data.ResourceType == "Microsoft.Web/sites") resourcetype = "Azure Cloud App Service";
+                    if (resource.Data.ResourceType == "Microsoft.DocumentDB/mongoClusters") resourcetype = "Azure Cloud Cosmos MongoDB Database";
+                    if (resource.Data.ResourceType == "Microsoft.Web/serverFarms") resourcetype = "Azure Cloud App Service Plan";
+                    if (resource.Data.ResourceType == "Microsoft.Storage/storageAccounts") resourcetype = "Azure Cloud Storage Account";
+                    if (resource.Data.ResourceType == "microsoft.insights/components") resourcetype = "Azure Cloud App Insights";
+                    if (resource.Data.ResourceType == "microsoft.insights/actiongroups") resourcetype = "Azure Cloud App Insights Smart Detection";
+                    if (resource.Data.ResourceType == "Microsoft.Web/connections") resourcetype = "Azure Cloud Task Connection";
+                    if (resource.Data.ResourceType == "Microsoft.Logic/workflows") resourcetype = "Azure Cloud Storage Account Task";
 
                     resourceTypes.Add(resourcetype);
                     resourceNames.Add(resourcename);
 
-                    var res = new Resourcex();
+                    var res = new AzureResource();
                     res.Name = resourcename;
                     res.Type = resourcetype;
                     resources.Add(res);
@@ -231,10 +291,10 @@ namespace myshared.Services
             {
                 //Console.WriteLine($"Repository Name: {repo.Name}, Repository ID: {repo.Id}");
                 resourceNames.Add(repo.Name);
-                resourceTypes.Add("AzureRepository");
-                var res = new Resourcex();
+                resourceTypes.Add("Azure DevOps Repository");
+                var res = new AzureResource();
                 res.Name = repo.Name;
-                res.Type = "AzureRepository";
+                res.Type = "Azure DevOps Repository";
                 resources.Add(res);
             }
 
@@ -245,11 +305,11 @@ namespace myshared.Services
             {
                 //Console.WriteLine($"Pipeline Name: {pipeline.Name}, Pipeline ID: {pipeline.Id}");
                 resourceNames.Add(pipeline.Name);
-                resourceTypes.Add("BuildPipeline");
+                resourceTypes.Add("Azure DevOps Build Pipeline");
                 //resourceTypes.Add(pipeline.Type.ToString());
-                var res = new Resourcex();
+                var res = new AzureResource();
                 res.Name = pipeline.Name;
-                res.Type = "BuildPipeline";
+                res.Type = "Azure DevOps Build Pipeline";
                 resources.Add(res);
             }
 
@@ -286,10 +346,10 @@ namespace myshared.Services
                 {
                     //Console.WriteLine($"Name: {variableGroup.name}, ID: {variableGroup.id}");
                     resourceNames.Add(variableGroup.name.ToString());
-                    resourceTypes.Add("VariableGroup");
-                    var res = new Resourcex();
+                    resourceTypes.Add("Azure DevOps Variable Group");
+                    var res = new AzureResource();
                     res.Name = variableGroup.name.ToString();
-                    res.Type = "VariableGroup";
+                    res.Type = "Azure DevOps Variable Group";
                     resources.Add(res);
                 }
             }
@@ -328,10 +388,10 @@ namespace myshared.Services
                 {
                     //Console.WriteLine($"Pipeline Name: {releasePipeline.name}, ID: {releasePipeline.id}");
                     resourceNames.Add(releasePipeline.name.ToString());
-                    resourceTypes.Add("DeployRelease");
-                    var res = new Resourcex();
+                    resourceTypes.Add("Azure DevOps Deploy Release");
+                    var res = new AzureResource();
                     res.Name = releasePipeline.name.ToString();
-                    res.Type = "DeployRelease";
+                    res.Type = "Azure DevOps Deploy Release";
                     resources.Add(res);
                 }
             }

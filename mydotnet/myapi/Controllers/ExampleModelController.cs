@@ -4,7 +4,7 @@ using myapi.Services;
 using myshared.DTOs;
 using myshared.Models;
 using myshared.Services;
-using static myshared.Services.AzureService;
+using static myapi.Services.AzureService;
 
 namespace myapi.Controllers // controllers
 {
@@ -53,7 +53,7 @@ namespace myapi.Controllers // controllers
 
 		// GET: api/ExampleNavigationProperty
 		[HttpGet("GetResources")]
-		public ActionResult<List<Resourcex>> GetAllResources()
+		public ActionResult<List<AzureResource>> GetAllResources()
 		{
 			var resources = _azureService.GetResourcesList();
 
