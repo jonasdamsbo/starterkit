@@ -24,14 +24,17 @@ namespace myapi.Services
         // temp hardcoded vars // Replace with your Azure Cloud Subscription info + Azure DevOps organization info
         //temp devops
         string organizationName;// = "jonasdamsbo";
-        string orgUrl;// = "https://dev.azure.com/jonasdamsbo";
+		string orgUrl;// = "https://dev.azure.com/jonasdamsbo";
 		string patToken;// = "CXJ3OyaKTFmcbMjSjHannRvjNepidqZGyN4endV9ldZqeruEWuCHJQQJ99AKACAAAAAjpjMvAAASAZDOhOVN"; // <-- cant get with ps1, add manually to EnvVar
 						//temp cloud
 		string subscriptionName;// = "jgdtestsubscription";
 		string subscriptionId;// = "8e4e96ed-7549-4b0c-9bd9-edbeed4c2f77";
 		string tenantId;// = "ec481362-ae50-4bfb-8524-b7c76d7b4cd8";
-		string clientId;// = "ec84cdac-142e-479f-89c1-4c70bb8f743d";
-		string clientSecret;// = "J2q8Q~JCA2psO-e0oY1O6YXfgYKzwSrhOFsCpafb";
+		string clientId;// = "a4109f06-8bf4-46a5-a4d7-141ff0c306be";
+		string clientSecret;// = "1fv8Q~ccrLeiOJAN~EeDSIKILstTPk2~QxwrJbOC";
+
+		public string projectName;// = "jgde2e";
+		string resourceName;// = "jgde2ex";
 
 		// normals vars
 		public EnvironmentVariableService _envVarService;
@@ -43,22 +46,23 @@ namespace myapi.Services
 
         private SubscriptionResource azureCloudSubscription;
 
-        private List<ResourceGroupData> resourceGroupsData;
-        private ResourceGroupCollection resourceGroupsResource;
+        private List<ResourceGroupData> resourceGroupsData = new List<ResourceGroupData>();
+        private List<ResourceGroupResource> resourceGroupsResource = new List<ResourceGroupResource>();
 
-        private IPagedList<TeamProjectReference> projectsReference;
+        private List<TeamProjectReference> projectsReference = new List<TeamProjectReference>();
 
-        public AzureService() {
-            //var env = _envVarService.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            //if(env == "Production")
-            //{
+        public AzureService(EnvironmentVariableService envVarService) {
+            _envVarService = envVarService;
+            var env = _envVarService.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            if (env == "Production")
+            {
                 Init();
-            //}
+            }
         }
 
         public void Init()
         {
-            InitVars();
+            //InitVars();
 
             InitDevops();
             InitCloud();
@@ -77,7 +81,10 @@ namespace myapi.Services
             tenantId = _envVarService.GetEnvironmentVariable("AzureServiceSettings:TENANTID");
             clientId = _envVarService.GetEnvironmentVariable("AzureServiceSettings:CLIENTID");
             clientSecret = _envVarService.GetEnvironmentVariable("AzureServiceSettings:CLIENTSECRET");
-        }
+
+			projectName = _envVarService.GetEnvironmentVariable("AzureServiceSettings:PROJECTNAME");
+			resourceName = _envVarService.GetEnvironmentVariable("AzureServiceSettings:RESOURCENAME");
+		}
 
         private void SortResources()
         {
@@ -123,7 +130,7 @@ namespace myapi.Services
             GetProjects();
             GetResourcegroups();
             GetCloudResources();
-            GetDevopsResources().GetAwaiter().GetResult();
+            GetDevopsResources(projectName).GetAwaiter().GetResult();
             PrintAllResources();
         }
 
@@ -194,21 +201,26 @@ namespace myapi.Services
                 // Create the Project API Client
                 var projectClient = azureDevopsOrganization.GetClient<ProjectHttpClient>();
 
-                // Get all projects in the organization
-                var projects = projectClient.GetProjects().Result;
-                //var x = projects.ToList();
+				// Get all projects in the organization
+				//var projects = projectClient.GetProjects().Result
+				var projects = projectClient.GetProjects().Result;
+				//var x = projects.ToList();
 
-                // Output project names
-                //Console.WriteLine("Projects in the organization:");
-                foreach (var project in projects)
+				// Output project names
+				//Console.WriteLine("Projects in the organization:");
+				foreach (var project in projects)
                 {
-					//Console.WriteLine($"- {project.Name}");
-					var res = new AzureResource();
-					res.Name = project.Name;
-					res.Type = "Azure DevOps Project";
-					resources.Add(res);
+                    //Console.WriteLine($"- {project.Name}");
+                    if (project.Name.Contains(projectName))
+                    {
+					    var res = new AzureResource();
+					    res.Name = project.Name;
+					    res.Type = "Azure DevOps Project";
+					    resources.Add(res);
+
+						projectsReference.Add(project);
+					}
 				}
-                projectsReference = projects;
             }
             catch (Exception ex)
             {
@@ -230,16 +242,20 @@ namespace myapi.Services
                 foreach (var resourcegroup in resourcegroups)
                 {
                     //Console.WriteLine($"- {resourcegroup.Data.Name}");
-                    resourcegroupsData.Add(resourcegroup.Data);
+                    if (resourcegroup.Data.Name.Contains(resourceName))
+					{
+						resourcegroupsData.Add(resourcegroup.Data);
 
-					var res = new AzureResource();
-					res.Name = resourcegroup.Data.Name;
-					res.Type = "Azure Cloud Resource Group";
-					//res.Type = resourcegroup.Data.ResourceType;
-					resources.Add(res);
+						var res = new AzureResource();
+						res.Name = resourcegroup.Data.Name;
+						res.Type = "Azure Cloud Resource Group";
+						//res.Type = resourcegroup.Data.ResourceType;
+						resources.Add(res);
+
+						resourceGroupsData.Add(resourcegroup.Data);
+                        resourceGroupsResource.Add(resourcegroup);
+					}
 				}
-                resourceGroupsData = resourcegroupsData;
-                resourceGroupsResource = resourcegroups;
             }
             catch (Exception ex)
             {
@@ -252,7 +268,7 @@ namespace myapi.Services
             try
             {
                 // Get all projects in the organization
-                var apps = resourceGroupsResource.First().GetGenericResources();
+                var apps = resourceGroupsResource.Where(x => x.Data.Name.Contains(resourceName)).First().GetGenericResources();
                 //var x = projects.ToList();
 
                 // Output project names
@@ -292,14 +308,14 @@ namespace myapi.Services
             }
         }
 
-        private async Task GetDevopsResources()
+        private async Task GetDevopsResources(string projName)
         {
             var gitClient = azureDevopsOrganization.GetClient<GitHttpClient>();
             var pipelineClient = azureDevopsOrganization.GetClient<BuildHttpClient>();
 
             // List Git Repositories in the project
             //Console.WriteLine($"Listing Repositories for project: {projectsReference.First().Name}");
-            var repositories = await gitClient.GetRepositoriesAsync(projectsReference.First().Id);
+            var repositories = await gitClient.GetRepositoriesAsync(projectsReference.Where(x => x.Name.Contains(projName)).First().Id);
             foreach (var repo in repositories)
             {
                 //Console.WriteLine($"Repository Name: {repo.Name}, Repository ID: {repo.Id}");
@@ -313,7 +329,7 @@ namespace myapi.Services
 
             // List Build Pipelines in the project
             //Console.WriteLine($"\nListing Pipelines for project: {projectsReference.First().Name}");
-            var pipelines = await pipelineClient.GetDefinitionsAsync(projectsReference.First().Id);
+            var pipelines = await pipelineClient.GetDefinitionsAsync(projectsReference.Where(x => x.Name.Contains(projName)).First().Id);
             foreach (var pipeline in pipelines)
             {
                 //Console.WriteLine($"Pipeline Name: {pipeline.Name}, Pipeline ID: {pipeline.Id}");
@@ -329,7 +345,7 @@ namespace myapi.Services
             // VARIABLE GROUP
             // Azure DevOps organization and project (replace with your values)
             string orgName = organizationName;
-            string projectName = projectsReference.First().Name;
+            string projectName = projectsReference.Where(x => x.Name.Contains(projName)).First().Name;
             string pat = patToken; // Your PAT here
 
             // Set up the HTTP client

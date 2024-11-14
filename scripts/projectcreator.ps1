@@ -558,6 +558,10 @@ if($verifySetup -eq "y")
                 write-host 
                 & $scriptpath run
             }
+	    else
+	    {
+		$installTools = "no"
+	    }
         }
         #read-host "Enter to proceed..."
 }
