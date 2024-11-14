@@ -15,6 +15,7 @@ using myshared.Models;
 using myshared.Services;
 using Microsoft.VisualStudio.Services.Commerce;
 using SubscriptionResource = Azure.ResourceManager.Resources.SubscriptionResource;
+using Microsoft.Graph;
 
 namespace myapi.Services
 {
@@ -22,18 +23,18 @@ namespace myapi.Services
     {
         // temp hardcoded vars // Replace with your Azure Cloud Subscription info + Azure DevOps organization info
         //temp devops
-        string organizationName = "jonasdamsbo";
-        string orgUrl = "https://dev.azure.com/jonasdamsbo";
-        string patToken = "CXJ3OyaKTFmcbMjSjHannRvjNepidqZGyN4endV9ldZqeruEWuCHJQQJ99AKACAAAAAjpjMvAAASAZDOhOVN"; // <-- cant get with ps1, add manually to EnvVar
-        //temp cloud
-        string subscriptionName = "jgdtestsubscription";
-        string subscriptionId = "8e4e96ed-7549-4b0c-9bd9-edbeed4c2f77";
-        string tenantId = "ec481362-ae50-4bfb-8524-b7c76d7b4cd8";
-        string clientId = "ec84cdac-142e-479f-89c1-4c70bb8f743d";
-        string clientSecret = "J2q8Q~JCA2psO-e0oY1O6YXfgYKzwSrhOFsCpafb";
+        string organizationName;// = "jonasdamsbo";
+        string orgUrl;// = "https://dev.azure.com/jonasdamsbo";
+		string patToken;// = "CXJ3OyaKTFmcbMjSjHannRvjNepidqZGyN4endV9ldZqeruEWuCHJQQJ99AKACAAAAAjpjMvAAASAZDOhOVN"; // <-- cant get with ps1, add manually to EnvVar
+						//temp cloud
+		string subscriptionName;// = "jgdtestsubscription";
+		string subscriptionId;// = "8e4e96ed-7549-4b0c-9bd9-edbeed4c2f77";
+		string tenantId;// = "ec481362-ae50-4bfb-8524-b7c76d7b4cd8";
+		string clientId;// = "ec84cdac-142e-479f-89c1-4c70bb8f743d";
+		string clientSecret;// = "J2q8Q~JCA2psO-e0oY1O6YXfgYKzwSrhOFsCpafb";
 
-        // normals vars
-        public EnvironmentVariableService _envVarService;
+		// normals vars
+		public EnvironmentVariableService _envVarService;
         private List<string> resourceNames = new List<string>();
         private List<string> resourceTypes = new List<string>();
         public List<AzureResource> resources = new List<AzureResource>();
@@ -57,7 +58,7 @@ namespace myapi.Services
 
         public void Init()
         {
-            //InitVars();
+            InitVars();
 
             InitDevops();
             InitCloud();
@@ -157,6 +158,18 @@ namespace myapi.Services
             {
                 Console.WriteLine("Exception in azureservice: " + ex.ToString());
             }
+
+            //// app registration
+            //var graphClient = new GraphServiceClient(credential);
+
+            //// List App Registrations
+            //var applications = graphClient.Applications
+            //    .GetAsync().GetAwaiter().GetResult();
+
+            //foreach (var app in applications.Value)
+            //{
+            //    Console.WriteLine($"App ID: {app.AppId}, App Name: {app.DisplayName}");
+            //}
         }
 
         private void InitDevops()
