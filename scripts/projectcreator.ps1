@@ -35,6 +35,9 @@ if($verifySetup -eq "y")
         $orgExists = "false"
         while($orgExists -eq "false")
         {
+	    $pat = read-host "Please enter Azure DevOps org PAT key (Create in settings > Personal Access Tokens)"
+	    $env:AZURE_DEVOPS_EXT_PAT = $pat
+
             $orgName = read-host "What is the name your Azure DevOps organization?" # used to check project and repo name before accepting chosen projectname, and git init
             $fullOrgName = "https://dev.azure.com/"+$orgName+"/"
             $fullOrgName = $fullOrgName.Replace(" ","")
@@ -355,7 +358,7 @@ if($verifySetup -eq "y")
         
         write-host "Replacing vars in old-project.ps1"
                 
-        Set-Location "./scripts/"
+        #Set-Location "./scripts/"
 
         ((Get-Content -path old-project.ps1 -Raw) -replace 'tempprojectname',$projectName) | Set-Content -Path old-project.ps1
         ((Get-Content -path old-project.ps1 -Raw) -replace 'temporganizationname',$orgName) | Set-Content -Path old-project.ps1
