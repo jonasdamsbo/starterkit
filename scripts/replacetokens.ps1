@@ -17,7 +17,7 @@ Write-Host "TOKENS ARE BEING REPLACED"
     $organizationname = ${env:ORGANIZATIONNAME}
     $fullorganizationname = ${env:FULLORGANIZATIONNAME}
     $projectname = ${env:PROJECTNAME}
-    $resourcename = ${env:ORGANIZATIONNAME}
+    $resourcename = ${env:RESOURCENAME}
 
     
 # check lib vars
