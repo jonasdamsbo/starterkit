@@ -495,7 +495,9 @@ if($verifySetup -eq "y")
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "subscriptionname" --value $subName
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "organizationname" --value $orgName
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "fullorganizationname" --value $fullOrgName
-	az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "PAT" --value $pat
+	    az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "PAT" --value $pat
+        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "projectname" --value $projectName
+        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "resourcename" --value $resourceName
 
         read-host "Done creating library variable group variables... press enter to continue"
             
@@ -558,10 +560,10 @@ if($verifySetup -eq "y")
                 write-host 
                 & $scriptpath run
             }
-	    else
-	    {
-		$installTools = "no"
-	    }
+            else
+            {
+                $installTools = "no"
+            }
         }
         #read-host "Enter to proceed..."
 }

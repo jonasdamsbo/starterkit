@@ -46,6 +46,8 @@ resource "azurerm_windows_web_app" "exampleApiapp" {
     "AzureServiceSettings:CLIENTID" = "tempclientid"
     "AzureServiceSettings:CLIENTSECRET" = "tempclientsecret"
     "AzureServiceSettings:TENANTID" = "temptenantid"
+    "AzureServiceSettings:PROJECTNAME" = "tempprojectname"
+    "AzureServiceSettings:RESOURCENAME" = "tempresourcename"
   }
 
   connection_string {

@@ -16,6 +16,8 @@ Write-Host "TOKENS ARE BEING REPLACED"
     $subscriptionname = ${env:SUBSCRIPTIONNAME}
     $organizationname = ${env:ORGANIZATIONNAME}
     $fullorganizationname = ${env:FULLORGANIZATIONNAME}
+    $projectname = ${env:SUBSCRIPTIONNAME}
+    $resourcename = ${env:ORGANIZATIONNAME}
 
     
 # check lib vars
@@ -76,6 +78,8 @@ write-host "started replacing"
     ((Get-Content -path $appservicestfpath -Raw) -replace 'tempclientid',$clientid) | Set-Content -Path $appservicestfpath
     ((Get-Content -path $appservicestfpath -Raw) -replace 'tempclientsecret',$clientsecret) | Set-Content -Path $appservicestfpath
     ((Get-Content -path $appservicestfpath -Raw) -replace 'temptenantid',$tenantid) | Set-Content -Path $appservicestfpath
+    ((Get-Content -path $appservicestfpath -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path $appservicestfpath
+    ((Get-Content -path $appservicestfpath -Raw) -replace 'tempprojectname',$projectname) | Set-Content -Path $appservicestfpath
 
     
 write-host "done replacing"

@@ -62,7 +62,7 @@ namespace myapi.Services
 
         public void Init()
         {
-            //InitVars();
+            InitVars();
 
             InitDevops();
             InitCloud();
