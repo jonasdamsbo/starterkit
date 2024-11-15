@@ -184,6 +184,8 @@ if($verifySetup -eq "y")
             write-host "What would you like to call your resources?"
             write-host "   - repository, pipeline, resourcegroup, webapp, api, databases, storageaccount"
             write-host "   - ex: if you enter 'myresources', the repository will be named myresourcesRepository"
+            write-host "   - 1/2 OBS!!! Can be the same as the project name. This is in case you want to use an existing project,"
+            write-host "   - 2/2 OBS!!! which might already have resources named after that projects name."
             $resourceName = read-host
 
         ## check if resourcegroup exists
