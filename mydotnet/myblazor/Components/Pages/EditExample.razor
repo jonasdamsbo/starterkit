@@ -6,34 +6,34 @@
 
 @if(Id is null)
 {
-	<PageTitle>Add a new project</PageTitle>
-	<h3>Add a new project</h3>
+	<PageTitle>Add a new example</PageTitle>
+	<h3>Add a new example</h3>
 
-	<EditForm Model="CurrentProjectDTO" OnSubmit="HandleSubmit">
+	<EditForm Model="CurrentExampleDTO" OnSubmit="HandleSubmit">
 		<div>
 			<label for="title">Title</label>
-			<InputText id="title" @bind-Value="CurrentProjectDTO.Title" class="form-control" />
+			<InputText id="title" @bind-Value="CurrentExampleDTO.Title" class="form-control" />
 		</div>
 		<div>
 			<label for="description">Description</label>
-			<InputText id="description" @bind-Value="CurrentProjectDTO.Description" class="form-control" />
+			<InputText id="description" @bind-Value="CurrentExampleDTO.Description" class="form-control" />
 		</div>
 		<button type="submit" class="btn btn-primary">Save</button>
 	</EditForm>
 }
 else
 {
-	<PageTitle>Edit: "@CurrentProjectDTO.Title"</PageTitle>
-	<h3>Edit: "@CurrentProjectDTO.Title"</h3>
+	<PageTitle>Edit: "@CurrentExampleDTO.Title"</PageTitle>
+	<h3>Edit: "@CurrentExampleDTO.Title"</h3>
 
-	<EditForm Model="CurrentProjectDTO" OnSubmit="HandleSubmit">
+	<EditForm Model="CurrentExampleDTO" OnSubmit="HandleSubmit">
 		<div>
 			<label for="title">Title</label>
-			<InputText id="title" @bind-Value="CurrentProjectDTO.Title" class="form-control" />
+			<InputText id="title" @bind-Value="CurrentExampleDTO.Title" class="form-control" />
 		</div>
 		<div>
 			<label for="description">Description</label>
-			<InputText id="description" @bind-Value="CurrentProjectDTO.Description" class="form-control" />
+			<InputText id="description" @bind-Value="CurrentExampleDTO.Description" class="form-control" />
 		</div>
 		<button type="submit" class="btn btn-primary">Save</button>
 	</EditForm>
@@ -44,8 +44,8 @@ else
 	[Parameter]
 	public string? Id { get; set; }
 
-	public ExampleDTO CurrentProject { get; set; } = new();
-	public ExampleDTO CurrentProjectDTO { get; set; } = new();
+	public ExampleDTO CurrentExample { get; set; } = new();
+	public ExampleDTO CurrentExampleDTO { get; set; } = new();
 	private HttpResponseMessage response = new();
 
 	protected override async Task OnParametersSetAsync()
@@ -55,12 +55,12 @@ else
 			var APIURL = EnvironmentVariableService.GetEnvironmentVariable("MyAppSettings:APIURL");
 			HttpClient httpClient = new HttpClient();
 			response = await httpClient.GetAsync(APIURL + "api/ExampleModel/" + Id);
-			var project = JsonConvert.DeserializeObject<ExampleDTO>(await response.Content.ReadAsStringAsync()) ?? new ExampleDTO();
+			var example = JsonConvert.DeserializeObject<ExampleDTO>(await response.Content.ReadAsStringAsync()) ?? new ExampleDTO();
 			httpClient.Dispose();
 
-			if(project is not null)
+			if(example is not null)
 			{
-				CurrentProjectDTO = project;
+				CurrentExampleDTO = example;
 			}
 		}
 	}
@@ -72,7 +72,7 @@ else
 			var APIURL = EnvironmentVariableService.GetEnvironmentVariable("MyAppSettings:APIURL");
 
 			HttpClient httpClient = new HttpClient();
-			string jsonContent = JsonConvert.SerializeObject(CurrentProjectDTO);
+			string jsonContent = JsonConvert.SerializeObject(CurrentExampleDTO);
 			HttpContent httpContent = new StringContent(jsonContent);
 			httpContent.Headers.ContentType.MediaType = "application/json";
 			response = await httpClient.PutAsync(APIURL + "api/ExampleModel/" + Id, httpContent);
@@ -85,8 +85,8 @@ else
 			var APIURL = EnvironmentVariableService.GetEnvironmentVariable("MyAppSettings:APIURL");
 
 			HttpClient httpClient = new HttpClient();
-			CurrentProjectDTO.Id = "0";
-			string jsonContent = JsonConvert.SerializeObject(CurrentProjectDTO);
+			CurrentExampleDTO.Id = "0";
+			string jsonContent = JsonConvert.SerializeObject(CurrentExampleDTO);
 			HttpContent httpContent = new StringContent(jsonContent);
 			httpContent.Headers.ContentType.MediaType = "application/json";
 			response = await httpClient.PostAsync(APIURL + "api/ExampleModel", httpContent);

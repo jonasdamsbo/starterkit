@@ -506,7 +506,7 @@ if($verifySetup -eq "y")
         # CREATE PIPELINE HERE
         write-host "Started creating pipeline..."
 
-            $pipelineDeployName = "Deploy "+$resourceName
+            $pipelineDeployName = "Build "+$resourceName
             az pipelines create --name $pipelineDeployName --yml-path '\azure\azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master"
 
             $pipelineId = az pipelines show --name $pipelineDeployName --org $fullOrgName --project $projectName --output json --query "[id]"

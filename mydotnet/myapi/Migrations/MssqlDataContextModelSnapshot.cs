@@ -43,23 +43,23 @@ namespace myapi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "672c3df356274e2164c88fa4",
-                            Description = "Alot of fun",
-                            Title = "First project",
+                            Id = "673697f3ee328ebb2ba5d8cf",
+                            Description = "Some field of first example",
+                            Title = "First example",
                             WebUrl = "google.dk"
                         },
                         new
                         {
-                            Id = "672c3df356274e2164c88fa5",
-                            Description = "Alot of fun",
-                            Title = "Second project",
+                            Id = "673697f3ee328ebb2ba5d8d1",
+                            Description = "Some field of second example",
+                            Title = "Second example",
                             WebUrl = "google.dk"
                         },
                         new
                         {
-                            Id = "672c3df356274e2164c88fa6",
-                            Description = "Alot of fun",
-                            Title = "Third project",
+                            Id = "673697f3ee328ebb2ba5d8d3",
+                            Description = "Some field of third example",
+                            Title = "Third example",
                             WebUrl = "google.dk"
                         });
                 });
@@ -86,20 +86,20 @@ namespace myapi.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "672c3df356274e2164c88fa7",
-                            ExampleModelId = "672c3df356274e2164c88fa4",
+                            Id = "673697f3ee328ebb2ba5d8d4",
+                            ExampleModelId = "673697f3ee328ebb2ba5d8cf",
                             Title = "First navprop"
                         },
                         new
                         {
-                            Id = "672c3df356274e2164c88fa8",
-                            ExampleModelId = "672c3df356274e2164c88fa4",
+                            Id = "673697f3ee328ebb2ba5d8d5",
+                            ExampleModelId = "673697f3ee328ebb2ba5d8cf",
                             Title = "Second navprop"
                         },
                         new
                         {
-                            Id = "672c3df356274e2164c88fa9",
-                            ExampleModelId = "672c3df356274e2164c88fa5",
+                            Id = "673697f3ee328ebb2ba5d8d6",
+                            ExampleModelId = "673697f3ee328ebb2ba5d8d1",
                             Title = "Third navprop"
                         });
                 });

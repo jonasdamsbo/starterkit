@@ -23,7 +23,7 @@ namespace myapi.Services
     {
         // temp hardcoded vars // Replace with your Azure Cloud Subscription info + Azure DevOps organization info
         //temp devops
-        string organizationName;// = "jonasdamsbo";
+        string organizationName;// = "jonasdamsbo"; 
 		string orgUrl;// = "https://dev.azure.com/jonasdamsbo";
 		string patToken;// = "CXJ3OyaKTFmcbMjSjHannRvjNepidqZGyN4endV9ldZqeruEWuCHJQQJ99AKACAAAAAjpjMvAAASAZDOhOVN"; // <-- cant get with ps1, add manually to EnvVar
 						//temp cloud
