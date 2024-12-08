@@ -32,8 +32,7 @@ namespace myapi.Controllers // controllers
         {
             var examples = await _exampleModelService.GetAllAsync();
 
-			if (examples is null) return BadRequest();
-			if (examples.Count() < 1) return NotFound();
+			if (examples.IsNullOrEmpty()) return NotFound();
 
 			return Ok(examples);
 
@@ -45,8 +44,7 @@ namespace myapi.Controllers // controllers
 		{
 			var examples = await _exampleNavigationPropertyService.GetAllAsync();
 
-			if (examples is null) return BadRequest();
-			if (examples.Count() < 1) return NotFound();
+			if (examples.IsNullOrEmpty()) return NotFound();
 
 			return Ok(examples);
 
@@ -58,8 +56,7 @@ namespace myapi.Controllers // controllers
 		{
 			var resources = _azureService.GetResourcesList();
 
-			if (resources is null) return BadRequest();
-			if (resources.Count() < 1) return NotFound();
+			if (resources.IsNullOrEmpty()) return NotFound();
 
 			return Ok(resources);
 		}
@@ -67,11 +64,12 @@ namespace myapi.Controllers // controllers
 		// GET: api/ExampleModel/5
 		[HttpGet("{id}")]
         public async Task<ActionResult<ExampleDTO>> GetByIdAsync(string id)
-        {
-            var example = await _exampleModelService.GetByIdAsync(id);
+		{
+			if (id is null) return BadRequest();
 
-			if (example is null) return BadRequest();
-			if (example.Title.IsNullOrEmpty()) return NotFound();
+			var example = await _exampleModelService.GetByIdAsync(id);
+
+			if (example is null) return NotFound();
 
 			return Ok(example);
         }
@@ -81,23 +79,27 @@ namespace myapi.Controllers // controllers
 		[HttpPost]
 		public async Task<ActionResult<ExampleDTO>> AddAsync(ExampleDTO exampleDTO)
 		{
+			if (exampleDTO is null) return BadRequest();
+
 			var example = await _exampleModelService.AddAsync(exampleDTO);
 
-			if (example is null) return BadRequest();
-			if (example.Title.IsNullOrEmpty()) return NotFound();
+			if (example is null) return NotFound();
 
-			return CreatedAtAction("GetExampleModel", new { id = exampleDTO.Id }, exampleDTO);
+			return CreatedAtAction(nameof(GetByIdAsync), new { id = exampleDTO.Id }, exampleDTO);
 		}
 
 		// PUT: api/ExampleModel/5
 		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
 		[HttpPut("{id}")]
         public async Task<IActionResult> UpdateAsync(string id, ExampleDTO exampleDTO)
-        {
-            var example = await _exampleModelService.UpdateAsync(id, exampleDTO);
+		{
+			if (id is null || exampleDTO is null) return BadRequest();
 
-			if (example is null) return BadRequest();
-			if (example.Title.IsNullOrEmpty()) return NotFound();
+			var example = await _exampleModelService.GetByIdAsync(id);
+
+			if (example is null) return NotFound();
+
+			await _exampleModelService.UpdateAsync(id, exampleDTO);
 
 			return NoContent();
         }
@@ -106,10 +108,13 @@ namespace myapi.Controllers // controllers
 		[HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAsync(string id)
         {
-            var example = await _exampleModelService.DeleteAsync(id);
+			if (id is null) return BadRequest();
 
-			if (example is null) return BadRequest();
-			if (example.Title.IsNullOrEmpty()) return NotFound();
+			var example = await _exampleModelService.GetByIdAsync(id);
+
+			if (example is null) return NotFound();
+
+			await _exampleModelService.DeleteAsync(id);
 
 			return NoContent();
         }

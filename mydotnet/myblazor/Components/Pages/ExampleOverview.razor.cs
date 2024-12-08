@@ -7,7 +7,7 @@ namespace myblazor.Components.Pages
 {
 	public partial class ExampleOverview
 	{
-		// dependencies
+		// frontend dependency injection
 
 		// dotnet 8
 
@@ -18,10 +18,11 @@ namespace myblazor.Components.Pages
 
 
 		// dotnet 9
+
 		//private readonly NavigationManager NavigationManager;
 		//private readonly EnvironmentVariableService EnvironmentVariableService;
 
-		//public PortfolioOverview(
+		//public ExampleOverview(
 		//	NavigationManager navigationManager,
 		//	EnvironmentVariableService environmentVariableService)
 		//{

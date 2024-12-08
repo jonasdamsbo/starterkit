@@ -10,7 +10,9 @@ namespace myshared.DTOs
 		public string? Description { get; set; }
 
 		public ExampleDTO() { }
-		public ExampleDTO(ExampleModel example) =>
-		(Id, Title, Description) = (example.Id, example.Title, example.Description);
+
+		// manual mapping, not needed with mapster
+		/*public ExampleDTO(ExampleModel example) =>
+		(Id, Title, Description) = (example.Id, example.Title, example.Description);*/
 	}
 }

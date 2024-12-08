@@ -22,7 +22,9 @@ namespace myshared.Models
 		public ExampleModel() {
 			Id = ObjectId.GenerateNewId().ToString();
 		 }
-		public ExampleModel(ExampleDTO exampleDTO) =>
-		(Id, Title, Description) = (exampleDTO.Id, exampleDTO.Title, exampleDTO.Description);
+
+		// manual mapping, not needed with mapster
+		/*public ExampleModel(ExampleDTO exampleDTO) =>
+		(Id, Title, Description) = (exampleDTO.Id, exampleDTO.Title, exampleDTO.Description);*/
 	}
 }

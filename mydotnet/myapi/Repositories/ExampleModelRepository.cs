@@ -6,8 +6,8 @@ using myshared.Models;
 
 namespace myapi.Repositories
 {
-    public class ExampleModelRepository// : IRepository
-    {
+    public class ExampleModelRepository : IExampleModelRepository
+	{
         private readonly MssqlDataContext _context;
         private ILogger<ExampleModelRepository> _log;
 

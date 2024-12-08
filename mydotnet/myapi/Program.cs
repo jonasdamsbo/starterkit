@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using myapi.Data;
 using myapi.Repositories;
 using myapi.Services;
+using myshared.DTOs;
+using myshared.Models;
 using myshared.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,6 +22,12 @@ builder.Services.AddSwaggerGen(c =>
 	c.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
 });
 
+// automapper and mapster
+// automapper
+//builder.Services.AddAutoMapper(typeof(Program).Assembly);
+// mapster
+builder.Services.AddScoped<MapsterConfig>();
+
 // mssql database context and connectionstring
 builder.Services.AddDbContext<MssqlDataContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("Mssql")));
@@ -32,7 +40,7 @@ builder.Services.AddScoped<ExampleModelService>();
 builder.Services.AddScoped<ExampleNavigationPropertyService>();
 
 // add repositories
-builder.Services.AddScoped<ExampleModelRepository>();
+builder.Services.AddScoped<IExampleModelRepository, ExampleModelRepository>();
 builder.Services.AddScoped<ExampleNavigationPropertyRepository>();
 
 // to run/deploy 2 projects in a single app
@@ -56,6 +64,10 @@ using (var scope = app.Services.CreateScope())
     // using your manually created migrations, automatically runs update-database 
     var context = services.GetRequiredService<MssqlDataContext>();
     context.Database.Migrate();
+
+	// mapster
+	var mapster = services.GetRequiredService<MapsterConfig>();
+	mapster.ConfigureMapster();
 }
 
 // Configure the HTTP request pipeline. 
