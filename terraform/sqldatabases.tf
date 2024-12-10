@@ -18,10 +18,11 @@ resource "azurerm_mssql_database" "exampleMssqldatabase" {
   read_scale     = false
   sku_name       = "GP_S_Gen5_2"
   min_capacity   = 0.5
+  max_capacity   = 2
   auto_pause_delay_in_minutes = 60
   collation      = "SQL_Latin1_General_CP1_CI_AS"
-  max_size_gb    = 4
-  zone_redundant = true
+  max_size_gb    = 32
+  zone_redundant = false
   enclave_type   = "VBS"
 
   tags = {
@@ -32,4 +33,10 @@ resource "azurerm_mssql_database" "exampleMssqldatabase" {
   lifecycle {
     prevent_destroy = true
   }
+}
+
+resource "azurerm_management_lock" "exampleLock" {
+  name       = "Prevent-SQLDB-Deletion"
+  scope      = azurerm_mssql_database.exampleMssqldatabase.id
+  lock_level = "CanNotDelete" # Use "ReadOnly" for stricter lock
 }
