@@ -19,6 +19,9 @@ Write-Host "TOKENS ARE BEING REPLACED"
     $projectname = ${env:PROJECTNAME}
     $resourcename = ${env:RESOURCENAME}
 
+    # for dbbackup
+    $storageconnectionstring = ${env:STORAGECONNECTIONSTRING}
+
     
 # check lib vars
 
@@ -31,6 +34,8 @@ Write-Host "TOKENS ARE BEING REPLACED"
     write-host $clientid
 
     write-host $sqlpassword
+
+    write-host $storageconnectionstring
 
     write-host "done printing env vars from lib vars"
 
@@ -80,6 +85,10 @@ write-host "started replacing"
     ((Get-Content -path $appservicestfpath -Raw) -replace 'temptenantid',$tenantid) | Set-Content -Path $appservicestfpath
     ((Get-Content -path $appservicestfpath -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path $appservicestfpath
     ((Get-Content -path $appservicestfpath -Raw) -replace 'tempprojectname',$projectname) | Set-Content -Path $appservicestfpath
+
+    # for dbbackup
+    ((Get-Content -path $appservicestfpath -Raw) -replace 'tempstoragekey',$storagekey) | Set-Content -Path $appservicestfpath
+    ((Get-Content -path $appservicestfpath -Raw) -replace 'tempstorageconnectionstring',$storageconnectionstring) | Set-Content -Path $appservicestfpath
 
     
 write-host "done replacing"

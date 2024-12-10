@@ -334,11 +334,18 @@ if($verifySetup -eq "y")
             $storageaccountId = az storage account create -l "northeurope" -n $storageaccountName -g $resourcegroupName --sku Standard_LRS --output json --query "[id]"
             write-host "Done creating storageaccount..."
 
-            write-host "Started creating storageaccount container..."
+            write-host "Started creating storageaccount terraform container..."
             $terraformcontainername = "terraform"
             az storage container create --name $terraformcontainername --account-name $storageaccountName
             write-host $storageaccountId
-            write-host "Done creating storageaccount container..."
+            write-host "Done creating storageaccount terraform container..."
+
+            # for dbbackup
+            write-host "Started creating storageaccount dbbackup container..."
+            $dbbackupcontainername = "dbbackup"
+            az storage container create --name $dbbackupcontainername --account-name $storageaccountName
+            write-host $storageaccountId
+            write-host "Done creating storageaccount dbbackup container..."
 
             # get storageaccountkey
             write-host "Started getting storage key..."
@@ -394,11 +401,16 @@ if($verifySetup -eq "y")
 
         # replace x with $x in main.tf
             ((Get-Content -path main.tf -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path main.tf
-            ((Get-Content -path main.tf -Raw) -replace 'tempterraformcontainername',$terraformcontainername) | Set-Content -Path main.tf
             ((Get-Content -path main.tf -Raw) -replace 'temporganizationname',$orgName) | Set-Content -Path main.tf
+
+            # for terraform
+            ((Get-Content -path main.tf -Raw) -replace 'tempterraformcontainername',$terraformcontainername) | Set-Content -Path main.tf
 
         # replace x with $x in appservices.tf
             ((Get-Content -path appservices.tf -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path appservices.tf
+
+            # for dbbackup
+            ((Get-Content -path appservices.tf -Raw) -replace 'tempdbbackupcontainername',$dbbackupcontainername) | Set-Content -Path appservices.tf
 
         # replace x with $x in sqldatabases.tf
             ((Get-Content -path sqldatabases.tf -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path sqldatabases.tf

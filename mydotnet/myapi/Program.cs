@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using myapi.Data;
 using myapi.Repositories;
 using myapi.Services;
+using myapi.Utility;
 using myshared.DTOs;
 using myshared.Models;
 using myshared.Services;
@@ -38,6 +39,7 @@ builder.Services.AddScoped<AzureService>();
 builder.Services.AddScoped<EnvironmentVariableService>();
 builder.Services.AddScoped<ExampleModelService>();
 builder.Services.AddScoped<ExampleNavigationPropertyService>();
+builder.Services.AddScoped<BackupDbUtility>();
 
 // add repositories
 builder.Services.AddScoped<IExampleModelRepository, ExampleModelRepository>();
@@ -60,6 +62,10 @@ using (var scope = app.Services.CreateScope())
 	// test azure cli/devops
 	var azure = services.GetRequiredService<AzureService>();
     //var x = azure.GetResourcesList();
+
+	// backup db if on production env
+	var backupDbService = services.GetRequiredService<BackupDbUtility>();
+    backupDbService.InitBackup();
 
     // using your manually created migrations, automatically runs update-database 
     var context = services.GetRequiredService<MssqlDataContext>();
