@@ -17,9 +17,9 @@ using Microsoft.VisualStudio.Services.Commerce;
 using SubscriptionResource = Azure.ResourceManager.Resources.SubscriptionResource;
 using Microsoft.Graph;
 
-namespace myapi.Services
+namespace myapi.Utility
 {
-    public class AzureService
+    public class AzureUtility
     {
         // temp hardcoded vars // Replace with your Azure Cloud Subscription info + Azure DevOps organization info
         //temp devops
@@ -51,7 +51,7 @@ namespace myapi.Services
 
         private List<TeamProjectReference> projectsReference = new List<TeamProjectReference>();
 
-        public AzureService(EnvironmentVariableService envVarService) {
+        public AzureUtility(EnvironmentVariableService envVarService) {
             _envVarService = envVarService;
             var env = _envVarService.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             if (env == "Production")

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-﻿using Azure.Storage.Blobs;
+using Azure.Storage.Blobs;
 using Microsoft.SqlServer.Dac;
 using myshared.Services;
 using System.Globalization;

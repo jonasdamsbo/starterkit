@@ -2,10 +2,11 @@
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.TeamFoundation.Common;
 using myapi.Services;
+using myapi.Utility;
 using myshared.DTOs;
 using myshared.Models;
 using myshared.Services;
-using static myapi.Services.AzureService;
+using static myapi.Utility.AzureUtility;
 
 namespace myapi.Controllers // controllers
 {
@@ -15,15 +16,15 @@ namespace myapi.Controllers // controllers
     {
         private readonly ExampleModelService _exampleModelService;
 		private readonly ExampleNavigationPropertyService _exampleNavigationPropertyService;
-		private readonly AzureService _azureService;
+		private readonly AzureUtility _azureUtility;
 
 		public ExampleModelController(ExampleModelService exampleService, 
 			ExampleNavigationPropertyService exampleNavPropService,
-			AzureService azureService)
+			AzureUtility azureUtility)
         {
             _exampleModelService = exampleService;
 			_exampleNavigationPropertyService = exampleNavPropService;
-			_azureService = azureService;
+			_azureUtility = azureUtility;
 		}
 
         // GET: api/ExampleModel
@@ -54,7 +55,7 @@ namespace myapi.Controllers // controllers
 		[HttpGet("GetResources")]
 		public ActionResult<List<AzureResource>> GetAllResources()
 		{
-			var resources = _azureService.GetResourcesList();
+			var resources = _azureUtility.GetResourcesList();
 
 			if (resources.IsNullOrEmpty()) return NotFound();
 

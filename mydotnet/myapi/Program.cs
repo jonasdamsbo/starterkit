@@ -35,7 +35,7 @@ builder.Services.AddDbContext<MssqlDataContext>(options =>
 	//.EnableSensitiveDataLogging(true));
 
 // add services
-builder.Services.AddScoped<AzureService>();
+builder.Services.AddScoped<AzureUtility>();
 builder.Services.AddScoped<EnvironmentVariableService>();
 builder.Services.AddScoped<ExampleModelService>();
 builder.Services.AddScoped<ExampleNavigationPropertyService>();
@@ -60,7 +60,7 @@ using (var scope = app.Services.CreateScope())
 	var services = scope.ServiceProvider;
 	
 	// test azure cli/devops
-	var azure = services.GetRequiredService<AzureService>();
+	var azure = services.GetRequiredService<AzureUtility>();
     //var x = azure.GetResourcesList();
 
 	// backup db if on production env

@@ -11,7 +11,7 @@ namespace myblazor.Components.Pages
 	public partial class ResourceOverview
 	{
 		// [Inject]
-		// public AzureService AzureService { get; set; }
+		// public AzureUtility AzureUtility { get; set; }
 		[Inject]
 		public EnvironmentVariableService EnvironmentVariableService { get; set; }
 
@@ -23,7 +23,7 @@ namespace myblazor.Components.Pages
 
 		protected override async Task OnInitializedAsync()
 		{
-			//var listOfResources = AzureService.GetResourcesList();
+			//var listOfResources = AzureUtility.GetResourcesList();
 			var APIURL = EnvironmentVariableService.GetEnvironmentVariable("MyAppSettings:APIURL");
 
 			try
