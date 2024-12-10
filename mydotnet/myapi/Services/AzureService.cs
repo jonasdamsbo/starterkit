@@ -23,18 +23,18 @@ namespace myapi.Services
     {
         // temp hardcoded vars // Replace with your Azure Cloud Subscription info + Azure DevOps organization info
         //temp devops
-        string organizationName;// = "jonasdamsbo"; 
-		string orgUrl;// = "https://dev.azure.com/jonasdamsbo";
-		string patToken;// = "CXJ3OyaKTFmcbMjSjHannRvjNepidqZGyN4endV9ldZqeruEWuCHJQQJ99AKACAAAAAjpjMvAAASAZDOhOVN"; // <-- cant get with ps1, add manually to EnvVar
-						//temp cloud
-		string subscriptionName;// = "jgdtestsubscription";
-		string subscriptionId;// = "8e4e96ed-7549-4b0c-9bd9-edbeed4c2f77";
-		string tenantId;// = "ec481362-ae50-4bfb-8524-b7c76d7b4cd8";
-		string clientId;// = "a4109f06-8bf4-46a5-a4d7-141ff0c306be";
-		string clientSecret;// = "1fv8Q~ccrLeiOJAN~EeDSIKILstTPk2~QxwrJbOC";
+        string organizationName;
+		string orgUrl;
+		string patToken;
+		//temp cloud
+		string subscriptionName;
+		string subscriptionId;
+		string tenantId;
+		string clientId;
+		string clientSecret;
 
-		public string projectName;// = "jgde2e";
-		string resourceName;// = "jgde2ex";
+		public string projectName;
+		string resourceName;
 
 		// normals vars
 		public EnvironmentVariableService _envVarService;
