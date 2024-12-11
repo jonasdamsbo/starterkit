@@ -296,6 +296,9 @@ if($verifySetup -eq "y")
         $tenantid = $appDetails.tenant
         write-host "tenantid: $tenantid"
 
+	az role assignment create --assignee $clientid --role "User Access Administrator" --scope "/subscriptions/$subscriptionId"
+        write-host "Added role: User Access Administrator"
+
         read-host "Done getting and replacing tenantid, clientid, clientsecret... press enter to continue"
         
 
