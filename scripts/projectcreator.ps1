@@ -456,6 +456,23 @@ if($verifySetup -eq "y")
         read-host "Press enter when done..."
         write-host 
 
+	write-host "Secondly, add secondary role to your 'Azure Resource Manager':"
+        write-host " - Go to your Azure cloud subscription"
+        write-host " - Access control (IAM)"
+        write-host " -  > Role assignments"
+        write-host " - Find your app registration. I should be names something like 'ORG-DEVOPSPROJECT-yadayada'"
+        write-host " - Remember the 'ORG-DEVOPSPROJECT'"
+        write-host " - Add > Add role assignment"
+        write-host " - Role > Privileged administrator roles > Click on 'User Access Administrator'"
+        write-host " - Members > Assign access to > User, group or service principal > Select members"
+        write-host " - Write your own 'ORG-DEVOPSPROJECT' in search to find your app registration > click it > Select"
+        write-host " - Conditions > (Fewer privileges) > Select roles and principals > Constrain roles > Configure"
+        write-host " - Add role > Privileged administrator roles > click on 'Contributor' > Select > Save > Save"
+        write-host " - Review + assign > Review + assign"
+        write-host
+        read-host "Press enter when done..."
+        write-host 
+
         # push repofolder to repo
         ### init git and push initial commit, create branches
 
