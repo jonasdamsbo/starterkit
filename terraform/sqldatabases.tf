@@ -16,7 +16,7 @@ resource "azurerm_mssql_database" "exampleMssqldatabase" {
   name           = "tempresourcenamemssqldatabase"
   server_id      = azurerm_mssql_server.exampleMssqlserver.id
   read_scale     = false
-  sku_name       = "GP_S_Gen5_2"
+  sku_name       = "GP_S_Gen5_1"
   min_capacity   = 0.5
   auto_pause_delay_in_minutes = 60
   collation      = "SQL_Latin1_General_CP1_CI_AS"
