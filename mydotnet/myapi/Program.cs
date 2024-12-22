@@ -51,8 +51,31 @@ builder.Services.Configure<IISOptions>(options =>
 	options.ForwardClientCertificate = false;
 });
 
+// "no route matches" error v
+builder.Services.AddMvc(options =>
+{
+	options.SuppressAsyncSuffixInActionNames = false;
+});
+// "no route matches" error ^
+
+// angular v
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy("AllowAll", policy =>
+	{
+		policy.AllowAnyOrigin()
+			  .AllowAnyHeader()
+			  .AllowAnyMethod();
+	});
+});
+// angular ^
+
 // build app
 var app = builder.Build();
+
+// angular v
+app.UseCors("AllowAll");
+// angular ^
 
 // update-database on build
 using (var scope = app.Services.CreateScope())
