@@ -13,6 +13,8 @@ resource "azurerm_windows_web_app" "exampleWebapp" {
   service_plan_id = azurerm_service_plan.exampleAppserviceplan.id
   public_network_access_enabled = true
 
+  https_only = true
+
   site_config {
     ip_restriction_default_action = "Allow"
     always_on = "false"
@@ -30,6 +32,8 @@ resource "azurerm_windows_web_app" "exampleApiapp" {
   resource_group_name = data.azurerm_resource_group.exampleResourcegroup.name
   service_plan_id = azurerm_service_plan.exampleAppserviceplan.id
   public_network_access_enabled = true
+
+  https_only = true
 
   site_config {
     ip_restriction_default_action = "Deny"
