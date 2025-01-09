@@ -1,0 +1,190 @@
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger: none
+#- main  # Adjust the branch as needed
+resources:
+  pipelines:
+    - pipeline: BuildPipeline  # Logical name to reference this pipeline
+      source: Build # Build jgde2ex # tempresourcename   # Actual name of the build pipeline in Azure DevOps
+      branch: master           # Branch to monitor for the build pipeline completion
+      trigger:
+        branches:
+          include:
+            - master           # Trigger this pipeline when a build from the master branch completes
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+- group: myvariablegroup # jgde2exvariablegroup # tempresourcenamevariablegroup
+- name: solution
+  value: '**/*.sln'
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: webappName # Reference library variable 'resourcename' and append 'webapp'
+  value: "$(resourcename)webapp"
+- name: apiappName # Reference library variable 'resourcename' and append 'webapp'
+  value: "$(resourcename)apiapp"
+- name: resourcegroupName
+  value: "jgdtestresourcegroup" # "$(resourcename)resourcegroup"
+- name: storageaccountName
+  value: "jgdteststorageaccount" # "$(resourcename)storageaccount"
+- name: azureServiceSubscription
+  value: "Azure Resource Manager" # name of app registration with federated identity, will be create if you create an azure devops service connection
+- name: artifactPath
+  value: "$(Pipeline.Workspace)/BuildPipeline/drop" # $(Pipeline.Workspace)/BuildPipeline/drop
+- name: thestoragekey
+  value: "$(storagekey)" # $(Pipeline.Workspace)/BuildPipeline/drop
+# - name: terraformcontainerName
+#   value: "$(terraformcontainer)"
+# - name: terraformkey
+#   value: "$(terraformkey)"
+
+stages:
+- stage: Terraformanddeploy
+  displayName: Terraform cloud stage
+  jobs:
+
+  - job: TerraformJob
+    displayName: replacetokens terraform setcloudvars job
+    steps:
+    
+    # Download the artifact from the build pipeline
+    - download: BuildPipeline  # Reference to the build pipeline artifact
+      artifact: drop           # Replace 'drop' with your artifact name if it's different
+
+    - task: AzureCLI@2
+      displayName: "Azure CLI $(artifactPath)/scripts/replacetokens.ps1"
+      inputs:
+        azureSubscription: "$(azureServiceSubscription)"
+        scriptType: 'ps'
+        scriptLocation: 'scriptPath'
+        scriptPath: "$(artifactPath)/scripts/replacetokens.ps1"
+        arguments: "-filePath '$(artifactPath)'"
+
+    - task: PowerShell@2
+      displayName:  "Verify main.tf after ReplaceTokens"
+      inputs:
+        targetType: 'inline'
+        script: |
+          Get-Content -Path '$(artifactPath)/terraform/main.tf'
+          
+    # - task: PowerShell@2
+    #   displayName: "Clean Terraform cache"
+    #   inputs:
+    #     targetType: 'inline'
+    #     script: |
+    #       Remove-Item -Recurse -Force '$(artifactPath)/terraform/.terraform' -ErrorAction SilentlyContinue
+
+    - task: TerraformInstaller@1
+      inputs:
+        terraformVersion: 'latest'
+    
+    - task: TerraformTaskV4@4
+      displayName: 'Terraform init'
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        workingDirectory: '$(artifactPath)/terraform'
+        backendAzureRmUseEnvironmentVariablesForAuthentication: false
+        backendAzureRmUseEntraIdForAuthentication: false
+        backendServiceArm: $(azureServiceSubscription)
+        backendAzureRmResourceGroupName: $(resourcegroupName)
+        backendAzureRmStorageAccountName: $(storageaccountName)
+        backendAzureRmContainerName: 'terraform' # $(terraformcontainerName)
+        backendAzureRmKey: 'terraform.tfstate' # $(terraformkey)
+    
+    # - task: TerraformTaskV4@4
+    #   inputs:
+    #     provider: 'azurerm'
+    #     command: 'init'
+    #     workingDirectory: '$(artifactPath)/terraform'
+    #     backendServiceArm: 'Azure Resource Manager'
+    #     backendAzureRmResourceGroupName: 'jgdtestresourcegroup'
+    #     backendAzureRmStorageAccountName: 'jgdteststorageaccount'
+    #     backendAzureRmContainerName: 'terraform'
+    #     backendAzureRmKey: 'terraform.tfstate'
+    
+      
+    - task: TerraformTaskV4@4
+      displayName: 'Terraform validate'
+      inputs:
+        provider: 'azurerm'
+        command: 'validate'
+        workingDirectory: "$(artifactPath)/terraform"
+
+    - task: TerraformTaskV4@4
+      displayName: 'Terraform plan'
+      inputs:
+        provider: 'azurerm'
+        command: 'plan'
+        workingDirectory: "$(artifactPath)/terraform"
+        environmentServiceNameAzureRM: "$(azureServiceSubscription)"
+
+    - task: TerraformTaskV4@4
+      displayName: 'Terraform : azurerm'
+      inputs:
+        provider: 'azurerm'
+        command: 'apply'
+        workingDirectory: "$(artifactPath)/terraform"
+        environmentServiceNameAzureRM: "$(azureServiceSubscription)"
+
+    - task: AzureCLI@2
+      displayName: "Azure CLI $(System.DefaultWorkingDirectory)/_Build $(resourcename)/drop/scripts/setcloudvars.ps1"
+      inputs:
+        azureSubscription: "$(azureServiceSubscription)"
+        scriptType: 'ps'
+        scriptLocation: 'scriptPath'
+        scriptPath: "$(artifactPath)/scripts/setcloudvars.ps1"
+
+
+  - job: DeployJob
+    displayName: Deploy to Azure App Service job
+    dependsOn: TerraformJob
+    steps:
+
+    # Download the artifact from the build pipeline
+    - download: BuildPipeline  # Reference to the build pipeline artifact
+      artifact: drop           # Replace 'drop' with your artifact name if it's different
+      
+    # Deploy the artifact (myblazor.zip) to Azure App Service
+    # - task: AzureWebApp@1
+    #   inputs:
+    #     azureSubscription: "$(azureServiceSubscription)"  # Azure service connection name
+    #     appName: "$(webappName)"                   # Name of your App Service
+    #     package: "$(artifactPath)/myblazor.zip"  # Path to the ZIP file
+    #     deploymentMethod: 'auto'  # Let Azure determine the best deployment method (zip deploy, etc.)
+    #     appType: 'webApp'         # Set app type to 'webApp' for a standard web app deployment
+    #   displayName: 'Deploy web to Azure App Service'
+      
+    - task: AzureRmWebAppDeployment@4
+      displayName: 'Deploy web to Azure App Service'
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: "$(azureServiceSubscription)"  # Azure service connection name
+        appType: 'webApp'
+        WebAppName: '$(webappName)'
+        packageForLinux: '$(artifactPath)/myblazor.zip'
+
+    - task: AzureRmWebAppDeployment@4
+      displayName: 'Deploy api to Azure App Service'
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: "$(azureServiceSubscription)"  # Azure service connection name
+        appType: 'webApp'
+        WebAppName: '$(apiappName)'
+        packageForLinux: '$(artifactPath)/myapi.zip'
+
+    # - task: AzureWebApp@1
+    #   inputs:
+    #     azureSubscription: "$(azureServiceSubscription)"  # Azure service connection name
+    #     appName: "$(apiappName)"                   # Name of your App Service
+    #     package: "$(artifactPath)/myapi.zip"  # Path to the ZIP file
+    #     deploymentMethod: 'auto'  # Let Azure determine the best deployment method (zip deploy, etc.)
+    #     appType: 'webApp'         # Set app type to 'webApp' for a standard web app deployment
+    #   displayName: 'Deploy api to Azure App Service'

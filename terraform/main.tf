@@ -12,8 +12,8 @@ terraform {
   backend "azurerm" {
       resource_group_name  = "tempresourcenameresourcegroup"
       storage_account_name = "tempresourcenamestorageaccount"
-      container_name       = "tempterraformcontainername"
-      key                  = "terraform.tfstate"
+      container_name       = "terraform" # tempterraformcontainer
+      key                  = "terraform.tfstate" # tempterraformkey
       access_key           = "tempstoragekey"
   }
 }
@@ -33,3 +33,5 @@ provider "azuredevops" {
 data "azurerm_resource_group" "exampleResourcegroup" {
   name = "tempresourcenameresourcegroup"
 }
+
+

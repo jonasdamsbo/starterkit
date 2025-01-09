@@ -54,7 +54,7 @@ resource "azurerm_windows_web_app" "exampleApiapp" {
     "AzureServiceSettings:RESOURCENAME" = "tempresourcename"
     "MyApiSettings:DatabaseName" = azurerm_mssql_database.exampleMssqldatabase.name
     "MyApiSettings:AzureStorageConnectionString" = "tempstorageconnectionstring"
-    "MyApiSettings:StorageContainerName" = "tempdbbackupcontainername"
+    "MyApiSettings:StorageContainerName" = "dbbackup" # tempdbbackupcontainer
   }
 
   connection_string {

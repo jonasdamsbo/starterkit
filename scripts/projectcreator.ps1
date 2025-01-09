@@ -339,6 +339,7 @@ if($verifySetup -eq "y")
 
             write-host "Started creating storageaccount terraform container..."
             $terraformcontainername = "terraform"
+            $terraformkey = "terraform.tfstate"
             az storage container create --name $terraformcontainername --account-name $storageaccountName
             write-host $storageaccountId
             write-host "Done creating storageaccount terraform container..."
@@ -365,7 +366,7 @@ if($verifySetup -eq "y")
         $weburl = "https://"+$resourceName+"webapp.azurewebsites.net/"
         $sqlpassword = -join (((48..57) | Get-Random | % {[char]$_})+((65..90) | Get-Random | % {[char]$_})+((97..122) | Get-Random | % {[char]$_})+(-join ((48..57) + (65..90) + (97..122) | Get-Random -Count 10 | % {[char]$_})))
 
-        $variableGroupName = $resourceName+"variablegroup"
+        $variableGroupName = "myvariablegroup" # $resourceName+"variablegroup"
 
 
     # ############################################# replace vars in old-project.ps1 ############################################
@@ -385,42 +386,42 @@ if($verifySetup -eq "y")
     
     # ############################################# replace vars in setcloudvars.ps1 ############################################
         
-        write-host "Replacing vars in setcloudvars.ps1"
+        # write-host "Replacing vars in setcloudvars.ps1"
                     
-        Set-Location "./scripts/"
+        # Set-Location "./scripts/"
 
-        ((Get-Content -path setcloudvars.ps1 -Raw) -replace 'tempresourcename',$resourceName) | Set-Content -Path setcloudvars.ps1
+        # ((Get-Content -path setcloudvars.ps1 -Raw) -replace 'tempresourcename',$resourceName) | Set-Content -Path setcloudvars.ps1
 
-        Set-Location ..
+        # Set-Location ..
 
-        read-host "Done replacing vars in setcloudvars.ps1, press enter to proceed..."
+        # read-host "Done replacing vars in setcloudvars.ps1, press enter to proceed..."
 
 
     ################################################## replace vars in .tf files ##################################################
 
-        write-host "Replacing vars in .tf files"
+        # write-host "Replacing vars in .tf files"
 
-        Set-Location "./terraform/"
+        # Set-Location "./terraform/"
 
-        # replace x with $x in main.tf
-            ((Get-Content -path main.tf -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path main.tf
-            ((Get-Content -path main.tf -Raw) -replace 'temporganizationname',$orgName) | Set-Content -Path main.tf
+        # # replace x with $x in main.tf
+        #     ((Get-Content -path main.tf -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path main.tf
+        #     ((Get-Content -path main.tf -Raw) -replace 'temporganizationname',$orgName) | Set-Content -Path main.tf
 
-            # for terraform
-            ((Get-Content -path main.tf -Raw) -replace 'tempterraformcontainername',$terraformcontainername) | Set-Content -Path main.tf
+        #     # for terraform
+        #     #((Get-Content -path main.tf -Raw) -replace 'tempterraformcontainername',$terraformcontainername) | Set-Content -Path main.tf
 
-        # replace x with $x in appservices.tf
-            ((Get-Content -path appservices.tf -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path appservices.tf
+        # # replace x with $x in appservices.tf
+        #     ((Get-Content -path appservices.tf -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path appservices.tf
 
-            # for dbbackup
-            ((Get-Content -path appservices.tf -Raw) -replace 'tempdbbackupcontainername',$dbbackupcontainername) | Set-Content -Path appservices.tf
+        #     # for dbbackup
+        #     ((Get-Content -path appservices.tf -Raw) -replace 'tempdbbackupcontainername',$dbbackupcontainername) | Set-Content -Path appservices.tf
 
-        # replace x with $x in sqldatabases.tf
-            ((Get-Content -path sqldatabases.tf -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path sqldatabases.tf
+        # # replace x with $x in sqldatabases.tf
+        #     ((Get-Content -path sqldatabases.tf -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path sqldatabases.tf
 
-        Set-Location ..
+        # Set-Location ..
 
-        read-host "Done replacing vars in .tf files, press enter to proceed..."
+        # read-host "Done replacing vars in .tf files, press enter to proceed..."
 
     # ################################################## replace vars in README.md #################################################
 
@@ -524,6 +525,10 @@ if($verifySetup -eq "y")
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "storagekey" --value $storagekey # sensitive
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "storageconnectionstring" --value $storageconnectionstring # sensitive
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "sqlpassword" --value $sqlpassword # sensitive
+        
+        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "terraformcontainer" --value $terraformcontainername
+        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "terraformkey" --value $terraformkey
+        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "backupcontainer" --value $dbbackupcontainername
 
         #for azureservice
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "subscriptionname" --value $subName
@@ -556,7 +561,9 @@ if($verifySetup -eq "y")
 
     ################################################## prompt set up release in azure devops ##################################################
         write-host 
-        write-host "Finally, you need to setup your release in Azure DevOps (See the development guide for help, link in readme.md):"
+        write-host "Finally, you can choose to use the deploy.yml for releases, or use the manual Azure Devops Releases."
+	write-host "If you're happy with using a deploy.yml, skip these steps, otherwise:"
+        write-host " - You need to setup your release in Azure DevOps (See the development guide for help, link in readme.md):"
         write-host " - Go to your Azure DevOps project"
         write-host " - Pipelines > Releases > +New v > New release pipeline"
         write-host " - Template > Select empty job > setup 2 stages:"

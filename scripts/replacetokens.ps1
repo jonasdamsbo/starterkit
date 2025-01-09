@@ -1,3 +1,8 @@
+### params
+param (
+    [string]$filePath
+)
+
 ### replace tokens in scripts after terraform before deploy
 Write-Host "TOKENS ARE BEING REPLACED"
 
@@ -10,6 +15,11 @@ Write-Host "TOKENS ARE BEING REPLACED"
     $clientid = ${env:CLIENTID}
 
     $sqlpassword = ${env:SQLPASSWORD}
+
+    # to get all values out of tf files and into lib vars
+    $terraformcontainer = ${env:TERRAFORMCONTAINER}
+    $terraformkey = ${env:TERRAFORMKEY}
+    $dbbackupcontainer = ${env:BACKUPCONTAINER}
 
     # for azureservice
     $pat = ${env:PAT}
@@ -42,14 +52,23 @@ Write-Host "TOKENS ARE BEING REPLACED"
 
 # check files before
     write-host "printing content of main.tf"
-    $myrootpath = $PWD.Path
-    $terraformpath = Get-ChildItem -Path $myrootpath -Filter 'main.tf' -Recurse -ErrorAction SilentlyContinue |
-                     Select-Object -Expand Directory -Unique |
-                     Select-Object -Expand FullName
+    # $myrootpath = $PWD.Path
+    # $terraformpath = Get-ChildItem -Path $myrootpath -Filter 'main.tf' -Recurse -ErrorAction SilentlyContinue |
+    #                  Select-Object -Expand Directory -Unique |
+    #                  Select-Object -Expand FullName
 
-    $maintfpath = $terraformpath+"/main.tf"
-    $appservicestfpath = $terraformpath+"/appservices.tf"
-    $sqldatabasestfpath = $terraformpath+"/sqldatabases.tf"
+    # $maintfpath = $terraformpath+"/main.tf"
+    # $appservicestfpath = $terraformpath+"/appservices.tf"
+    # $sqldatabasestfpath = $terraformpath+"/sqldatabases.tf"
+
+        ## new method to get paths v
+        $myrootpath = $filePath
+        $terraformpath = $filePath+"/terraform"
+        $maintfpath = $terraformpath+"/main.tf"
+        $appservicestfpath = $terraformpath+"/appservices.tf"
+        $sqldatabasestfpath = $terraformpath+"/sqldatabases.tf"
+        ## new method to get paths ^
+
 
     write-host "path: "$myrootpath
     write-host "path: "$terraformpath
@@ -73,6 +92,14 @@ write-host "started replacing"
     ((Get-Content -path $maintfpath -Raw) -replace 'tempstoragekey',$storagekey) | Set-Content -Path $maintfpath
     ((Get-Content -path $sqldatabasestfpath -Raw) -replace 'tempsqlpassword',$sqlpassword) | Set-Content -Path $sqldatabasestfpath
     ((Get-Content -path $appservicestfpath -Raw) -replace 'tempsqlpassword',$sqlpassword) | Set-Content -Path $appservicestfpath
+
+    # to get all values out of tf files and into lib vars
+    ((Get-Content -path $maintfpath -Raw) -replace 'tempterraformcontainer',$terraformcontainer) | Set-Content -Path $maintfpath
+    ((Get-Content -path $maintfpath -Raw) -replace 'tempterraformkey',$terraformkey) | Set-Content -Path $maintfpath
+    ((Get-Content -path $maintfpath -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path $maintfpath
+    ((Get-Content -path $sqldatabasestfpath -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path $sqldatabasestfpath
+    ((Get-Content -path $appservicestfpath -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path $appservicestfpath
+    ((Get-Content -path $appservicestfpath -Raw) -replace 'tempdbbackupcontainer',$dbbackupcontainer) | Set-Content -Path $appservicestfpath
 
     # for azureservice
     ((Get-Content -path $appservicestfpath -Raw) -replace 'temppat',$pat) | Set-Content -Path $appservicestfpath

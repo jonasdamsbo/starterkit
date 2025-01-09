@@ -56,7 +56,7 @@ namespace myapi.Utility
             var env = _envVarService.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             if (env == "Production")
             {
-                Init();
+                //Init();
             }
         }
 

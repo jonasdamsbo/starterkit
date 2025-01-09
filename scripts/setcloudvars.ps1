@@ -5,7 +5,7 @@ write-host "SETTING CLOUD VARS"
 ### Set temp variables
 
     # set directly from projectcreator
-        $resourcename = "tempresourcename"
+        $resourcename = ${env:RESOURCENAME} # tempresourcename
         
         write-host $resourcename
 
