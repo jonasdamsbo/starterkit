@@ -325,6 +325,47 @@ if($verifySetup -eq "y")
                     --body $federatedCredentialJson
 
             Write-Host "Federated identity '$federatedCredentialName' created for Azure DevOps."
+
+
+    ### add as azure devops service connection
+
+            # Build the JSON payload
+            $serviceConnectionPayload = @{
+                name = "Azure Resource Manager"
+                type = "azurerm"
+                authorization = @{
+                    # scheme = "ServicePrincipal"
+                    # parameters = @{
+                    #     serviceprincipalid = $clientid
+                    #     serviceprincipalkey = $clientsecret
+                    #     tenantid = $tenantid
+                    # }
+                    scheme = "ManagedServiceIdentity"
+                    parameters = @{
+                        tenantid = $tenantid
+                    }
+                }
+                url = "https://management.azure.com/"
+                data = @{
+                    subscriptionId = $subscriptionId
+                    subscriptionName = $subName
+                    environment = "AzureCloud"
+                }
+            } | ConvertTo-Json -Depth 10 -Compress
+
+            # Save JSON payload to a temporary file
+            $tempFile = [System.IO.Path]::GetTempFileName()
+            Set-Content -Path $tempFile -Value $serviceConnectionPayload
+
+            # Create the service connection
+            $serviceConnection = az devops service-endpoint create --organization "$fullOrgName" --project "$projectName" --service-endpoint-configuration $tempFile | ConvertFrom-Json
+                        
+            # Remove the temporary file
+            Remove-Item $tempFile
+
+            # Grant permissions to all pipelines
+            az devops service-endpoint update --id $serviceConnection.id --enable-for-all --organization "$fullOrgName" --project "$projectName"
+
         
 
     # ################################################## run create preliminary resources script #################################################
@@ -467,37 +508,37 @@ if($verifySetup -eq "y")
 
     ################################################## run pushtorepo script ##################################################
 
-        write-host "Before running your pipeline:"
-        write-host " - Go to your Azure DevOps project"
-        write-host " - Project settings"
-        write-host " - Pipelines > Service Connections"
-        write-host " - New service connection"
-        write-host " - Azure Resource Manager"
-        write-host " - App registration (automatic)"
-        write-host " - Select subscription"
-        write-host " - Leave resource group blank"
-        write-host " - Write 'Azure Resource Manager' in service connection name"
-        write-host " - Check 'Grant access permissions to all pipelines' under security"
-        write-host
-        read-host "Press enter when done..."
-        write-host 
+    #     write-host "Before running your pipeline:"
+    #     write-host " - Go to your Azure DevOps project"
+    #     write-host " - Project settings"
+    #     write-host " - Pipelines > Service Connections"
+    #     write-host " - New service connection"
+    #     write-host " - Azure Resource Manager"
+    #     write-host " - App registration (automatic)"
+    #     write-host " - Select subscription"
+    #     write-host " - Leave resource group blank"
+    #     write-host " - Write 'Azure Resource Manager' in service connection name"
+    #     write-host " - Check 'Grant access permissions to all pipelines' under security"
+    #     write-host
+    #     read-host "Press enter when done..."
+    #     write-host 
 
-	write-host "Secondly, add secondary role to your 'Azure Resource Manager':"
-        write-host " - Go to your Azure cloud subscription"
-        write-host " - Access control (IAM)"
-        write-host " -  > Role assignments"
-        write-host " - Find your app registration. I should be names something like 'ORG-DEVOPSPROJECT-yadayada'"
-        write-host " - Remember the 'ORG-DEVOPSPROJECT'"
-        write-host " - Add > Add role assignment"
-        write-host " - Role > Privileged administrator roles > Click on 'User Access Administrator'"
-        write-host " - Members > Assign access to > User, group or service principal > Select members"
-        write-host " - Write your own 'ORG-DEVOPSPROJECT' in search to find your app registration > click it > Select"
-        write-host " - Conditions > (Fewer privileges) > Select roles and principals > Constrain roles > Configure"
-        write-host " - Add role > Privileged administrator roles > click on 'Contributor' > Select > Save > Save"
-        write-host " - Review + assign > Review + assign"
-        write-host
-        read-host "Press enter when done..."
-        write-host 
+	# write-host "Secondly, add secondary role to your 'Azure Resource Manager':"
+    #     write-host " - Go to your Azure cloud subscription"
+    #     write-host " - Access control (IAM)"
+    #     write-host " -  > Role assignments"
+    #     write-host " - Find your app registration. I should be names something like 'ORG-DEVOPSPROJECT-yadayada'"
+    #     write-host " - Remember the 'ORG-DEVOPSPROJECT'"
+    #     write-host " - Add > Add role assignment"
+    #     write-host " - Role > Privileged administrator roles > Click on 'User Access Administrator'"
+    #     write-host " - Members > Assign access to > User, group or service principal > Select members"
+    #     write-host " - Write your own 'ORG-DEVOPSPROJECT' in search to find your app registration > click it > Select"
+    #     write-host " - Conditions > (Fewer privileges) > Select roles and principals > Constrain roles > Configure"
+    #     write-host " - Add role > Privileged administrator roles > click on 'Contributor' > Select > Save > Save"
+    #     write-host " - Review + assign > Review + assign"
+    #     write-host
+    #     read-host "Press enter when done..."
+    #     write-host 
 
         # push repofolder to repo
         ### init git and push initial commit, create branches
