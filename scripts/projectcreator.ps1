@@ -329,9 +329,10 @@ if($verifySetup -eq "y")
 
     ### add as azure devops service connection
 
+            $serviceConnectionName = "Azure Resource Manager"
             # Build the JSON payload
             $serviceConnectionPayload = @{
-                name = "Azure Resource Manager"
+                name = $serviceConnectionName
                 type = "azurerm"
                 authorization = @{
                     # scheme = "ServicePrincipal"
@@ -498,9 +499,11 @@ if($verifySetup -eq "y")
         ((Get-Content -path README.md -Raw) -replace 'tempprojectname',$projectName) | Set-Content -Path README.md
         ((Get-Content -path README.md -Raw) -replace 'tempresourcegroupname',$resourcegroupName) | Set-Content -Path README.md
         ((Get-Content -path README.md -Raw) -replace 'temprepositoryname',$repositoryName) | Set-Content -Path README.md
+        ((Get-Content -path README.md -Raw) -replace 'tempstorageaccountname',$storageaccountName) | Set-Content -Path README.md
         ((Get-Content -path README.md -Raw) -replace 'temppipelinename',$pipelineName) | Set-Content -Path README.md
         ((Get-Content -path README.md -Raw) -replace 'tempvariablegroupname',$variableGroupName) | Set-Content -Path README.md
         ((Get-Content -path README.md -Raw) -replace 'tempapplicationname',$applicationName) | Set-Content -Path README.md
+        ((Get-Content -path README.md -Raw) -replace 'tempserviceconnectionname',$serviceConnectionName) | Set-Content -Path README.md
         ((Get-Content -path README.md -Raw) -replace 'tempwebappurl',$weburl) | Set-Content -Path README.md
 
         read-host "Done replacing vars in readme.txt, press enter to proceed..."
@@ -603,6 +606,12 @@ if($verifySetup -eq "y")
 	    az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "PAT" --value $pat
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "projectname" --value $projectName
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "resourcename" --value $resourceName
+
+        ## extra
+        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "storageaccountname" --value $storageaccountName
+        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "resourcegroupname" --value $resourcegroupName
+        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "azureserviceconnectionname" --value $serviceConnectionName
+
 
         read-host "Done creating library variable group variables... press enter to continue"
             
