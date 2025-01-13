@@ -300,6 +300,31 @@ if($verifySetup -eq "y")
         write-host "Added role: User Access Administrator"
 
         read-host "Done getting and replacing tenantid, clientid, clientsecret... press enter to continue"
+
+
+	### federated identity
+            # Set the federated identity variables
+            $resource = "https://dev.azure.com/"+$organizationName+"/"+$projectName+"/_git/"+$repositoryName
+            $federatedCredentialName = "AzureDevOpsFederatedIdentity"
+
+            # Create the federated identity body as a hashtable
+            $federatedCredentialBody = @{
+                name = $federatedCredentialName
+                issuer = "https://vssps.dev.azure.com"
+                subject = $resource
+                audiences = @("api://AzureADTokenExchange")
+            } 
+
+            # Convert hashtable to JSON
+            $federatedCredentialJson = $federatedCredentialBody | ConvertTo-Json -Depth 2 -Compress
+
+            # Use Azure CLI to add the federated identity
+            az rest --method POST `
+                    --url "https://graph.microsoft.com/v1.0/applications/$clientid/federatedIdentityCredentials" `
+                    --headers "Content-Type=application/json" `
+                    --body $federatedCredentialJson
+
+            Write-Host "Federated identity '$federatedCredentialName' created for Azure DevOps."
         
 
     # ################################################## run create preliminary resources script #################################################
