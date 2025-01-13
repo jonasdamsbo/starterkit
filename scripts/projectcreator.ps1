@@ -611,14 +611,19 @@ if($verifySetup -eq "y")
         # CREATE PIPELINE HERE
         write-host "Started creating pipeline..."
 
-            $pipelineDeployName = "Build "+$resourceName
-            az pipelines create --name $pipelineDeployName --yml-path '\azure\azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master"
+            $buildPipelineName = "Build "+$resourceName
+            az pipelines create --name $buildPipelineName --yml-path '\azure\azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master"
 
-            $pipelineId = az pipelines show --name $pipelineDeployName --org $fullOrgName --project $projectName --output json --query "[id]"
+            $pipelineId = az pipelines show --name $buildPipelineName --org $fullOrgName --project $projectName --output json --query "[id]"
             $pipelineId = $pipelineId.Replace("[","")
             $pipelineId = $pipelineId.Replace("]","")
             $pipelineId = $pipelineId.Replace(" ","")
             write-host "PipelineId: "$pipelineId
+
+            # deploy release pipeline yml
+            $deployPipelineName = "Deploy "+$resourceName
+            az pipelines create --name $deployPipelineName --yml-path '\azure\deploy-azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master"
+
             $pipelines = az pipelines list --org $fullOrgName --project $projectName --output json
             write-host "Pipelines: "$pipelines
                 
