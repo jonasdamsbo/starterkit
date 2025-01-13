@@ -24,4 +24,8 @@ Subscription: tempsubscriptionname
 
 Resourcegroup: tempresourcegroupname
 
+Storageaccount: tempstorageaccountname
+
 Appregistration: tempapplicationname
+
+Azuredevopsserviceconnection: tempserviceconnectionname
