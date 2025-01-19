@@ -46,7 +46,8 @@ do {
         write-host "  K - Install DockerDesktop" -NoNewline
 	    write-host " <--- Requires 'O - Install WSL'" -ForegroundColor Yellow
         write-host "  L - Install DockerContainers" -NoNewline
-	    write-host " <--- Requires 'K - Install DockerDesktop' + 'N - Clone project'" -ForegroundColor Yellow
+	    write-host " <--- Requires 'K - Install DockerDesktop'" -ForegroundColor Yellow
+        # + 'N - Clone project'" -ForegroundColor Yellow
         write-host ""
         write-host "PREREQUISITES" -ForegroundColor Cyan
         #write-host "  M - Install git"
