@@ -20,6 +20,14 @@ resource "azurerm_windows_web_app" "exampleWebapp" {
     always_on = "false"
   }
 
+  logs{
+    application_logs {
+      file_system_level = "Verbose"
+    }
+    detailed_error_messages = "true"
+    failed_request_tracing = "true"
+  }
+
   app_settings = {
     "MyAppSettings:APIURL" = "https://tempresourcenameapiapp.azurewebsites.net/"
     "ASPNETCORE_ENVIRONMENT" = "Production"
