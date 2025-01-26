@@ -16,15 +16,15 @@ namespace myapi.Controllers // controllers
     {
         private readonly ExampleModelService _exampleModelService;
 		private readonly ExampleNavigationPropertyService _exampleNavigationPropertyService;
-		private readonly AzureUtility _azureUtility;
+		//private readonly AzureUtility _azureUtility;
 
 		public ExampleModelController(ExampleModelService exampleService, 
-			ExampleNavigationPropertyService exampleNavPropService,
-			AzureUtility azureUtility)
+			ExampleNavigationPropertyService exampleNavPropService/*,
+			AzureUtility azureUtility*/)
         {
             _exampleModelService = exampleService;
 			_exampleNavigationPropertyService = exampleNavPropService;
-			_azureUtility = azureUtility;
+			//_azureUtility = azureUtility;
 		}
 
         // GET: api/ExampleModel
@@ -51,16 +51,16 @@ namespace myapi.Controllers // controllers
 
 		}
 
-		// GET: api/ExampleNavigationProperty
-		[HttpGet("GetResources")]
-		public ActionResult<List<AzureResource>> GetAllResources()
-		{
-			var resources = _azureUtility.GetResourcesList();
+		// GET: api/GetResources for azureutility
+		//[HttpGet("GetResources")]
+		//public ActionResult<List<AzureResource>> GetAllResources()
+		//{
+		//	var resources = _azureUtility.GetResourcesList();
 
-			if (resources.IsNullOrEmpty()) return NotFound();
+		//	if (resources.IsNullOrEmpty()) return NotFound();
 
-			return Ok(resources);
-		}
+		//	return Ok(resources);
+		//}
 
 		// GET: api/ExampleModel/5
 		[HttpGet("{id}")]

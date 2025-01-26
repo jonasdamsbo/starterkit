@@ -23,18 +23,18 @@ namespace myapi.Utility
     {
         // temp hardcoded vars // Replace with your Azure Cloud Subscription info + Azure DevOps organization info
         //temp devops
-        string organizationName;
-		string orgUrl;
-		string patToken;
+        string organizationName = "jonasdamsbo";
+		string orgUrl = "https://dev.azure.com/jonasdamsbo/";
+		string patToken = "9barlcsvYexvq9YrhmGMm70sEyBnqrh7oEJYFEwyhhkqR2DPdkCpJQQJ99BAACAAAAAjpjMvAAASAZDOK5HI";
 		//temp cloud
-		string subscriptionName;
-		string subscriptionId;
-		string tenantId;
-		string clientId;
-		string clientSecret;
+		string subscriptionName = "jgdtestsubscription";
+		string subscriptionId = "8e4e96ed-7549-4b0c-9bd9-edbeed4c2f77";
+		string tenantId = "ec481362-ae50-4bfb-8524-b7c76d7b4cd8";
+		string clientId = "99f8c36b-1780-45d0-ab1b-7ec459f389b6";
+		string clientSecret = "Drk8Q~CMZAp4YHzyoJl7vc~VFGeTeeXI72zVWbYi";
 
-		public string projectName;
-		string resourceName;
+		public string projectName = "jgde2e";
+		string resourceName = "jgde2ex";
 
 		// normals vars
 		public EnvironmentVariableService _envVarService;
@@ -54,10 +54,11 @@ namespace myapi.Utility
         public AzureUtility(EnvironmentVariableService envVarService) {
             _envVarService = envVarService;
             var env = _envVarService.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            if (env == "Production")
-            {
-                //Init();
-            }
+            //if (env == "Production")
+            //{
+            //    Init();
+            //}
+            Init();
         }
 
         public void Init()
@@ -69,21 +70,21 @@ namespace myapi.Utility
 
             GetResources();
 
-            SortResources();
+            //SortResources();
         }
 
         private void InitVars(){
-            organizationName = _envVarService.GetEnvironmentVariable("AzureServiceSettings:ORGANIZATIONNAME");
-            orgUrl = _envVarService.GetEnvironmentVariable("AzureServiceSettings:FULLORGANIZATIONNAME");
-            patToken = _envVarService.GetEnvironmentVariable("AzureServiceSettings:PAT");
-            subscriptionName = _envVarService.GetEnvironmentVariable("AzureServiceSettings:SUBSCRIPTIONNAME");
-            subscriptionId = _envVarService.GetEnvironmentVariable("AzureServiceSettings:SUBSCRIPTIONID");
-            tenantId = _envVarService.GetEnvironmentVariable("AzureServiceSettings:TENANTID");
-            clientId = _envVarService.GetEnvironmentVariable("AzureServiceSettings:CLIENTID");
-            clientSecret = _envVarService.GetEnvironmentVariable("AzureServiceSettings:CLIENTSECRET");
+   //         organizationName = _envVarService.GetEnvironmentVariable("AzureServiceSettings:ORGANIZATIONNAME");
+   //         orgUrl = _envVarService.GetEnvironmentVariable("AzureServiceSettings:FULLORGANIZATIONNAME");
+   //         patToken = _envVarService.GetEnvironmentVariable("AzureServiceSettings:PAT");
+   //         subscriptionName = _envVarService.GetEnvironmentVariable("AzureServiceSettings:SUBSCRIPTIONNAME");
+   //         subscriptionId = _envVarService.GetEnvironmentVariable("AzureServiceSettings:SUBSCRIPTIONID");
+   //         tenantId = _envVarService.GetEnvironmentVariable("AzureServiceSettings:TENANTID");
+   //         clientId = _envVarService.GetEnvironmentVariable("AzureServiceSettings:CLIENTID");
+   //         clientSecret = _envVarService.GetEnvironmentVariable("AzureServiceSettings:CLIENTSECRET");
 
-			projectName = _envVarService.GetEnvironmentVariable("AzureServiceSettings:PROJECTNAME");
-			resourceName = _envVarService.GetEnvironmentVariable("AzureServiceSettings:RESOURCENAME");
+			//projectName = _envVarService.GetEnvironmentVariable("AzureServiceSettings:PROJECTNAME");
+			//resourceName = _envVarService.GetEnvironmentVariable("AzureServiceSettings:RESOURCENAME");
 		}
 
         private void SortResources()
@@ -131,7 +132,7 @@ namespace myapi.Utility
             GetResourcegroups();
             GetCloudResources();
             GetDevopsResources(projectName).GetAwaiter().GetResult();
-            PrintAllResources();
+            //PrintAllResources();
         }
 
         public List<AzureResource> GetResourcesList()

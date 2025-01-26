@@ -29,13 +29,21 @@ builder.Services.AddSwaggerGen(c =>
 // mapster
 builder.Services.AddScoped<MapsterConfig>();
 
+
 // mssql database context and connectionstring
+
+// for mssql
 builder.Services.AddDbContext<MssqlDataContext>(options =>
-	options.UseSqlServer(builder.Configuration.GetConnectionString("Mssql")));
-	//.EnableSensitiveDataLogging(true));
+   options.UseSqlServer(builder.Configuration.GetConnectionString("Mssql")));
+//.EnableSensitiveDataLogging(true));
+
+// for sqlite
+//builder.Services.AddDbContext<MssqlDataContext>(options =>
+//	options.UseSqlite(builder.Configuration.GetConnectionString("Sqlite")));
+
 
 // add services
-builder.Services.AddScoped<AzureUtility>();
+//builder.Services.AddScoped<AzureUtility>();
 builder.Services.AddScoped<EnvironmentVariableService>();
 builder.Services.AddScoped<ExampleModelService>();
 builder.Services.AddScoped<ExampleNavigationPropertyService>();
@@ -83,7 +91,7 @@ using (var scope = app.Services.CreateScope())
 	var services = scope.ServiceProvider;
 	
 	// test azure cli/devops
-	var azure = services.GetRequiredService<AzureUtility>();
+	//var azure = services.GetRequiredService<AzureUtility>();
     //var x = azure.GetResourcesList();
 
 	// backup db if on production env
