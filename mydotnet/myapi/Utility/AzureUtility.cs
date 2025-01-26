@@ -23,18 +23,18 @@ namespace myapi.Utility
     {
         // temp hardcoded vars // Replace with your Azure Cloud Subscription info + Azure DevOps organization info
         //temp devops
-        string organizationName = "jonasdamsbo";
-		string orgUrl = "https://dev.azure.com/jonasdamsbo/";
-		string patToken = "9barlcsvYexvq9YrhmGMm70sEyBnqrh7oEJYFEwyhhkqR2DPdkCpJQQJ99BAACAAAAAjpjMvAAASAZDOK5HI";
+        string organizationName;
+		string orgUrl;
+		string patToken;
 		//temp cloud
-		string subscriptionName = "jgdtestsubscription";
-		string subscriptionId = "8e4e96ed-7549-4b0c-9bd9-edbeed4c2f77";
-		string tenantId = "ec481362-ae50-4bfb-8524-b7c76d7b4cd8";
-		string clientId = "99f8c36b-1780-45d0-ab1b-7ec459f389b6";
-		string clientSecret = "Drk8Q~CMZAp4YHzyoJl7vc~VFGeTeeXI72zVWbYi";
+		string subscriptionName;
+		string subscriptionId;
+		string tenantId;
+		string clientId;
+		string clientSecret;
 
-		public string projectName = "jgde2e";
-		string resourceName = "jgde2ex";
+		public string projectName;
+		string resourceName;
 
 		// normals vars
 		public EnvironmentVariableService _envVarService;
