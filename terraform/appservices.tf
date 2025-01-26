@@ -48,6 +48,14 @@ resource "azurerm_windows_web_app" "exampleApiapp" {
     always_on = "false"
   }
 
+  logs{
+    application_logs {
+      file_system_level = "Verbose"
+    }
+    detailed_error_messages = "true"
+    failed_request_tracing = "true"
+  }
+
   app_settings = {
     "ASPNETCORE_ENVIRONMENT" = "Production"
     "AzureServiceSettings:PAT" = "temppat"

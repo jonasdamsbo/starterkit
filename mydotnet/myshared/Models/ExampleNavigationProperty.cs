@@ -14,9 +14,9 @@ namespace myshared.Models
 
 		// foreign key
 		//[JsonIgnore]
-		public required virtual ExampleModel ExampleModel { get; set; }
+		public virtual ExampleModel ExampleModel { get; set; }
 		[ForeignKey(nameof(ExampleModel))]
-		public required string ExampleModelId { get; set; }
+		public string ExampleModelId { get; set; }
 
 		public ExampleNavigationProperty() {
 			Id = Guid.NewGuid().ToString();
