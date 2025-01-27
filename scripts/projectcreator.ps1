@@ -500,7 +500,8 @@ if($verifySetup -eq "y")
         ((Get-Content -path README.md -Raw) -replace 'tempresourcegroupname',$resourcegroupName) | Set-Content -Path README.md
         ((Get-Content -path README.md -Raw) -replace 'temprepositoryname',$repositoryName) | Set-Content -Path README.md
         ((Get-Content -path README.md -Raw) -replace 'tempstorageaccountname',$storageaccountName) | Set-Content -Path README.md
-        ((Get-Content -path README.md -Raw) -replace 'temppipelinename',$pipelineName) | Set-Content -Path README.md
+        ((Get-Content -path README.md -Raw) -replace 'tempbuildpipelinename',$buildPipelineName) | Set-Content -Path README.md
+        ((Get-Content -path README.md -Raw) -replace 'tempdeploypipelinename',$deployPipelineName) | Set-Content -Path README.md
         ((Get-Content -path README.md -Raw) -replace 'tempvariablegroupname',$variableGroupName) | Set-Content -Path README.md
         ((Get-Content -path README.md -Raw) -replace 'tempapplicationname',$applicationName) | Set-Content -Path README.md
         ((Get-Content -path README.md -Raw) -replace 'tempserviceconnectionname',$serviceConnectionName) | Set-Content -Path README.md
@@ -610,6 +611,7 @@ if($verifySetup -eq "y")
         ## extra
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "storageaccountname" --value $storageaccountName
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "resourcegroupname" --value $resourcegroupName
+        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "appregistration" --value $applicationName
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "azureserviceconnectionname" --value $serviceConnectionName
 
 

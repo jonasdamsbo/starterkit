@@ -4,21 +4,10 @@ Link to starterkit template (Azure DevOps): https://dev.azure.com/JonasDamsbo/st
 
 Link to starterkit template (Github): https://github.com/jonasdamsbo/starterkit/
 
-Link to Azure DevOps: https://dev.azure.com/
 
 Link to Azure Portal: https://portal.azure.com/
 
 Link to Website: tempwebappurl
-
-Organization: temporganizationname
-
-Project: tempprojectname
-
-Repository: temprepositoryname
-
-Pipeline: temppipelinename
-
-Variablegroup: tempvariablegroupname
 
 Subscription: tempsubscriptionname
 
@@ -27,5 +16,20 @@ Resourcegroup: tempresourcegroupname
 Storageaccount: tempstorageaccountname
 
 Appregistration: tempapplicationname
+
+
+Link to Azure DevOps: https://dev.azure.com/
+
+Organization: temporganizationname
+
+Project: tempprojectname
+
+Repository: temprepositoryname
+
+Buildpipeline: tempbuildpipelinename
+
+Deploypipeline: tempbuildpipelinename
+
+Variablegroup: tempvariablegroupname
 
 Azuredevopsserviceconnection: tempserviceconnectionname
