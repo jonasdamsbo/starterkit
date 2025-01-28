@@ -385,14 +385,17 @@ if($verifySetup -eq "y")
             write-host $repositoryId
             write-host "Done creating repository..."
 
-            write-host "Deleting old repository..."
-            $oldRepoId = az repos show --repository $projectName --org $fullOrgName --project $projectName --output json --query "[id]"
-            $oldRepoId = $oldRepoId.Replace("[","")
-            $oldRepoId = $oldRepoId.Replace("]","")
-            $oldRepoId = $oldRepoId.Replace(" ","")
-            write-host "Oldrepo id: "+$oldRepoId
-            az repos delete --id $oldRepoId --org $fullOrgName --project $projectName --yes
-            write-host "Done deleting old repository..."
+            if($projectName -ne $resourceName)
+            {
+                write-host "Deleting old repository..."
+                $oldRepoId = az repos show --repository $projectName --org $fullOrgName --project $projectName --output json --query "[id]"
+                $oldRepoId = $oldRepoId.Replace("[","")
+                $oldRepoId = $oldRepoId.Replace("]","")
+                $oldRepoId = $oldRepoId.Replace(" ","")
+                write-host "Oldrepo id: "+$oldRepoId
+                az repos delete --id $oldRepoId --org $fullOrgName --project $projectName --yes
+                write-host "Done deleting old repository..."
+            }
 
             # create resourcegroup
             $resourcegroupId = az group create -l "northeurope" -n $resourcegroupName --managed-by $fullSubId --output json --query "[id]"
