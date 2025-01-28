@@ -12,8 +12,8 @@ terraform {
   backend "azurerm" {
       resource_group_name  = "tempresourcenameresourcegroup"
       storage_account_name = "tempresourcenamestorageaccount"
-      container_name       = "terraform" # tempterraformcontainer
-      key                  = "terraform.tfstate" # tempterraformkey
+      container_name       = "tempterraformcontainer" # "terraform"
+      key                  = "tempterraformkey" # "terraform.tfstate"
       access_key           = "tempstoragekey"
   }
 }
