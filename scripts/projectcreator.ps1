@@ -396,6 +396,10 @@ if($verifySetup -eq "y")
                 az repos delete --id $oldRepoId --org $fullOrgName --project $projectName --yes
                 write-host "Done deleting old repository..."
             }
+            else
+            {
+                write-host "Projectname and resourcename are the same, no need to delete old repository..."
+            }
 
             # create resourcegroup
             $resourcegroupId = az group create -l "northeurope" -n $resourcegroupName --managed-by $fullSubId --output json --query "[id]"
