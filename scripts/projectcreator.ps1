@@ -377,16 +377,16 @@ if($verifySetup -eq "y")
             write-host "Creating preliminary resources..."
             write-host "path: "$PWD.Path
 
-            # create repo - 
-            $repositoryId = az repos create --name $repositoryName --org $fullOrgName --project $projectName --output json --query "[id]"
-            $repositoryId = $repositoryId.Replace("[","")
-            $repositoryId = $repositoryId.Replace("]","")
-            $repositoryId = $repositoryId.Replace(" ","")
-            write-host $repositoryId
-            write-host "Done creating repository..."
-
             if($projectName -ne $resourceName)
             {
+                # create repo - 
+                $repositoryId = az repos create --name $repositoryName --org $fullOrgName --project $projectName --output json --query "[id]"
+                $repositoryId = $repositoryId.Replace("[","")
+                $repositoryId = $repositoryId.Replace("]","")
+                $repositoryId = $repositoryId.Replace(" ","")
+                write-host $repositoryId
+                write-host "Done creating repository..."
+
                 write-host "Deleting old repository..."
                 $oldRepoId = az repos show --repository $projectName --org $fullOrgName --project $projectName --output json --query "[id]"
                 $oldRepoId = $oldRepoId.Replace("[","")
@@ -398,7 +398,7 @@ if($verifySetup -eq "y")
             }
             else
             {
-                write-host "Projectname and resourcename are the same, no need to delete old repository..."
+                write-host "Projectname and resourcename are the same, no need to create new repo and delete old repository..."
             }
 
             # create resourcegroup
