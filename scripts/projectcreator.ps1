@@ -335,16 +335,16 @@ if($verifySetup -eq "y")
                 name = $serviceConnectionName
                 type = "azurerm"
                 authorization = @{
-                    # scheme = "ServicePrincipal"
-                    # parameters = @{
-                    #     serviceprincipalid = $clientid
-                    #     serviceprincipalkey = $clientsecret
-                    #     tenantid = $tenantid
-                    # }
-                    scheme = "ManagedServiceIdentity"
+                    scheme = "ServicePrincipal"
                     parameters = @{
+                        serviceprincipalid = $clientid
+                        serviceprincipalkey = $clientsecret
                         tenantid = $tenantid
                     }
+                    # scheme = "ManagedServiceIdentity"
+                    # parameters = @{
+                    #     tenantid = $tenantid
+                    # }
                 }
                 url = "https://management.azure.com/"
                 data = @{
