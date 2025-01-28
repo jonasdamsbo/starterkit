@@ -377,29 +377,22 @@ if($verifySetup -eq "y")
             write-host "Creating preliminary resources..."
             write-host "path: "$PWD.Path
 
-            if($projectName -ne $resourceName)
-            {
-                # create repo - 
-                $repositoryId = az repos create --name $repositoryName --org $fullOrgName --project $projectName --output json --query "[id]"
-                $repositoryId = $repositoryId.Replace("[","")
-                $repositoryId = $repositoryId.Replace("]","")
-                $repositoryId = $repositoryId.Replace(" ","")
-                write-host $repositoryId
-                write-host "Done creating repository..."
+            # create repo - 
+            $repositoryId = az repos create --name $repositoryName --org $fullOrgName --project $projectName --output json --query "[id]"
+            $repositoryId = $repositoryId.Replace("[","")
+            $repositoryId = $repositoryId.Replace("]","")
+            $repositoryId = $repositoryId.Replace(" ","")
+            write-host $repositoryId
+            write-host "Done creating repository..."
 
-                write-host "Deleting old repository..."
-                $oldRepoId = az repos show --repository $projectName --org $fullOrgName --project $projectName --output json --query "[id]"
-                $oldRepoId = $oldRepoId.Replace("[","")
-                $oldRepoId = $oldRepoId.Replace("]","")
-                $oldRepoId = $oldRepoId.Replace(" ","")
-                write-host "Oldrepo id: "+$oldRepoId
-                az repos delete --id $oldRepoId --org $fullOrgName --project $projectName --yes
-                write-host "Done deleting old repository..."
-            }
-            else
-            {
-                write-host "Projectname and resourcename are the same, no need to create new repo and delete old repository..."
-            }
+            write-host "Deleting old repository..."
+            $oldRepoId = az repos show --repository $projectName --org $fullOrgName --project $projectName --output json --query "[id]"
+            $oldRepoId = $oldRepoId.Replace("[","")
+            $oldRepoId = $oldRepoId.Replace("]","")
+            $oldRepoId = $oldRepoId.Replace(" ","")
+            write-host "Oldrepo id: "+$oldRepoId
+            az repos delete --id $oldRepoId --org $fullOrgName --project $projectName --yes
+            write-host "Done deleting old repository..."
 
             # create resourcegroup
             $resourcegroupId = az group create -l "northeurope" -n $resourcegroupName --managed-by $fullSubId --output json --query "[id]"
