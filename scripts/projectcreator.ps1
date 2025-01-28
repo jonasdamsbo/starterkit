@@ -435,6 +435,8 @@ if($verifySetup -eq "y")
 
         $variableGroupName = "myvariablegroup" # $resourceName+"variablegroup"
 
+        $sqlconnectionstring = "Server=tcp:"+$resourceName+"mssqlserver.database.windows.net,1433;Initial Catalog="+$resourceName+"mssqldatabase;Persist Security Info=False;User ID="+$resourceName+";Password="+$sqlpassword+";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+
 
     # ############################################# replace vars in old-project.ps1 ############################################
         
@@ -613,6 +615,9 @@ if($verifySetup -eq "y")
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "resourcegroupname" --value $resourcegroupName
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "appregistration" --value $applicationName
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "azureserviceconnectionname" --value $serviceConnectionName
+
+        ## constr, not needed but nice, can replace sqlpassword and add tempconstr to appservice.tf webapi constr
+        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "sqlconnectionstring" --value $sqlconnectionstring
 
 
         read-host "Done creating library variable group variables... press enter to continue"

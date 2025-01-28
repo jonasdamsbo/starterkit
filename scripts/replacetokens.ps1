@@ -16,6 +16,8 @@ Write-Host "TOKENS ARE BEING REPLACED"
 
     $sqlpassword = ${env:SQLPASSWORD}
 
+    $sqlconnectionstring = ${env:SQLCONNECTIONSTRING}
+
     # to get all values out of tf files and into lib vars
     $terraformcontainer = ${env:TERRAFORMCONTAINER}
     $terraformkey = ${env:TERRAFORMKEY}
@@ -92,6 +94,8 @@ write-host "started replacing"
     ((Get-Content -path $maintfpath -Raw) -replace 'tempstoragekey',$storagekey) | Set-Content -Path $maintfpath
     ((Get-Content -path $sqldatabasestfpath -Raw) -replace 'tempsqlpassword',$sqlpassword) | Set-Content -Path $sqldatabasestfpath
     ((Get-Content -path $appservicestfpath -Raw) -replace 'tempsqlpassword',$sqlpassword) | Set-Content -Path $appservicestfpath
+    
+    ((Get-Content -path $appservicestfpath -Raw) -replace 'tempsqlconnectionstring',$sqlconnectionstring) | Set-Content -Path $appservicestfpath
 
     # to get all values out of tf files and into lib vars
     ((Get-Content -path $maintfpath -Raw) -replace 'tempterraformcontainer',$terraformcontainer) | Set-Content -Path $maintfpath
