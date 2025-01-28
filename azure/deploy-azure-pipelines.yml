@@ -31,11 +31,11 @@ variables:
 - name: apiappName # Reference library variable 'resourcename' and append 'webapp'
   value: "$(resourcename)apiapp"
 - name: resourcegroupName
-  value: "jgdtestresourcegroup" # "$(resourcename)resourcegroup"
+  value: "$(resourcename)resourcegroup" # "jgdtestresourcegroup"
 - name: storageaccountName
-  value: "jgdteststorageaccount" # "$(resourcename)storageaccount"
+  value: "$(resourcename)storageaccount" # "jgdteststorageaccount"
 - name: azureServiceSubscription
-  value: "Azure Resource Manager" # name of app registration with federated identity, will be create if you create an azure devops service connection
+  value: "$(azureserviceconnectionname)" # "Azure Resource Manager" # name of app registration with federated identity, will be create if you create an azure devops service connection
 - name: artifactPath
   value: "$(Pipeline.Workspace)/BuildPipeline/drop" # $(Pipeline.Workspace)/BuildPipeline/drop
 - name: thestoragekey

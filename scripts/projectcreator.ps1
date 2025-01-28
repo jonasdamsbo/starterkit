@@ -437,6 +437,12 @@ if($verifySetup -eq "y")
 
         $sqlconnectionstring = "Server=tcp:"+$resourceName+"mssqlserver.database.windows.net,1433;Initial Catalog="+$resourceName+"mssqldatabase;Persist Security Info=False;User ID="+$resourceName+";Password="+$sqlpassword+";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
 
+        
+        # $buildPipelineName = "Build "+$resourceName
+        # $deployPipelineName = "Deploy "+$resourceName
+        $buildPipelineName = "Build"
+        $deployPipelineName = "Deploy"
+
 
     # ############################################# replace vars in old-project.ps1 ############################################
         
@@ -627,7 +633,7 @@ if($verifySetup -eq "y")
         # CREATE PIPELINE HERE
         write-host "Started creating pipeline..."
 
-            $buildPipelineName = "Build "+$resourceName
+            # deploypipelinename and buildpipelinename is in preparecloudvars ^
             az pipelines create --name $buildPipelineName --yml-path '\azure\azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master"
 
             $pipelineId = az pipelines show --name $buildPipelineName --org $fullOrgName --project $projectName --output json --query "[id]"
@@ -637,7 +643,6 @@ if($verifySetup -eq "y")
             write-host "PipelineId: "$pipelineId
 
             # deploy release pipeline yml
-            $deployPipelineName = "Deploy "+$resourceName
             az pipelines create --name $deployPipelineName --yml-path '\azure\deploy-azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master"
 
             $pipelines = az pipelines list --org $fullOrgName --project $projectName --output json
