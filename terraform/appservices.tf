@@ -58,24 +58,25 @@ resource "azurerm_windows_web_app" "exampleApiapp" {
 
   app_settings = {
     "ASPNETCORE_ENVIRONMENT" = "Production"
-    "AzureServiceSettings:PAT" = "temppat"
-    "AzureServiceSettings:ORGANIZATIONNAME" = "temporganizationname"
-    "AzureServiceSettings:FULLORGANIZATIONNAME" = "tempfullorganizationname"
-    "AzureServiceSettings:SUBSCRIPTIONNAME" = "tempsubscriptionname"
-    "AzureServiceSettings:SUBSCRIPTIONID" = "tempsubscriptionid"
-    "AzureServiceSettings:CLIENTID" = "tempclientid"
-    "AzureServiceSettings:CLIENTSECRET" = "tempclientsecret"
-    "AzureServiceSettings:TENANTID" = "temptenantid"
-    "AzureServiceSettings:PROJECTNAME" = "tempprojectname"
-    "AzureServiceSettings:RESOURCENAME" = "tempresourcename"
     "MyApiSettings:DatabaseName" = azurerm_mssql_database.exampleMssqldatabase.name
     "MyApiSettings:AzureStorageConnectionString" = "tempstorageconnectionstring"
-    "MyApiSettings:StorageContainerName" = "dbbackup" # tempdbbackupcontainer
+    "MyApiSettings:StorageContainerName" = "tempdbbackupcontainer" # "dbbackup"
+    # "AzureServiceSettings:PAT" = "temppat"
+    # "AzureServiceSettings:ORGANIZATIONNAME" = "temporganizationname"
+    # "AzureServiceSettings:FULLORGANIZATIONNAME" = "tempfullorganizationname"
+    # "AzureServiceSettings:SUBSCRIPTIONNAME" = "tempsubscriptionname"
+    # "AzureServiceSettings:SUBSCRIPTIONID" = "tempsubscriptionid"
+    # "AzureServiceSettings:CLIENTID" = "tempclientid"
+    # "AzureServiceSettings:CLIENTSECRET" = "tempclientsecret"
+    # "AzureServiceSettings:TENANTID" = "temptenantid"
+    # "AzureServiceSettings:PROJECTNAME" = "tempprojectname"
+    # "AzureServiceSettings:RESOURCENAME" = "tempresourcename"
   }
 
   connection_string {
     name  = "Mssql"
     type  = "SQLServer"
     value = "Server=tcp:tempresourcenamemssqlserver.database.windows.net,1433;Initial Catalog=tempresourcenamemssqldatabase;Persist Security Info=False;User ID=tempresourcename;Password=tempsqlpassword;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+    #value = "tempsqlconnectionstring"
   }
 }
