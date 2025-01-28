@@ -28,7 +28,7 @@ Repository: temprepositoryname
 
 Buildpipeline: tempbuildpipelinename
 
-Deploypipeline: tempbuildpipelinename
+Deploypipeline: tempdeploypipelinename
 
 Variablegroup: tempvariablegroupname
 
