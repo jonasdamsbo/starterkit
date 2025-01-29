@@ -75,6 +75,29 @@ stages:
         scriptType: 'ps'
         scriptLocation: 'inlineScript'
         inlineScript: |
+          $resourceGroup = "$(resourcegroupName)"
+          $serverName = "$(sqlserverName)"
+          $databaseName = "$(sqldatabaseName)"
+          $sqlname = "$(sqlusername)"
+          $sqlpass = "$(sqlpassword)"
+          $storageAccount = "$(storageaccountName)"
+          $containerName = "$(backupcontainerName)"
+          $storageKey = az storage account keys list --resource-group $resourceGroup --account-name $storageAccount --query "[0].value" -o tsv
+          $storageUri = "https://${storageAccount}.blob.core.windows.net/${containerName}/backup-${databaseName}-$(Get-Date -Format yyyyMMddHHmmss).bacpac"
+
+          # Check if the database exists
+          $dbExists = az sql db show `
+            --resource-group $resourceGroup `
+            --server $serverName `
+            --name $databaseName `
+            --query "name" -o tsv
+
+          if (-not $dbExists) {
+            Write-Output "Database '$databaseName' does not exist. Skipping export."
+            exit 0
+          }
+          Write-Output "Database '$databaseName' exists. Proceeding with export."
+
           az sql server firewall-rule create `
             --resource-group "$(resourcegroupName)" `
             --server "$(sqlserverName)" `
@@ -131,6 +154,29 @@ stages:
         scriptType: 'ps'
         scriptLocation: 'inlineScript'
         inlineScript: |
+          $resourceGroup = "$(resourcegroupName)"
+          $serverName = "$(sqlserverName)"
+          $databaseName = "$(sqldatabaseName)"
+          $sqlname = "$(sqlusername)"
+          $sqlpass = "$(sqlpassword)"
+          $storageAccount = "$(storageaccountName)"
+          $containerName = "$(backupcontainerName)"
+          $storageKey = az storage account keys list --resource-group $resourceGroup --account-name $storageAccount --query "[0].value" -o tsv
+          $storageUri = "https://${storageAccount}.blob.core.windows.net/${containerName}/backup-${databaseName}-$(Get-Date -Format yyyyMMddHHmmss).bacpac"
+
+          # Check if the database exists
+          $dbExists = az sql db show `
+            --resource-group $resourceGroup `
+            --server $serverName `
+            --name $databaseName `
+            --query "name" -o tsv
+
+          if (-not $dbExists) {
+            Write-Output "Database '$databaseName' does not exist. Skipping export."
+            exit 0
+          }
+          Write-Output "Database '$databaseName' exists. Proceeding with export."
+          
           Start-Sleep -Seconds 5
           az sql server firewall-rule delete `
             --resource-group "$(RESOURCEGROUP)" `
