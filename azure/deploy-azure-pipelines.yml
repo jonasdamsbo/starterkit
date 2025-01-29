@@ -50,7 +50,7 @@ variables:
   value: "$(resourcename)mssqldatabase" # "jgdtestmssqldatabase"
 - name: sqlusername
   value: "$(resourcename)"
-- name: sqlpassword
+- name: thesqlpassword
   value: "$(sqlpassword)"
 - name: backupcontainerName
   value: "$(backupcontainer)"
@@ -79,7 +79,7 @@ stages:
           $serverName = "$(sqlserverName)"
           $databaseName = "$(sqldatabaseName)"
           $sqlname = "$(sqlusername)"
-          $sqlpass = "$(sqlpassword)"
+          $sqlpass = "$(thesqlpassword)"
           $storageAccount = "$(storageaccountName)"
           $containerName = "$(backupcontainerName)"
           $storageKey = az storage account keys list --resource-group $resourceGroup --account-name $storageAccount --query "[0].value" -o tsv
@@ -179,8 +179,8 @@ stages:
           
           Start-Sleep -Seconds 5
           az sql server firewall-rule delete `
-            --resource-group "$(RESOURCEGROUP)" `
-            --server "$(SERVERNAME)" `
+            --resource-group "$(resourcegroupName)" `
+            --server "$(sqlserverName)" `
             --name AllowAllWindowsAzureIps
 
     - task: AzureCLI@2
@@ -195,6 +195,7 @@ stages:
 
   - job: TerraformJob
     displayName: replacetokens terraform setcloudvars job
+    dependsOn: BackupdbJob
     steps:
     
     # Download the artifact from the build pipeline
