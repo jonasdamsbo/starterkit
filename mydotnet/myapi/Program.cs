@@ -95,8 +95,8 @@ using (var scope = app.Services.CreateScope())
     //var x = azure.GetResourcesList();
 
 	// backup db if on production env
-	var backupDbService = services.GetRequiredService<BackupDbUtility>();
-    backupDbService.InitBackup();
+	/*var backupDbService = services.GetRequiredService<BackupDbUtility>();
+    backupDbService.InitBackup();*/
 
     // using your manually created migrations, automatically runs update-database 
     var context = services.GetRequiredService<MssqlDataContext>();
