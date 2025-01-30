@@ -99,8 +99,8 @@ using (var scope = app.Services.CreateScope())
     backupDbService.InitBackup();*/
 
     // using your manually created migrations, automatically runs update-database 
-    var context = services.GetRequiredService<MssqlDataContext>();
-    context.Database.Migrate();
+    // var context = services.GetRequiredService<MssqlDataContext>();
+    // context.Database.Migrate();
 
 	// mapster
 	var mapster = services.GetRequiredService<MapsterConfig>();
