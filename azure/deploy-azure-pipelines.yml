@@ -287,6 +287,45 @@ stages:
         scriptPath: "$(artifactPath)/scripts/setcloudvars.ps1"
 
 
+  - job: MigrateJob
+    displayName: Migrate sqldb from api models with efcore
+    dependsOn: TerraformJob
+    steps:
+
+    # Download the artifact from the build pipeline
+    - download: BuildPipeline  # Reference to the build pipeline artifact
+      artifact: drop           # Replace 'drop' with your artifact name if it's different
+
+  # # Unzip the downloaded artifact
+  #   - task: ExtractFiles@1
+  #     inputs:
+  #       archiveFilePatterns: "$(Pipeline.Workspace)/BuildPipeline/drop/myapi.zip"
+  #       destinationFolder: "$(Pipeline.Workspace)/BuildPipeline/drop/unzipped"
+  #     displayName: Unzip Artifact
+
+    # - script: |
+    #     dotnet tool install --global dotnet-ef
+    #     dotnet ef migrations script --idempotent --output "$(Pipeline.Workspace)/BuildPipeline/drop/unzipped/myapi/migrations/script.sql" --context DataContext
+    #   workingDirectory: "$(Pipeline.Workspace)/BuildPipeline/drop/unzipped/myapi"
+    #   displayName: Generate EF Core Migration Script
+
+    - task: AzureCLI@2
+      displayName: Apply EF Core Migration Script to Azure SQL
+      inputs:
+        azureSubscription: "$(azureServiceSubscription)"
+        scriptType: ps
+        scriptLocation: inlineScript
+        inlineScript: |
+          $serverName = "$(sqlserverName).database.windows.net"
+          $databaseName = "$(sqldatabaseName)"
+          $username = "$(sqlusername)"
+          $password = "$(thesqlpassword)"
+          $sqlScriptPath = "$(Pipeline.Workspace)\BuildPipeline\drop\migrationscript\migrationscript.sql"
+
+          # Run sqlcmd to execute the migration script
+          sqlcmd -S "tcp:$serverName,1433" -d $databaseName -U $username -P "$password" -i "$sqlScriptPath"
+
+
   - job: DeployJob
     displayName: Deploy to Azure App Service job
     dependsOn: TerraformJob

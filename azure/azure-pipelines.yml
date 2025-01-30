@@ -45,6 +45,18 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
+- script: |
+    dotnet tool install --global dotnet-ef
+    dotnet ef migrations script --idempotent --output "$(Pipeline.Workspace)/migrationscript.sql" --context MssqlDataContext
+  displayName: Generate EF Core Migration Script
+  workingDirectory: "mydotnet/myapi"
+
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '$(Pipeline.Workspace)'
+    Contents: 'migrationscript.sql'
+    TargetFolder: '$(build.artifactstagingdirectory)/migrationscript'
+
 - task: CopyFiles@2
   inputs:
     SourceFolder: 'terraform'
