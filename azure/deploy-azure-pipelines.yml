@@ -296,19 +296,6 @@ stages:
     - download: BuildPipeline  # Reference to the build pipeline artifact
       artifact: drop           # Replace 'drop' with your artifact name if it's different
 
-  # # Unzip the downloaded artifact
-  #   - task: ExtractFiles@1
-  #     inputs:
-  #       archiveFilePatterns: "$(Pipeline.Workspace)/BuildPipeline/drop/myapi.zip"
-  #       destinationFolder: "$(Pipeline.Workspace)/BuildPipeline/drop/unzipped"
-  #     displayName: Unzip Artifact
-
-    # - script: |
-    #     dotnet tool install --global dotnet-ef
-    #     dotnet ef migrations script --idempotent --output "$(Pipeline.Workspace)/BuildPipeline/drop/unzipped/myapi/migrations/script.sql" --context DataContext
-    #   workingDirectory: "$(Pipeline.Workspace)/BuildPipeline/drop/unzipped/myapi"
-    #   displayName: Generate EF Core Migration Script
-
     - task: AzureCLI@2
       displayName: 'Temporarily Disable Firewall'
       inputs:
@@ -339,12 +326,14 @@ stages:
           }
           Write-Output "Database '$databaseName' exists. Proceeding with disabling firewall."
 
+          $ip = Invoke-RestMethod -Uri 'https://api.ipify.org?format=json';
           az sql server firewall-rule create `
             --resource-group "$(resourcegroupName)" `
             --server "$(sqlserverName)" `
-            --name AllowAllWindowsAzureIps `
-            --start-ip-address 0.0.0.0 `
-            --end-ip-address 0.0.0.0
+            --name AllowDevopsAgentIp `
+            --start-ip-address $ip.ip `
+            --end-ip-address $ip.ip
+
           Start-Sleep -Seconds 5
 
     - task: AzureCLI@2
@@ -394,10 +383,12 @@ stages:
           Write-Output "Database '$databaseName' exists. Proceeding with enabling firewall."
           
           Start-Sleep -Seconds 5
+
           az sql server firewall-rule delete `
             --resource-group "$(resourcegroupName)" `
             --server "$(sqlserverName)" `
-            --name AllowAllWindowsAzureIps
+            --name AllowDevopsAgentIp
+
 
   - job: DeployJob
     displayName: Deploy to Azure App Service job
