@@ -98,9 +98,14 @@ using (var scope = app.Services.CreateScope())
 	/*var backupDbService = services.GetRequiredService<BackupDbUtility>();
     backupDbService.InitBackup();*/
 
-    // using your manually created migrations, automatically runs update-database 
-    // var context = services.GetRequiredService<MssqlDataContext>();
-    // context.Database.Migrate();
+	// run migrations if local development
+	if (app.Environment.IsDevelopment())
+	{
+		// using your manually created migrations, automatically runs update-database 
+		var context = services.GetRequiredService<MssqlDataContext>();
+		// make sure docker or docker desktop is running and the containers are started
+		context.Database.Migrate();
+	}
 
 	// mapster
 	var mapster = services.GetRequiredService<MapsterConfig>();
