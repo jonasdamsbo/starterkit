@@ -647,6 +647,21 @@ if($verifySetup -eq "y")
 
             $pipelines = az pipelines list --org $fullOrgName --project $projectName --output json
             write-host "Pipelines: "$pipelines
+
+            # environment for review/approval of runs
+            #az devops pipeline environment create --name "Production" --org "https://dev.azure.com/jonasdamsbo" --project "mycsrepo"
+
+            # $devCenterName = "DevCenter"
+            # $projectName = "mycsrepo";
+            # $environmentName = "Review"
+            # $environmentType = "Review";
+            # $environmentDefinitionName = "Review";
+            # $catalogName = "AzureService";
+
+            # az devcenter dev environment create --dev-center-name $devCenterName `
+            # --project-name $projectName --environment-name $environmentName --environment-type $environmentType `
+            # --environment-definition-name $environmentDefinitionName --catalog-name $catalogName
+
                 
         Read-Host "Done creating pipeline... press enter to continue"
 
@@ -654,7 +669,7 @@ if($verifySetup -eq "y")
     ################################################## prompt set up release in azure devops ##################################################
         write-host 
         write-host "Finally, you can choose to use the deploy.yml for releases, or use the manual Azure Devops Releases."
-	write-host "If you're happy with using a deploy.yml, skip these steps, otherwise:"
+	    write-host "If you're happy with using a deploy.yml, skip these steps, otherwise:"
         write-host " - You need to setup your release in Azure DevOps (See the development guide for help, link in readme.md):"
         write-host " - Go to your Azure DevOps project"
         write-host " - Pipelines > Releases > +New v > New release pipeline"
@@ -673,6 +688,34 @@ if($verifySetup -eq "y")
         #write-host "For AzureService:"
         #write-host " - Go to User settings > Personal access tokens > New token > Name it PAT and customize settings or choose full access > Create > Copy the PAT"
         #write-host " - Go to Pipelines > Library > Variable groups > Pick your new variable group > Create new variable called PAT with value of your PAT"
+        write-host 
+        read-host "Press enter when done..."
+        write-host 
+
+    
+    ################################################## prompt set up environment in azure devops ##################################################
+        write-host 
+        write-host "If you chose 'manual Azure Devops Releases', skip these steps"
+        write-host "If you chose to use the deploy.yml for releases, follow these steps"
+        write-host " - The deploy.yml is using environments for run approvals, so you need to set up your production environment in Azure DevOps -> 1/2"
+        write-host " - 2/2 -> or delete the approval check from the yml (See the development guide for help, link in readme.md):"
+        write-host " - Go to your Azure DevOps project"
+        write-host " - Create a new environment:"
+        write-host " - - Pipelines > Environments > New environment"
+        write-host " - - - Name: Production"
+        write-host " - - - Description: (optional, can leave blank)"
+        write-host " - - - Resource: None"
+        write-host " - Create approval policy:"
+        write-host " - - Go to your environment (if you just created it, you are here), otherwise go to Pipelines > Environments"
+        write-host " - - - Click on 'View all checks' or the '+' sign"
+        write-host " - - - Add pre-check approvals"
+        write-host " - - - Approvers: Add approver"
+        write-host " - - - Advanced: Can approvers approve their own runs?"
+        write-host " - - - Control options: set timeout if not approved, set default to 5 minutes"
+        write-host " - - In the environment overview, you can change the approval from pre-check to just approval:"
+        write-host " - - - Click the '...' right of your environment in the list"
+        write-host " - - - Change execution order > to Approval"
+        write-host 
         write-host 
         read-host "Press enter when done..."
         write-host 

@@ -18,6 +18,13 @@ resources:
 pool:
   vmImage: 'windows-latest'
 
+# select specific build id
+# parameters:
+#   - name: buildId
+#     displayName: "Select Build ID"
+#     type: string
+#     default: 'REQUIRED'  # Empty by default (uses latest build if not provided)
+
 variables:
 - group: myvariablegroup # jgde2exvariablegroup # tempresourcenamevariablegroup
 - name: solution
@@ -54,11 +61,24 @@ variables:
   value: "$(sqlpassword)"
 - name: backupcontainerName
   value: "$(backupcontainer)"
+# - name: selectedBuildId # for manual trigger
+#   value: ${{ parameters.buildId }}
+# - name: theprojectname
+#   value: "$(projectname)"
 
 stages:
 - stage: Terraformanddeploy
   displayName: Terraform cloud stage
   jobs:
+
+  - deployment: Review
+    displayName: Review job
+    environment: Production
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - script: echo "Deployment started!"
 
   - job: BackupdbJob
     displayName: Dbbackup job
@@ -67,6 +87,17 @@ stages:
     # Download the artifact from the build pipeline
     - download: BuildPipeline  # Reference to the build pipeline artifact
       artifact: drop           # Replace 'drop' with your artifact name if it's different
+
+    # download based on specific build id
+    # - task: DownloadPipelineArtifact@2
+    #   inputs:
+    #     source: specific
+    #     project: "$(theprojectname)"
+    #     pipeline: Build
+    #     runVersion: specific
+    #     runId: ${{ coalesce(parameters.buildId, resources.pipeline.BuildPipeline.runID) }}
+    #     artifact: drop
+    #     path: $(Pipeline.Workspace)/drop
 
     - task: AzureCLI@2
       displayName: 'Temporarily Disable Firewall'
