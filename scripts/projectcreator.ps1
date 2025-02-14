@@ -670,7 +670,7 @@ if($verifySetup -eq "y")
         write-host 
         write-host "Finally, you can choose to use the deploy.yml for releases, or use the manual Azure Devops Releases."
 	    write-host "If you're happy with using a deploy.yml for releases, skip these steps"
-	    write-host "If you wnat to use the manual Azure Devops Releases for releases, follow these steps"
+	    write-host "If you want to use the manual Azure Devops Releases for releases, follow these steps"
         write-host " - You need to setup your release in Azure DevOps (See the development guide for help, link in readme.md):"
         write-host " - Go to your Azure DevOps project"
         write-host " - Pipelines > Releases > +New v > New release pipeline"
