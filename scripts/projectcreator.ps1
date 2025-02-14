@@ -669,7 +669,8 @@ if($verifySetup -eq "y")
     ################################################## prompt set up release in azure devops ##################################################
         write-host 
         write-host "Finally, you can choose to use the deploy.yml for releases, or use the manual Azure Devops Releases."
-	    write-host "If you're happy with using a deploy.yml, skip these steps, otherwise:"
+	    write-host "If you're happy with using a deploy.yml for releases, skip these steps"
+	    write-host "If you wnat to use the manual Azure Devops Releases for releases, follow these steps"
         write-host " - You need to setup your release in Azure DevOps (See the development guide for help, link in readme.md):"
         write-host " - Go to your Azure DevOps project"
         write-host " - Pipelines > Releases > +New v > New release pipeline"
@@ -684,6 +685,7 @@ if($verifySetup -eq "y")
         write-host " - - - Step 2: Setup a Deploy apiapp Azure App Service deploy task"
         write-host " - - - - write "+$resourceName+"apiapp in app service name"
         write-host " - Go to Variables > Variable groups > Link variable group"
+        write-host " - Go to Pipelines > Click '...' on the pipeline named 'Deploy' > Delete"
         write-host 
         #write-host "For AzureService:"
         #write-host " - Go to User settings > Personal access tokens > New token > Name it PAT and customize settings or choose full access > Create > Copy the PAT"
