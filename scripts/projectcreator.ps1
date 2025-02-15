@@ -684,6 +684,11 @@ if($verifySetup -eq "y")
         write-host " - - - - write "+$resourceName+"webapp in app service name"
         write-host " - - - Step 2: Setup a Deploy apiapp Azure App Service deploy task"
         write-host " - - - - write "+$resourceName+"apiapp in app service name"
+        write-host " - To add approval to releases, go to the Release > Edit"
+        write-host " - - Click the 'Pre-deployment conditions' (lightning icon) to the left of Stage 1"
+        write-host " - - To the right of the 'Pre-doplyment approvals' dropdown, click the button to switch to 'Enabled'"
+        write-host " - - Add the name of the desired approver, and desired timeout if not approved/rejected in time, default is 5 minutes"
+        write-host " - - Under approval policies, click the checkbox 'The user requesting a release or deployment should not approve it'"
         write-host " - Go to Variables > Variable groups > Link variable group"
         write-host " - Go to Pipelines > Click '...' on the pipeline named 'Deploy' > Delete"
         write-host 

@@ -30,6 +30,7 @@ provider "azuredevops" {
   org_service_url = "https://dev.azure.com/temporganizationname/"
 }
 
+# can be deleted if 'tempresourcenameresourcegroup' is used instead in other tf files, but this is more clean
 data "azurerm_resource_group" "exampleResourcegroup" {
   name = "tempresourcenameresourcegroup"
 }

@@ -1,7 +1,7 @@
 resource "azurerm_service_plan" "exampleAppserviceplan" {
   name                = "tempresourcenameappserviceplan"
   location            = "northeurope"
-  resource_group_name = data.azurerm_resource_group.exampleResourcegroup.name
+  resource_group_name = data.azurerm_resource_group.exampleResourcegroup.name # "tempresourcenameresourcegroup"
   os_type             = "Windows"
   sku_name            = "F1"
 }
@@ -9,7 +9,7 @@ resource "azurerm_service_plan" "exampleAppserviceplan" {
 resource "azurerm_windows_web_app" "exampleWebapp" {
   name                = "tempresourcenamewebapp"
   location            = "northeurope"
-  resource_group_name = data.azurerm_resource_group.exampleResourcegroup.name
+  resource_group_name = data.azurerm_resource_group.exampleResourcegroup.name # "tempresourcenameresourcegroup"
   service_plan_id = azurerm_service_plan.exampleAppserviceplan.id
   public_network_access_enabled = true
 
@@ -37,7 +37,7 @@ resource "azurerm_windows_web_app" "exampleWebapp" {
 resource "azurerm_windows_web_app" "exampleApiapp" {
   name                = "tempresourcenameapiapp"
   location            = "northeurope"
-  resource_group_name = data.azurerm_resource_group.exampleResourcegroup.name
+  resource_group_name = data.azurerm_resource_group.exampleResourcegroup.name # "tempresourcenameresourcegroup"
   service_plan_id = azurerm_service_plan.exampleAppserviceplan.id
   public_network_access_enabled = true
 
@@ -58,9 +58,9 @@ resource "azurerm_windows_web_app" "exampleApiapp" {
 
   app_settings = {
     "ASPNETCORE_ENVIRONMENT" = "Production"
-    "MyApiSettings:DatabaseName" = azurerm_mssql_database.exampleMssqldatabase.name
-    "MyApiSettings:AzureStorageConnectionString" = "tempstorageconnectionstring"
-    "MyApiSettings:StorageContainerName" = "tempdbbackupcontainer" # "dbbackup"
+    # "MyApiSettings:DatabaseName" = azurerm_mssql_database.exampleMssqldatabase.name
+    # "MyApiSettings:AzureStorageConnectionString" = "tempstorageconnectionstring"
+    # "MyApiSettings:StorageContainerName" = "tempdbbackupcontainer" # "dbbackup"
     # "AzureServiceSettings:PAT" = "temppat"
     # "AzureServiceSettings:ORGANIZATIONNAME" = "temporganizationname"
     # "AzureServiceSettings:FULLORGANIZATIONNAME" = "tempfullorganizationname"
