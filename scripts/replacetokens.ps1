@@ -53,23 +53,33 @@ Write-Host "TOKENS ARE BEING REPLACED"
 
 
 # check files before
-    write-host "printing content of main.tf"
-    # $myrootpath = $PWD.Path
-    # $terraformpath = Get-ChildItem -Path $myrootpath -Filter 'main.tf' -Recurse -ErrorAction SilentlyContinue |
-    #                  Select-Object -Expand Directory -Unique |
-    #                  Select-Object -Expand FullName
 
-    # $maintfpath = $terraformpath+"/main.tf"
-    # $appservicestfpath = $terraformpath+"/appservices.tf"
-    # $sqldatabasestfpath = $terraformpath+"/sqldatabases.tf"
+    # check if classic or yml
+    $isclassic = ${env:RELEASE_PRIMARYARTIFACTSOURCEALIAS}
+    $myrootpath = "rootpath"
+    $terraformpath = "terraformpath"
 
-        ## new method to get paths v
+    if($isclassic)
+    {
+        # old method for getting paths v works for classic release
+        write-host "printing content of main.tf"
+        $myrootpath = $PWD.Path
+        $terraformpath = Get-ChildItem -Path $myrootpath -Filter 'main.tf' -Recurse -ErrorAction SilentlyContinue |
+                        Select-Object -Expand Directory -Unique |
+                        Select-Object -Expand FullName
+    }
+    else 
+    {
+        # new method to get paths v works for deploy.yml releases
         $myrootpath = $filePath
         $terraformpath = $filePath+"/terraform"
-        $maintfpath = $terraformpath+"/main.tf"
-        $appservicestfpath = $terraformpath+"/appservices.tf"
-        $sqldatabasestfpath = $terraformpath+"/sqldatabases.tf"
-        ## new method to get paths ^
+        # new method to get paths ^
+    }
+
+    $maintfpath = $terraformpath+"/main.tf"
+    $appservicestfpath = $terraformpath+"/appservices.tf"
+    $sqldatabasestfpath = $terraformpath+"/sqldatabases.tf"
+        
 
 
     write-host "path: "$myrootpath
@@ -105,21 +115,21 @@ write-host "started replacing"
     ((Get-Content -path $appservicestfpath -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path $appservicestfpath
     ((Get-Content -path $appservicestfpath -Raw) -replace 'tempdbbackupcontainer',$dbbackupcontainer) | Set-Content -Path $appservicestfpath
 
-    # for azureservice
-    ((Get-Content -path $appservicestfpath -Raw) -replace 'temppat',$pat) | Set-Content -Path $appservicestfpath
-    ((Get-Content -path $appservicestfpath -Raw) -replace 'temporganizationname',$organizationname) | Set-Content -Path $appservicestfpath
-    ((Get-Content -path $appservicestfpath -Raw) -replace 'tempfullorganizationname',$fullorganizationname) | Set-Content -Path $appservicestfpath
-    ((Get-Content -path $appservicestfpath -Raw) -replace 'tempsubscriptionname',$subscriptionname) | Set-Content -Path $appservicestfpath
-    ((Get-Content -path $appservicestfpath -Raw) -replace 'tempsubscriptionid',$subscriptionid) | Set-Content -Path $appservicestfpath
-    ((Get-Content -path $appservicestfpath -Raw) -replace 'tempclientid',$clientid) | Set-Content -Path $appservicestfpath
-    ((Get-Content -path $appservicestfpath -Raw) -replace 'tempclientsecret',$clientsecret) | Set-Content -Path $appservicestfpath
-    ((Get-Content -path $appservicestfpath -Raw) -replace 'temptenantid',$tenantid) | Set-Content -Path $appservicestfpath
-    ((Get-Content -path $appservicestfpath -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path $appservicestfpath
-    ((Get-Content -path $appservicestfpath -Raw) -replace 'tempprojectname',$projectname) | Set-Content -Path $appservicestfpath
+    # # for azureservice
+    # ((Get-Content -path $appservicestfpath -Raw) -replace 'temppat',$pat) | Set-Content -Path $appservicestfpath
+    # ((Get-Content -path $appservicestfpath -Raw) -replace 'temporganizationname',$organizationname) | Set-Content -Path $appservicestfpath
+    # ((Get-Content -path $appservicestfpath -Raw) -replace 'tempfullorganizationname',$fullorganizationname) | Set-Content -Path $appservicestfpath
+    # ((Get-Content -path $appservicestfpath -Raw) -replace 'tempsubscriptionname',$subscriptionname) | Set-Content -Path $appservicestfpath
+    # ((Get-Content -path $appservicestfpath -Raw) -replace 'tempsubscriptionid',$subscriptionid) | Set-Content -Path $appservicestfpath
+    # ((Get-Content -path $appservicestfpath -Raw) -replace 'tempclientid',$clientid) | Set-Content -Path $appservicestfpath
+    # ((Get-Content -path $appservicestfpath -Raw) -replace 'tempclientsecret',$clientsecret) | Set-Content -Path $appservicestfpath
+    # ((Get-Content -path $appservicestfpath -Raw) -replace 'temptenantid',$tenantid) | Set-Content -Path $appservicestfpath
+    # ((Get-Content -path $appservicestfpath -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path $appservicestfpath
+    # ((Get-Content -path $appservicestfpath -Raw) -replace 'tempprojectname',$projectname) | Set-Content -Path $appservicestfpath
 
-    # for dbbackup
-    ((Get-Content -path $appservicestfpath -Raw) -replace 'tempstoragekey',$storagekey) | Set-Content -Path $appservicestfpath
-    ((Get-Content -path $appservicestfpath -Raw) -replace 'tempstorageconnectionstring',$storageconnectionstring) | Set-Content -Path $appservicestfpath
+    # # for dbbackup
+    # ((Get-Content -path $appservicestfpath -Raw) -replace 'tempstoragekey',$storagekey) | Set-Content -Path $appservicestfpath
+    # ((Get-Content -path $appservicestfpath -Raw) -replace 'tempstorageconnectionstring',$storageconnectionstring) | Set-Content -Path $appservicestfpath
 
     
 write-host "done replacing"
