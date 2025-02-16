@@ -678,7 +678,7 @@ if($verifySetup -eq "y")
         write-host " - Go to your Azure DevOps project"
         write-host " - Pipelines > Releases > +New v"
         write-host " - > New release pipeline > Now you can set it up by following the steps, or import the two releases json from the project/azure folder"
-        write-host " - > you will have to delete the artifact and add it again, this fixes the release pipeline validation error"
+        write-host " - > you will have to delete the artifact and add it again, and click through each stages' steps to reattach references, this fixes the release pipeline validation error"
         write-host " - - Template > Select empty job > setup 4 stages:"
         write-host " - - - Stage 1: setup 1 task"
         write-host " - - - - Task 1: Setup a backupdb Azure CLI ps1 script task"
