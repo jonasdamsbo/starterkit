@@ -10,8 +10,8 @@ terraform {
     }
   }
   backend "azurerm" {
-      resource_group_name  = "tempresourcenameresourcegroup"
-      storage_account_name = "tempresourcenamestorageaccount"
+      resource_group_name  = "tempresourcegroupname"
+      storage_account_name = "tempstorageaccountname"
       container_name       = "tempterraformcontainer" # "terraform"
       key                  = "tempterraformkey" # "terraform.tfstate"
       access_key           = "tempstoragekey"
@@ -32,7 +32,7 @@ provider "azuredevops" {
 
 # can be deleted if 'tempresourcenameresourcegroup' is used instead in other tf files, but this is more clean
 data "azurerm_resource_group" "exampleResourcegroup" {
-  name = "tempresourcenameresourcegroup"
+  name = "tempresourcegroupname"
 }
 
 

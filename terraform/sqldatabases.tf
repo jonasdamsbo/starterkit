@@ -3,7 +3,7 @@ resource "azurerm_mssql_server" "exampleMssqlserver" {
   resource_group_name          = data.azurerm_resource_group.exampleResourcegroup.name
   location                     = "northeurope"
   version                      = "12.0"
-  administrator_login          = "tempresourcename"
+  administrator_login          = "tempsqllogin"
   administrator_login_password = "tempsqlpassword"
   public_network_access_enabled = true
 

@@ -76,7 +76,7 @@ resource "azurerm_windows_web_app" "exampleApiapp" {
   connection_string {
     name  = "Mssql"
     type  = "SQLServer"
-    value = "Server=tcp:tempresourcenamemssqlserver.database.windows.net,1433;Initial Catalog=tempresourcenamemssqldatabase;Persist Security Info=False;User ID=tempresourcename;Password=tempsqlpassword;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
-    #value = "tempsqlconnectionstring"
+    #value = "Server=tcp:tempresourcenamemssqlserver.database.windows.net,1433;Initial Catalog=tempresourcenamemssqldatabase;Persist Security Info=False;User ID=tempsqllogin;Password=tempsqlpassword;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+    value = "tempsqlconnectionstring"
   }
 }

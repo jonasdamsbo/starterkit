@@ -9,7 +9,8 @@ write-host "SETTING CLOUD VARS"
         
         write-host $resourcename
 
-        $resourcegroupname = $resourcename+"resourcegroup"
+        #$resourcegroupname = $resourcename+"resourcegroup"
+        $resourcegroupname = ${env:RESOURCEGROUPNAME}
         $webappname = $resourcename+"webapp"
         $apiappname = $resourcename+"apiapp"
         $sqlservername = $resourcename+"mssqlserver"

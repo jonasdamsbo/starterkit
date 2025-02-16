@@ -15,8 +15,11 @@ Write-Host "TOKENS ARE BEING REPLACED"
     $clientid = ${env:CLIENTID}
 
     $sqlpassword = ${env:SQLPASSWORD}
+    $sqllogin = ${env:SQLLOGIN}
 
     $sqlconnectionstring = ${env:SQLCONNECTIONSTRING}
+
+    $storageaccountname = ${env:STORAGEACCOUNTNAME}
 
     # to get all values out of tf files and into lib vars
     $terraformcontainer = ${env:TERRAFORMCONTAINER}
@@ -30,6 +33,7 @@ Write-Host "TOKENS ARE BEING REPLACED"
     $fullorganizationname = ${env:FULLORGANIZATIONNAME}
     $projectname = ${env:PROJECTNAME}
     $resourcename = ${env:RESOURCENAME}
+    $resourcegroupname = ${env:RESOURCEGROUPNAME}
 
     # for dbbackup
     $storageconnectionstring = ${env:STORAGECONNECTIONSTRING}
@@ -102,8 +106,11 @@ write-host "started replacing"
     ((Get-Content -path $maintfpath -Raw) -replace 'temptenantid',$tenantid) | Set-Content -Path $maintfpath
     ((Get-Content -path $maintfpath -Raw) -replace 'tempsubscriptionid',$subscriptionid) | Set-Content -Path $maintfpath
     ((Get-Content -path $maintfpath -Raw) -replace 'tempstoragekey',$storagekey) | Set-Content -Path $maintfpath
+    ((Get-Content -path $maintfpath -Raw) -replace 'tempstorageaccountname',$storageaccountname) | Set-Content -Path $maintfpath
     ((Get-Content -path $sqldatabasestfpath -Raw) -replace 'tempsqlpassword',$sqlpassword) | Set-Content -Path $sqldatabasestfpath
     ((Get-Content -path $appservicestfpath -Raw) -replace 'tempsqlpassword',$sqlpassword) | Set-Content -Path $appservicestfpath
+    ((Get-Content -path $sqldatabasestfpath -Raw) -replace 'tempsqllogin',$sqllogin) | Set-Content -Path $sqldatabasestfpath
+    ((Get-Content -path $appservicestfpath -Raw) -replace 'tempsqllogin',$sqllogin) | Set-Content -Path $appservicestfpath
     
     ((Get-Content -path $appservicestfpath -Raw) -replace 'tempsqlconnectionstring',$sqlconnectionstring) | Set-Content -Path $appservicestfpath
 
@@ -111,6 +118,7 @@ write-host "started replacing"
     ((Get-Content -path $maintfpath -Raw) -replace 'tempterraformcontainer',$terraformcontainer) | Set-Content -Path $maintfpath
     ((Get-Content -path $maintfpath -Raw) -replace 'tempterraformkey',$terraformkey) | Set-Content -Path $maintfpath
     ((Get-Content -path $maintfpath -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path $maintfpath
+    ((Get-Content -path $maintfpath -Raw) -replace 'tempresourcegroupname',$resourcegroupname) | Set-Content -Path $maintfpath
     ((Get-Content -path $sqldatabasestfpath -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path $sqldatabasestfpath
     ((Get-Content -path $appservicestfpath -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path $appservicestfpath
     ((Get-Content -path $appservicestfpath -Raw) -replace 'tempdbbackupcontainer',$dbbackupcontainer) | Set-Content -Path $appservicestfpath

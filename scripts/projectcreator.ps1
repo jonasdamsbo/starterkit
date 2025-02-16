@@ -603,6 +603,7 @@ if($verifySetup -eq "y")
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "storagekey" --value $storagekey # sensitive
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "storageconnectionstring" --value $storageconnectionstring # sensitive
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "sqlpassword" --value $sqlpassword # sensitive
+        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "sqllogin" --value $resourcename # sensitive
         
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "terraformcontainer" --value $terraformcontainername
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "terraformkey" --value $terraformkey
@@ -674,7 +675,8 @@ if($verifySetup -eq "y")
 	    write-host "If you want to use the manual Azure Devops Releases for releases, follow these steps"
         write-host " - You need to setup your release in Azure DevOps (See the development guide for help, link in readme.md):"
         write-host " - Go to your Azure DevOps project"
-        write-host " - Pipelines > Releases > +New v > New release pipeline"
+        write-host " - Pipelines > Releases > +New v"
+        write-host " - > New release pipeline > Now you can set it up by following the steps, or import the two releases json from the project/azure folder"
         write-host " - Template > Select empty job > setup 4 stages:"
         write-host " - - Stage 1: setup 1 task"
         write-host " - - - Task 1: Setup a backupdb Azure CLI ps1 script task"
