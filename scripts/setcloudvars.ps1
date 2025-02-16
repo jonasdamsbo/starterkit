@@ -13,7 +13,8 @@ write-host "SETTING CLOUD VARS"
         $resourcegroupname = ${env:RESOURCEGROUPNAME}
         $webappname = $resourcename+"webapp"
         $apiappname = $resourcename+"apiapp"
-        $sqlservername = $resourcename+"mssqlserver"
+        #$sqlservername = $resourcename+"mssqlserver"
+        $sqlservername = ${env:SQLSERVERNAME}
 
 
 ### get webappip

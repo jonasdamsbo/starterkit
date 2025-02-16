@@ -37,6 +37,8 @@ Write-Host "TOKENS ARE BEING REPLACED"
 
     # for dbbackup
     $storageconnectionstring = ${env:STORAGECONNECTIONSTRING}
+    
+    $sqlservername = ${env:SQLSERVERNAME}
 
     
 # check lib vars
@@ -122,6 +124,8 @@ write-host "started replacing"
     ((Get-Content -path $sqldatabasestfpath -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path $sqldatabasestfpath
     ((Get-Content -path $appservicestfpath -Raw) -replace 'tempresourcename',$resourcename) | Set-Content -Path $appservicestfpath
     ((Get-Content -path $appservicestfpath -Raw) -replace 'tempdbbackupcontainer',$dbbackupcontainer) | Set-Content -Path $appservicestfpath
+
+    ((Get-Content -path $sqldatabasestfpath -Raw) -replace 'tempsqlservername',$sqlservername) | Set-Content -Path $sqldatabasestfpath
 
     # # for azureservice
     # ((Get-Content -path $appservicestfpath -Raw) -replace 'temppat',$pat) | Set-Content -Path $appservicestfpath
