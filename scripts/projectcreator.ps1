@@ -678,6 +678,7 @@ if($verifySetup -eq "y")
         write-host " - Go to your Azure DevOps project"
         write-host " - Pipelines > Releases > +New v"
         write-host " - > New release pipeline > Now you can set it up by following the steps, or import the two releases json from the project/azure folder"
+        write-host " - > you will have to set up a new artifact and all of the stages and tasks for them to work, but you can look an copy from the template import"
         write-host " - - Template > Select empty job > setup 4 stages:"
         write-host " - - - Stage 1: setup 1 task"
         write-host " - - - - Task 1: Setup a backupdb Azure CLI ps1 script task"
