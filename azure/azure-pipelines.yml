@@ -16,7 +16,12 @@
 #   default: $(webappname) # tempwebappname
 
 trigger:
-- master
+  branches:
+    include:
+      - master
+      - test
+      #- feature/*
+      #- develop
 
 pool:
   vmImage: 'windows-latest'
