@@ -681,6 +681,7 @@ if($verifySetup -eq "y")
         write-host " - > you will have to delete the artifact and add it again, and delete the terraform stage and recreate it,"
         write-host " - > Click through each stages' steps to reattach references, this fixes the release pipeline validation error"
         write-host " - > The service connection is mostly what you need, enter 'Azure Resource Manager', other variables can be found in the library."
+        write-host " - > Remember to tweak the test release release variables accordingly."
         write-host " - - Template > Select empty job > setup 4 stages:"
         write-host " - - - Stage 1: setup 1 task"
         write-host " - - - - Task 1: Setup a backupdb Azure CLI ps1 script task"
