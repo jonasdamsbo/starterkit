@@ -21,7 +21,7 @@ write-host "SETTING CLOUD VARS"
 
     $webappip = az webapp show --resource-group $resourcegroupname --name $webappname
     $webappip = $webappip | ConvertFrom-Json
-    $webappip = $webappip.outboundIpAddresses
+    $webappip = $webappip.possibleOutboundIpAddresses
     $webappips = $webappip.Split(',')
     $webappip = $webappips[0]
 
@@ -30,7 +30,7 @@ write-host "SETTING CLOUD VARS"
 
     $apiappip = az webapp show --resource-group $resourcegroupname --name $apiappname
     $apiappip = $apiappip | ConvertFrom-Json
-    $apiappips = $apiappip.outboundIpAddresses
+    $apiappips = $apiappip.possibleOutboundIpAddresses
     $apiappipssplit = $apiappips.Split(',')
     $apiappip = $apiappipssplit[0]
 
