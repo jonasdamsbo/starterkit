@@ -1,9 +1,12 @@
-Link to web development guide: https://docs.google.com/document/d/1XfyCFWGpygB4GT2xxnCMj8e1RH9QMl8q0-ShvOF6d_Y/edit?usp=sharing
+# Starterkit
+
+Link to web development guide: https://docs.google.com/document/d/1XfyCFWGpygB4GT2xxnCMj8e1RH9QMl8q0-ShvOF6d_Y
 
 Link to starterkit template (Azure DevOps): https://dev.azure.com/JonasDamsbo/starterkit/
 
 Link to starterkit template (Github): https://github.com/jonasdamsbo/starterkit/
 
+# Azure Cloud
 
 Link to Azure Portal: https://portal.azure.com/
 
@@ -17,6 +20,7 @@ Storageaccount: tempstorageaccountname
 
 Appregistration: tempapplicationname
 
+# Azure DevOps
 
 Link to Azure DevOps: https://dev.azure.com/
 
