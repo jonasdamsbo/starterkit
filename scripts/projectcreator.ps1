@@ -441,7 +441,7 @@ if($verifySetup -eq "y")
         # $buildPipelineName = "Build "+$resourceName
         # $deployPipelineName = "Deploy "+$resourceName
         $buildPipelineName = "Build"
-        $deployPipelineName = "Deploy"
+        #$deployPipelineName = "Deploy"
 
 
     # ############################################# replace vars in old-project.ps1 ############################################
@@ -509,7 +509,7 @@ if($verifySetup -eq "y")
         ((Get-Content -path README.md -Raw) -replace 'temprepositoryname',$repositoryName) | Set-Content -Path README.md
         ((Get-Content -path README.md -Raw) -replace 'tempstorageaccountname',$storageaccountName) | Set-Content -Path README.md
         ((Get-Content -path README.md -Raw) -replace 'tempbuildpipelinename',$buildPipelineName) | Set-Content -Path README.md
-        ((Get-Content -path README.md -Raw) -replace 'tempdeploypipelinename',$deployPipelineName) | Set-Content -Path README.md
+        #((Get-Content -path README.md -Raw) -replace 'tempdeploypipelinename',$deployPipelineName) | Set-Content -Path README.md
         ((Get-Content -path README.md -Raw) -replace 'tempvariablegroupname',$variableGroupName) | Set-Content -Path README.md
         ((Get-Content -path README.md -Raw) -replace 'tempapplicationname',$applicationName) | Set-Content -Path README.md
         ((Get-Content -path README.md -Raw) -replace 'tempserviceconnectionname',$serviceConnectionName) | Set-Content -Path README.md
@@ -602,11 +602,11 @@ if($verifySetup -eq "y")
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "clientsecret" --value $clientsecret # sensitive
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "storagekey" --value $storagekey # sensitive
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "storageconnectionstring" --value $storageconnectionstring # sensitive
-        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "sqlpassword" --value $sqlpassword # sensitive
-        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "sqllogin" --value $resourcename # sensitive
+        #az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "sqlpassword" --value $sqlpassword # sensitive
+        #az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "sqllogin" --value $resourcename # sensitive
         
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "terraformcontainer" --value $terraformcontainername
-        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "terraformkey" --value $terraformkey
+        #az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "terraformkey" --value $terraformkey
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "backupcontainer" --value $dbbackupcontainername
 
         #for azureservice
@@ -615,7 +615,7 @@ if($verifySetup -eq "y")
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "fullorganizationname" --value $fullOrgName
 	    az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "PAT" --value $pat
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "projectname" --value $projectName
-        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "resourcename" --value $resourceName
+        #az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "resourcename" --value $resourceName
 
         ## extra
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "storageaccountname" --value $storageaccountName
@@ -624,8 +624,43 @@ if($verifySetup -eq "y")
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "azureserviceconnectionname" --value $serviceConnectionName
 
         ## constr, not needed but nice, can replace sqlpassword and add tempconstr to appservice.tf webapi constr
-        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "sqlconnectionstring" --value $sqlconnectionstring
-        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "sqlservername" --value $sqlservername
+        #az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "sqlconnectionstring" --value $sqlconnectionstring
+        #az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "sqlservername" --value $sqlservername
+
+
+        # for prod variable group
+        write-host "Started creating prodvariablegroup..."
+        $prodVariableGroupName = "prodvariablegroup" # $resourceName+"variablegroup"
+        $prodVariableGroupId = az pipelines variable-group create --name $prodVariableGroupName --organization $fullOrgName --project $projectName --authorize --variables "subscriptionid=$subId" --output json --query "[id]"
+        $prodVariableGroupId = $prodVariableGroupId.Replace("[","")
+        $prodVariableGroupId = $prodVariableGroupId.Replace("]","")
+        $prodVariableGroupId = $prodVariableGroupId.Replace(" ","")
+        write-host "variableGroupId: "$prodVariableGroupId
+
+        az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "sqlconnectionstring" --value $sqlconnectionstring
+        az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "sqlservername" --value $sqlservername
+        az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "resourcename" --value $resourceName
+        az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "terraformkey" --value $terraformkey
+        az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "sqlpassword" --value $sqlpassword # sensitive
+        az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "sqllogin" --value $resourcename # sensitive
+
+        # for test variable group
+        write-host "Started creating testvariablegroup..."
+        $testVariableGroupName = "testvariablegroup" # $resourceName+"variablegroup"
+        $testVariableGroupId = az pipelines variable-group create --name $testVariableGroupName --organization $fullOrgName --project $projectName --authorize --variables "subscriptionid=$subId" --output json --query "[id]"
+        $testVariableGroupId = $testVariableGroupId.Replace("[","")
+        $testVariableGroupId = $testVariableGroupId.Replace("]","")
+        $testVariableGroupId = $testVariableGroupId.Replace(" ","")
+        write-host "variableGroupId: "$testVariableGroupId
+
+        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqlconnectionstring" --value $sqlconnectionstring
+        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqlservername" --value $sqlservername
+        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "resourcename" --value $resourceName
+        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "terraformkey" --value $terraformkey
+        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqlpassword" --value $sqlpassword # sensitive
+        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqllogin" --value $resourcename # sensitive
+
+
 
 
         read-host "Done creating library variable group variables... press enter to continue"
@@ -645,10 +680,10 @@ if($verifySetup -eq "y")
             write-host "PipelineId: "$pipelineId
 
             # deploy release pipeline yml
-            az pipelines create --name $deployPipelineName --yml-path '\azure\deploy-azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master"
+            #az pipelines create --name $deployPipelineName --yml-path '\azure\deploy-azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master"
 
-            $pipelines = az pipelines list --org $fullOrgName --project $projectName --output json
-            write-host "Pipelines: "$pipelines
+            #$pipelines = az pipelines list --org $fullOrgName --project $projectName --output json
+            #write-host "Pipelines: "$pipelines
 
             # environment for review/approval of runs
             #az devops pipeline environment create --name "Production" --org "https://dev.azure.com/jonasdamsbo" --project "mycsrepo"
@@ -670,39 +705,42 @@ if($verifySetup -eq "y")
 
     ################################################## prompt set up release in azure devops ##################################################
         write-host 
-        write-host "Finally, you can choose to use the deploy.yml for releases, or use the manual Azure Devops Releases"
-	    write-host "Azure Devops Releases are separate from pipelines and the setup is more clean"
-	    write-host "If you're happy with using a deploy.yml for releases, skip these steps"
-	    write-host "If you want to use the manual Azure Devops Releases for releases, follow these steps"
+        write-host "Finally,"
+        # write-host "Finally, you can choose to use the deploy.yml for releases, or use the manual Azure Devops Releases"
+	    # write-host "Azure Devops Releases are separate from pipelines and the setup is more clean"
+	    # write-host "If you're happy with using a deploy.yml for releases, skip these steps"
+	    # write-host "If you want to use the manual Azure Devops Releases for releases, follow these steps"
         write-host " - You need to setup your release in Azure DevOps (See the development guide for help, link in readme.md):"
         write-host " - Go to your Azure DevOps project"
         write-host " - Pipelines > Releases > +New v"
-        write-host " - > New release pipeline > Now you can set it up by following the steps, or import the two releases json from the project/azure folder"
-        write-host " - > you will have to delete the artifact and add it again, and delete the terraform stage and recreate it,"
+        write-host " - > New release pipeline > import the two releases json from the project/azure folder"
+        # write-host " - > New release pipeline > Now you can set it up by following the steps, or import the two releases json from the project/azure folder"
+        #write-host " - > you will have to delete the artifact and add it again, and delete the terraform stage and recreate it,"
+        write-host " - > you will have to delete the artifact and add it again"
         write-host " - > Click through each stages' steps to reattach references, this fixes the release pipeline validation error"
-        write-host " - > The service connection is mostly what you need, enter 'Azure Resource Manager', other variables can be found in the library."
-        write-host " - > Remember to tweak the test release release variables accordingly."
-        write-host " - - Template > Select empty job > setup 4 stages:"
-        write-host " - - - Stage 1: setup 1 task"
-        write-host " - - - - Task 1: Setup a backupdb Azure CLI ps1 script task"
-        write-host " - - - Stage 2: setup 7 tasks"
-        write-host " - - - - Task 1: Setup a Replace tokens Azure CLI ps1 script task"
-        write-host " - - - - Task 2-6: Setup Terraform install/init/validate/plan/apply tasks"
-        write-host " - - - - Task 7: Setup a Set cloud ips Azure CLI ps1 script task"
-        write-host " - - - Stage 3: setup 1 task"
-        write-host " - - - - Task 1: Setup a migratedb 'Azure SQL Database deployment' task"
-        write-host " - - - Stage 4: setup 2 tasks"
-        write-host " - - - - Step 1: Setup a Deploy webapp Azure App Service deploy task"
-        write-host " - - - - - write "+$resourceName+"webapp in app service name"
-        write-host " - - - - Step 2: Setup a Deploy apiapp Azure App Service deploy task"
-        write-host " - - - - - write "+$resourceName+"apiapp in app service name"
+        write-host " - > Most steps wants you to reattach 'Azure Resource Manager', other variables can be found in the library."
+        #write-host " - > Remember to tweak the test release release variables accordingly."
+        # write-host " - - Template > Select empty job > setup 4 stages:"
+        # write-host " - - - Stage 1: setup 1 task"
+        # write-host " - - - - Task 1: Setup a backupdb Azure CLI ps1 script task"
+        # write-host " - - - Stage 2: setup 7 tasks"
+        # write-host " - - - - Task 1: Setup a Replace tokens Azure CLI ps1 script task"
+        # write-host " - - - - Task 2-6: Setup Terraform install/init/validate/plan/apply tasks"
+        # write-host " - - - - Task 7: Setup a Set cloud ips Azure CLI ps1 script task"
+        # write-host " - - - Stage 3: setup 1 task"
+        # write-host " - - - - Task 1: Setup a migratedb 'Azure SQL Database deployment' task"
+        # write-host " - - - Stage 4: setup 2 tasks"
+        # write-host " - - - - Step 1: Setup a Deploy webapp Azure App Service deploy task"
+        # write-host " - - - - - write "+$resourceName+"webapp in app service name"
+        # write-host " - - - - Step 2: Setup a Deploy apiapp Azure App Service deploy task"
+        # write-host " - - - - - write "+$resourceName+"apiapp in app service name"
         write-host " - - If you want a test environment, do the same for test release"
-        write-host " - - To add approval to releases, go to the Release > Edit"
-        write-host " - - - Click the 'Pre-deployment conditions' (lightning icon) to the left of Stage 1"
-        write-host " - - - To the right of the 'Pre-doplyment approvals' dropdown, click the button to switch to 'Enabled'"
-        write-host " - - - Add the name of the desired approver, and desired timeout if not approved/rejected in time, default is 5 minutes"
-        write-host " - - - Under approval policies, click the checkbox 'The user requesting a release or deployment should not approve it'"
-        write-host " - Go to Variables > Variable groups > Link variable group"
+        # write-host " - - To add approval to releases, go to the Release > Edit"
+        # write-host " - - - Click the 'Pre-deployment conditions' (lightning icon) to the left of Stage 1"
+        # write-host " - - - To the right of the 'Pre-doplyment approvals' dropdown, click the button to switch to 'Enabled'"
+        # write-host " - - - Add the name of the desired approver, and desired timeout if not approved/rejected in time, default is 5 minutes"
+        # write-host " - - - Under approval policies, click the checkbox 'The user requesting a release or deployment should not approve it'"
+        write-host " - Go to Variables > Variable groups > Link variable group > Link both myvariablegroup and either prodvariablegroup or testvariablegroup"
         write-host " - Go to Pipelines > Click '...' on the pipeline named 'Deploy' > Delete"
         write-host 
         #write-host "For AzureService:"
@@ -714,31 +752,31 @@ if($verifySetup -eq "y")
 
     
     ################################################## prompt set up environment in azure devops ##################################################
-        write-host 
-        write-host "If you chose 'manual Azure Devops Releases', skip these steps"
-        write-host "If you chose to use the deploy.yml for releases, follow these steps"
-        write-host " - The deploy.yml is using environments for run approvals, so you need to set up your production environment in Azure DevOps -> 1/2"
-        write-host " - 2/2 -> or delete the approval check from the yml (See the development guide for help, link in readme.md):"
-        write-host " - Go to your Azure DevOps project"
-        write-host " - Create a new environment:"
-        write-host " - - Pipelines > Environments > New environment"
-        write-host " - - - Name: Production"
-        write-host " - - - Description: (optional, can leave blank)"
-        write-host " - - - Resource: None"
-        write-host " - Create approval policy:"
-        write-host " - - Go to your environment (if you just created it, you are here), otherwise go to Pipelines > Environments"
-        write-host " - - - Click on 'View all checks' or the '+' sign"
-        write-host " - - - Add pre-check approvals"
-        write-host " - - - Approvers: Add approver"
-        write-host " - - - Advanced: Can approvers approve their own runs?"
-        write-host " - - - Control options: set timeout if not approved, set default to 5 minutes"
-        write-host " - - In the environment overview, you can change the approval from pre-check to just approval:"
-        write-host " - - - Click the '...' right of your environment in the list"
-        write-host " - - - Change execution order > to Approval"
-        write-host 
-        write-host 
-        read-host "Press enter when done..."
-        write-host 
+        # write-host 
+        # write-host "If you chose 'manual Azure Devops Releases', skip these steps"
+        # write-host "If you chose to use the deploy.yml for releases, follow these steps"
+        # write-host " - The deploy.yml is using environments for run approvals, so you need to set up your production environment in Azure DevOps -> 1/2"
+        # write-host " - 2/2 -> or delete the approval check from the yml (See the development guide for help, link in readme.md):"
+        # write-host " - Go to your Azure DevOps project"
+        # write-host " - Create a new environment:"
+        # write-host " - - Pipelines > Environments > New environment"
+        # write-host " - - - Name: Production"
+        # write-host " - - - Description: (optional, can leave blank)"
+        # write-host " - - - Resource: None"
+        # write-host " - Create approval policy:"
+        # write-host " - - Go to your environment (if you just created it, you are here), otherwise go to Pipelines > Environments"
+        # write-host " - - - Click on 'View all checks' or the '+' sign"
+        # write-host " - - - Add pre-check approvals"
+        # write-host " - - - Approvers: Add approver"
+        # write-host " - - - Advanced: Can approvers approve their own runs?"
+        # write-host " - - - Control options: set timeout if not approved, set default to 5 minutes"
+        # write-host " - - In the environment overview, you can change the approval from pre-check to just approval:"
+        # write-host " - - - Click the '...' right of your environment in the list"
+        # write-host " - - - Change execution order > to Approval"
+        # write-host 
+        # write-host 
+        # read-host "Press enter when done..."
+        # write-host 
 
     ################################################## before pipeline and tools-installer ##################################################
 

@@ -27,6 +27,7 @@ pool:
 
 variables:
 - group: myvariablegroup # jgde2exvariablegroup # tempresourcenamevariablegroup
+- group: prodvariablegroup
 - name: solution
   value: '**/*.sln'
 - name: buildPlatform
