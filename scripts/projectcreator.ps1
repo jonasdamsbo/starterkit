@@ -736,7 +736,7 @@ if($verifySetup -eq "y")
         # write-host " - - - - - write "+$resourceName+"webapp in app service name"
         # write-host " - - - - Step 2: Setup a Deploy apiapp Azure App Service deploy task"
         # write-host " - - - - - write "+$resourceName+"apiapp in app service name"
-        write-host " - - If you want a test environment, do the same for test release"
+        write-host " - - If you want a test environment, do the same for test release. Set the release artifact trigger (lightning icon) to include branch 'test'"
         # write-host " - - To add approval to releases, go to the Release > Edit"
         # write-host " - - - Click the 'Pre-deployment conditions' (lightning icon) to the left of Stage 1"
         # write-host " - - - To the right of the 'Pre-doplyment approvals' dropdown, click the button to switch to 'Enabled'"
