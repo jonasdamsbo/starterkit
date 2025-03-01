@@ -187,6 +187,7 @@ if($verifySetup -eq "y")
             write-host "   - 1/2 OBS!!! Can be the same as the project name. This is in case you want to use an existing project,"
             write-host "   - 2/2 OBS!!! which might already have resources named after that projects name."
             $resourceName = read-host
+            $testresourcename = "test"+$resourceName
 
         ## check if resourcegroup exists
             write-host "Checking if resourcegroup exists..."
@@ -407,6 +408,7 @@ if($verifySetup -eq "y")
             write-host "Started creating storageaccount terraform container..."
             $terraformcontainername = "terraform"
             $terraformkey = "terraform.tfstate"
+            $testterraformkey = "testterraform.tfstate"
             az storage container create --name $terraformcontainername --account-name $storageaccountName
             write-host $storageaccountId
             write-host "Done creating storageaccount terraform container..."
@@ -432,11 +434,14 @@ if($verifySetup -eq "y")
 
         $weburl = "https://"+$resourceName+"webapp.azurewebsites.net/"
         $sqlpassword = -join (((48..57) | Get-Random | % {[char]$_})+((65..90) | Get-Random | % {[char]$_})+((97..122) | Get-Random | % {[char]$_})+(-join ((48..57) + (65..90) + (97..122) | Get-Random -Count 10 | % {[char]$_})))
+        $testsqlpassword = -join (((48..57) | Get-Random | % {[char]$_})+((65..90) | Get-Random | % {[char]$_})+((97..122) | Get-Random | % {[char]$_})+(-join ((48..57) + (65..90) + (97..122) | Get-Random -Count 10 | % {[char]$_})))
 
         $variableGroupName = "myvariablegroup" # $resourceName+"variablegroup"
 
         $sqlconnectionstring = "Server=tcp:"+$resourceName+"mssqlserver.database.windows.net,1433;Initial Catalog="+$resourceName+"mssqldatabase;Persist Security Info=False;User ID="+$resourceName+";Password="+$sqlpassword+";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+        $testsqlconnectionstring = "Server=tcp:"+$testresourceName+"mssqlserver.database.windows.net,1433;Initial Catalog="+$testresourceName+"mssqldatabase;Persist Security Info=False;User ID="+$testresourceName+";Password="+$testsqlpassword+";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
         $sqlservername = $resourceName+"mssqlserver"
+        $testsqlservername = "test"+$resourceName+"mssqlserver"
         
         # $buildPipelineName = "Build "+$resourceName
         # $deployPipelineName = "Deploy "+$resourceName
@@ -631,13 +636,12 @@ if($verifySetup -eq "y")
         # for prod variable group
         write-host "Started creating prodvariablegroup..."
         $prodVariableGroupName = "prodvariablegroup" # $resourceName+"variablegroup"
-        $prodVariableGroupId = az pipelines variable-group create --name $prodVariableGroupName --organization $fullOrgName --project $projectName --authorize --variables "subscriptionid=$subId" --output json --query "[id]"
+        $prodVariableGroupId = az pipelines variable-group create --name $prodVariableGroupName --organization $fullOrgName --project $projectName --authorize --variables "sqlconnectionstring=$sqlconnectionstring" --output json --query "[id]"
         $prodVariableGroupId = $prodVariableGroupId.Replace("[","")
         $prodVariableGroupId = $prodVariableGroupId.Replace("]","")
         $prodVariableGroupId = $prodVariableGroupId.Replace(" ","")
         write-host "variableGroupId: "$prodVariableGroupId
 
-        az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "sqlconnectionstring" --value $sqlconnectionstring
         az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "sqlservername" --value $sqlservername
         az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "resourcename" --value $resourceName
         az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "terraformkey" --value $terraformkey
@@ -647,20 +651,17 @@ if($verifySetup -eq "y")
         # for test variable group
         write-host "Started creating testvariablegroup..."
         $testVariableGroupName = "testvariablegroup" # $resourceName+"variablegroup"
-        $testVariableGroupId = az pipelines variable-group create --name $testVariableGroupName --organization $fullOrgName --project $projectName --authorize --variables "subscriptionid=$subId" --output json --query "[id]"
+        $testVariableGroupId = az pipelines variable-group create --name $testVariableGroupName --organization $fullOrgName --project $projectName --authorize --variables "sqlconnectionstring=$testsqlconnectionstring" --output json --query "[id]"
         $testVariableGroupId = $testVariableGroupId.Replace("[","")
         $testVariableGroupId = $testVariableGroupId.Replace("]","")
         $testVariableGroupId = $testVariableGroupId.Replace(" ","")
         write-host "variableGroupId: "$testVariableGroupId
 
-        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqlconnectionstring" --value $sqlconnectionstring
-        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqlservername" --value $sqlservername
-        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "resourcename" --value $resourceName
-        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "terraformkey" --value $terraformkey
-        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqlpassword" --value $sqlpassword # sensitive
-        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqllogin" --value $resourcename # sensitive
-
-
+        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqlservername" --value $testsqlservername
+        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "resourcename" --value $testresourcename
+        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "terraformkey" --value $testterraformkey
+        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqlpassword" --value $testsqlpassword # sensitive
+        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqllogin" --value $testresourcename # sensitive
 
 
         read-host "Done creating library variable group variables... press enter to continue"
