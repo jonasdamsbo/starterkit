@@ -32,7 +32,7 @@ builder.Services.AddScoped<MapsterConfig>();
 // for mssql
 builder.Services.AddDbContext<MssqlDataContext>(options => options
    .UseSqlServer(builder.Configuration.GetConnectionString("Mssql"))//);
-   .UseLazyLoadingProxies());
+   .UseLazyLoadingProxies()); // for enabling lazy loading
 //.EnableSensitiveDataLogging(true));
 
 // for sqlite
