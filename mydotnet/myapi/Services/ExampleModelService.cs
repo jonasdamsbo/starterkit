@@ -64,7 +64,10 @@ namespace myapi.Services
 			//	}).ToList();
 
 			// homemade mapper, mapping is moved to DtoMapper.cs with Map overload methods
-			var exampleModelsDTO = exampleModels.Select(example => _dtoMapper.Map(example, new ExampleDTO())).ToList();
+			//var exampleModelsDTO = exampleModels.Select(example => _dtoMapper.Map(example, new ExampleDTO())).ToList();
+			var exampleModelsDTO = 
+				//exampleModels.Select(example => new ExampleDTO(example)).ToList();
+				exampleModels.Select(example => _dtoMapper.Map(example, new ExampleDTO())).ToList();
 
 
 			// mapster, like the above example but the mapping is moved to mapsterconfig so you can call adapt
@@ -98,11 +101,16 @@ namespace myapi.Services
 			if (exampleModel is null) return null;
 			if (exampleModel.Id.IsNullOrEmpty()) return new ExampleDTO();
 
-			//exampleModel.ToDto(new ExampleDTO());
-			//_dtoMapper.ToDto(exampleModel, new ExampleDTO());
+			var exampleModelDto =
+				// constructor mapping
+				//new ExampleDTO(exampleModel);
+				//exampleModel.ToDto(new ExampleDTO());
+				_dtoMapper.Map(exampleModel, new ExampleDTO());
+			
+			return exampleModelDto;
 
 			// homemade
-			return _dtoMapper.Map(exampleModel, new ExampleDTO());
+			//return _dtoMapper.Map(exampleModel, new ExampleDTO());
 
 			//mapster
 			//return exampleModel.Adapt<ExampleDTO>();

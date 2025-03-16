@@ -1,4 +1,5 @@
 ﻿using myshared.Models;
+using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace myshared.DTOs
@@ -11,9 +12,12 @@ namespace myshared.DTOs
 
 		public List<ExampleNavigationPropertyDTO>? ExampleNavigationPropertiesDTO { get; set; }
 
-		// manual mapping, not needed with mapster
-		/*public ExampleDTO(ExampleModel example) =>
-		(Id, Title, Description) = (example.Id, example.Title, example.Description);*/
+
+		public ExampleDTO() { }
+		public ExampleDTO(ExampleModel example) =>
+		(Id, Title, Description, ExampleNavigationPropertiesDTO) = (example.Id, example.Title, example.Description,
+			example.ExampleNavigationProperties.Select(x => new ExampleNavigationPropertyDTO(x)).ToList()
+		);
 	}
 	//public enum DtoTypes
 	//{
