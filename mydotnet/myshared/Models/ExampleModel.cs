@@ -14,10 +14,10 @@ namespace myshared.Models
 		public string Id { get; set; }
 		public string? Title { get; set; }
         public string? Description { get; set; }
-        public string? WebUrl { get; set; }
+		//public string? WebUrl { get; set; }
 
 		[JsonIgnore]
-		public virtual List<ExampleNavigationProperty>? ExampleNavigationProperty { get; set; }
+		public virtual List<ExampleNavigationProperty> ExampleNavigationProperties { get; set; }
 
 		public ExampleModel() {
 			Id = ObjectId.GenerateNewId().ToString();
@@ -26,5 +26,14 @@ namespace myshared.Models
 		// manual mapping, not needed with mapster
 		/*public ExampleModel(ExampleDTO exampleDTO) =>
 		(Id, Title, Description) = (exampleDTO.Id, exampleDTO.Title, exampleDTO.Description);*/
+
+		//public ExampleDTO ToDto(ExampleDTO newDto)
+		//{
+		//	return newDto;
+		//}
+		//public ExampleNavigationPropertyDTO ToDto(ExampleNavigationPropertyDTO exampleDto)
+		//{
+		//	return new ExampleNavigationPropertyDTO();
+		//}
 	}
 }

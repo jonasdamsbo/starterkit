@@ -1,11 +1,8 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Proxies;
 using myapi.Data;
-using myapi.Repositories;
-using myapi.Services;
-using myapi.Utility;
-using myshared.DTOs;
 using myshared.Models;
-using myshared.Services;
+using myapi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,8 +30,9 @@ builder.Services.AddScoped<MapsterConfig>();
 // mssql database context and connectionstring
 
 // for mssql
-builder.Services.AddDbContext<MssqlDataContext>(options =>
-   options.UseSqlServer(builder.Configuration.GetConnectionString("Mssql")));
+builder.Services.AddDbContext<MssqlDataContext>(options => options
+   .UseSqlServer(builder.Configuration.GetConnectionString("Mssql"))//);
+   .UseLazyLoadingProxies());
 //.EnableSensitiveDataLogging(true));
 
 // for sqlite
@@ -42,16 +40,19 @@ builder.Services.AddDbContext<MssqlDataContext>(options =>
 //	options.UseSqlite(builder.Configuration.GetConnectionString("Sqlite")));
 
 
-// add services
-//builder.Services.AddScoped<AzureUtility>();
-builder.Services.AddScoped<EnvironmentVariableService>();
-builder.Services.AddScoped<ExampleModelService>();
-builder.Services.AddScoped<ExampleNavigationPropertyService>();
-builder.Services.AddScoped<BackupDbUtility>();
+//// add services
+////builder.Services.AddScoped<AzureUtility>();
+//builder.Services.AddScoped<EnvironmentVariableService>();
+//builder.Services.AddScoped<ExampleModelService>();
+//builder.Services.AddScoped<ExampleNavigationPropertyService>();
+//builder.Services.AddScoped<BackupDbUtility>();
 
-// add repositories
-builder.Services.AddScoped<IExampleModelRepository, ExampleModelRepository>();
-builder.Services.AddScoped<ExampleNavigationPropertyRepository>();
+//// add repositories
+//builder.Services.AddScoped<IExampleModelRepository, ExampleModelRepository>();
+//builder.Services.AddScoped<ExampleNavigationPropertyRepository>();
+
+// add servicecollection
+builder.Services.RegisterServices();
 
 // to run/deploy 2 projects in a single app
 builder.Services.Configure<IISOptions>(options =>
@@ -98,14 +99,9 @@ using (var scope = app.Services.CreateScope())
 	/*var backupDbService = services.GetRequiredService<BackupDbUtility>();
     backupDbService.InitBackup();*/
 
-	// run migrations if local development
-	if (app.Environment.IsDevelopment())
-	{
-		// using your manually created migrations, automatically runs update-database 
-		var context = services.GetRequiredService<MssqlDataContext>();
-		// make sure docker or docker desktop is running and the containers are started
-		context.Database.Migrate();
-	}
+    // using your manually created migrations, automatically runs update-database 
+    /*var context = services.GetRequiredService<MssqlDataContext>();
+    context.Database.Migrate();*/
 
 	// mapster
 	var mapster = services.GetRequiredService<MapsterConfig>();

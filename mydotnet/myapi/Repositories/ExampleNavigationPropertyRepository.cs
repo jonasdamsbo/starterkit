@@ -39,7 +39,7 @@ namespace myapi.Repositories
         }
 
         // should be in all repositories whos model uses a foreign key
-        public async Task<List<ExampleNavigationProperty>?> GetAllRelatedToIdAsync(string exampleModelId)
+        public async Task<List<ExampleNavigationProperty>?> GetByExampleModelIdAsync(string exampleModelId)
         {
             try
             {

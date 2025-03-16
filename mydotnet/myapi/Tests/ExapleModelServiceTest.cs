@@ -20,8 +20,8 @@ namespace myapi.Tests
 				Id = modelId,
 				Title = "test",
 				Description = "test",
-				WebUrl = "test",
-				ExampleNavigationProperty = null
+				//WebUrl = "test",
+				ExampleNavigationProperties = null
 			};
 
 			var mockRepository = new Mock<IExampleModelRepository>();
@@ -31,7 +31,9 @@ namespace myapi.Tests
 
 			var mockLog = new Mock<ILogger<ExampleModelService>>();
 
-			var service = new ExampleModelService(mockLog.Object, mockRepository.Object);
+			var mockDtomapper = new Mock<DtoMapper>();
+
+			var service = new ExampleModelService(mockLog.Object, mockRepository.Object, mockDtomapper.Object);
 
 			// Act
 			var result = await service.GetByIdAsync(modelId);

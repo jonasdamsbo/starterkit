@@ -14,18 +14,23 @@ namespace myapi.Services
 	{
 		private IExampleModelRepository _exampleModelRepository;
 		private ILogger<ExampleModelService> _log;
+		private DtoMapper _dtoMapper;
 
 		// automapper
 		//private readonly IMapper _autoMapper;
 
         public ExampleModelService(
 			ILogger<ExampleModelService> log,
-			IExampleModelRepository exampleModelRepository/*,
+			IExampleModelRepository exampleModelRepository,
+			DtoMapper dtoMapper/*,
 			IMapper autoMapper*/
 		)
 		{
 			_exampleModelRepository = exampleModelRepository;
 			_log = log;
+
+			// homemade mapper
+			_dtoMapper = dtoMapper;
 
 			// automapper
 			//_autoMapper = autoMapper;
@@ -36,23 +41,54 @@ namespace myapi.Services
 
 		public async Task<List<ExampleDTO>?> GetAllAsync()
 		{
+			// get list of models
 			var exampleModels = await _exampleModelRepository.GetAllAsync();
 
+			// check if null or empty
 			if (exampleModels is null) return null;
             if (exampleModels.Count() < 1) return new List<ExampleDTO>();
 
-			// maps
+			// map to dtos without mapster
+			//var exampleModelsDTO = exampleModels
+			//	.Select(example => new ExampleDTO()
+			//	{
+			//		Id = example.Id,
+			//		Description = example.Description,
+			//		Title = example.Title,
+			//		ExampleNavigationPropertiesDTO = example.ExampleNavigationProperties
+			//			.Select(navProp => new ExampleNavigationPropertyDTO()
+			//			{
+			//				Id = navProp.Id,
+			//				Title = navProp.Title
+			//			}).ToList()
+			//	}).ToList();
 
-			// mapster
-			var mapsterExample = exampleModels.Select(example => example.Adapt<ExampleDTO>()).ToList();
+			// homemade mapper, mapping is moved to DtoMapper.cs with Map overload methods
+			var exampleModelsDTO = exampleModels.Select(example => _dtoMapper.Map(example, new ExampleDTO())).ToList();
+
+
+			// mapster, like the above example but the mapping is moved to mapsterconfig so you can call adapt
+			//var exampleModelsDTO = exampleModels.Select(example => example.Adapt<ExampleDTO>()).ToList();
+
+			//// map to dto, use mapster setup to map from example to exampledto with examplenavpropdtos
+			//for (int i = 0; i < exampleModels.Count; i++)
+			//{
+			//	exampleModelsDTO[i].ExampleNavigationPropertiesDTO = new List<ExampleNavigationPropertyDTO>();
+			//	for (int j = 0; j < exampleModels[i].ExampleNavigationProperties.Count; j++)
+			//	{
+			//		exampleModelsDTO[i].ExampleNavigationPropertiesDTO.Add(exampleModels[i].ExampleNavigationProperties[j].Adapt<ExampleNavigationPropertyDTO>());
+			//	}
+			//}
+
+
 
 			//automapper
 			//var automapperExample = exampleModels.Select(example => _autoMapper.Map<ExampleDTO>(example)).ToList();
 
-			// manual mapping
+			// manual mapping, define in models and dtos
 			//var exampleDTOs = exampleModels.Select(x => new ExampleDTO(x)).ToList();
 
-			return mapsterExample;
+			return exampleModelsDTO;
 		}
 
 		public async Task<ExampleDTO?> GetByIdAsync(string id)
@@ -62,8 +98,14 @@ namespace myapi.Services
 			if (exampleModel is null) return null;
 			if (exampleModel.Id.IsNullOrEmpty()) return new ExampleDTO();
 
+			//exampleModel.ToDto(new ExampleDTO());
+			//_dtoMapper.ToDto(exampleModel, new ExampleDTO());
+
+			// homemade
+			return _dtoMapper.Map(exampleModel, new ExampleDTO());
+
 			//mapster
-			return exampleModel.Adapt<ExampleDTO>();
+			//return exampleModel.Adapt<ExampleDTO>();
 			//manual mapping
 			//return new ExampleDTO(exampleModel);
 		}

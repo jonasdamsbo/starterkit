@@ -22,9 +22,10 @@ namespace myapi.Repositories
         {
             try
             {
-                var examples = await _context.ExampleModels.ToListAsync();
+				//var examples = await _context.ExampleModels.ToListAsync(); // lazy
+				var examples = await _context.ExampleModels.Include(x => x.ExampleNavigationProperties).ToListAsync(); // eager
 
-                return examples;
+				return examples;
             }
             catch (Exception ex)
             {

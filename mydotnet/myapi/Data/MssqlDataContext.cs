@@ -19,23 +19,23 @@ namespace myapi.Data
 
             // define relations
 			modelBuilder.Entity<ExampleModel>()
-                .HasMany(x => x.ExampleNavigationProperty)
+                .HasMany(x => x.ExampleNavigationProperties)
                 .WithOne(x => x.ExampleModel)
                 .HasForeignKey(x => x.ExampleModelId)
                 .IsRequired();
 
             modelBuilder.Entity<ExampleNavigationProperty>()
                 .HasOne(x => x.ExampleModel)
-                .WithMany(x => x.ExampleNavigationProperty);
+                .WithMany(x => x.ExampleNavigationProperties);
 
 
             // dummy data
 			List<ExampleModel> exampleList = new List<ExampleModel>();
 			List<ExampleNavigationProperty> navPropList = new List<ExampleNavigationProperty>();
 
-			exampleList.Add(new ExampleModel { Id = ObjectId.GenerateNewId().ToString(), Title = "First example", Description = "Some field of first example", WebUrl = "google.dk", ExampleNavigationProperty = new List<ExampleNavigationProperty>() });
-			exampleList.Add(new ExampleModel { Id = ObjectId.GenerateNewId().ToString(), Title = "Second example", Description = "Some field of second example", WebUrl = "google.dk", ExampleNavigationProperty = new List<ExampleNavigationProperty>() });
-			exampleList.Add(new ExampleModel { Id = ObjectId.GenerateNewId().ToString(), Title = "Third example", Description = "Some field of third example", WebUrl = "google.dk", ExampleNavigationProperty = new List<ExampleNavigationProperty>() });
+			exampleList.Add(new ExampleModel { Id = ObjectId.GenerateNewId().ToString(), Title = "First example", Description = "Some field of first example"/*, WebUrl = "google.dk"*/, ExampleNavigationProperties = new List<ExampleNavigationProperty>() });
+			exampleList.Add(new ExampleModel { Id = ObjectId.GenerateNewId().ToString(), Title = "Second example", Description = "Some field of second example"/*, WebUrl = "google.dk"*/, ExampleNavigationProperties = new List<ExampleNavigationProperty>() });
+			exampleList.Add(new ExampleModel { Id = ObjectId.GenerateNewId().ToString(), Title = "Third example", Description = "Some field of third example"/*, WebUrl = "google.dk"*/, ExampleNavigationProperties = new List<ExampleNavigationProperty>() });
 
             navPropList.Add(new ExampleNavigationProperty { Id = ObjectId.GenerateNewId().ToString(), Title = "First navprop", ExampleModelId = exampleList[0].Id });
             navPropList.Add(new ExampleNavigationProperty { Id = ObjectId.GenerateNewId().ToString(), Title = "Second navprop", ExampleModelId = exampleList[0].Id });

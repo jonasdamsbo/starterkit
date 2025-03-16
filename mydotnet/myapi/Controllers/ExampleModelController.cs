@@ -41,7 +41,7 @@ namespace myapi.Controllers // controllers
 
 		// GET: api/ExampleNavigationProperty
 		[HttpGet("ExampleNavigationProperty")]
-		public async Task<ActionResult<IEnumerable<ExampleDTO>>> GetAllNavPropsAsync()
+		public async Task<ActionResult<IEnumerable<ExampleNavigationPropertyDTO>>> GetAllNavPropsAsync()
 		{
 			var examples = await _exampleNavigationPropertyService.GetAllAsync();
 

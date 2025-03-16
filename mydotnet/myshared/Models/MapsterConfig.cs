@@ -8,10 +8,17 @@ namespace myshared.Models
 		public void ConfigureMapster()
 		{
 			TypeAdapterConfig<ExampleModel, ExampleDTO>.NewConfig();
-			
+			TypeAdapterConfig<ExampleNavigationProperty, ExampleNavigationPropertyDTO>.NewConfig();
+
 			// custom maps
-			//TypeAdapterConfig<ExampleModel, ExampleDTO>.NewConfig()
-			//	.Map(dest => dest.Description, src => src.Description);
+			TypeAdapterConfig<ExampleModel, ExampleDTO>.NewConfig()
+				.Map(dest => dest.ExampleNavigationPropertiesDTO, src => src.ExampleNavigationProperties
+					.Select(navProp => new ExampleNavigationPropertyDTO()
+					{
+						Id = navProp.Id,
+						Title = navProp.Title
+					}).ToList()
+				);
 		}
 	}
 }
