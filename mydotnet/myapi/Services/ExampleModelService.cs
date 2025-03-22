@@ -67,7 +67,7 @@ namespace myapi.Services
 			//var exampleModelsDTO = exampleModels.Select(example => _dtoMapper.Map(example, new ExampleDTO())).ToList();
 			var exampleModelsDTO = 
 				//exampleModels.Select(example => new ExampleDTO(example)).ToList();
-				exampleModels.Select(example => _dtoMapper.Map(example, new ExampleDTO())).ToList();
+				exampleModels.Select(example => _dtoMapper.ToExampleDTO(example)).ToList();
 
 
 			// mapster, like the above example but the mapping is moved to mapsterconfig so you can call adapt
@@ -105,7 +105,7 @@ namespace myapi.Services
 				// constructor mapping
 				//new ExampleDTO(exampleModel);
 				//exampleModel.ToDto(new ExampleDTO());
-				_dtoMapper.Map(exampleModel, new ExampleDTO());
+				_dtoMapper.ToExampleDTO(exampleModel);
 			
 			return exampleModelDto;
 

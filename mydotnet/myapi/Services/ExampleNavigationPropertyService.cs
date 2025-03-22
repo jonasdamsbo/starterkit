@@ -32,7 +32,8 @@ namespace myapi.Services
 			if (exampleNavigationProperties is null) return null;
             if (exampleNavigationProperties.Count() < 1) return new List<ExampleNavigationPropertyDTO>();
 
-			var exampleNavigationPropertyDTOs = exampleNavigationProperties.Select(x => _dtoMapper.Map(x, new ExampleNavigationPropertyDTO())).ToList();
+			var exampleNavigationPropertyDTOs = exampleNavigationProperties.Select(exampleNavigationProperty => 
+				_dtoMapper.ToExampleNavigationPropertyDTO(exampleNavigationProperty)).ToList();
 
 			return exampleNavigationPropertyDTOs;
 		}
@@ -44,7 +45,7 @@ namespace myapi.Services
 			if (exampleNavigationProperty is null) return null;
 			if (exampleNavigationProperty.Id.IsNullOrEmpty()) return new ExampleNavigationPropertyDTO();
 
-			var exampleNavigationPropertyDTO = _dtoMapper.Map(exampleNavigationProperty, new ExampleNavigationPropertyDTO());
+			var exampleNavigationPropertyDTO = _dtoMapper.ToExampleNavigationPropertyDTO(exampleNavigationProperty);
 
 			return exampleNavigationPropertyDTO;
 		}
@@ -56,7 +57,8 @@ namespace myapi.Services
 			if (exampleNavigationProperties is null) return null;
             if (exampleNavigationProperties.Count() < 1) return new List<ExampleNavigationPropertyDTO>();
 
-			var exampleNavigationPropertyDTOs = exampleNavigationProperties.Select(x => _dtoMapper.Map(x, new ExampleNavigationPropertyDTO())).ToList();
+			var exampleNavigationPropertyDTOs = exampleNavigationProperties.Select(exampleNavigationProperty => 
+				_dtoMapper.ToExampleNavigationPropertyDTO(exampleNavigationProperty)).ToList();
 
 			return exampleNavigationPropertyDTOs;
 		}
@@ -69,7 +71,7 @@ namespace myapi.Services
 			if (newExampleNavProp is null) return null;
 			if (newExampleNavProp.Id.IsNullOrEmpty()) return new ExampleNavigationPropertyDTO();
 
-			var newExampleNavPropDTO = _dtoMapper.Map(newExampleNavProp, new ExampleNavigationPropertyDTO());
+			var newExampleNavPropDTO = _dtoMapper.ToExampleNavigationPropertyDTO(newExampleNavProp);
 
 			return newExampleNavPropDTO;
 		}
@@ -81,7 +83,7 @@ namespace myapi.Services
 			if (updatedModel is null) return null;
 			if (updatedModel.Id.IsNullOrEmpty()) return new ExampleNavigationPropertyDTO();
 
-			var updatedModelDTO = _dtoMapper.Map(updatedModel, new ExampleNavigationPropertyDTO());
+			var updatedModelDTO = _dtoMapper.ToExampleNavigationPropertyDTO(updatedModel);
 
 			return updatedModelDTO;
 		}
@@ -93,7 +95,7 @@ namespace myapi.Services
 			if (exampleModel is null) return null;
 			if (exampleModel.Id.IsNullOrEmpty()) return new ExampleNavigationPropertyDTO();
 
-			var exampleModelDTO = _dtoMapper.Map(exampleModel, new ExampleNavigationPropertyDTO());
+			var exampleModelDTO = _dtoMapper.ToExampleNavigationPropertyDTO(exampleModel);
 
 			return exampleModelDTO;
 		}

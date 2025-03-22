@@ -4,26 +4,26 @@ namespace myshared.Models
 {
 	public class DtoMapper
 	{
-		public ExampleDTO Map(ExampleModel model, ExampleDTO newDto)
+		public ExampleDTO ToExampleDTO(ExampleModel model)
 		{
-			newDto = new ExampleDTO()
+			var dto = new ExampleDTO()
 			{
 				Id = model.Id,
 				Description = model.Description,
 				Title = model.Title,
 				ExampleNavigationPropertiesDTO = model.ExampleNavigationProperties
-						.Select(navProp => Map(navProp, new ExampleNavigationPropertyDTO())).ToList()
+						.Select(navProp => ToExampleNavigationPropertyDTO(navProp)).ToList()
 			};
-			return newDto;
+			return dto;
 		}
-		public ExampleNavigationPropertyDTO Map(ExampleNavigationProperty model, ExampleNavigationPropertyDTO newDto)
+		public ExampleNavigationPropertyDTO ToExampleNavigationPropertyDTO(ExampleNavigationProperty model)
 		{
-			newDto = new ExampleNavigationPropertyDTO()
+			var dto = new ExampleNavigationPropertyDTO()
 			{
 				Id = model.Id,
 				Title = model.Title
 			};
-			return newDto;
+			return dto;
 		}
 	}
 }
