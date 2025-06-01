@@ -40,12 +40,133 @@
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
             }
-        }
+        },
+        {
+            "name": "Launch Blazor Frontend browserless",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build myblazor",
+            "program": "${workspaceFolder}/mydotnet/myblazor/bin/Debug/net8.0/myblazor.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/mydotnet/myblazor",
+            "stopAtEntry": false,
+            // "serverReadyAction": {
+            //     "action": "openExternally",
+            //     "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+            //     "uriFormat": "%s"
+            // },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "sourceFileMap": {
+                "/Pages": "${workspaceFolder}/mydotnet/myblazor/Components/Pages",
+                "/Shared": "${workspaceFolder}/mydotnet/myblazor/Shared"
+            },
+            "presentation": {
+                "hidden": true
+            }
+        },
+        {
+            "name": "Launch ASP.NET Core Web API Backend browserless",
+            "type": "coreclr",
+            "request": "launch",
+            "preLaunchTask": "build myapi",
+            "program": "${workspaceFolder}/mydotnet/myapi/bin/Debug/net8.0/myapi.dll",
+            "args": [],
+            "cwd": "${workspaceFolder}/mydotnet/myapi",
+            "stopAtEntry": false,
+            // "serverReadyAction": {
+            //     "action": "openExternally",
+            //     "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
+            //     "uriFormat": "%s"
+            // },
+            "env": {
+                "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "presentation": {
+                "hidden": true
+            }
+        },
+        {
+            "type": "pwa-msedge",
+            "name": "Launch Microsoft Edge",
+            "request": "launch",
+            "runtimeArgs": [
+                "--remote-debugging-port=9222"
+            ],
+            "url": "https://jgdtestwebapp.azurewebsites.net",
+            "presentation": {
+                "hidden": true
+            }
+        },
+        {
+            "type": "pwa-msedge",
+            "name": "Launch Microsoft Edge in headless mode",
+            "request": "launch",
+            "runtimeArgs": [
+                "--headless",
+                "--remote-debugging-port=9222"
+            ],
+            "url": "https://jgdtestwebapp.azurewebsites.net",
+            "presentation": {
+                "hidden": true
+            }
+        },
+        {
+            "type": "vscode-edge-devtools.debug",
+            "name": "attach - Edge DevTools",
+            "request": "attach",
+            "url": "https://localhost:7192",
+            "presentation": {
+                "hidden": true
+            }
+        },
+        {
+            "type": "vscode-edge-devtools.debug",
+            "request": "launch",
+            "name": "launch - Edge DevTools",
+            "url": "https://localhost:7192",
+            "webRoot": "${workspaceFolder}",
+            "presentation": {
+                "hidden": true
+            }
+        },
     ],
     "compounds": [
         {
             "name": "Launch Blazor and Web API",
-            "configurations": ["Launch Blazor Frontend", "Launch ASP.NET Core Web API Backend"]
+            "configurations": [
+                "Launch Blazor Frontend",
+                "Launch ASP.NET Core Web API Backend"
+            ]
+        },
+        {
+            "name": "Launch Both with inneditor edge",
+            "configurations": [
+                "Launch Blazor Frontend browserless",
+                "Launch ASP.NET Core Web API Backend browserless",
+                "launch - Edge DevTools"
+            ]
+        },
+        {
+            "name": "Launch Edge Headless and attach DevTools",
+            "configurations": [
+                "Launch Microsoft Edge in headless mode",
+                "Open Edge DevTools"
+            ],
+            "presentation": {
+                "hidden": true
+            }
+        },
+        {
+            "name": "Launch Edge and attach DevTools",
+            "configurations": [
+                "Launch Microsoft Edge",
+                "Open Edge DevTools"
+            ],
+            "presentation": {
+                "hidden": true
+            }
         }
     ]
 }
