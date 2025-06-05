@@ -21,6 +21,9 @@
             "sourceFileMap": {
                 "/Pages": "${workspaceFolder}/mydotnet/myblazor/Components/Pages",
                 "/Shared": "${workspaceFolder}/mydotnet/myblazor/Shared"
+            },
+            "presentation": {
+                "hidden": true
             }
         },
         {
@@ -39,6 +42,9 @@
             },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
+            },
+            "presentation": {
+                "hidden": true
             }
         },
         {
@@ -50,11 +56,6 @@
             "args": [],
             "cwd": "${workspaceFolder}/mydotnet/myblazor",
             "stopAtEntry": false,
-            // "serverReadyAction": {
-            //     "action": "openExternally",
-            //     "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
-            //     "uriFormat": "%s"
-            // },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
@@ -75,11 +76,6 @@
             "args": [],
             "cwd": "${workspaceFolder}/mydotnet/myapi",
             "stopAtEntry": false,
-            // "serverReadyAction": {
-            //     "action": "openExternally",
-            //     "pattern": "\\bNow listening on:\\s+(https?://\\S+)",
-            //     "uriFormat": "%s"
-            // },
             "env": {
                 "ASPNETCORE_ENVIRONMENT": "Development"
             },
@@ -94,20 +90,7 @@
             "runtimeArgs": [
                 "--remote-debugging-port=9222"
             ],
-            "url": "https://jgdtestwebapp.azurewebsites.net",
-            "presentation": {
-                "hidden": true
-            }
-        },
-        {
-            "type": "pwa-msedge",
-            "name": "Launch Microsoft Edge in headless mode",
-            "request": "launch",
-            "runtimeArgs": [
-                "--headless",
-                "--remote-debugging-port=9222"
-            ],
-            "url": "https://jgdtestwebapp.azurewebsites.net",
+            "url": "https://localhost:7192",
             "presentation": {
                 "hidden": true
             }
@@ -134,14 +117,14 @@
     ],
     "compounds": [
         {
-            "name": "Launch Blazor and Web API",
+            "name": "Launch Both with default browser",
             "configurations": [
                 "Launch Blazor Frontend",
                 "Launch ASP.NET Core Web API Backend"
             ]
         },
         {
-            "name": "Launch Both with inneditor edge",
+            "name": "Launch Both with in-editor browser",
             "configurations": [
                 "Launch Blazor Frontend browserless",
                 "Launch ASP.NET Core Web API Backend browserless",
@@ -149,24 +132,12 @@
             ]
         },
         {
-            "name": "Launch Edge Headless and attach DevTools",
+            "name": "Launch Both with edge browser",
             "configurations": [
-                "Launch Microsoft Edge in headless mode",
-                "Open Edge DevTools"
-            ],
-            "presentation": {
-                "hidden": true
-            }
-        },
-        {
-            "name": "Launch Edge and attach DevTools",
-            "configurations": [
-                "Launch Microsoft Edge",
-                "Open Edge DevTools"
-            ],
-            "presentation": {
-                "hidden": true
-            }
+                "Launch Blazor Frontend browserless",
+                "Launch ASP.NET Core Web API Backend browserless",
+                "Launch Microsoft Edge"
+            ]
         }
     ]
 }
