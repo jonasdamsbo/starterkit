@@ -3,8 +3,16 @@ using Microsoft.EntityFrameworkCore.Proxies;
 using myapi.Data;
 using myshared.Models;
 using myapi.Extensions;
+using myapi.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddSession(options =>
+{
+	options.IdleTimeout = TimeSpan.FromMinutes(30); // Customize as needed
+	options.Cookie.HttpOnly = true;
+	options.Cookie.IsEssential = true;
+});
 
 // Add services to the container. // standard
 
@@ -82,6 +90,16 @@ builder.Services.AddCors(options =>
 // build app
 var app = builder.Build();
 
+app.UseSession();
+
+// do stuff on first app load v
+app.RunOnStartup();
+// do stuff on first app load ^
+
+// do stuff on every http request except specified routes v
+app.UseCustomMiddleware();
+// do stuff on every http request except specified routes ^
+
 // angular v
 app.UseCors("AllowAll");
 // angular ^
@@ -119,5 +137,9 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.MapControllers();
+
+// map all custom endpoints from extension v
+app.MapAllEndpoints();
+// map all custom endpoints from extension ^
 
 app.Run();
