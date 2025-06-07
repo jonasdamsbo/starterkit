@@ -41,7 +41,7 @@ steps:
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
-    msbuildArgs: '/t:myblazor /t:myapi /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
+    msbuildArgs: '/t:Monolith /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation="$(build.artifactStagingDirectory)"'
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
@@ -54,7 +54,7 @@ steps:
     dotnet tool install --global dotnet-ef
     dotnet ef migrations script --idempotent --output "$(Pipeline.Workspace)/migrationscript.sql" --context MssqlDataContext
   displayName: Generate EF Core Migration Script
-  workingDirectory: "mydotnet/myapi"
+  workingDirectory: "dotnet/Monolith"
 
 - task: CopyFiles@2
   inputs:

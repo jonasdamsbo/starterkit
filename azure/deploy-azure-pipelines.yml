@@ -34,10 +34,8 @@ variables:
   value: 'Any CPU'
 - name: buildConfiguration
   value: 'Release'
-- name: webappName # Reference library variable 'resourcename' and append 'webapp'
-  value: "$(resourcename)webapp"
-- name: apiappName # Reference library variable 'resourcename' and append 'webapp'
-  value: "$(resourcename)apiapp"
+- name: appName # Reference library variable 'resourcename' and append 'webapp'
+  value: "$(resourcename)app"
 - name: resourcegroupName
   value: "$(resourcename)resourcegroup" # "jgdtestresourcegroup"
 - name: storageaccountName
@@ -434,17 +432,8 @@ stages:
         ConnectionType: 'AzureRM'
         azureSubscription: "$(azureServiceSubscription)"  # Azure service connection name
         appType: 'webApp'
-        WebAppName: '$(webappName)'
-        packageForLinux: '$(artifactPath)/myblazor.zip'
-
-    - task: AzureRmWebAppDeployment@4
-      displayName: 'Deploy api to Azure App Service'
-      inputs:
-        ConnectionType: 'AzureRM'
-        azureSubscription: "$(azureServiceSubscription)"  # Azure service connection name
-        appType: 'webApp'
-        WebAppName: '$(apiappName)'
-        packageForLinux: '$(artifactPath)/myapi.zip'
+        WebAppName: '$(appName)'
+        packageForLinux: '$(artifactPath)/Monolith.zip'
 
     # - task: AzureWebApp@1
     #   inputs:
