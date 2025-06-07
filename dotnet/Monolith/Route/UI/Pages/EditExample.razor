@@ -1,0 +1,83 @@
+﻿@page "/edit-example"
+@page "/edit-example/{Id}"
+@inject NavigationManager NavigationManager
+@inject EnvironmentVariableService EnvironmentVariableService
+@rendermode InteractiveServer
+
+@if(Id is null)
+{
+	<PageTitle>Add a new example</PageTitle>
+	<h3>Add a new example</h3>
+
+	<EditForm Model="CurrentExampleDTO" OnSubmit="HandleSubmit">
+		<div>
+			<label for="title">Title</label>
+			<InputText id="title" @bind-Value="CurrentExampleDTO.Title" class="form-control" />
+		</div>
+		<div>
+			<label for="description">Description</label>
+			<InputText id="description" @bind-Value="CurrentExampleDTO.Description" class="form-control" />
+		</div>
+		<button type="submit" class="btn btn-primary">Save</button>
+	</EditForm>
+}
+else
+{
+	<PageTitle>Edit: "@CurrentExampleDTO.Title"</PageTitle>
+	<h3>Edit: "@CurrentExampleDTO.Title"</h3>
+
+	<EditForm Model="CurrentExampleDTO" OnSubmit="HandleSubmit">
+		<div>
+			<label for="title">Title</label>
+			<InputText id="title" @bind-Value="CurrentExampleDTO.Title" class="form-control" />
+		</div>
+		<div>
+			<label for="description">Description</label>
+			<InputText id="description" @bind-Value="CurrentExampleDTO.Description" class="form-control" />
+		</div>
+		<button type="submit" class="btn btn-primary">Save</button>
+	</EditForm>
+}
+
+@code
+{
+	[Parameter]
+	public string? Id { get; set; }
+
+	public ExampleDTO CurrentExample { get; set; } = new();
+	public ExampleDTO CurrentExampleDTO { get; set; } = new();
+
+	[Inject]
+	public ExampleModelService ExampleModelService { get; set; }
+
+
+	protected override async Task OnParametersSetAsync()
+	{
+		if(Id is not null)
+		{
+			var example = await ExampleModelService.GetByIdAsync(Id);
+
+			if(example is not null)
+			{
+				CurrentExampleDTO = example;
+			}
+		}
+	}
+
+	async Task HandleSubmit()
+	{
+		if(Id is not null)
+		{
+			await ExampleModelService.UpdateAsync(Id, CurrentExampleDTO);
+
+			NavigationManager.NavigateTo("/example");
+		}
+		else
+		{
+			CurrentExampleDTO.Id = "0";
+			await ExampleModelService.AddAsync(CurrentExampleDTO);
+
+			NavigationManager.NavigateTo("/example");
+		}
+	}
+}
