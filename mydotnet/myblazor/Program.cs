@@ -3,6 +3,14 @@ using myblazor.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+	options.IdleTimeout = TimeSpan.FromMinutes(30); // Customize as needed
+	options.Cookie.HttpOnly = true;
+	options.Cookie.IsEssential = true;
+});
+
 // Add services to the container.
 builder.Services.AddRazorComponents()
 	.AddInteractiveServerComponents()
@@ -21,6 +29,8 @@ builder.Services.Configure<IISOptions>(options =>
 });
 
 var app = builder.Build();
+
+app.UseSession();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
