@@ -207,7 +207,7 @@ if($verifySetup -eq "y")
             write-host "   - 1/2 OBS!!! Can be the same as the project name. This is in case you want to use an existing project,"
             write-host "   - 2/2 OBS!!! which might already have resources named after that projects name."
             $resourceName = read-host
-            $testresourcename = "test"+$resourceName
+            $testresourceName = "test"+$resourceName
 
         ## check if resourcegroup exists
             write-host "Checking if resourcegroup exists..."
@@ -466,6 +466,40 @@ if($verifySetup -eq "y")
         write-host 
 
 
+    ################################################## prompting sql db internal or external choice ######################################################
+
+        write-host "################################################"
+        write-host "### Prompting internal or external db choice ###"
+        write-host "################################################"
+
+        $dbchoice = Read-Host "Would you like to have the sql database be part of the Azure resources created by this pipeline (internal), or would you like to use an external database? Type internal or external"
+        $dbchoice = $dbchoice.ToLower()
+
+        while($dbchoice -ne "internal" -and $dbchoice -ne "external")
+        {
+            $dbchoice = Read-Host "Please type either internal or external"
+            $dbchoice = $dbchoice.ToLower()
+        }
+
+        if($dbchoice -eq "external")
+        {
+            write-host "You chose external database"
+            #$useInternalDb = $false
+
+            # prompt for external db connection string
+            $externalDbConnectionString = Read-Host "Please enter the connection string for your external database"
+            $externalDbLogin = Read-Host "Please enter the login name for your external database"
+            $externalDbPassword = Read-Host "Please enter the login password for your external database"
+            $externalDbServerName = Read-Host "Please enter the database server name for your external database"
+            # $externalDbConnectionString = $externalDbConnectionString.Trim()
+
+            # # validate connection string format (basic check)
+            # if($externalDbConnectionString -notmatch "^Server=.*;Database=.*;User Id=.*;Password=.*;$")
+            # {
+            #     write-host "Invalid connection string format. Please ensure it follows the pattern: Server=your_server;Database=your_database;User Id=your_user;Password=your_password;"
+            # }
+        }
+
     ################################################## prepare cloud vars ######################################################
 
         write-host "####################################"
@@ -481,8 +515,24 @@ if($verifySetup -eq "y")
         $sqlconnectionstring = "Server=tcp:"+$resourceName+"mssqlserver.database.windows.net,1433;Initial Catalog="+$resourceName+"mssqldatabase;Persist Security Info=False;User ID="+$resourceName+";Password="+$sqlpassword+";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
         $testsqlconnectionstring = "Server=tcp:"+$testresourceName+"mssqlserver.database.windows.net,1433;Initial Catalog="+$testresourceName+"mssqldatabase;Persist Security Info=False;User ID="+$testresourceName+";Password="+$testsqlpassword+";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
         $sqlservername = $resourceName+"mssqlserver"
-        $testsqlservername = "test"+$resourceName+"mssqlserver"
-        
+        $testsqlservername = $testresourceName+"mssqlserver"
+
+        $sqlloginname = $resourceName
+        $testsqlloginname = $testresourceName
+
+        if($dbchoice -eq "external")
+        {
+            $sqlconnectionstring = $externalDbConnectionString
+            $sqlservername = $externalDbServerName
+            $sqlpassword = $externalDbPassword
+            $sqlloginname = $externalDbLogin
+
+            $testsqlconnectionstring = $externalDbConnectionString
+            $testsqlservername = $externalDbServerName
+            $testsqlpassword = $externalDbPassword
+            $testsqlloginname = $externalDbLogin
+        }
+
         # $buildPipelineName = "Build "+$resourceName
         # $deployPipelineName = "Deploy "+$resourceName
         $buildPipelineName = "Build"
@@ -702,7 +752,7 @@ if($verifySetup -eq "y")
         az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "resourcename" --value $resourceName
         az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "terraformkey" --value $terraformkey
         az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "sqlpassword" --value $sqlpassword --secret true # sensitive
-        az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "sqllogin" --value $resourcename --secret true # sensitive
+        az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "sqllogin" --value $sqlloginname --secret true # sensitive
         az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "sqlconnectionstring" --value $sqlconnectionstring --secret true # sensitive
 
         # for test variable group
@@ -718,7 +768,7 @@ if($verifySetup -eq "y")
         az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "resourcename" --value $testresourcename
         az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "terraformkey" --value $testterraformkey
         az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqlpassword" --value $testsqlpassword --secret true # sensitive
-        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqllogin" --value $testresourcename --secret true # sensitive
+        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqllogin" --value $testsqlloginname --secret true # sensitive
         az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqlconnectionstring" --value $testsqlconnectionstring --secret true # sensitive
 
 
