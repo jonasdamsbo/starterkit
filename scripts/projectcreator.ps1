@@ -647,6 +647,7 @@ if($verifySetup -eq "y")
         az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "terraformkey" --value $terraformkey
         az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "sqlpassword" --value $sqlpassword # sensitive
         az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "sqllogin" --value $resourcename # sensitive
+        az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "environmentname" --value "Production"
 
         # for test variable group
         write-host "Started creating testvariablegroup..."
@@ -662,10 +663,11 @@ if($verifySetup -eq "y")
         az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "terraformkey" --value $testterraformkey
         az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqlpassword" --value $testsqlpassword # sensitive
         az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqllogin" --value $testresourcename # sensitive
+        az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "environmentname" --value "Test"
 
-
+        
         read-host "Done creating library variable group variables... press enter to continue"
-            
+
 
     ################################################## create pipeline ##################################################
         # CREATE PIPELINE HERE

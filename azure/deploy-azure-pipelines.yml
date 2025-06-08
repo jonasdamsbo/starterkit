@@ -60,6 +60,8 @@ variables:
   value: "$(sqlpassword)"
 - name: backupcontainerName
   value: "$(backupcontainer)"
+- name: environmentname
+  value: "$(environmentname)"
 # - name: selectedBuildId # for manual trigger
 #   value: ${{ parameters.buildId }}
 # - name: theprojectname

@@ -21,9 +21,13 @@ Write-Host "TOKENS ARE BEING REPLACED"
 
     $storageaccountname = ${env:STORAGEACCOUNTNAME}
 
+    
+    $environmentname = ${env:ENVIRONMENTNAME}
+
     # to get all values out of tf files and into lib vars
     $terraformcontainer = ${env:TERRAFORMCONTAINER}
     $terraformkey = ${env:TERRAFORMKEY}
+    $testterraformkey = ${env:TESTTERRAFORMKEY}
     $dbbackupcontainer = ${env:BACKUPCONTAINER}
 
     # for azureservice
@@ -54,6 +58,8 @@ Write-Host "TOKENS ARE BEING REPLACED"
     write-host $sqlpassword
 
     write-host $storageconnectionstring
+
+    Write-host $environmentname
 
     write-host "done printing env vars from lib vars"
 
@@ -115,6 +121,7 @@ write-host "started replacing"
     ((Get-Content -path $appservicestfpath -Raw) -replace 'tempsqllogin',$sqllogin) | Set-Content -Path $appservicestfpath
     
     ((Get-Content -path $appservicestfpath -Raw) -replace 'tempsqlconnectionstring',$sqlconnectionstring) | Set-Content -Path $appservicestfpath
+    ((Get-Content -path $appservicestfpath -Raw) -replace 'tempenvironmentname',$environmentname) | Set-Content -Path $appservicestfpath
 
     # to get all values out of tf files and into lib vars
     ((Get-Content -path $maintfpath -Raw) -replace 'tempterraformcontainer',$terraformcontainer) | Set-Content -Path $maintfpath

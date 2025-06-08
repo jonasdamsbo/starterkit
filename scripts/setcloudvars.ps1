@@ -10,28 +10,28 @@ write-host "SETTING CLOUD VARS"
         write-host $resourcename
 
         $resourcegroupname = ${env:RESOURCEGROUPNAME}
-        $apiappname = $resourcename+"app"
+        $appname = $resourcename+"app"
         $sqlservername = ${env:SQLSERVERNAME}
 
 
-### get apiapp ip
+### get app ip
 
-    $apiappip = az webapp show --resource-group $resourcegroupname --name $apiappname
-    $apiappip = $apiappip | ConvertFrom-Json
-    $apiappips = $apiappip.possibleOutboundIpAddresses
-    $apiappipssplit = $apiappips.Split(',')
-    $apiappip = $apiappipssplit[0]
+    $appip = az webapp show --resource-group $resourcegroupname --name $appname
+    $appip = $appip | ConvertFrom-Json
+    $appips = $appip.possibleOutboundIpAddresses
+    $appipssplit = $appips.Split(',')
+    $appip = $appipssplit[0]
 
 
-### add apiapp ip to sqldb
+### add app ip to sqldb
 
     write-host "### Update sqldb"
-    $xindex = 1
-    foreach ($item in $apiappipssplit)
+    $appindex = 1
+    foreach ($appitem in $appipssplit)
     {
-        $rulename = "apiappip"+$xindex
-        az sql server firewall-rule create --resource-group $resourcegroupname -s $sqlservername --name $rulename --start-ip-address $item --end-ip-address $item
-        $xindex = $xindex + 1
+        $apprulename = "appip"+$appindex
+        az sql server firewall-rule create --resource-group $resourcegroupname -s $sqlservername --name $apprulename --start-ip-address $appitem --end-ip-address $appitem
+        $appindex = $appindex + 1
     }
 
 
