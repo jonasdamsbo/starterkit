@@ -604,9 +604,9 @@ if($verifySetup -eq "y")
 
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "tenantid" --value $tenantid # sensitive?
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "clientid" --value $clientid # sensitive?
-        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "clientsecret" --value $clientsecret # sensitive
-        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "storagekey" --value $storagekey # sensitive
-        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "storageconnectionstring" --value $storageconnectionstring # sensitive
+        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "clientsecret" --value $clientsecret --secret true # sensitive
+        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "storagekey" --value $storagekey --secret true # sensitive
+        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "storageconnectionstring" --value $storageconnectionstring --secret true # sensitive
         #az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "sqlpassword" --value $sqlpassword # sensitive
         #az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "sqllogin" --value $resourcename # sensitive
         
@@ -618,7 +618,7 @@ if($verifySetup -eq "y")
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "subscriptionname" --value $subName
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "organizationname" --value $orgName
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "fullorganizationname" --value $fullOrgName
-	    az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "PAT" --value $pat
+	    az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "PAT" --value $pat --secret true # sensitive
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "projectname" --value $projectName
         #az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "resourcename" --value $resourceName
 
@@ -636,7 +636,7 @@ if($verifySetup -eq "y")
         # for prod variable group
         write-host "Started creating prodvariablegroup..."
         $prodVariableGroupName = "prodvariablegroup" # $resourceName+"variablegroup"
-        $prodVariableGroupId = az pipelines variable-group create --name $prodVariableGroupName --organization $fullOrgName --project $projectName --authorize --variables "sqlconnectionstring=$sqlconnectionstring" --output json --query "[id]"
+        $prodVariableGroupId = az pipelines variable-group create --name $prodVariableGroupName --organization $fullOrgName --project $projectName --authorize --variables "environmentname=Production" --output json --query "[id]"
         $prodVariableGroupId = $prodVariableGroupId.Replace("[","")
         $prodVariableGroupId = $prodVariableGroupId.Replace("]","")
         $prodVariableGroupId = $prodVariableGroupId.Replace(" ","")
@@ -645,14 +645,14 @@ if($verifySetup -eq "y")
         az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "sqlservername" --value $sqlservername
         az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "resourcename" --value $resourceName
         az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "terraformkey" --value $terraformkey
-        az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "sqlpassword" --value $sqlpassword # sensitive
-        az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "sqllogin" --value $resourcename # sensitive
-        az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "environmentname" --value "Production"
+        az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "sqlpassword" --value $sqlpassword --secret true # sensitive
+        az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "sqllogin" --value $resourcename --secret true # sensitive
+        az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "sqlconnectionstring" --value $sqlconnectionstring --secret true # sensitive
 
         # for test variable group
         write-host "Started creating testvariablegroup..."
         $testVariableGroupName = "testvariablegroup" # $resourceName+"variablegroup"
-        $testVariableGroupId = az pipelines variable-group create --name $testVariableGroupName --organization $fullOrgName --project $projectName --authorize --variables "sqlconnectionstring=$testsqlconnectionstring" --output json --query "[id]"
+        $testVariableGroupId = az pipelines variable-group create --name $testVariableGroupName --organization $fullOrgName --project $projectName --authorize --variables "environmentname=Test" --output json --query "[id]"
         $testVariableGroupId = $testVariableGroupId.Replace("[","")
         $testVariableGroupId = $testVariableGroupId.Replace("]","")
         $testVariableGroupId = $testVariableGroupId.Replace(" ","")
@@ -661,11 +661,11 @@ if($verifySetup -eq "y")
         az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqlservername" --value $testsqlservername
         az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "resourcename" --value $testresourcename
         az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "terraformkey" --value $testterraformkey
-        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqlpassword" --value $testsqlpassword # sensitive
-        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqllogin" --value $testresourcename # sensitive
-        az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "environmentname" --value "Test"
+        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqlpassword" --value $testsqlpassword --secret true # sensitive
+        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqllogin" --value $testresourcename --secret true # sensitive
+        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqlconnectionstring" --value $testsqlconnectionstring --secret true # sensitive
 
-        
+
         read-host "Done creating library variable group variables... press enter to continue"
 
 
