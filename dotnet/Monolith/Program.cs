@@ -30,7 +30,7 @@ builder.Services.RegisterServices();
 // for mssql
 builder.Services.AddDbContext<MssqlDataContext>(options => options
    .UseSqlServer(builder.Configuration.GetConnectionString("Mssql"))//);
-   .UseLazyLoadingProxies()); // for enabling lazy loading
+   //.UseLazyLoadingProxies()); // for enabling lazy loading
 							  //.EnableSensitiveDataLogging(true));
 
 
