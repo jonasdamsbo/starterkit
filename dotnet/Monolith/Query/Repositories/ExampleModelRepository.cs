@@ -3,6 +3,7 @@
 //using MongoDB.Driver;
 using Monolith.Data;
 using Monolith.Data.Models;
+using Monolith.Logic.DTOs;
 using Monolith.Query.Projections;
 
 namespace Monolith.Query.Repositories
@@ -102,7 +103,7 @@ namespace Monolith.Query.Repositories
 			}
 		}
 
-		public async Task<ExampleProjection?> AddAsync(ExampleProjection newModel)
+		public async Task<ExampleProjection?> AddAsync(ExampleDTO newModel)
         {
             try
             {
@@ -127,7 +128,7 @@ namespace Monolith.Query.Repositories
             }
         }
 
-        public async Task<ExampleProjection?> UpdateAsync(string id, ExampleProjection updatedModel)
+        public async Task<ExampleProjection?> UpdateAsync(string id, ExampleDTO updatedModel)
         {
             try
             {

@@ -1,4 +1,5 @@
-﻿using Monolith.Query.Projections;
+﻿using Monolith.Logic.DTOs;
+using Monolith.Query.Projections;
 
 namespace Monolith.Query.Repositories
 {
@@ -6,8 +7,8 @@ namespace Monolith.Query.Repositories
 	{
 		Task<List<ExampleProjection>?> GetAllAsync();
 		Task<ExampleProjection?> GetByIdAsync(string id);
-		Task<ExampleProjection?> AddAsync(ExampleProjection exampleDTO);
-		Task<ExampleProjection?> UpdateAsync(string id, ExampleProjection updatedExampleDTO);
+		Task<ExampleProjection?> AddAsync(ExampleDTO exampleDTO);
+		Task<ExampleProjection?> UpdateAsync(string id, ExampleDTO updatedExampleDTO);
 		Task<ExampleProjection?> DeleteAsync(string id);
 	}
 }
