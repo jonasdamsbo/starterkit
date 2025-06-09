@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build myblazor",
+            "label": "build app",
             "command": "dotnet",
             "type": "process",
             "args": ["build"],
@@ -12,21 +12,7 @@
                 "isDefault": true
             },
             "options": {
-                "cwd": "${workspaceFolder}/mydotnet/myblazor"
-            }
-        },
-        {
-            "label": "build myapi",
-            "command": "dotnet",
-            "type": "process",
-            "args": ["build"],
-            "problemMatcher": "$msCompile",
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            },
-            "options": {
-                "cwd": "${workspaceFolder}/mydotnet/myapi"
+                "cwd": "${workspaceFolder}/dotnet/Monolith"
             }
         }
     ]
