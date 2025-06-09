@@ -53,7 +53,7 @@
             "runtimeArgs": [
                 "--remote-debugging-port=9222"
             ],
-            "url": "https://localhost:7192",
+            "url": "https://localhost:7226",
             "presentation": {
                 "hidden": true
             }
@@ -62,7 +62,7 @@
             "type": "vscode-edge-devtools.debug",
             "name": "attach - Edge DevTools",
             "request": "attach",
-            "url": "https://localhost:7192",
+            "url": "https://localhost:7226",
             "presentation": {
                 "hidden": true
             }
@@ -71,7 +71,7 @@
             "type": "vscode-edge-devtools.debug",
             "request": "launch",
             "name": "launch - Edge DevTools",
-            "url": "https://localhost:7192",
+            "url": "https://localhost:7226",
             "webRoot": "${workspaceFolder}",
             "presentation": {
                 "hidden": true
