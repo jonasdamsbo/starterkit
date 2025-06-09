@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using Monolith.Logic.DTOs;
 using Monolith.Query.Projections;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -27,6 +28,10 @@ namespace Monolith.Data.Models
 		public ExampleModel(ExampleProjection exampleProjection) =>
 		(Id, Title, Description, ExampleNavigationProperties) = (exampleProjection.Id, exampleProjection.Title, exampleProjection.Description,
 			exampleProjection.ExampleNavigationProperties.Select(x => new ExampleNavigationProperty(x)).ToList()
+		);
+		public ExampleModel(ExampleDTO exampleDTO) =>
+		(Id, Title, Description, ExampleNavigationProperties) = (exampleDTO.Id, exampleDTO.Title, exampleDTO.Description,
+			exampleDTO.ExampleNavigationProperties.Select(x => new ExampleNavigationProperty(x)).ToList()
 		);
 
 		//public ExampleDTO ToDto(ExampleDTO newDto)

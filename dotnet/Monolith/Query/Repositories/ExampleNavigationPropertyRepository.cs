@@ -3,6 +3,7 @@ using MongoDB.Bson;
 //using MongoDB.Driver;
 using Monolith.Data;
 using Monolith.Data.Models;
+using Monolith.Logic.DTOs;
 using Monolith.Query.Projections;
 using System.Linq;
 
@@ -118,7 +119,7 @@ namespace Monolith.Query.Repositories
 			}
 		}
 
-		public async Task<ExampleNavigationPropertyProjection?> AddAsync(ExampleNavigationPropertyProjection newModel)
+		public async Task<ExampleNavigationPropertyProjection?> AddAsync(ExampleNavigationPropertyDTO newModel)
         {
             try
             {
@@ -143,7 +144,7 @@ namespace Monolith.Query.Repositories
             }
         }
 
-        public async Task<ExampleNavigationPropertyProjection?> UpdateAsync(string id, ExampleNavigationPropertyProjection updatedModel)
+        public async Task<ExampleNavigationPropertyProjection?> UpdateAsync(string id, ExampleNavigationPropertyDTO updatedModel)
         {
             try
             {

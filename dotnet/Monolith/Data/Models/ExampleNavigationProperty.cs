@@ -2,6 +2,7 @@
 using System.Text.Json.Serialization;
 using System.ComponentModel.DataAnnotations;
 using Monolith.Query.Projections;
+using Monolith.Logic.DTOs;
 
 namespace Monolith.Data.Models
 {
@@ -28,5 +29,10 @@ namespace Monolith.Data.Models
 			exampleNavigationPropertyProjection.Id, 
 			exampleNavigationPropertyProjection.Title, 
 			new ExampleModel(exampleNavigationPropertyProjection.ExampleProjection));
+		public ExampleNavigationProperty(ExampleNavigationPropertyDTO exampleNavigationPropertyDTO) =>
+		(Id, Title, ExampleModel) = (
+			exampleNavigationPropertyDTO.Id,
+			exampleNavigationPropertyDTO.Title,
+			new ExampleModel(exampleNavigationPropertyDTO.ExampleDTO));
 	}
 }

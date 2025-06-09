@@ -1,4 +1,5 @@
-﻿using Monolith.Query.Projections;
+﻿using Monolith.Data.Models;
+using Monolith.Query.Projections;
 using System.Linq;
 using System.Text.Json.Serialization;
 
@@ -15,6 +16,10 @@ namespace Monolith.Logic.DTOs
 
 		public ExampleDTO() { }
 		public ExampleDTO(ExampleProjection example) =>
+		(Id, Title, Description, ExampleNavigationProperties) = (example.Id, example.Title, example.Description,
+			example.ExampleNavigationProperties.Select(x => new ExampleNavigationPropertyDTO(x)).ToList()
+		);
+		public ExampleDTO(ExampleModel example) =>
 		(Id, Title, Description, ExampleNavigationProperties) = (example.Id, example.Title, example.Description,
 			example.ExampleNavigationProperties.Select(x => new ExampleNavigationPropertyDTO(x)).ToList()
 		);

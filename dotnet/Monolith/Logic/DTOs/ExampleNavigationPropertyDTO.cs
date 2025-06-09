@@ -1,4 +1,5 @@
-﻿using Monolith.Query.Projections;
+﻿using Monolith.Data.Models;
+using Monolith.Query.Projections;
 using System.Text.Json.Serialization;
 
 namespace Monolith.Logic.DTOs
@@ -12,6 +13,8 @@ namespace Monolith.Logic.DTOs
 		public ExampleNavigationPropertyDTO() { }
 		public ExampleNavigationPropertyDTO(ExampleNavigationPropertyProjection example) =>
 		(Id, Title, ExampleDTO) = (example.Id, example.Title, new ExampleDTO(example.ExampleProjection));
+		public ExampleNavigationPropertyDTO(ExampleNavigationProperty example) =>
+		(Id, Title, ExampleDTO) = (example.Id, example.Title, new ExampleDTO(example.ExampleModel));
 
 		// manual mapping, not needed with mapster
 		/*public ExampleDTO(ExampleModel example) =>

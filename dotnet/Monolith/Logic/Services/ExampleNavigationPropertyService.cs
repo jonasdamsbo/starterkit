@@ -67,8 +67,8 @@ namespace Monolith.Logic.Services
 		public async Task<ExampleNavigationPropertyDTO?> AddAsync(ExampleNavigationPropertyDTO exampleNavProp)
 		{
 			exampleNavProp.Id = ObjectId.GenerateNewId().ToString();
-			var example = new ExampleNavigationPropertyProjection(exampleNavProp);
-			var newExampleNavProp = await _exampleNavigationPropertyRepository.AddAsync(example);
+			//var example = new ExampleNavigationPropertyProjection(exampleNavProp);
+			var newExampleNavProp = await _exampleNavigationPropertyRepository.AddAsync(exampleNavProp);
 
 			if (newExampleNavProp is null) return null;
 			if (newExampleNavProp.Id.IsNullOrEmpty()) return new ExampleNavigationPropertyDTO();
@@ -80,9 +80,9 @@ namespace Monolith.Logic.Services
 
 		public async Task<ExampleNavigationPropertyDTO?> UpdateAsync(string id, ExampleNavigationPropertyDTO updatedNavProp)
 		{
-			var example = new ExampleNavigationPropertyProjection(updatedNavProp);
+			//var example = new ExampleNavigationPropertyProjection(updatedNavProp);
 
-			var updatedModel = await _exampleNavigationPropertyRepository.UpdateAsync(id, example);
+			var updatedModel = await _exampleNavigationPropertyRepository.UpdateAsync(id, updatedNavProp);
 
 			if (updatedModel is null) return null;
 			if (updatedModel.Id.IsNullOrEmpty()) return new ExampleNavigationPropertyDTO();
