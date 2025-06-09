@@ -27,7 +27,6 @@ Write-Host "TOKENS ARE BEING REPLACED"
     # to get all values out of tf files and into lib vars
     $terraformcontainer = ${env:TERRAFORMCONTAINER}
     $terraformkey = ${env:TERRAFORMKEY}
-    $testterraformkey = ${env:TESTTERRAFORMKEY}
     $dbbackupcontainer = ${env:BACKUPCONTAINER}
 
     # for azureservice

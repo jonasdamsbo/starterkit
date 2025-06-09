@@ -9,11 +9,11 @@ resources:
   pipelines:
     - pipeline: BuildPipeline  # Logical name to reference this pipeline
       source: Build # Build jgde2ex # tempresourcename   # Actual name of the build pipeline in Azure DevOps
-      branch: master           # Branch to monitor for the build pipeline completion
+      branch: test           # Branch to monitor for the build pipeline completion
       trigger:
         branches:
           include:
-            - master           # Trigger this pipeline when a build from the master branch completes
+            - test           # Trigger this pipeline when a build from the master branch completes
 
 pool:
   vmImage: 'windows-latest'
@@ -27,7 +27,7 @@ pool:
 
 variables:
 - group: myvariablegroup # jgde2exvariablegroup # tempresourcenamevariablegroup
-- group: prodvariablegroup
+- group: testvariablegroup
 - name: solution
   value: '**/*.sln'
 - name: buildPlatform
@@ -81,152 +81,9 @@ stages:
           steps:
             - script: echo "Deployment started!"
 
-  - job: BackupdbJob
-    displayName: Dbbackup job
-    steps:
-    
-    # Download the artifact from the build pipeline
-    - download: BuildPipeline  # Reference to the build pipeline artifact
-      artifact: drop           # Replace 'drop' with your artifact name if it's different
-
-    # download based on specific build id
-    # - task: DownloadPipelineArtifact@2
-    #   inputs:
-    #     source: specific
-    #     project: "$(theprojectname)"
-    #     pipeline: Build
-    #     runVersion: specific
-    #     runId: ${{ coalesce(parameters.buildId, resources.pipeline.BuildPipeline.runID) }}
-    #     artifact: drop
-    #     path: $(Pipeline.Workspace)/drop
-
-
-    - task: AzureCLI@2
-      displayName: "Azure CLI $(artifactPath)/scripts/backupdb.ps1"
-      inputs:
-        azureSubscription: "$(azureServiceSubscription)"
-        scriptType: 'ps'
-        scriptLocation: 'scriptPath'
-        scriptPath: "$(artifactPath)/scripts/backupdb.ps1"
-        arguments: "-filePath '$(artifactPath)'"
-
-
-    # - task: AzureCLI@2
-    #   displayName: 'Temporarily Disable Firewall'
-    #   inputs:
-    #     azureSubscription: "$(azureServiceSubscription)"
-    #     scriptType: 'ps'
-    #     scriptLocation: 'inlineScript'
-    #     inlineScript: |
-    #       $resourceGroup = "$(resourcegroupName)"
-    #       $serverName = "$(sqlserverName)"
-    #       $databaseName = "$(sqldatabaseName)"
-
-    #       # Check if the database exists
-    #       $dbExists = az sql db show `
-    #         --resource-group $resourceGroup `
-    #         --server $serverName `
-    #         --name $databaseName `
-    #         --query "name" -o tsv
-
-    #       if (-not $dbExists) {
-    #         Write-Output "Database '$databaseName' does not exist. Skipping export."
-    #         exit 0
-    #       }
-    #       Write-Output "Database '$databaseName' exists. Proceeding with export."
-
-    #       az sql server firewall-rule create `
-    #         --resource-group "$(resourcegroupName)" `
-    #         --server "$(sqlserverName)" `
-    #         --name AllowAllWindowsAzureIps `
-    #         --start-ip-address 0.0.0.0 `
-    #         --end-ip-address 0.0.0.0
-    #       Start-Sleep -Seconds 5
-
-    # - task: AzureCLI@2
-    #   displayName: 'Export Database to Azure Storage'
-    #   inputs:
-    #     azureSubscription: "$(azureServiceSubscription)"
-    #     scriptType: 'ps'
-    #     scriptLocation: 'inlineScript'
-    #     inlineScript: |
-    #       $resourceGroup = "$(resourcegroupName)"
-    #       $serverName = "$(sqlserverName)"
-    #       $databaseName = "$(sqldatabaseName)"
-    #       $sqlname = "$(sqlusername)"
-    #       $sqlpass = "$(sqlpassword)"
-    #       $storageAccount = "$(storageaccountName)"
-    #       $containerName = "$(backupcontainerName)"
-    #       $storageKey = az storage account keys list --resource-group $resourceGroup --account-name $storageAccount --query "[0].value" -o tsv
-    #       $storageUri = "https://${storageAccount}.blob.core.windows.net/${containerName}/backup-${databaseName}-$(Get-Date -Format yyyyMMddHHmmss).bacpac"
-
-    #       # Check if the database exists
-    #       $dbExists = az sql db show `
-    #         --resource-group $resourceGroup `
-    #         --server $serverName `
-    #         --name $databaseName `
-    #         --query "name" -o tsv
-
-    #       if (-not $dbExists) {
-    #         Write-Output "Database '$databaseName' does not exist. Skipping export."
-    #         exit 0
-    #       }
-    #       Write-Output "Database '$databaseName' exists. Proceeding with export."
-
-    #       # Initiate the export
-    #       az sql db export `
-    #         --admin-user $sqlname `
-    #         --admin-password $sqlpass `
-    #         --name $databaseName `
-    #         --resource-group $resourceGroup `
-    #         --server $serverName `
-    #         --storage-key $storageKey `
-    #         --storage-key-type StorageAccessKey `
-    #         --storage-uri $storageUri
-
-    # - task: AzureCLI@2
-    #   displayName: 'Enable Firewall Again'
-    #   inputs:
-    #     azureSubscription: "$(azureServiceSubscription)"
-    #     scriptType: 'ps'
-    #     scriptLocation: 'inlineScript'
-    #     inlineScript: |
-    #       $resourceGroup = "$(resourcegroupName)"
-    #       $serverName = "$(sqlserverName)"
-    #       $databaseName = "$(sqldatabaseName)"
-
-    #       # Check if the database exists
-    #       $dbExists = az sql db show `
-    #         --resource-group $resourceGroup `
-    #         --server $serverName `
-    #         --name $databaseName `
-    #         --query "name" -o tsv
-
-    #       if (-not $dbExists) {
-    #         Write-Output "Database '$databaseName' does not exist. Skipping export."
-    #         exit 0
-    #       }
-    #       Write-Output "Database '$databaseName' exists. Proceeding with export."
-          
-    #       Start-Sleep -Seconds 5
-    #       az sql server firewall-rule delete `
-    #         --resource-group "$(resourcegroupName)" `
-    #         --server "$(sqlserverName)" `
-    #         --name AllowAllWindowsAzureIps
-
-    # - task: AzureCLI@2
-    #   displayName: 'Verify Export'
-    #   inputs:
-    #     azureSubscription: "$(azureServiceSubscription)" #'your-azure-service-connection'
-    #     scriptType: 'bash'
-    #     scriptLocation: 'inlineScript'
-    #     inlineScript: |
-    #       echo "Checking exported file in Azure Storage"
-    #       az storage blob list --account-name "$(storageaccountName)" --container-name "$(backupcontainerName)" --output table
 
   - job: TerraformJob
     displayName: replacetokens terraform setcloudvars job
-    dependsOn: BackupdbJob
     steps:
     
     # Download the artifact from the build pipeline
