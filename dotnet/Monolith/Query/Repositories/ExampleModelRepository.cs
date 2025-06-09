@@ -83,7 +83,7 @@ namespace Monolith.Query.Repositories
             }
         }
 
-		public async Task<ExampleModel?> GetByIdAsyncModel(string id)
+		private async Task<ExampleModel?> GetByIdAsyncModel(string id)
 		{
 			try
 			{
