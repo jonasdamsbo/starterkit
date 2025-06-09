@@ -24,6 +24,7 @@ while($verifySetup -ne "y" -and $verifySetup -ne "n")
 {
     write-host "Have you verified the above? Otherwise the script will fail. (y/n)" -NoNewline -ForegroundColor Yellow
     $verifySetup = read-host
+    write-host 
 }
 
 if($verifySetup -eq "y")
@@ -31,6 +32,10 @@ if($verifySetup -eq "y")
     Set-Location $PWD.Path
 
     ################################################## run chooseorganization script ##################################################
+
+        write-host "###################################################"
+        write-host "### PAT + Choosing and checking organization... ###"
+        write-host "###################################################"
 
         ## prompt to enter organisation name name
         az login
@@ -68,9 +73,14 @@ if($verifySetup -eq "y")
         $tempProjectId = $tempProjectId.Replace(" ","")
         $statusCode = az devops project delete --id $tempProjectId --organization $fullOrgName -y --output tsv 2>$null
         read-host "Enter to proceed..."
+        write-host 
 
 
     ################################################## run createsubscription script ##################################################
+
+        write-host "#############################################"
+        write-host "### Choosing and checking subscription... ###"
+        write-host "#############################################"
 
         $subName = ""
         $subId = ""
@@ -105,9 +115,14 @@ if($verifySetup -eq "y")
         }
 
         read-host "Enter to proceed..."
+        write-host 
 
 
     ################################################## run chooseproject script ##################################################
+
+        write-host "#############################################"
+        write-host "### Choosing and checking project name... ###"
+        write-host "#############################################"
 
         $projectName = ""
         $projectExists = "false"
@@ -171,9 +186,14 @@ if($verifySetup -eq "y")
         }
 
         read-host "Enter to proceed..."
+        write-host 
 
 
     ################################################## run chooseresources script ##################################################
+
+        write-host "######################################################"
+        write-host "### Choosing and checking preliminary resources... ###"
+        write-host "######################################################"
 
         ## repeat loop if any resource with the desired name already exists
         $resourcegroupExists = "true"
@@ -187,7 +207,7 @@ if($verifySetup -eq "y")
             write-host "   - 1/2 OBS!!! Can be the same as the project name. This is in case you want to use an existing project,"
             write-host "   - 2/2 OBS!!! which might already have resources named after that projects name."
             $resourceName = read-host
-            $testresourcename = "test"+$resourceName
+            $testresourceName = "test"+$resourceName
 
         ## check if resourcegroup exists
             write-host "Checking if resourcegroup exists..."
@@ -274,12 +294,15 @@ if($verifySetup -eq "y")
         }
 
         read-host "Done checking preliminary resources, press enter to proceed..."
+        write-host 
 
     
     # ########################################### register enterprise app and get tenantid, clientid and clientsecret #########################################
 
-        write-host "Getting and replacing tenantid, clientid, clientsecret..."
-        
+        write-host "######################################################"
+        write-host "### Creating appregistration and assigning role... ###"
+        write-host "######################################################"
+
         $subscriptionId = $subId
 
         $applicationName = $resourceName+"appregistration"
@@ -297,10 +320,12 @@ if($verifySetup -eq "y")
         $tenantid = $appDetails.tenant
         write-host "tenantid: $tenantid"
 
-	az role assignment create --assignee $clientid --role "User Access Administrator" --scope "/subscriptions/$subscriptionId"
+	    az role assignment create --assignee $clientid --role "User Access Administrator" --scope "/subscriptions/$subscriptionId"
         write-host "Added role: User Access Administrator"
 
-        read-host "Done getting and replacing tenantid, clientid, clientsecret... press enter to continue"
+        # read-host "Done getting and replacing tenantid, clientid, clientsecret... press enter to continue"
+        read-host "Done creating appregistration and assigning role... press enter to continue"
+        write-host 
 
 
 	### federated identity - apparently only needed/used for github actions, not azure devops
@@ -327,55 +352,65 @@ if($verifySetup -eq "y")
 
             # Write-Host "Federated identity '$federatedCredentialName' created for Azure DevOps."
 
-
+    # ########################################### add as azure devops service connection #########################################
     ### add as azure devops service connection
 
-            $serviceConnectionName = "Azure Resource Manager"
-            # Build the JSON payload
-            $serviceConnectionPayload = @{
-                name = $serviceConnectionName
-                type = "azurerm"
-                authorization = @{
-                    scheme = "ServicePrincipal"
-                    parameters = @{
-                        serviceprincipalid = $clientid
-                        serviceprincipalkey = $clientsecret
-                        tenantid = $tenantid
-                    }
-                    # scheme = "ManagedServiceIdentity"
-                    # parameters = @{
-                    #     tenantid = $tenantid
-                    # }
+        write-host "#####################################"
+        write-host "### Creating serviceconnection... ###"
+        write-host "#####################################"
+
+        $serviceConnectionName = "Azure Resource Manager"
+        # Build the JSON payload
+        $serviceConnectionPayload = @{
+            name = $serviceConnectionName
+            type = "azurerm"
+            authorization = @{
+                scheme = "ServicePrincipal"
+                parameters = @{
+                    serviceprincipalid = $clientid
+                    serviceprincipalkey = $clientsecret
+                    tenantid = $tenantid
                 }
-                url = "https://management.azure.com/"
-                data = @{
-                    subscriptionId = $subscriptionId
-                    subscriptionName = $subName
-                    environment = "AzureCloud"
-                }
-            } | ConvertTo-Json -Depth 10 -Compress
+                # scheme = "ManagedServiceIdentity"
+                # parameters = @{
+                #     tenantid = $tenantid
+                # }
+            }
+            url = "https://management.azure.com/"
+            data = @{
+                subscriptionId = $subscriptionId
+                subscriptionName = $subName
+                environment = "AzureCloud"
+            }
+        } | ConvertTo-Json -Depth 10 -Compress
 
-            # Save JSON payload to a temporary file
-            $tempFile = [System.IO.Path]::GetTempFileName()
-            Set-Content -Path $tempFile -Value $serviceConnectionPayload
+        # Save JSON payload to a temporary file
+        $tempFile = [System.IO.Path]::GetTempFileName()
+        Set-Content -Path $tempFile -Value $serviceConnectionPayload
 
-            # Create the service connection
-            $serviceConnection = az devops service-endpoint create --organization "$fullOrgName" --project "$projectName" --service-endpoint-configuration $tempFile | ConvertFrom-Json
-                        
-            # Remove the temporary file
-            Remove-Item $tempFile
+        # Create the service connection
+        $serviceConnection = az devops service-endpoint create --organization "$fullOrgName" --project "$projectName" --service-endpoint-configuration $tempFile | ConvertFrom-Json
+                    
+        # Remove the temporary file
+        Remove-Item $tempFile
 
-            # Grant permissions to all pipelines
-            az devops service-endpoint update --id $serviceConnection.id --enable-for-all --organization "$fullOrgName" --project "$projectName"
+        # Grant permissions to all pipelines
+        az devops service-endpoint update --id $serviceConnection.id --enable-for-all --organization "$fullOrgName" --project "$projectName"
 
-        
+        read-host "Done creating serviceconnection... press enter to continue"
+        write-host 
+
 
     # ################################################## run create preliminary resources script #################################################
 
         if($resourcesDontExist -eq "true")
         {
             # create resources
-            write-host "Creating preliminary resources..."
+            write-host "#########################################"
+            write-host "### Creating preliminary resources... ###"
+            write-host "#########################################"
+
+
             write-host "path: "$PWD.Path
 
             # create repo - 
@@ -428,9 +463,48 @@ if($verifySetup -eq "y")
         }
 
         read-host "Done creating preliminary resources... press enter to continue"
+        write-host 
 
+
+    ################################################## prompting sql db internal or external choice ######################################################
+
+        write-host "################################################"
+        write-host "### Prompting internal or external db choice ###"
+        write-host "################################################"
+
+        $dbchoice = Read-Host "Would you like to have the sql database be part of the Azure resources created by this pipeline (internal), or would you like to use an external database? Type internal or external"
+        $dbchoice = $dbchoice.ToLower()
+
+        while($dbchoice -ne "internal" -and $dbchoice -ne "external")
+        {
+            $dbchoice = Read-Host "Please type either internal or external"
+            $dbchoice = $dbchoice.ToLower()
+        }
+
+        if($dbchoice -eq "external")
+        {
+            write-host "You chose external database"
+            #$useInternalDb = $false
+
+            # prompt for external db connection string
+            $externalDbConnectionString = Read-Host "Please enter the connection string for your external database"
+            $externalDbLogin = Read-Host "Please enter the login name for your external database"
+            $externalDbPassword = Read-Host "Please enter the login password for your external database"
+            $externalDbServerName = Read-Host "Please enter the database server name for your external database"
+            # $externalDbConnectionString = $externalDbConnectionString.Trim()
+
+            # # validate connection string format (basic check)
+            # if($externalDbConnectionString -notmatch "^Server=.*;Database=.*;User Id=.*;Password=.*;$")
+            # {
+            #     write-host "Invalid connection string format. Please ensure it follows the pattern: Server=your_server;Database=your_database;User Id=your_user;Password=your_password;"
+            # }
+        }
 
     ################################################## prepare cloud vars ######################################################
+
+        write-host "####################################"
+        write-host "### Preparing cloud variables... ###"
+        write-host "####################################"
 
         $weburl = "https://"+$resourceName+"webapp.azurewebsites.net/"
         $sqlpassword = -join (((48..57) | Get-Random | % {[char]$_})+((65..90) | Get-Random | % {[char]$_})+((97..122) | Get-Random | % {[char]$_})+(-join ((48..57) + (65..90) + (97..122) | Get-Random -Count 10 | % {[char]$_})))
@@ -441,17 +515,38 @@ if($verifySetup -eq "y")
         $sqlconnectionstring = "Server=tcp:"+$resourceName+"mssqlserver.database.windows.net,1433;Initial Catalog="+$resourceName+"mssqldatabase;Persist Security Info=False;User ID="+$resourceName+";Password="+$sqlpassword+";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
         $testsqlconnectionstring = "Server=tcp:"+$testresourceName+"mssqlserver.database.windows.net,1433;Initial Catalog="+$testresourceName+"mssqldatabase;Persist Security Info=False;User ID="+$testresourceName+";Password="+$testsqlpassword+";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
         $sqlservername = $resourceName+"mssqlserver"
-        $testsqlservername = "test"+$resourceName+"mssqlserver"
-        
+        $testsqlservername = $testresourceName+"mssqlserver"
+
+        $sqlloginname = $resourceName
+        $testsqlloginname = $testresourceName
+
+        if($dbchoice -eq "external")
+        {
+            $sqlconnectionstring = $externalDbConnectionString
+            $sqlservername = $externalDbServerName
+            $sqlpassword = $externalDbPassword
+            $sqlloginname = $externalDbLogin
+
+            $testsqlconnectionstring = $externalDbConnectionString
+            $testsqlservername = $externalDbServerName
+            $testsqlpassword = $externalDbPassword
+            $testsqlloginname = $externalDbLogin
+        }
+
         # $buildPipelineName = "Build "+$resourceName
         # $deployPipelineName = "Deploy "+$resourceName
         $buildPipelineName = "Build"
         #$deployPipelineName = "Deploy"
 
+        read-host "Done preparing cloud variables, press enter to proceed..."
+        write-host 
+
 
     # ############################################# replace vars in old-project.ps1 ############################################
         
-        write-host "Replacing vars in old-project.ps1"
+        write-host "############################################"
+        write-host "### Replacing vars in old-project.ps1... ###"
+        write-host "############################################"
                 
         Set-Location "./scripts/"
 
@@ -462,6 +557,7 @@ if($verifySetup -eq "y")
         Set-Location ..
 
         read-host "Done replacing vars in old-project.ps1, press enter to proceed..."
+        write-host 
 
     
     # ############################################# replace vars in setcloudvars.ps1 ############################################
@@ -505,7 +601,10 @@ if($verifySetup -eq "y")
 
     # ################################################## replace vars in README.md #################################################
 
-        write-host "Replacing vars in readme.txt" # put alt i readme som ikke sættes i lib vars
+        write-host "#######################################"
+        write-host "### Replacing vars in readme.txt... ###"
+        write-host "#######################################"
+        write-host "" # put alt i readme som ikke sættes i lib vars
 
         ((Get-Content -path README.md -Raw) -replace 'temporganizationname',$orgName) | Set-Content -Path README.md
         ((Get-Content -path README.md -Raw) -replace 'tempsubscriptionname',$subName) | Set-Content -Path README.md
@@ -521,6 +620,7 @@ if($verifySetup -eq "y")
         ((Get-Content -path README.md -Raw) -replace 'tempwebappurl',$weburl) | Set-Content -Path README.md
 
         read-host "Done replacing vars in readme.txt, press enter to proceed..."
+        write-host 
 
 
     ################################################## run pushtorepo script ##################################################
@@ -559,8 +659,9 @@ if($verifySetup -eq "y")
 
         # push repofolder to repo
         ### init git and push initial commit, create branches
-
-        write-host "Configuring and pushing to git repository..."
+        write-host "####################################################"
+        write-host "### Configuring and pushing to git repository... ###"
+        write-host "####################################################"
 
         # init git repo
             git init
@@ -583,10 +684,12 @@ if($verifySetup -eq "y")
             az repos policy approver-count create --allow-downvotes true --blocking true --branch master --creator-vote-counts false --enabled true --minimum-approver-count 1 --repository-id $repositoryId --org $fullOrgName --project $projectName --reset-on-source-push false
 
         Read-Host "Done configuring and pushing to git repository... press enter to continue"
+        write-host 
 
     ################################################## create library variable group ##################################################
-        
-        write-host "Started creating library variablegroup..."
+        write-host "#################################################"
+        write-host "### Started creating library variablegroup... ###"
+        write-host "#################################################"
 
         $variableGroupId = az pipelines variable-group create --name $variableGroupName --organization $fullOrgName --project $projectName --authorize --variables "subscriptionid=$subId" --output json --query "[id]"
         $variableGroupId = $variableGroupId.Replace("[","")
@@ -596,17 +699,20 @@ if($verifySetup -eq "y")
         write-host "variableGroupId: "$variableGroupId
 
         read-host "Done creating library variable group... press enter to continue"
+        write-host 
 
     
     ################################################## new create sensitive library variable group variables ##################################################
-
-        write-host "Started creating library variablegroup variables..."
+        write-host "###########################################################"
+        write-host "### Started creating library variablegroup variables... ###"
+        write-host "###########################################################"
+        write-host ""
 
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "tenantid" --value $tenantid # sensitive?
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "clientid" --value $clientid # sensitive?
-        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "clientsecret" --value $clientsecret # sensitive
-        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "storagekey" --value $storagekey # sensitive
-        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "storageconnectionstring" --value $storageconnectionstring # sensitive
+        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "clientsecret" --value $clientsecret --secret true # sensitive
+        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "storagekey" --value $storagekey --secret true # sensitive
+        az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "storageconnectionstring" --value $storageconnectionstring --secret true # sensitive
         #az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "sqlpassword" --value $sqlpassword # sensitive
         #az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "sqllogin" --value $resourcename # sensitive
         
@@ -618,7 +724,7 @@ if($verifySetup -eq "y")
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "subscriptionname" --value $subName
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "organizationname" --value $orgName
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "fullorganizationname" --value $fullOrgName
-	    az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "PAT" --value $pat
+	    az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "PAT" --value $pat --secret true # sensitive
         az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "projectname" --value $projectName
         #az pipelines variable-group variable create --id $variableGroupId --organization $fullOrgName --project $projectName --name "resourcename" --value $resourceName
 
@@ -636,7 +742,7 @@ if($verifySetup -eq "y")
         # for prod variable group
         write-host "Started creating prodvariablegroup..."
         $prodVariableGroupName = "prodvariablegroup" # $resourceName+"variablegroup"
-        $prodVariableGroupId = az pipelines variable-group create --name $prodVariableGroupName --organization $fullOrgName --project $projectName --authorize --variables "sqlconnectionstring=$sqlconnectionstring" --output json --query "[id]"
+        $prodVariableGroupId = az pipelines variable-group create --name $prodVariableGroupName --organization $fullOrgName --project $projectName --authorize --variables "environmentname=Production" --output json --query "[id]"
         $prodVariableGroupId = $prodVariableGroupId.Replace("[","")
         $prodVariableGroupId = $prodVariableGroupId.Replace("]","")
         $prodVariableGroupId = $prodVariableGroupId.Replace(" ","")
@@ -645,13 +751,14 @@ if($verifySetup -eq "y")
         az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "sqlservername" --value $sqlservername
         az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "resourcename" --value $resourceName
         az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "terraformkey" --value $terraformkey
-        az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "sqlpassword" --value $sqlpassword # sensitive
-        az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "sqllogin" --value $resourcename # sensitive
+        az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "sqlpassword" --value $sqlpassword --secret true # sensitive
+        az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "sqllogin" --value $sqlloginname --secret true # sensitive
+        az pipelines variable-group variable create --id $prodVariableGroupId --organization $fullOrgName --project $projectName --name "sqlconnectionstring" --value $sqlconnectionstring --secret true # sensitive
 
         # for test variable group
         write-host "Started creating testvariablegroup..."
         $testVariableGroupName = "testvariablegroup" # $resourceName+"variablegroup"
-        $testVariableGroupId = az pipelines variable-group create --name $testVariableGroupName --organization $fullOrgName --project $projectName --authorize --variables "sqlconnectionstring=$testsqlconnectionstring" --output json --query "[id]"
+        $testVariableGroupId = az pipelines variable-group create --name $testVariableGroupName --organization $fullOrgName --project $projectName --authorize --variables "environmentname=Test" --output json --query "[id]"
         $testVariableGroupId = $testVariableGroupId.Replace("[","")
         $testVariableGroupId = $testVariableGroupId.Replace("]","")
         $testVariableGroupId = $testVariableGroupId.Replace(" ","")
@@ -660,16 +767,20 @@ if($verifySetup -eq "y")
         az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqlservername" --value $testsqlservername
         az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "resourcename" --value $testresourcename
         az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "terraformkey" --value $testterraformkey
-        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqlpassword" --value $testsqlpassword # sensitive
-        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqllogin" --value $testresourcename # sensitive
+        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqlpassword" --value $testsqlpassword --secret true # sensitive
+        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqllogin" --value $testsqlloginname --secret true # sensitive
+        az pipelines variable-group variable create --id $testVariableGroupId --organization $fullOrgName --project $projectName --name "sqlconnectionstring" --value $testsqlconnectionstring --secret true # sensitive
 
 
         read-host "Done creating library variable group variables... press enter to continue"
-            
+        write-host 
+
 
     ################################################## create pipeline ##################################################
         # CREATE PIPELINE HERE
-        write-host "Started creating pipeline..."
+        write-host "####################################"
+        write-host "### Started creating pipeline... ###"
+        write-host "####################################"
 
             # deploypipelinename and buildpipelinename is in preparecloudvars ^
             az pipelines create --name $buildPipelineName --yml-path '\azure\azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master"
@@ -702,9 +813,15 @@ if($verifySetup -eq "y")
 
                 
         Read-Host "Done creating pipeline... press enter to continue"
+        write-host 
 
 
     ################################################## prompt set up release in azure devops ##################################################
+    
+        write-host "#################################################"
+        write-host "### Final choices before everything is set up ###"
+        write-host "#################################################"
+
         write-host 
         write-host "Finally,"
         # write-host "Finally, you can choose to use the deploy.yml for releases, or use the manual Azure Devops Releases"
@@ -783,6 +900,10 @@ if($verifySetup -eq "y")
         # write-host 
 
     ################################################## before pipeline and tools-installer ##################################################
+
+        write-host "##############################################"
+        write-host "### Additional development tools prompting ###"
+        write-host "##############################################"
 
         write-host "Your project is set up!"
 

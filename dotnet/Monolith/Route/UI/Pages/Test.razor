@@ -1,0 +1,68 @@
+﻿@page "/test"
+@rendermode InteractiveServer
+@attribute [StreamRendering]
+
+<PageTitle>Test @TestDto?.Title</PageTitle>
+
+<p>@TestDto?.Title</p>
+
+@if (TestDto == null || TestDto.StringList.Count == 0)
+{
+    <h1 class="loading" style="margin:auto;">Loading...</h1>
+}
+else
+{
+    <div class="flexcontainer">
+
+        <div class="wrapper">
+            <h1>Async List</h1>
+            <ul>
+                @foreach (var item in TestDto.StringList)
+                {
+                    <li>
+                        @item
+                        <button @onclick="@(() => Click(item))">Remove</button>
+                    </li>
+                }
+            </ul>
+        </div>
+
+        <div class="wrapper">
+            <h1>List swap</h1>
+            <div style="display:flex;">
+                <ul style="display: inline-block;">
+                    @foreach (var item in TestDto.list1)
+                    {
+                        <li>
+                            @item
+                            <button @onclick="@(() => Swap1(item))">Move to list2</button>
+                        </li>
+                    }
+                </ul>
+                <ul style="display: inline-block;">
+                    @foreach (var item in TestDto.list2)
+                    {
+                        <li>
+                            @item
+                            <button @onclick="@(() => Swap2(item))">Move to list1</button>
+                        </li>
+                    }
+                </ul>
+            </div>
+
+        </div>
+
+        <div class="wrapper">
+            <h1>Counter</h1>
+            <p>@TestDto.Counter</p>
+            <button @onclick="@(() => Increment())">Increment</button>
+        </div>
+
+        <div class="wrapper">
+            <div class="pointer @TestDto.elementStyles.Where(q => q.Key == TestDto.elementRef.Id).FirstOrDefault().Value" @ref=TestDto.elementRef @onclick="@(() => SetClass(TestDto.elementRef.Id))">
+                <h1>Click me</h1>
+            </div>
+        </div>
+
+    </div>
+}

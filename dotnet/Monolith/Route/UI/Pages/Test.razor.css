@@ -1,0 +1,50 @@
+﻿h1 {
+    text-align: center;
+}
+
+.flexcontainer {
+    display: flex;
+    justify-content: space-between;
+    width: 80%;
+}
+
+.wrapper {
+    text-align: center;
+}
+
+.loading {
+    animation: spin 4s linear;
+    margin-top: 100px !important;
+}
+
+@keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+        font-size: 40px;
+    }
+    75% {
+        font-size: 60px;
+    }
+    50% {
+        font-size: 40px;
+    }
+    25% {
+        font-size: 60px;
+    }
+    0% {
+        font-size: 40px;
+    }
+}
+
+.red{
+    background-color: red;
+    cursor: pointer;
+}
+.blue {
+    background-color: blue;
+    cursor: pointer;
+}
+.pointer{
+    cursor: pointer;
+}
