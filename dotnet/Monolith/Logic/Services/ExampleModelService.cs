@@ -56,9 +56,10 @@ namespace Monolith.Logic.Services
 
 		public async Task<ExampleDTO?> AddAsync(ExampleDTO exampleDTO)
 		{
+			exampleDTO.Id = ObjectId.GenerateNewId().ToString();
+			exampleDTO.ExampleNavigationProperties = new List<ExampleNavigationPropertyDTO>();
 			var exampleModel = new ExampleProjection(exampleDTO);
 
-			exampleModel.Id = ObjectId.GenerateNewId().ToString();
 			var newExampleModel = await _exampleModelRepository.AddAsync(exampleModel);
 
 			if (newExampleModel is null) return null;
