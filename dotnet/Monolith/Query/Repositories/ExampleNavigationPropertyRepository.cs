@@ -3,6 +3,7 @@ using MongoDB.Bson;
 //using MongoDB.Driver;
 using Monolith.Data;
 using Monolith.Data.Models;
+using Monolith.Query.Projections;
 using System.Linq;
 
 namespace Monolith.Query.Repositories
@@ -19,12 +20,18 @@ namespace Monolith.Query.Repositories
             _log = log;
         }
 
-        public async Task<List<ExampleNavigationProperty>?> GetAllAsync()
+        public async Task<List<ExampleNavigationPropertyProjection>?> GetAllAsync()
         {
             try
             {
                 var examples = await _context.ExampleNavigationProperties
-                    .Include(x => x.ExampleModel)
+					.Include(x => x.ExampleModel)
+					.Select(x => new ExampleNavigationPropertyProjection
+					{
+						Id = x.Id,
+						Title = x.Title,
+						ExampleProjection = new ExampleProjection(x.ExampleModel)
+					})
                     .ToListAsync();
 
                 return examples;
@@ -39,14 +46,20 @@ namespace Monolith.Query.Repositories
         }
 
         // should be in all repositories whos model uses a foreign key
-        public async Task<List<ExampleNavigationProperty>?> GetByExampleModelIdAsync(string exampleModelId)
+        public async Task<List<ExampleNavigationPropertyProjection>?> GetByExampleModelIdAsync(string exampleModelId)
         {
             try
             {
                 var exampleNavProps = await _context.ExampleNavigationProperties
                     .Where(x => x.ExampleModel.Id == exampleModelId)
                     .Include(x => x.ExampleModel)
-                    .ToListAsync();
+					.Select(x => new ExampleNavigationPropertyProjection
+					{
+						Id = x.Id,
+						Title = x.Title,
+						ExampleProjection = new ExampleProjection(x.ExampleModel)
+					})
+					.ToListAsync();
 
                 return exampleNavProps;
             }
@@ -59,14 +72,20 @@ namespace Monolith.Query.Repositories
             }
         }
 
-        public async Task<ExampleNavigationProperty?> GetByIdAsync(string id)
+        public async Task<ExampleNavigationPropertyProjection?> GetByIdAsync(string id)
         {
             try
             {
                 var exampleNavProp = await _context.ExampleNavigationProperties
                     .Where(x => x.ExampleModel.Id == id)
                     .Include(x => x.ExampleModel)
-                    .FirstOrDefaultAsync();
+					.Select(x => new ExampleNavigationPropertyProjection
+					{
+						Id = x.Id,
+						Title = x.Title,
+						ExampleProjection = new ExampleProjection(x.ExampleModel)
+					})
+					.FirstOrDefaultAsync();
 
                 return exampleNavProp;
             }
@@ -79,14 +98,36 @@ namespace Monolith.Query.Repositories
             }
         }
 
-        public async Task<ExampleNavigationProperty?> AddAsync(ExampleNavigationProperty newModel)
+		public async Task<ExampleNavigationProperty?> GetByIdAsyncModel(string id)
+		{
+			try
+			{
+				var exampleNavProp = await _context.ExampleNavigationProperties
+					.Where(x => x.ExampleModel.Id == id)
+					.Include(x => x.ExampleModel)
+					.FirstOrDefaultAsync();
+
+				return exampleNavProp;
+			}
+			catch (Exception ex)
+			{
+				_log.LogError("\r\n" + "\r\n" + "### Exception thrown at 'ExampleNavigationPropertyRepository/GetByIdAsync' --> " + ex.ToString() + " <-- ###" + "\r\n" + "\r\n"); // saved to apptracelogs in azure
+				Console.WriteLine("### Exception thrown at 'ExampleNavigationPropertyRepository/GetByIdAsync' --> " + ex.ToString() + " <-- ###"); // shown in app console
+
+				return null;
+			}
+		}
+
+		public async Task<ExampleNavigationPropertyProjection?> AddAsync(ExampleNavigationPropertyProjection newModel)
         {
             try
             {
                 //if((await GetByIdAsync(newModel.Id)) != null) return null;
                 newModel.Id = ObjectId.GenerateNewId().ToString();
 
-                _context.Add(newModel);
+                var example = new ExampleNavigationProperty(newModel);
+
+                _context.Add(example);
                 await _context.SaveChangesAsync();
 
                 var newExample = await GetByIdAsync(newModel.Id);
@@ -102,11 +143,11 @@ namespace Monolith.Query.Repositories
             }
         }
 
-        public async Task<ExampleNavigationProperty?> UpdateAsync(string id, ExampleNavigationProperty updatedModel)
+        public async Task<ExampleNavigationPropertyProjection?> UpdateAsync(string id, ExampleNavigationPropertyProjection updatedModel)
         {
             try
             {
-                var example = await GetByIdAsync(id);
+                var example = await GetByIdAsyncModel(id);
 
                 example.Title = updatedModel.Title;
                 await _context.SaveChangesAsync();
@@ -124,16 +165,18 @@ namespace Monolith.Query.Repositories
             }
         }
 
-        public async Task<ExampleNavigationProperty?> DeleteAsync(string id)
+        public async Task<ExampleNavigationPropertyProjection?> DeleteAsync(string id)
         {
             try
             {
-                var example = await GetByIdAsync(id);
+                var example = await GetByIdAsyncModel(id);
 
                 _context.ExampleNavigationProperties.Remove(example);
                 await _context.SaveChangesAsync();
 
-                return example;
+                var returnExample = new ExampleNavigationPropertyProjection(example);
+
+				return returnExample;
             }
             catch (Exception ex)
             {

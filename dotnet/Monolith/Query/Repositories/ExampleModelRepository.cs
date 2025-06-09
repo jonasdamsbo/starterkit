@@ -3,6 +3,7 @@
 //using MongoDB.Driver;
 using Monolith.Data;
 using Monolith.Data.Models;
+using Monolith.Query.Projections;
 
 namespace Monolith.Query.Repositories
 {
@@ -18,15 +19,30 @@ namespace Monolith.Query.Repositories
             _log = log;
         }
 
-        public async Task<List<ExampleModel>?> GetAllAsync()
+        public async Task<List<ExampleProjection>?> GetAllAsync()
         {
             try
             {
 				//var examples = await _context.ExampleModels.ToListAsync(); // lazy
-				var examples = await _context.ExampleModels.Include(x => x.ExampleNavigationProperties).ToListAsync(); // eager
+				//var examples = await _context.ExampleModels.Include(x => x.ExampleNavigationProperties).ToListAsync(); // eager
+
+				var examples = await _context.ExampleModels
+				.Include(x => x.ExampleNavigationProperties)
+				.Select(x => new ExampleProjection
+				{
+					Id = x.Id,
+					Title = x.Title,
+					Description = x.Description,
+					ExampleNavigationProperties = x.ExampleNavigationProperties.Select(y => new ExampleNavigationPropertyProjection
+					{
+						Id = y.Id,
+						Title = y.Title
+					}).ToList()
+				})
+				.ToListAsync();
 
 				return examples;
-            }
+			}
             catch (Exception ex)
             {
                 _log.LogError("\r\n" + "\r\n" + "### Exception thrown at 'ExampleModelRepository/GetAllAsync' --> " + ex.ToString() + " <-- ###" + "\r\n" + "\r\n"); // saved to apptracelogs in azure
@@ -36,11 +52,25 @@ namespace Monolith.Query.Repositories
             }
         }
 
-        public async Task<ExampleModel?> GetByIdAsync(string id)
+        public async Task<ExampleProjection?> GetByIdAsync(string id)
         {
             try
             {
-                var example = await _context.ExampleModels.FindAsync(id);
+                var example = await _context.ExampleModels
+                    .Where(x => x.Id == id)
+                    .Select(x => new ExampleProjection
+				    {
+					    Id = x.Id,
+					    Title = x.Title,
+					    Description = x.Description,
+					    ExampleNavigationProperties = x.ExampleNavigationProperties
+                            .Select(y => new ExampleNavigationPropertyProjection
+					        {
+						        Id = y.Id,
+						        Title = y.Title
+					        }).ToList()
+				    })
+                    .FirstOrDefaultAsync();
 
                 return example;
             }
@@ -53,17 +83,38 @@ namespace Monolith.Query.Repositories
             }
         }
 
-        public async Task<ExampleModel?> AddAsync(ExampleModel newModel)
+		public async Task<ExampleModel?> GetByIdAsyncModel(string id)
+		{
+			try
+			{
+				var example = await _context.ExampleModels
+					.Where(x => x.Id == id)
+					.FirstOrDefaultAsync();
+
+				return example;
+			}
+			catch (Exception ex)
+			{
+				_log.LogError("\r\n" + "\r\n" + "### Exception thrown at 'ExampleModelRepository/GetByIdAsync' --> " + ex.ToString() + " <-- ###" + "\r\n" + "\r\n"); // saved to apptracelogs in azure
+				Console.WriteLine("### Exception thrown at 'ExampleModelRepository/GetByIdAsync' --> " + ex.ToString() + " <-- ###"); // shown in app console
+
+				return null;
+			}
+		}
+
+		public async Task<ExampleProjection?> AddAsync(ExampleProjection newModel)
         {
             try
             {
                 //if((await GetByIdAsync(newModel.Id)) != null) return null;
                 //newModel.Id = ObjectId.GenerateNewId().ToString();
 
-                _context.Add(newModel);
+                var example = new ExampleModel(newModel);
+
+                _context.Add(example);
                 await _context.SaveChangesAsync();
 
-                var newExample = await GetByIdAsync(newModel.Id);
+                var newExample = await GetByIdAsync(example.Id);
 
                 return newExample;
             }
@@ -76,11 +127,11 @@ namespace Monolith.Query.Repositories
             }
         }
 
-        public async Task<ExampleModel?> UpdateAsync(string id, ExampleModel updatedModel)
+        public async Task<ExampleProjection?> UpdateAsync(string id, ExampleProjection updatedModel)
         {
             try
             {
-                var example = await GetByIdAsync(id);
+                var example = await GetByIdAsyncModel(id);
 
                 example.Title = updatedModel.Title;
                 example.Description = updatedModel.Description;
@@ -99,16 +150,18 @@ namespace Monolith.Query.Repositories
             }
         }
 
-        public async Task<ExampleModel?> DeleteAsync(string id)
+        public async Task<ExampleProjection?> DeleteAsync(string id)
         {
             try
             {
-                var example = await GetByIdAsync(id);
-                
-                _context.ExampleModels.Remove(example);
+				var example = await GetByIdAsyncModel(id);
+
+				_context.ExampleModels.Remove(example);
                 await _context.SaveChangesAsync();
-                
-                return example;
+
+				var returnExample = new ExampleProjection(example);
+
+				return returnExample;
             }
             catch (Exception ex)
             {

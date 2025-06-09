@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using System.ComponentModel.DataAnnotations;
+using Monolith.Query.Projections;
 
 namespace Monolith.Data.Models
 {
@@ -21,5 +22,11 @@ namespace Monolith.Data.Models
 		public ExampleNavigationProperty() {
 			Id = Guid.NewGuid().ToString();
 		 }
+
+		public ExampleNavigationProperty(ExampleNavigationPropertyProjection exampleNavigationPropertyProjection) =>
+		(Id, Title, ExampleModel) = (
+			exampleNavigationPropertyProjection.Id, 
+			exampleNavigationPropertyProjection.Title, 
+			new ExampleModel(exampleNavigationPropertyProjection.ExampleProjection));
 	}
 }

@@ -5,6 +5,7 @@ using Monolith.Query.Repositories;
 using Microsoft.IdentityModel.Tokens;
 //using Microsoft.TeamFoundation.Common;
 using Monolith.Logic.DTOs;
+using Monolith.Query.Projections;
 
 namespace Monolith.Logic.Services
 {
@@ -63,10 +64,11 @@ namespace Monolith.Logic.Services
 			return exampleNavigationPropertyDTOs;
 		}
 
-		public async Task<ExampleNavigationPropertyDTO?> AddAsync(ExampleNavigationProperty exampleNavProp)
+		public async Task<ExampleNavigationPropertyDTO?> AddAsync(ExampleNavigationPropertyDTO exampleNavProp)
 		{
 			exampleNavProp.Id = ObjectId.GenerateNewId().ToString();
-			var newExampleNavProp = await _exampleNavigationPropertyRepository.AddAsync(exampleNavProp);
+			var example = new ExampleNavigationPropertyProjection(exampleNavProp);
+			var newExampleNavProp = await _exampleNavigationPropertyRepository.AddAsync(example);
 
 			if (newExampleNavProp is null) return null;
 			if (newExampleNavProp.Id.IsNullOrEmpty()) return new ExampleNavigationPropertyDTO();
@@ -76,9 +78,11 @@ namespace Monolith.Logic.Services
 			return newExampleNavPropDTO;
 		}
 
-		public async Task<ExampleNavigationPropertyDTO?> UpdateAsync(string id, ExampleNavigationProperty updatedNavProp)
+		public async Task<ExampleNavigationPropertyDTO?> UpdateAsync(string id, ExampleNavigationPropertyDTO updatedNavProp)
 		{
-			var updatedModel = await _exampleNavigationPropertyRepository.UpdateAsync(id, updatedNavProp);
+			var example = new ExampleNavigationPropertyProjection(updatedNavProp);
+
+			var updatedModel = await _exampleNavigationPropertyRepository.UpdateAsync(id, example);
 
 			if (updatedModel is null) return null;
 			if (updatedModel.Id.IsNullOrEmpty()) return new ExampleNavigationPropertyDTO();

@@ -5,6 +5,7 @@ using Monolith.Query.Repositories;
 using Moq;
 using Monolith.Logic.Services;
 using Monolith.Logic.DTOs;
+using Monolith.Query.Projections;
 
 namespace Monolith.Tests
 {
@@ -15,7 +16,7 @@ namespace Monolith.Tests
 		{
 			// Arrange
 			var modelId = "1";
-			var expectedModel = new ExampleModel
+			var expectedModel = new ExampleProjection
 			{
 				Id = modelId,
 				Title = "test",

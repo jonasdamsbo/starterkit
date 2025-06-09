@@ -1,14 +1,13 @@
-﻿using Monolith.Logic.DTOs;
-using Monolith.Data.Models;
+﻿using Monolith.Query.Projections;
 
 namespace Monolith.Query.Repositories
 {
 	public interface IExampleModelRepository
 	{
-		Task<List<ExampleModel>?> GetAllAsync();
-		Task<ExampleModel?> GetByIdAsync(string id);
-		Task<ExampleModel?> AddAsync(ExampleModel exampleDTO);
-		Task<ExampleModel?> UpdateAsync(string id, ExampleModel updatedExampleDTO);
-		Task<ExampleModel?> DeleteAsync(string id);
+		Task<List<ExampleProjection>?> GetAllAsync();
+		Task<ExampleProjection?> GetByIdAsync(string id);
+		Task<ExampleProjection?> AddAsync(ExampleProjection exampleDTO);
+		Task<ExampleProjection?> UpdateAsync(string id, ExampleProjection updatedExampleDTO);
+		Task<ExampleProjection?> DeleteAsync(string id);
 	}
 }

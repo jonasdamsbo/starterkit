@@ -4,6 +4,7 @@ using Monolith.Logic.DTOs;
 using Monolith.Data.Models;
 using Monolith.Query.Repositories;
 using Microsoft.IdentityModel.Tokens;
+using Monolith.Query.Projections;
 //using Microsoft.TeamFoundation.Common;
 
 namespace Monolith.Logic.Services
@@ -55,7 +56,7 @@ namespace Monolith.Logic.Services
 
 		public async Task<ExampleDTO?> AddAsync(ExampleDTO exampleDTO)
 		{
-			var exampleModel = new ExampleModel(exampleDTO);
+			var exampleModel = new ExampleProjection(exampleDTO);
 
 			exampleModel.Id = ObjectId.GenerateNewId().ToString();
 			var newExampleModel = await _exampleModelRepository.AddAsync(exampleModel);
@@ -68,7 +69,7 @@ namespace Monolith.Logic.Services
 
 		public async Task<ExampleDTO?> UpdateAsync(string id, ExampleDTO updatedExampleDTO)
 		{
-			var exampleModel = new ExampleModel(updatedExampleDTO);
+			var exampleModel = new ExampleProjection(updatedExampleDTO);
 			exampleModel.Id = id;
 
 

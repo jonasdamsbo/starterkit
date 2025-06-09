@@ -8,7 +8,6 @@
 
   <ItemGroup>
     <Folder Include="Logic\Utilities\" />
-    <Folder Include="Query\Projections\" />
   </ItemGroup>
 
   <ItemGroup>
