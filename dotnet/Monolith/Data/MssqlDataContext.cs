@@ -35,13 +35,13 @@ namespace Monolith.Data
 			List<ExampleModel> exampleList = new List<ExampleModel>();
 			List<ExampleNavigationProperty> navPropList = new List<ExampleNavigationProperty>();
 
-			exampleList.Add(new ExampleModel { Id = ObjectId.GenerateNewId().ToString(), Title = "First example", Description = "Some field of first example"/*, WebUrl = "google.dk"*/, ExampleNavigationProperties = new List<ExampleNavigationProperty>() });
-			exampleList.Add(new ExampleModel { Id = ObjectId.GenerateNewId().ToString(), Title = "Second example", Description = "Some field of second example"/*, WebUrl = "google.dk"*/, ExampleNavigationProperties = new List<ExampleNavigationProperty>() });
-			exampleList.Add(new ExampleModel { Id = ObjectId.GenerateNewId().ToString(), Title = "Third example", Description = "Some field of third example"/*, WebUrl = "google.dk"*/, ExampleNavigationProperties = new List<ExampleNavigationProperty>() });
+			exampleList.Add(new ExampleModel { Id = "684d8e7cc02a4db5abb84928"/*ObjectId.GenerateNewId().ToString()*/, Title = "First example", Description = "Some field of first example"/*, WebUrl = "google.dk"*/, ExampleNavigationProperties = new List<ExampleNavigationProperty>() });
+			exampleList.Add(new ExampleModel { Id = "684d8e7cc02a4db5abb84926"/*ObjectId.GenerateNewId().ToString()*/, Title = "Second example", Description = "Some field of second example"/*, WebUrl = "google.dk"*/, ExampleNavigationProperties = new List<ExampleNavigationProperty>() });
+			exampleList.Add(new ExampleModel { Id = "684d8e7cc02a4db5abb84924"/*ObjectId.GenerateNewId().ToString()*/, Title = "Third example", Description = "Some field of third example"/*, WebUrl = "google.dk"*/, ExampleNavigationProperties = new List<ExampleNavigationProperty>() });
 
-			navPropList.Add(new ExampleNavigationProperty { Id = ObjectId.GenerateNewId().ToString(), Title = "First navprop", ExampleModelId = exampleList[0].Id });
-			navPropList.Add(new ExampleNavigationProperty { Id = ObjectId.GenerateNewId().ToString(), Title = "Second navprop", ExampleModelId = exampleList[0].Id });
-			navPropList.Add(new ExampleNavigationProperty { Id = ObjectId.GenerateNewId().ToString(), Title = "Third navprop", ExampleModelId = exampleList[1].Id });
+			navPropList.Add(new ExampleNavigationProperty { Id = "684d8e7cc02a4db5abb8492b"/*ObjectId.GenerateNewId().ToString()*/, Title = "First navprop", ExampleModelId = exampleList[0].Id });
+			navPropList.Add(new ExampleNavigationProperty { Id = "684d8e7cc02a4db5abb8492a"/*ObjectId.GenerateNewId().ToString()*/, Title = "Second navprop", ExampleModelId = exampleList[0].Id });
+			navPropList.Add(new ExampleNavigationProperty { Id = "684d8e7cc02a4db5abb84929"/*ObjectId.GenerateNewId().ToString()*/, Title = "Third navprop", ExampleModelId = exampleList[1].Id });
 
 			//exampleList[0].ExampleNavigationProperty.Add(navPropList[0]);
 			//exampleList[1].ExampleNavigationProperty.Add(navPropList[1]);
