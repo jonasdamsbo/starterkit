@@ -27,12 +27,26 @@ builder.Services.AddServerSideBlazor().AddCircuitOptions(options => { options.De
 builder.Services.RegisterServices();
 // add services ^
 
-// for mssql
+// for mssql v
+
+//var env = builder.Environment;
+
+//if (!env.IsProduction()/*env.IsDevelopment() || env.IsEnvironment("Test")*/)
+//{
+//	builder.Services.AddDbContext<MssqlDataContext>(options =>
+//		options.UseInMemoryDatabase("DevOrTestDb"));
+//}
+//else
+//{
+//	builder.Services.AddDbContext<MssqlDataContext>(options => options
+//   .UseSqlServer(builder.Configuration.GetConnectionString("Mssql")));
+//}
 builder.Services.AddDbContext<MssqlDataContext>(options => options
    .UseSqlServer(builder.Configuration.GetConnectionString("Mssql")));
-   //.UseLazyLoadingProxies()); // for enabling lazy loading
-							  //.EnableSensitiveDataLogging(true));
+//.UseLazyLoadingProxies()); // for enabling lazy loading
+//.EnableSensitiveDataLogging(true));
 
+// for mssql ^
 
 var app = builder.Build();
 

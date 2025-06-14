@@ -1,4 +1,6 @@
-﻿namespace Monolith.Extensions
+﻿using Monolith.Data;
+
+namespace Monolith.Extensions
 {
 	public static class AppStartupTasksExtension
 	{
@@ -13,6 +15,13 @@
 					.CreateLogger("AppStartupTasksExtension");
 
 				// Do startup tasks here
+				//var env = (app as WebApplication)?.Environment;
+				//if (!env.IsProduction())
+				//{
+				//	var db = scope.ServiceProvider.GetRequiredService<MssqlDataContext>();
+				//	db.Database.EnsureCreated();
+				//}
+
 				logger.LogInformation("Startups tasks has run");
 			}
 		}
