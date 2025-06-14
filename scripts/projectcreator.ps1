@@ -468,37 +468,37 @@ if($verifySetup -eq "y")
 
     ################################################## prompting sql db internal or external choice ######################################################
 
-        write-host "################################################"
-        write-host "### Prompting internal or external db choice ###"
-        write-host "################################################"
+        # write-host "################################################"
+        # write-host "### Prompting internal or external db choice ###"
+        # write-host "################################################"
 
-        $dbchoice = Read-Host "Would you like to have the sql database be part of the Azure resources created by this pipeline (internal), or would you like to use an external database? Type internal or external"
-        $dbchoice = $dbchoice.ToLower()
+        # $dbchoice = Read-Host "Would you like to have the sql database be part of the Azure resources created by this pipeline (internal), or would you like to use an external database? Type internal or external"
+        # $dbchoice = $dbchoice.ToLower()
 
-        while($dbchoice -ne "internal" -and $dbchoice -ne "external")
-        {
-            $dbchoice = Read-Host "Please type either internal or external"
-            $dbchoice = $dbchoice.ToLower()
-        }
+        # while($dbchoice -ne "internal" -and $dbchoice -ne "external")
+        # {
+        #     $dbchoice = Read-Host "Please type either internal or external"
+        #     $dbchoice = $dbchoice.ToLower()
+        # }
 
-        if($dbchoice -eq "external")
-        {
-            write-host "You chose external database"
-            #$useInternalDb = $false
+        # if($dbchoice -eq "external")
+        # {
+        #     write-host "You chose external database"
+        #     #$useInternalDb = $false
 
-            # prompt for external db connection string
-            $externalDbConnectionString = Read-Host "Please enter the connection string for your external database"
-            $externalDbLogin = Read-Host "Please enter the login name for your external database"
-            $externalDbPassword = Read-Host "Please enter the login password for your external database"
-            $externalDbServerName = Read-Host "Please enter the database server name for your external database"
-            # $externalDbConnectionString = $externalDbConnectionString.Trim()
+        #     # prompt for external db connection string
+        #     $externalDbConnectionString = Read-Host "Please enter the connection string for your external database"
+        #     $externalDbLogin = Read-Host "Please enter the login name for your external database"
+        #     $externalDbPassword = Read-Host "Please enter the login password for your external database"
+        #     $externalDbServerName = Read-Host "Please enter the database server name for your external database"
+        #     # $externalDbConnectionString = $externalDbConnectionString.Trim()
 
-            # # validate connection string format (basic check)
-            # if($externalDbConnectionString -notmatch "^Server=.*;Database=.*;User Id=.*;Password=.*;$")
-            # {
-            #     write-host "Invalid connection string format. Please ensure it follows the pattern: Server=your_server;Database=your_database;User Id=your_user;Password=your_password;"
-            # }
-        }
+        #     # # validate connection string format (basic check)
+        #     # if($externalDbConnectionString -notmatch "^Server=.*;Database=.*;User Id=.*;Password=.*;$")
+        #     # {
+        #     #     write-host "Invalid connection string format. Please ensure it follows the pattern: Server=your_server;Database=your_database;User Id=your_user;Password=your_password;"
+        #     # }
+        # }
 
     ################################################## prepare cloud vars ######################################################
 
@@ -508,30 +508,34 @@ if($verifySetup -eq "y")
 
         $weburl = "https://"+$resourceName+"webapp.azurewebsites.net/"
         $sqlpassword = -join (((48..57) | Get-Random | % {[char]$_})+((65..90) | Get-Random | % {[char]$_})+((97..122) | Get-Random | % {[char]$_})+(-join ((48..57) + (65..90) + (97..122) | Get-Random -Count 10 | % {[char]$_})))
-        $testsqlpassword = -join (((48..57) | Get-Random | % {[char]$_})+((65..90) | Get-Random | % {[char]$_})+((97..122) | Get-Random | % {[char]$_})+(-join ((48..57) + (65..90) + (97..122) | Get-Random -Count 10 | % {[char]$_})))
+        # $testsqlpassword = -join (((48..57) | Get-Random | % {[char]$_})+((65..90) | Get-Random | % {[char]$_})+((97..122) | Get-Random | % {[char]$_})+(-join ((48..57) + (65..90) + (97..122) | Get-Random -Count 10 | % {[char]$_})))
+        $testsqlpassword = $sqlpassword
 
         $variableGroupName = "myvariablegroup" # $resourceName+"variablegroup"
 
         $sqlconnectionstring = "Server=tcp:"+$resourceName+"mssqlserver.database.windows.net,1433;Initial Catalog="+$resourceName+"mssqldatabase;Persist Security Info=False;User ID="+$resourceName+";Password="+$sqlpassword+";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
-        $testsqlconnectionstring = "Server=tcp:"+$testresourceName+"mssqlserver.database.windows.net,1433;Initial Catalog="+$testresourceName+"mssqldatabase;Persist Security Info=False;User ID="+$testresourceName+";Password="+$testsqlpassword+";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+        #$testsqlconnectionstring = "Server=tcp:"+$testresourceName+"mssqlserver.database.windows.net,1433;Initial Catalog="+$testresourceName+"mssqldatabase;Persist Security Info=False;User ID="+$testresourceName+";Password="+$testsqlpassword+";MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+        $testsqlconnectionstring = $sqlconnectionstring
         $sqlservername = $resourceName+"mssqlserver"
-        $testsqlservername = $testresourceName+"mssqlserver"
+        # $testsqlservername = $testresourceName+"mssqlserver"
+        $testsqlservername = $sqlservername
 
         $sqlloginname = $resourceName
-        $testsqlloginname = $testresourceName
+        # $testsqlloginname = $testresourceName
+        $testsqlloginname = $sqlloginname
 
-        if($dbchoice -eq "external")
-        {
-            $sqlconnectionstring = $externalDbConnectionString
-            $sqlservername = $externalDbServerName
-            $sqlpassword = $externalDbPassword
-            $sqlloginname = $externalDbLogin
+        # if($dbchoice -eq "external")
+        # {
+        #     $sqlconnectionstring = $externalDbConnectionString
+        #     $sqlservername = $externalDbServerName
+        #     $sqlpassword = $externalDbPassword
+        #     $sqlloginname = $externalDbLogin
 
-            $testsqlconnectionstring = $externalDbConnectionString
-            $testsqlservername = $externalDbServerName
-            $testsqlpassword = $externalDbPassword
-            $testsqlloginname = $externalDbLogin
-        }
+        #     $testsqlconnectionstring = $externalDbConnectionString
+        #     $testsqlservername = $externalDbServerName
+        #     $testsqlpassword = $externalDbPassword
+        #     $testsqlloginname = $externalDbLogin
+        # }
 
         # $buildPipelineName = "Build "+$resourceName
         # $deployPipelineName = "Deploy "+$resourceName
@@ -865,8 +869,11 @@ if($verifySetup -eq "y")
         write-host " - Go to Variables > Variable groups > Link variable group > Link both myvariablegroup and either prodvariablegroup or testvariablegroup"
         # write-host " - Go to Pipelines > Click '...' on the pipeline named 'Deploy' > Delete"
         write-host 
-        write-host " - If you chose external database, you can skip this step, otherwise:"
-        write-host " - If you chose internal sql database, as of now, the free database cant be created with terraform, so you will have to go to Azure Cloud:"
+        # write-host " - If you chose external database, you can skip this step, otherwise:"
+        # write-host " - If you chose internal sql database:"
+        write-host " - As of now, the free database cant be created with terraform, and you can only have one."
+        write-host " - This means that test and prod will share the database, until you configure it to use an external db or a separate paid internal one."
+        write-host " - So you will have to go to Azure Cloud to create the free shared database:"
         write-host " - Find your resource group named "+$resourcegroupName+" in Azure Cloud"
         write-host " - Create a new SQL server with the name "+$resourceName+"mssqlserver, as well as login name "+$resourceName+" and password "+$sqlpassword
         write-host " - Create a new SQL database with the name "+$resourceName+"mssqldatabase and choose to apply the free preview"
