@@ -840,7 +840,7 @@ if($verifySetup -eq "y")
         write-host " - - > Create a new stage and use the terraform stage as guidance before deleting it."
         write-host " - > Click through each stages' steps to reattach references, this fixes the release pipeline validation errors"
         write-host " - > Most steps wants you to reattach 'Azure Resource Manager' and the agent pool, choose 'Azure Pipelines' as the pool and 'windows-latest' as the specification."
-        write-host " - > The 'deploy app' step wants you to specify the app name, write $pipelineId. If need be, other variables can be found in your library variables in DevOps"
+        write-host " - > The 'deploy app' step wants you to specify the app name, write "+$pipelineId+". If need be, other variables can be found in your library variables in DevOps"
         #write-host " - > Remember to tweak the test release release variables accordingly."
         # write-host " - - Template > Select empty job > setup 4 stages:"
         # write-host " - - - Stage 1: setup 1 task"
@@ -865,6 +865,11 @@ if($verifySetup -eq "y")
         write-host " - Go to Variables > Variable groups > Link variable group > Link both myvariablegroup and either prodvariablegroup or testvariablegroup"
         # write-host " - Go to Pipelines > Click '...' on the pipeline named 'Deploy' > Delete"
         write-host 
+        write-host " - If you chose external database, you can skip this step, otherwise:"
+        write-host " - If you chose internal sql database, as of now, the free database cant be created with terraform, so you will have to go to Azure Cloud:"
+        write-host " - Find your resource group named "+$resourcegroupName+" in Azure Cloud"
+        write-host " - Create a new SQL server with the name "+$resourceName+"mssqlserver, as well as login name "+$resourceName+" and password "+$sqlpassword
+        write-host " - Create a new SQL database with the name "+$resourceName+"mssqldatabase and choose to apply the free preview"
         #write-host "For AzureService:"
         #write-host " - Go to User settings > Personal access tokens > New token > Name it PAT and customize settings or choose full access > Create > Copy the PAT"
         #write-host " - Go to Pipelines > Library > Variable groups > Pick your new variable group > Create new variable called PAT with value of your PAT"
