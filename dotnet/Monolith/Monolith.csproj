@@ -7,6 +7,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="Route\UI\Layout\AtomicCSS\atoms.css" />
+    <Content Include="Route\UI\Layout\AtomicCSS\molecules.css" />
+    <Content Include="Route\UI\Layout\AtomicCSS\organisms.css" />
+    <Content Include="Route\UI\Layout\AtomicCSS\settings.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Logic\Utilities\" />
   </ItemGroup>
 

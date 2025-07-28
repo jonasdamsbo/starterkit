@@ -1,0 +1,6 @@
+/* standard html tags, no id or class */
+
+body {
+    background-color: var(--blue);
+    color: var(--white);
+}

@@ -4,6 +4,7 @@ using Monolith.Route.UI;
 using Microsoft.EntityFrameworkCore.Proxies;
 using Monolith.Data;
 using Monolith.Data.Models;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,7 +71,24 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseStaticFiles();
+//app.UseStaticFiles();
+
+
+
+// css serving if the files are outside wwwroot
+app.UseStaticFiles(); // still serve wwwroot
+
+app.UseStaticFiles(new StaticFileOptions // serve css files from ../Route/UI/Layout/AtomicCSS/ as styles/ or atomic/ or root
+{
+	FileProvider = new PhysicalFileProvider(
+		Path.Combine(builder.Environment.ContentRootPath, "Route", "UI", "Layout", "AtomicCSS")),
+	RequestPath = "/atomic" // wwwroot/atomic/ path
+	//RequestPath = "/styles" // wwwroot/styles/ path
+	//RequestPath = "" // root path, same as wwwroot/app.css
+});
+
+
+
 app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
