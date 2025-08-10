@@ -1,11 +1,11 @@
 ﻿using Monolith.Logic.DTOs;
-using Monolith.Query.Projections;
+using Monolith.Query.Aggregates;
 
 namespace Monolith.Data.Models
 {
 	public class DtoMapper
 	{
-		public ExampleDTO ToExampleDTO(ExampleProjection model)
+		public ExampleDTO ToExampleDTO(ExampleAggregate model)
 		{
 			var dto = new ExampleDTO()
 			{
@@ -18,7 +18,7 @@ namespace Monolith.Data.Models
 			return dto;
 		}
 
-		public ExampleNavigationPropertyDTO ToExampleNavigationPropertyDTO(ExampleNavigationPropertyProjection model)
+		public ExampleNavigationPropertyDTO ToExampleNavigationPropertyDTO(ExampleNavigationPropertyAggregate model)
 		{
 			var dto = new ExampleNavigationPropertyDTO()
 			{

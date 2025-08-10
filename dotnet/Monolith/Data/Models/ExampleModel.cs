@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson;
 using Monolith.Logic.DTOs;
-using Monolith.Query.Projections;
+using Monolith.Query.Aggregates;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
@@ -25,9 +25,9 @@ namespace Monolith.Data.Models
 		 }
 
 		// manual mapping, not needed with mapster
-		public ExampleModel(ExampleProjection exampleProjection) =>
-		(Id, Title, Description, ExampleNavigationProperties) = (exampleProjection.Id, exampleProjection.Title, exampleProjection.Description,
-			exampleProjection.ExampleNavigationProperties.Select(x => new ExampleNavigationProperty(x)).ToList()
+		public ExampleModel(ExampleAggregate exampleAggregate) =>
+		(Id, Title, Description, ExampleNavigationProperties) = (exampleAggregate.Id, exampleAggregate.Title, exampleAggregate.Description,
+			exampleAggregate.ExampleNavigationProperties.Select(x => new ExampleNavigationProperty(x)).ToList()
 		);
 		public ExampleModel(ExampleDTO exampleDTO) =>
 		(Id, Title, Description, ExampleNavigationProperties) = (exampleDTO.Id, exampleDTO.Title, exampleDTO.Description,

@@ -7,10 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Route\UI\Layout\AtomicCSS\atoms.css" />
-    <Content Include="Route\UI\Layout\AtomicCSS\molecules.css" />
-    <Content Include="Route\UI\Layout\AtomicCSS\organisms.css" />
-    <Content Include="Route\UI\Layout\AtomicCSS\settings.css">
+    <Content Include="UI\GUI\Layout\AtomicCSS\atoms.css" />
+    <Content Include="UI\GUI\Layout\AtomicCSS\molecules.css" />
+    <Content Include="UI\GUI\Layout\AtomicCSS\organisms.css" />
+    <Content Include="UI\GUI\Layout\AtomicCSS\settings.css">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
@@ -18,6 +18,10 @@
 
   <ItemGroup>
     <Folder Include="Logic\Utilities\" />
+    <Folder Include="Integration\" />
+    <Folder Include="Integration\ExternalAPIs\" />
+    <Folder Include="Integration\Projections\" />
+    <Folder Include="UI\GUI\Components\" />
   </ItemGroup>
 
   <ItemGroup>

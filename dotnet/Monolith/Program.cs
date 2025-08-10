@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Monolith.Extensions;
-using Monolith.Route.UI;
+using Monolith.UI.GUI;
 using Microsoft.EntityFrameworkCore.Proxies;
 using Monolith.Data;
 using Monolith.Data.Models;
@@ -81,7 +81,7 @@ app.UseStaticFiles(); // still serve wwwroot
 app.UseStaticFiles(new StaticFileOptions // serve css files from ../Route/UI/Layout/AtomicCSS/ as styles/ or atomic/ or root
 {
 	FileProvider = new PhysicalFileProvider(
-		Path.Combine(builder.Environment.ContentRootPath, "Route", "UI", "Layout", "AtomicCSS")),
+		Path.Combine(builder.Environment.ContentRootPath, "UI", "GUI", "Layout", "AtomicCSS")),
 	RequestPath = "/atomic" // wwwroot/atomic/ path
 	//RequestPath = "/styles" // wwwroot/styles/ path
 	//RequestPath = "" // root path, same as wwwroot/app.css

@@ -4,7 +4,7 @@ using Monolith.Logic.DTOs;
 using Monolith.Data.Models;
 using Monolith.Query.Repositories;
 using Microsoft.IdentityModel.Tokens;
-using Monolith.Query.Projections;
+using Monolith.Query.Aggregates;
 //using Microsoft.TeamFoundation.Common;
 
 namespace Monolith.Logic.Services

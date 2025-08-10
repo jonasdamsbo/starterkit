@@ -3,7 +3,7 @@
 using Monolith.Logic.Services;
 using Monolith.Logic.DTOs;
 
-namespace Monolith.Route.UI.Pages
+namespace Monolith.UI.GUI.Pages
 {
 	public partial class Test
 	{

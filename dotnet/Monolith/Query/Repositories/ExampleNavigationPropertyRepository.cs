@@ -4,7 +4,7 @@ using MongoDB.Bson;
 using Monolith.Data;
 using Monolith.Data.Models;
 using Monolith.Logic.DTOs;
-using Monolith.Query.Projections;
+using Monolith.Query.Aggregates;
 using System.Linq;
 
 namespace Monolith.Query.Repositories
@@ -21,17 +21,17 @@ namespace Monolith.Query.Repositories
             _log = log;
         }
 
-        public async Task<List<ExampleNavigationPropertyProjection>?> GetAllAsync()
+        public async Task<List<ExampleNavigationPropertyAggregate>?> GetAllAsync()
         {
             try
             {
                 var examples = await _context.ExampleNavigationProperties
 					.Include(x => x.ExampleModel)
-					.Select(x => new ExampleNavigationPropertyProjection
+					.Select(x => new ExampleNavigationPropertyAggregate
 					{
 						Id = x.Id,
 						Title = x.Title,
-						ExampleProjection = new ExampleProjection(x.ExampleModel)
+						ExampleAggregate = new ExampleAggregate(x.ExampleModel)
 					})
                     .ToListAsync();
 
@@ -47,18 +47,18 @@ namespace Monolith.Query.Repositories
         }
 
         // should be in all repositories whos model uses a foreign key
-        public async Task<List<ExampleNavigationPropertyProjection>?> GetByExampleModelIdAsync(string exampleModelId)
+        public async Task<List<ExampleNavigationPropertyAggregate>?> GetByExampleModelIdAsync(string exampleModelId)
         {
             try
             {
                 var exampleNavProps = await _context.ExampleNavigationProperties
                     .Where(x => x.ExampleModel.Id == exampleModelId)
                     .Include(x => x.ExampleModel)
-					.Select(x => new ExampleNavigationPropertyProjection
+					.Select(x => new ExampleNavigationPropertyAggregate
 					{
 						Id = x.Id,
 						Title = x.Title,
-						ExampleProjection = new ExampleProjection(x.ExampleModel)
+						ExampleAggregate = new ExampleAggregate(x.ExampleModel)
 					})
 					.ToListAsync();
 
@@ -73,18 +73,18 @@ namespace Monolith.Query.Repositories
             }
         }
 
-        public async Task<ExampleNavigationPropertyProjection?> GetByIdAsync(string id)
+        public async Task<ExampleNavigationPropertyAggregate?> GetByIdAsync(string id)
         {
             try
             {
                 var exampleNavProp = await _context.ExampleNavigationProperties
                     .Where(x => x.ExampleModel.Id == id)
                     .Include(x => x.ExampleModel)
-					.Select(x => new ExampleNavigationPropertyProjection
+					.Select(x => new ExampleNavigationPropertyAggregate
 					{
 						Id = x.Id,
 						Title = x.Title,
-						ExampleProjection = new ExampleProjection(x.ExampleModel)
+						ExampleAggregate = new ExampleAggregate(x.ExampleModel)
 					})
 					.FirstOrDefaultAsync();
 
@@ -119,7 +119,7 @@ namespace Monolith.Query.Repositories
 			}
 		}
 
-		public async Task<ExampleNavigationPropertyProjection?> AddAsync(ExampleNavigationPropertyDTO newModel)
+		public async Task<ExampleNavigationPropertyAggregate?> AddAsync(ExampleNavigationPropertyDTO newModel)
         {
             try
             {
@@ -144,7 +144,7 @@ namespace Monolith.Query.Repositories
             }
         }
 
-        public async Task<ExampleNavigationPropertyProjection?> UpdateAsync(string id, ExampleNavigationPropertyDTO updatedModel)
+        public async Task<ExampleNavigationPropertyAggregate?> UpdateAsync(string id, ExampleNavigationPropertyDTO updatedModel)
         {
             try
             {
@@ -166,7 +166,7 @@ namespace Monolith.Query.Repositories
             }
         }
 
-        public async Task<ExampleNavigationPropertyProjection?> DeleteAsync(string id)
+        public async Task<ExampleNavigationPropertyAggregate?> DeleteAsync(string id)
         {
             try
             {
@@ -175,7 +175,7 @@ namespace Monolith.Query.Repositories
                 _context.ExampleNavigationProperties.Remove(example);
                 await _context.SaveChangesAsync();
 
-                var returnExample = new ExampleNavigationPropertyProjection(example);
+                var returnExample = new ExampleNavigationPropertyAggregate(example);
 
 				return returnExample;
             }

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Monolith.Logic.API.DTOs;
 using Monolith.Logic.API.Services;
 
-namespace Monolith.Route.API.Endpoints
+namespace Monolith.UI.API.Endpoints
 {
 	public static class TestEndpoints
 	{

@@ -3,7 +3,7 @@ using Monolith.Logic.DTOs;
 using Monolith.Logic.Services;
 using Newtonsoft.Json;
 
-namespace Monolith.Route.UI.Pages
+namespace Monolith.UI.GUI.Pages
 {
 	public partial class ExampleOverview
 	{
