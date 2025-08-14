@@ -1,5 +1,4 @@
 ﻿using Monolith.Data.Models;
-using Monolith.Logic.API.Services;
 using Monolith.Logic.Services;
 using Monolith.Query.Repositories;
 //using Monolith.Logic.Utility;
@@ -17,7 +16,6 @@ namespace Monolith.Extensions
 			services.AddScoped<ExampleModelService>();
 			services.AddScoped<ExampleNavigationPropertyService>();
 			services.AddScoped<TestDtoService>();
-			services.AddScoped<TestDtoFactory>();
 			services.AddScoped<DtoMapper>();
 
 			// Register your repositories here

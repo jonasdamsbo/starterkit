@@ -9,7 +9,7 @@
 	<PageTitle>Add a new example</PageTitle>
 	<h3>Add a new example</h3>
 
-	<EditForm Model="CurrentExampleDTO" OnSubmit="HandleSubmit">
+	<EditForm Model="CurrentExampleDTO" OnSubmit="HandleSubmit" FormName="EditForm">
 		<div>
 			<label for="title">Title</label>
 			<InputText id="title" @bind-Value="CurrentExampleDTO.Title" class="form-control" />
@@ -26,7 +26,7 @@ else
 	<PageTitle>Edit: "@CurrentExampleDTO.Title"</PageTitle>
 	<h3>Edit: "@CurrentExampleDTO.Title"</h3>
 
-	<EditForm Model="CurrentExampleDTO" OnSubmit="HandleSubmit">
+	<EditForm Model="CurrentExampleDTO" OnSubmit="HandleSubmit" FormName="CreateForm">
 		<div>
 			<label for="title">Title</label>
 			<InputText id="title" @bind-Value="CurrentExampleDTO.Title" class="form-control" />

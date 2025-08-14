@@ -1,8 +1,8 @@
 ﻿//using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
-using Monolith.Logic.API.DTOs;
-using Monolith.Logic.API.Services;
+using Monolith.Logic.DTOs;
+using Monolith.Logic.Services;
 
 namespace Monolith.UI.API.Endpoints
 {
@@ -13,14 +13,14 @@ namespace Monolith.UI.API.Endpoints
 			var group = app.MapGroup("api/test");
 
 			group.MapPost("/", Remove);
-			static async Task<IResult> Remove(TestDto testDto, TestDtoFactory testService)
+			static async Task<IResult> Remove(TestDto testDto, TestDtoService testService)
 			{
 				var newDto = await testService.GetStuff(testDto);
 
 				return TypedResults.Ok(newDto);
 			}
 			group.MapGet("/init", Init);
-			static async Task<IResult> Init(TestDtoFactory testService)
+			static async Task<IResult> Init(TestDtoService testService)
 			{
 				var newDto = await testService.GetInitialStuff();
 
