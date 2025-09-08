@@ -1,7 +1,9 @@
 ﻿@inherits LayoutComponentBase
 
+<HeaderMenu />
+
 <div class="page">
-    <div class="sidebar">
+    <div class="sidebar sidebar-left">
         <NavMenu />
     </div>
 
@@ -14,7 +16,13 @@
             @Body
         </article>
     </main>
+
+    <div class="sidebar sidebar-right" style="right: 0;">
+        <NavMenu />
+    </div>
 </div>
+
+<FooterMenu />
 
 <div id="blazor-error-ui">
     An unhandled error has occurred.
