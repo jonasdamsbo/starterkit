@@ -15,7 +15,7 @@
 .loading {
     animation: spin 4s linear;
     margin-top: 100px !important;
-    width: 800px;
+    max-width: 800px;
 }
 
 @keyframes spin {
