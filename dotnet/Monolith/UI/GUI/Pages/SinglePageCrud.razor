@@ -1,0 +1,77 @@
+﻿@page "/single"
+@rendermode InteractiveServer
+@attribute [StreamRendering]
+
+<h3>SinglePageCrud</h3>
+
+@if (state == CrudState.Loading)
+{
+	<p><em>Loading examples...</em></p>
+}
+else if(state == CrudState.Loaded)
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Title</th>
+				<th>Description</th>
+				<!--<th>WebUrl</th>-->
+				<th></th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var example in examples)
+			{
+				<tr>
+					<td>@example.Title</td>
+					<td>@example.Description</td>
+					<!--<td>@example.WebUrl</td>-->
+					<td><button class="btn btn-primary" @onclick="@(() => EditExample(example.Id))">Edit</button></td>
+					<td><button class="btn btn-danger" @onclick="@(() => DeleteExample(example.Id))">Delete</button></td>
+				</tr>
+			}
+		</tbody>
+	</table>
+
+	<button @onclick="AddExample">Add a new example</button>
+}
+else if(state == CrudState.Edit)
+{
+	<PageTitle>Edit: "@CurrentExampleDTO.Title"</PageTitle>
+	<h3>Edit: "@CurrentExampleDTO.Title"</h3>
+
+	<EditForm Model="CurrentExampleDTO" OnSubmit="HandleSubmitEdit" FormName="CreateForm">
+		<div>
+			<label for="title">Title</label>
+			<InputText id="title" @bind-Value="CurrentExampleDTO.Title" class="form-control" />
+		</div>
+		<div>
+			<label for="description">Description</label>
+			<InputText id="description" @bind-Value="CurrentExampleDTO.Description" class="form-control" />
+		</div>
+		<button type="submit" class="btn btn-primary">Save</button>
+	</EditForm>
+}
+else if(state == CrudState.Add)
+{
+	<PageTitle>Add a new example</PageTitle>
+	<h3>Add a new example</h3>
+
+	<EditForm Model="CurrentExampleDTO" OnSubmit="HandleSubmitAdd" FormName="EditForm">
+		<div>
+			<label for="title">Title</label>
+			<InputText id="title" @bind-Value="CurrentExampleDTO.Title" class="form-control" />
+		</div>
+		<div>
+			<label for="description">Description</label>
+			<InputText id="description" @bind-Value="CurrentExampleDTO.Description" class="form-control" />
+		</div>
+		<button type="submit" class="btn btn-primary">Save</button>
+	</EditForm>
+}
+
+
+@code {
+
+}
