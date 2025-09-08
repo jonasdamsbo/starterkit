@@ -10,10 +10,8 @@ namespace Monolith.Extensions
 			{
 				// skip middleware for these paths
 				var path = context.Request.Path;
-				if (path.StartsWithSegments("/session/authenticate") ||
-					path.StartsWithSegments("/css") ||
-					path.StartsWithSegments("/js") ||
-					path.StartsWithSegments("/favicon.ico"))
+				var excludedPaths = ExcludedPaths();
+				if (excludedPaths.Any(excludedPath => path.StartsWithSegments(excludedPath)))
 				{
 					await next();
 					return;
@@ -21,27 +19,66 @@ namespace Monolith.Extensions
 
 				// check and set session flag
 				var hasSession = context.Session.GetString(Constants.Session.hasSession) is "true" ? true : false;
-				if (!hasSession) context.Session.SetString(Constants.Session.hasSession, "true");
-				else FirstSessionRequest(context);
+				var hasRun = context.Session.GetString(Constants.Session.hasRun) is "true" ? true : false;
 
-				// do some stuff before every request here
+				// do stuff on first request (request 1) and first session request (request 2) respectively
+				if (!hasSession)
+				{
+					// set firstrequest flag
+					context.Session.SetString(Constants.Session.hasSession, "true");
+					FirstRequest();
+				}
+				else if (!hasRun) 
+				{
+					// set firstsessionrequest flag
+					context.Session.SetString(Constants.Session.hasRun, "true");
+					FirstSessionRequest();
+				}
 
-				// send request through
-				await next();
+				// do some stuff for every request that has a session here (request 2 and onwards)
+				hasRun = context.Session.GetString(Constants.Session.hasRun) is "true" ? true : false;
+				if (hasRun)
+				{
+					// do some stuff before every request here
+					BeforeSessionRequests();
 
-				// do some stuff after every request here
+					// send request through
+					await next();
+
+					// do some stuff after every request here
+					AfterSessionRequests();
+				}
 			});
 		}
-		public static void FirstSessionRequest(HttpContext context)
+		private static List<PathString> ExcludedPaths()
 		{
-			// check and set firstrequest flag
-			var hasRun = context.Session.GetString(Constants.Session.hasRun) is "true" ? true : false;
-			if (!hasRun)
+			return new List<PathString>()
 			{
-				context.Session.SetString(Constants.Session.hasRun, "true");
+				"/session/authenticate",
+				"/css",
+				"/js",
+				"/favicon.ico"
+			};
+		}
+		private static void FirstRequest()
+		{
+			// do some stuff on the first request that does not have session set here
 
-				// do some stuff on the first request that has session set here
-			}
+		}
+		private static void FirstSessionRequest()
+		{
+			// do some stuff on the first request that has session set here
+
+		}
+		private static void BeforeSessionRequests()
+		{
+			// do some stuff before every request that has session set here
+
+		}
+		private static void AfterSessionRequests()
+		{
+			// do some stuff after every request that has session set here
+
 		}
 	}
 }

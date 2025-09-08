@@ -782,18 +782,18 @@ if($verifySetup -eq "y")
 
     ################################################## create pipeline ##################################################
         # CREATE PIPELINE HERE
-        write-host "####################################"
-        write-host "### Started creating pipeline... ###"
-        write-host "####################################"
+        # write-host "####################################"
+        # write-host "### Started creating pipeline... ###"
+        # write-host "####################################"
 
-            # deploypipelinename and buildpipelinename is in preparecloudvars ^
-            az pipelines create --name $buildPipelineName --yml-path '\azure\azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master"
+        #     # deploypipelinename and buildpipelinename is in preparecloudvars ^
+        #     az pipelines create --name $buildPipelineName --yml-path '\azure\build-pipeline.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master"
 
-            $pipelineId = az pipelines show --name $buildPipelineName --org $fullOrgName --project $projectName --output json --query "[id]"
-            $pipelineId = $pipelineId.Replace("[","")
-            $pipelineId = $pipelineId.Replace("]","")
-            $pipelineId = $pipelineId.Replace(" ","")
-            write-host "PipelineId: "$pipelineId
+        #     $pipelineId = az pipelines show --name $buildPipelineName --org $fullOrgName --project $projectName --output json --query "[id]"
+        #     $pipelineId = $pipelineId.Replace("[","")
+        #     $pipelineId = $pipelineId.Replace("]","")
+        #     $pipelineId = $pipelineId.Replace(" ","")
+        #     write-host "PipelineId: "$pipelineId
 
             # deploy release pipeline yml
             #az pipelines create --name $deployPipelineName --yml-path '\azure\deploy-azure-pipelines.yml' --org $fullOrgName --project $projectName --repository-type "tfsgit" --repository $repositoryName --branch "master"
@@ -816,8 +816,8 @@ if($verifySetup -eq "y")
             # --environment-definition-name $environmentDefinitionName --catalog-name $catalogName
 
                 
-        Read-Host "Done creating pipeline... press enter to continue"
-        write-host 
+        # Read-Host "Done creating pipeline... press enter to continue"
+        # write-host 
 
 
     ################################################## prompt set up release in azure devops ##################################################
@@ -832,19 +832,31 @@ if($verifySetup -eq "y")
 	    # write-host "Azure Devops Releases are separate from pipelines and the setup is more clean"
 	    # write-host "If you're happy with using a deploy.yml for releases, skip these steps"
 	    # write-host "If you want to use the manual Azure Devops Releases for releases, follow these steps"
-        write-host " - You need to setup your release in Azure DevOps (See the development guide for help, link in readme.md):"
-        write-host " - Go to your Azure DevOps project"
-        write-host " - Pipelines > Releases > +New v"
-        write-host " - - > To see the import option when creating a new release pipeline, save an empty pipeline, then go back"
-        write-host " - > New release pipeline > import the two releases json from the project/azure folder"
+        write-host " - OBS You can use yml or classic pipelines for releases, but the classic pipelines are more clean and easier to use"
+        write-host " - OBS If you want to use the yml pipelines, skip step 1/2 and 2/2, if you want to use classic pipelines, skip this step."
+        write-host " - - - - > Go to your Azure DevOps project"
+        write-host " - - - - > Make 3 new Pipelines: Pipelines > Pipelines > New Pipeline > Azure repos git > Select your repository > ASP.Net"
+        write-host " - - - - > Copy the contents of 'build-pipeline.yml', 'prod-deploy-pipeline.yml' and 'test-deploy-pipeline.yml' from the azure folder of this project"
+        write-host " - 1/2 You need to setup your classic build pipeline in Azure DevOps (See the development guide for help, link in readme.md):"
+        write-host " - - - - > Go to your Azure DevOps project"
+        write-host " - - - - > Pipelines > Pipelines > ... > Import a pipeline"
+        write-host " - - - - > Choose the 'Build pipeline.json' file in the azure folder of this project"
+        write-host " - - - - > In agent pool, choose 'Azure Pipelines' and in specification, choose 'windows-latest'"
+        write-host " - - - - > Rename the pipeline to 'Build' and save it"
+        write-host " - 2/2 You need to setup your classic release pipeline in Azure DevOps (See the development guide for help, link in readme.md):"
+        write-host " - - - - > Go to your Azure DevOps project"
+        write-host " - - - - > Pipelines > Releases > +New v"
+        write-host " - - - - > To see the import option when creating a new release pipeline, save an empty pipeline, then go back"
+        write-host " - - - - > New release pipeline > import the 'Production release pipeline' and 'Test release pipeline' json from the project/azure folder"
         # write-host " - > New release pipeline > Now you can set it up by following the steps, or import the two releases json from the project/azure folder"
         #write-host " - > you will have to delete the artifact and add it again, to fix the reference issue"
-        write-host " - > you will have to add the artifact (just select your build pipeline), to fix the reference issue"
-        write-host " - > you will have to delete the terraform stage and recreate it, to fix the reference issue"
-        write-host " - - > Create a new stage and use the terraform stage as guidance before deleting it."
-        write-host " - > Click through each stages' steps to reattach references, this fixes the release pipeline validation errors"
-        write-host " - > Most steps wants you to reattach 'Azure Resource Manager' and the agent pool, choose 'Azure Pipelines' as the pool and 'windows-latest' as the specification."
-        write-host " - > The 'deploy app' step wants you to specify the app name, write "+$pipelineId+". If need be, other variables can be found in your library variables in DevOps"
+        write-host " - - - - > Click through each stages' steps to reattach references, this fixes the release pipeline validation errors"
+        write-host " - - - - - > you will have to add the artifact (just select your build pipeline)"
+        write-host " - - - - - > you will have to add an approver in the pre-deployment conditions"
+        #write-host " - - - - > you will have to delete the terraform stage and recreate it, to fix the reference issue"
+        #write-host " - - - - > Create a new stage and use the terraform stage as guidance before deleting it."
+        write-host " - - - - - > Most steps wants you to reattach 'Azure Resource Manager' and the agent pool, choose 'Azure Pipelines' as the pool and 'windows-latest' as the specification."
+        write-host " - - - - - > The 'deploy app' step wants you to specify the app name, write "+$resourceName+"app"+". If need be, other variables can be found in your library variables in DevOps"
         #write-host " - > Remember to tweak the test release release variables accordingly."
         # write-host " - - Template > Select empty job > setup 4 stages:"
         # write-host " - - - Stage 1: setup 1 task"
@@ -860,23 +872,25 @@ if($verifySetup -eq "y")
         # write-host " - - - - - write "+$resourceName+"webapp in app service name"
         # write-host " - - - - Step 2: Setup a Deploy apiapp Azure App Service deploy task"
         # write-host " - - - - - write "+$resourceName+"apiapp in app service name"
-        write-host " - - If you want a test environment, do the same for test release. Set the release artifact trigger (lightning icon) to include branch 'test'"
+        # write-host " - - If you want a test environment, do the same for test release. Set the release artifact trigger (lightning icon) to include branch 'test'"
         # write-host " - - To add approval to releases, go to the Release > Edit"
         # write-host " - - - Click the 'Pre-deployment conditions' (lightning icon) to the left of Stage 1"
         # write-host " - - - To the right of the 'Pre-doplyment approvals' dropdown, click the button to switch to 'Enabled'"
         # write-host " - - - Add the name of the desired approver, and desired timeout if not approved/rejected in time, default is 5 minutes"
         # write-host " - - - Under approval policies, click the checkbox 'The user requesting a release or deployment should not approve it'"
-        write-host " - Go to Variables > Variable groups > Link variable group > Link both myvariablegroup and either prodvariablegroup or testvariablegroup"
+        write-host " - - - - - > Go to Variables > Variable groups > Link variable group > Link both myvariablegroup and either prodvariablegroup or testvariablegroup"
         # write-host " - Go to Pipelines > Click '...' on the pipeline named 'Deploy' > Delete"
         write-host 
         # write-host " - If you chose external database, you can skip this step, otherwise:"
         # write-host " - If you chose internal sql database:"
         write-host " - As of now, the free database cant be created with terraform, and you can only have one."
-        write-host " - This means that test and prod will share the database, until you configure it to use an external db or a separate paid internal one."
-        write-host " - So you will have to go to Azure Cloud to create the free shared database:"
-        write-host " - Find your resource group named "+$resourcegroupName+" in Azure Cloud"
-        write-host " - Create a new SQL server with the name "+$resourceName+"mssqlserver, as well as login name "+$resourceName+" and password "+$sqlpassword
-        write-host " - Create a new SQL database with the name "+$resourceName+"mssqldatabase and choose to apply the free preview"
+        write-host " - - - - - > This means that test and prod will share the database, until you configure it to use an external db or a separate paid internal one."
+        write-host " - - - - - > So you will have to go to Azure Cloud to create the free shared database:"
+        write-host " - - - - - > Find your resource group named "+$resourcegroupName+" in Azure Cloud"
+        write-host " - - - - - > Create a new SQL server with the name "+$resourceName+"mssqlserver, as well as login name "+$resourceName+" and password "+$sqlpassword
+        write-host " - - - - - > Create a new SQL database with the name "+$resourceName+"mssqldatabase and choose to apply the free preview"
+        write-host " - - - - - > You can configure custom database settings for production and test in the variable groups if you have a third party db"
+        write-host " - - - - - > or you can create a paid one with terraform (sqldatabases.tf example in the terraform folder) for each environment."
         #write-host "For AzureService:"
         #write-host " - Go to User settings > Personal access tokens > New token > Name it PAT and customize settings or choose full access > Create > Copy the PAT"
         #write-host " - Go to Pipelines > Library > Variable groups > Pick your new variable group > Create new variable called PAT with value of your PAT"

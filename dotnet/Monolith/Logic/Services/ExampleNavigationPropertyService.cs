@@ -5,7 +5,7 @@ using Monolith.Query.Repositories;
 using Microsoft.IdentityModel.Tokens;
 //using Microsoft.TeamFoundation.Common;
 using Monolith.Logic.DTOs;
-using Monolith.Query.Projections;
+using Monolith.Query.Aggregates;
 
 namespace Monolith.Logic.Services
 {

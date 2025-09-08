@@ -7,7 +7,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="UI\GUI\Layout\AtomicCSS\atoms.css" />
+    <Content Include="UI\GUI\Layout\AtomicCSS\molecules.css" />
+    <Content Include="UI\GUI\Layout\AtomicCSS\habitats.css" />
+    <Content Include="UI\GUI\Layout\AtomicCSS\organisms.css" />
+    <Content Include="UI\GUI\Layout\AtomicCSS\settings.css">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Logic\Utilities\" />
+    <Folder Include="Integration\" />
+    <Folder Include="Integration\ExternalAPIs\" />
+    <Folder Include="Integration\Projections\" />
+    <Folder Include="UI\GUI\Components\" />
   </ItemGroup>
 
   <ItemGroup>

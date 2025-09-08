@@ -2,8 +2,9 @@
 									   //using System.Net.Http.Json; // for api call
 using Monolith.Logic.Services;
 using Monolith.Logic.DTOs;
+using System.Net.Http.Headers;
 
-namespace Monolith.Route.UI.Pages
+namespace Monolith.UI.GUI.Pages
 {
 	public partial class Test
 	{
@@ -27,12 +28,13 @@ namespace Monolith.Route.UI.Pages
 		{
 			TestDto.clickedString = str;
 
-			HttpResponseMessage response = new();
-			HttpClient httpClient = new HttpClient();
-			response = await httpClient.PostAsJsonAsync("https://localhost:7226" + "/api/test", TestDto);
-			var newDto = await response.Content.ReadFromJsonAsync<TestDto>() ?? new TestDto();
+			// http requests only works when seperate apps, not monolith, and is redundant when using blazor server monolith
+			//HttpResponseMessage response = new();
+			//HttpClient httpClient = new HttpClient();
+			//response = await httpClient.PostAsJsonAsync("http://localhost:5194" + "/api/test", TestDto);
+			//var newDto = await response.Content.ReadFromJsonAsync<TestDto>() ?? new TestDto();
 
-			//var newDto = await TestService.GetStuff(TestDto);
+			var newDto = await TestService.GetStuff(TestDto);
 
 			var listString = newDto.StringList;
 
@@ -41,12 +43,16 @@ namespace Monolith.Route.UI.Pages
 
 		private async Task<TestDto> GetInit()
 		{
-			HttpResponseMessage response = new();
-			HttpClient httpClient = new HttpClient();
-			response = await httpClient.GetAsync("https://localhost:7226" + "/api/test/init");
-			var newDto = await response.Content.ReadFromJsonAsync<TestDto>() ?? new TestDto();
+			// http requests only works when seperate apps, not monolith, and is redundant when using blazor server monolith
+			//HttpResponseMessage response = new();
+			//HttpClient httpClient = new HttpClient();
+			//httpClient.DefaultRequestHeaders.Accept.Add(
+			//	new MediaTypeWithQualityHeaderValue("application/json"));
+			//response = await httpClient.GetAsync("http://localhost:5194" + "/api/test/init");
+			//var content = await response.Content.ReadAsStringAsync();
+			//var newDto = await response.Content.ReadFromJsonAsync<TestDto>() ?? new TestDto();
 
-			//var newDto = await TestService.GetInitialStuff();
+			var newDto = await TestService.GetInitialStuff();
 
 			return newDto;
 		}

@@ -4,7 +4,7 @@
 using Monolith.Data;
 using Monolith.Data.Models;
 using Monolith.Logic.DTOs;
-using Monolith.Query.Projections;
+using Monolith.Query.Aggregates;
 
 namespace Monolith.Query.Repositories
 {
@@ -20,7 +20,7 @@ namespace Monolith.Query.Repositories
             _log = log;
         }
 
-        public async Task<List<ExampleProjection>?> GetAllAsync()
+        public async Task<List<ExampleAggregate>?> GetAllAsync()
         {
             try
             {
@@ -29,12 +29,12 @@ namespace Monolith.Query.Repositories
 
 				var examples = await _context.ExampleModels
 				.Include(x => x.ExampleNavigationProperties)
-				.Select(x => new ExampleProjection
+				.Select(x => new ExampleAggregate
 				{
 					Id = x.Id,
 					Title = x.Title,
 					Description = x.Description,
-					ExampleNavigationProperties = x.ExampleNavigationProperties.Select(y => new ExampleNavigationPropertyProjection
+					ExampleNavigationProperties = x.ExampleNavigationProperties.Select(y => new ExampleNavigationPropertyAggregate
 					{
 						Id = y.Id,
 						Title = y.Title
@@ -53,19 +53,19 @@ namespace Monolith.Query.Repositories
             }
         }
 
-        public async Task<ExampleProjection?> GetByIdAsync(string id)
+        public async Task<ExampleAggregate?> GetByIdAsync(string id)
         {
             try
             {
                 var example = await _context.ExampleModels
                     .Where(x => x.Id == id)
-                    .Select(x => new ExampleProjection
+                    .Select(x => new ExampleAggregate
 				    {
 					    Id = x.Id,
 					    Title = x.Title,
 					    Description = x.Description,
 					    ExampleNavigationProperties = x.ExampleNavigationProperties
-                            .Select(y => new ExampleNavigationPropertyProjection
+                            .Select(y => new ExampleNavigationPropertyAggregate
 					        {
 						        Id = y.Id,
 						        Title = y.Title
@@ -103,7 +103,7 @@ namespace Monolith.Query.Repositories
 			}
 		}
 
-		public async Task<ExampleProjection?> AddAsync(ExampleDTO newModel)
+		public async Task<ExampleAggregate?> AddAsync(ExampleDTO newModel)
         {
             try
             {
@@ -128,7 +128,7 @@ namespace Monolith.Query.Repositories
             }
         }
 
-        public async Task<ExampleProjection?> UpdateAsync(string id, ExampleDTO updatedModel)
+        public async Task<ExampleAggregate?> UpdateAsync(string id, ExampleDTO updatedModel)
         {
             try
             {
@@ -151,7 +151,7 @@ namespace Monolith.Query.Repositories
             }
         }
 
-        public async Task<ExampleProjection?> DeleteAsync(string id)
+        public async Task<ExampleAggregate?> DeleteAsync(string id)
         {
             try
             {
@@ -160,7 +160,7 @@ namespace Monolith.Query.Repositories
 				_context.ExampleModels.Remove(example);
                 await _context.SaveChangesAsync();
 
-				var returnExample = new ExampleProjection(example);
+				var returnExample = new ExampleAggregate(example);
 
 				return returnExample;
             }

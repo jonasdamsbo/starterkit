@@ -1,4 +1,4 @@
-﻿using Monolith.Route.API.Endpoints;
+﻿using Monolith.UI.API.Endpoints;
 
 namespace Monolith.Extensions
 {

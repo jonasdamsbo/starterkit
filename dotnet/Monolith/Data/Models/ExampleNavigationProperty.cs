@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using System.ComponentModel.DataAnnotations;
-using Monolith.Query.Projections;
+using Monolith.Query.Aggregates;
 using Monolith.Logic.DTOs;
 
 namespace Monolith.Data.Models
@@ -24,11 +24,11 @@ namespace Monolith.Data.Models
 			Id = Guid.NewGuid().ToString();
 		 }
 
-		public ExampleNavigationProperty(ExampleNavigationPropertyProjection exampleNavigationPropertyProjection) =>
+		public ExampleNavigationProperty(ExampleNavigationPropertyAggregate exampleNavigationPropertyAggregate) =>
 		(Id, Title, ExampleModel) = (
-			exampleNavigationPropertyProjection.Id, 
-			exampleNavigationPropertyProjection.Title, 
-			new ExampleModel(exampleNavigationPropertyProjection.ExampleProjection));
+			exampleNavigationPropertyAggregate.Id,
+			exampleNavigationPropertyAggregate.Title, 
+			new ExampleModel(exampleNavigationPropertyAggregate.ExampleAggregate));
 		public ExampleNavigationProperty(ExampleNavigationPropertyDTO exampleNavigationPropertyDTO) =>
 		(Id, Title, ExampleModel) = (
 			exampleNavigationPropertyDTO.Id,

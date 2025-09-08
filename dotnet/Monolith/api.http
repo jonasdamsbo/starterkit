@@ -4,3 +4,7 @@ GET {{myapi_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+@endpoint_HostAddress = http://localhost:5194
+GET {{endpoint_HostAddress}}/api/test/init
+Accept: application/json
