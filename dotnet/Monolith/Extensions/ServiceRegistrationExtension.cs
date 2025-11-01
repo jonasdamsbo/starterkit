@@ -23,6 +23,7 @@ namespace Monolith.Extensions
 			services.AddScoped<ExampleNavigationPropertyRepository>();
 
 			// More services...
+			services.AddScoped<CalendarService>();
 
 			return services;
 		}
