@@ -1,6 +1,6 @@
 # Starterkit
 
-Link to web development guide: https://docs.google.com/document/d/1XfyCFWGpygB4GT2xxnCMj8e1RH9QMl8q0-ShvOF6d_Y
+Link to web development guide: [https://docs.google.com/document/d/1XfyCFWGpygB4GT2xxnCMj8e1RH9QMl8q0-ShvOF6d_Y](https://docs.google.com/document/d/1OFqlgBX17zyI1nbg5xhXiSX7Tne4yZ44mZI8sOBjLps/edit?usp=sharing)
 
 Link to starterkit template (Azure DevOps): https://dev.azure.com/JonasDamsbo/starterkit/
 
