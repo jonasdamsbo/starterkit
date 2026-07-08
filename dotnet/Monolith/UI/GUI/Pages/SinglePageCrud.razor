@@ -21,16 +21,20 @@ else if(state == CrudState.Loaded)
 			</tr>
 		</thead>
 		<tbody>
-			@foreach (var example in examples)
+			@if (examples != null && examples.Count > 0)
 			{
-				<tr>
-					<td>@example.Title</td>
-					<td>@example.Description</td>
-					<!--<td>@example.WebUrl</td>-->
-					<td><button class="btn btn-primary" @onclick="@(() => EditExample(example.Id))">Edit</button></td>
-					<td><button class="btn btn-danger" @onclick="@(() => DeleteExample(example.Id))">Delete</button></td>
-				</tr>
+				@foreach (var example in examples)
+				{
+					<tr>
+						<td>@example.Title</td>
+						<td>@example.Description</td>
+						<!--<td>@example.WebUrl</td>-->
+						<td><button class="btn btn-primary" @onclick="@(() => EditExample(example.Id))">Edit</button></td>
+						<td><button class="btn btn-danger" @onclick="@(() => DeleteExample(example.Id))">Delete</button></td>
+					</tr>
+				}
 			}
+			
 		</tbody>
 	</table>
 

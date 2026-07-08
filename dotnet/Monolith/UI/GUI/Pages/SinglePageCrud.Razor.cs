@@ -60,11 +60,11 @@ namespace Monolith.UI.GUI.Pages
 					// use this instead to use inmemory examples until syncing with db examples 2/2
 					var newExamples = await ExampleModelService.GetAllAsync();
 					var isEqual = true;
-					if (newExamples.Any() == false && examples.Any() == false) isEqual = true;
-					else if (newExamples.Any() == true && examples.Any() == false) isEqual = false;
-					else if ((newExamples.Any() == false && examples.Any() == true)) isEqual = false;
-					else if (newExamples.Count != examples.Count) isEqual = false;
-					else if (newExamples.Count == examples.Count)
+					if (newExamples?.Any() == false && examples.Any() == false) isEqual = true;
+					else if (newExamples?.Any() == true && examples.Any() == false) isEqual = false;
+					else if ((newExamples?.Any() == false && examples.Any() == true)) isEqual = false;
+					else if (newExamples?.Count != examples.Count) isEqual = false;
+					else if (newExamples?.Count == examples.Count)
 					{
 						for (int i = 0; i < newExamples.Count; i++)
 						{

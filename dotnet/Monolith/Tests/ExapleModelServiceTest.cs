@@ -82,7 +82,8 @@ namespace Monolith.Tests
 //				.ReturnsAsync(expectedModel);
 
 //			var mockLogger = new Mock<ILogger<ExampleModelService>>();
-//			//var mockAutomapper = new Mock<IMapper>();
+
+//			var mockDtomapper = new Mock<DtoMapper>();
 
 //			var service = new ExampleModelService(mockLogger.Object, mockRepository.Object);
 
